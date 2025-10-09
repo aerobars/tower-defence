@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8r6x1lkn3ohn"]
+
+[ext_resource type="Texture2D" uid="uid://5yxrnrqltoca" path="res://Deprecated/tower.png" id="1_8crcl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4vo1n"]
+size = Vector2(128, 126)
+
+[node name="tower" type="StaticBody2D"]
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(1.00674, 1)
+shape = SubResource("RectangleShape2D_4vo1n")
+
+[node name="Tower" type="Sprite2D" parent="."]
+texture = ExtResource("1_8crcl")
+
+[node name="WeaponSlot1" type="Marker2D" parent="."]
+position = Vector2(-46, -54)
+
+[node name="WeaponSlot2" type="Marker2D" parent="."]
+position = Vector2(0, -54)
+
+[node name="WeaponSlot3" type="Marker2D" parent="."]
+position = Vector2(49, -53)
+
+[node name="PowerSlot" type="Marker2D" parent="."]
+position = Vector2(0, 23)

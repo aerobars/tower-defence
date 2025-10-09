@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="InventoryData" load_steps=7 format=3 uid="uid://c3m5eg7swenlw"]
+
+[ext_resource type="Script" uid="uid://bjmi2gnp5s1tf" path="res://GameData/UIScenes/Inventory/inventory_data.gd" id="1_qwddm"]
+[ext_resource type="Script" uid="uid://b4so26n1sqyy1" path="res://GameData/UIScenes/Inventory/slot_data.gd" id="2_4t8we"]
+[ext_resource type="Resource" uid="uid://c0b02to1odbhe" path="res://GameData/TowerMods/power_test.tres" id="3_4t8we"]
+
+[sub_resource type="Resource" id="Resource_afwgh"]
+script = ExtResource("2_4t8we")
+tower_mod = ExtResource("3_4t8we")
+quantity = 1
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[sub_resource type="Resource" id="Resource_fy7e0"]
+script = ExtResource("2_4t8we")
+tower_mod = ExtResource("3_4t8we")
+quantity = 2
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[sub_resource type="Resource" id="Resource_tixu4"]
+script = ExtResource("2_4t8we")
+tower_mod = ExtResource("3_4t8we")
+quantity = 3
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[resource]
+script = ExtResource("1_qwddm")
+slots = Array[ExtResource("2_4t8we")]([SubResource("Resource_afwgh"), SubResource("Resource_fy7e0"), SubResource("Resource_tixu4")])
+metadata/_custom_type_script = "uid://bjmi2gnp5s1tf"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=2 format=3 uid="uid://csfw8j2u8n72r"]
+
+[ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/weapon_mod.gd" id="1_42vnw"]
+
+[resource]
+script = ExtResource("1_42vnw")
+damage = 0
+rate_of_fire = 0.0
+attack_type = 0
+power_cost = 0
+attack_tags = null
+name = ""
+description = ""
+mod_class = 0
+metadata/_custom_type_script = "uid://djuix1w1w7p4i"

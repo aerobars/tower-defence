@@ -1,0 +1,201 @@
+[gd_scene load_steps=17 format=3 uid="uid://b7d7kfemno1ex"]
+
+[ext_resource type="PackedScene" uid="uid://egfxblymqfqd" path="res://GameData/Maps/map.tscn" id="1_akvmk"]
+[ext_resource type="Script" uid="uid://djsr0kjgwaton" path="res://GameData/MainScenes/game_scene.gd" id="1_g2kuy"]
+[ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/MainScenes/ui.gd" id="3_ibdpl"]
+[ext_resource type="Texture2D" uid="uid://clhk7px75x85h" path="res://Assets/UI/Buttons/button_square_line.png" id="4_jvyjn"]
+[ext_resource type="PackedScene" uid="uid://2eyhy1p2h3n1" path="res://GameData/UIScenes/GUI/mod_draggable.tscn" id="5_541wh"]
+[ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/inventory_ui.gd" id="5_waasu"]
+[ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://Resources/Inventory/player_inventory.tres" id="6_qo4eh"]
+[ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="7_674w2"]
+[ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="8_a0jnf"]
+[ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="9_clpeu"]
+[ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://Resources/Fonts/kfn_50_o1.tres" id="10_0h1f8"]
+[ext_resource type="PackedScene" uid="uid://iq7vcv16hyni" path="res://GameData/UIScenes/GUI/tower_button.tscn" id="11_s26dc"]
+[ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://Resources/Fonts/kfn_30_o1.tres" id="11_sl8sw"]
+[ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="12_jvyjn"]
+[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="13_541wh"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_waasu"]
+texture = ExtResource("4_jvyjn")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+modulate_color = Color(1, 1, 1, 0.627451)
+
+[node name="GameScene" type="Node2D"]
+script = ExtResource("1_g2kuy")
+
+[node name="Map" parent="." instance=ExtResource("1_akvmk")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("3_ibdpl")
+
+[node name="InventoryDraggable" parent="UI" instance=ExtResource("5_541wh")]
+z_index = 1
+position = Vector2(320, 368)
+
+[node name="HUD" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+mouse_filter = 2
+
+[node name="BuildBar" type="ColorRect" parent="UI/HUD"]
+custom_minimum_size = Vector2(1280, 100)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = -200.0
+offset_right = 640.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="InventoryContainer" type="PanelContainer" parent="UI/HUD/BuildBar"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -160.0
+offset_right = 128.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_waasu")
+
+[node name="InventoryGrid" type="GridContainer" parent="UI/HUD/BuildBar/InventoryContainer"]
+layout_mode = 2
+mouse_filter = 2
+columns = 3
+script = ExtResource("5_waasu")
+data = ExtResource("6_qo4eh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/BuildBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -82.0
+offset_top = -80.0
+offset_right = 82.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/separation = 30
+
+[node name="TowerBase" parent="UI/HUD/BuildBar/HBoxContainer" instance=ExtResource("11_s26dc")]
+show_behind_parent = true
+z_index = -1
+layout_mode = 2
+
+[node name="InfoBar" type="ColorRect" parent="UI/HUD"]
+self_modulate = Color(0, 0, 0, 0.470588)
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="InfoContainer" type="HBoxContainer" parent="UI/HUD/InfoBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Symbol" type="Label" parent="UI/HUD/InfoBar/InfoContainer"]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
+theme_override_fonts/font = ExtResource("10_0h1f8")
+theme_override_font_sizes/font_size = 50
+text = "$"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Money" type="Label" parent="UI/HUD/InfoBar/InfoContainer"]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
+theme_override_fonts/font = ExtResource("11_sl8sw")
+theme_override_font_sizes/font_size = 30
+text = "100"
+vertical_alignment = 1
+
+[node name="HealthIcon" type="TextureRect" parent="UI/HUD/InfoBar/InfoContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 10
+texture = ExtResource("12_jvyjn")
+
+[node name="HealthBar" type="TextureProgressBar" parent="UI/HUD/InfoBar/InfoContainer"]
+custom_minimum_size = Vector2(400, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+value = 100.0
+nine_patch_stretch = true
+texture_under = ExtResource("13_541wh")
+texture_progress = ExtResource("13_541wh")
+tint_under = Color(0.215686, 0.215686, 0.215686, 1)
+tint_progress = Color(0, 0.658824, 0, 1)
+
+[node name="Control" type="Control" parent="UI/HUD/InfoBar/InfoContainer"]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/InfoBar"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -82.0
+offset_right = 82.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="GameControls" type="HBoxContainer" parent="UI/HUD/InfoBar/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="PausePlay" type="TextureButton" parent="UI/HUD/InfoBar/MarginContainer/GameControls"]
+process_mode = 3
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+toggle_mode = true
+texture_normal = ExtResource("7_674w2")
+texture_pressed = ExtResource("8_a0jnf")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="FastForward" type="TextureButton" parent="UI/HUD/InfoBar/MarginContainer/GameControls"]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("9_clpeu")
+ignore_texture_size = true
+stretch_mode = 0
+
+[connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="UI" method="_on_pause_play_pressed"]
+[connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/FastForward" to="UI" method="_on_fast_forward_pressed"]

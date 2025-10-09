@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://1v8wrp07l6rg"]
+
+[ext_resource type="PackedScene" uid="uid://bqlcpexwsb1bp" path="res://Deprecated/ui_tower_button.tscn" id="1_37p78"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_top = 512.0
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(1, 1, 1, 0.176471)
+
+[node name="UiTowerButton1" parent="." instance=ExtResource("1_37p78")]
+layout_mode = 1
+offset_left = 256.0
+offset_top = 512.0
+offset_right = 384.0
+offset_bottom = 640.0
+
+[node name="UiTowerButton2" parent="." instance=ExtResource("1_37p78")]
+layout_mode = 1
+offset_left = 512.0
+offset_top = 512.0
+offset_right = 640.0
+offset_bottom = 640.0
+
+[node name="UiTowerButton3" parent="." instance=ExtResource("1_37p78")]
+layout_mode = 1
+offset_left = 768.0
+offset_top = 512.0
+offset_right = 896.0
+offset_bottom = 640.0
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 32.0
+color = Color(1, 1, 1, 0.176471)

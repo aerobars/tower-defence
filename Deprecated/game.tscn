@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://byxp8t2wmf1m4"]
+
+[ext_resource type="Script" uid="uid://drni1uucwm347" path="res://Deprecated/game.gd" id="1_fi4x0"]
+[ext_resource type="PackedScene" uid="uid://c8r6x1lkn3ohn" path="res://Deprecated/tower.tscn" id="1_j4aje"]
+[ext_resource type="PackedScene" uid="uid://ibby7sgj2jjc" path="res://Deprecated/baddy.tscn" id="2_dtxd7"]
+[ext_resource type="PackedScene" uid="uid://cwfl3yw8hggrk" path="res://Deprecated/tower_weapon.tscn" id="3_jvves"]
+[ext_resource type="Script" uid="uid://3korieqbxmqv" path="res://Deprecated/Camera2D.gd" id="5_ys4ob"]
+[ext_resource type="PackedScene" uid="uid://1v8wrp07l6rg" path="res://Deprecated/hud.tscn" id="15_7sc4i"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_fi4x0")
+
+[node name="Baddy" parent="." instance=ExtResource("2_dtxd7")]
+position = Vector2(-175, 211)
+
+[node name="Tower" parent="." instance=ExtResource("1_j4aje")]
+visibility_layer = 6
+position = Vector2(424, 304)
+collision_layer = 0
+collision_mask = 2
+
+[node name="TowerWeapon" parent="Tower" instance=ExtResource("3_jvves")]
+
+[node name="Baddy2" parent="." instance=ExtResource("2_dtxd7")]
+position = Vector2(-573, 478)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 320)
+limit_left = -5000
+limit_top = -5000
+limit_right = 5000
+limit_bottom = 5000
+limit_smoothed = true
+editor_draw_limits = true
+editor_draw_drag_margin = true
+script = ExtResource("5_ys4ob")
+
+[node name="HUDCanvas" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="HUDCanvas" instance=ExtResource("15_7sc4i")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+offset_left = -576.0
+offset_top = -648.0
+offset_right = -576.0
+offset_bottom = -648.0
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8

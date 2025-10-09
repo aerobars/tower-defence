@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://m1p3oucnboti"]
+
+[ext_resource type="Texture2D" uid="uid://m5diaf4lgcc8" path="res://Assets/UI/Buttons/towerDefense_tile295.png" id="1_j7v43"]
+[ext_resource type="Script" uid="uid://lo556pytiuf3" path="res://GameData/UIScenes/Inventory/inventory_slot_ui.gd" id="1_knema"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_orvv1"]
+atlas = ExtResource("1_j7v43")
+region = Rect2(16, 16, 32, 32)
+
+[node name="InventorySlot" type="Button"]
+custom_minimum_size = Vector2(32, 32)
+offset_right = 32.0
+offset_bottom = 32.0
+script = ExtResource("1_knema")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+offset_right = 32.0
+offset_bottom = 32.0
+texture = SubResource("AtlasTexture_orvv1")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+offset_top = 20.0
+offset_right = 32.0
+offset_bottom = 32.0
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 8
+text = "99"
+horizontal_alignment = 2
+vertical_alignment = 2

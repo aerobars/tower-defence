@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqlcpexwsb1bp"]
+
+[ext_resource type="Texture2D" uid="uid://5yxrnrqltoca" path="res://Deprecated/tower.png" id="1_yv24t"]
+[ext_resource type="Texture2D" uid="uid://ngr5mav7ihvi" path="res://Deprecated/power.png" id="2_jcent"]
+[ext_resource type="Script" uid="uid://oxjku3ogap32" path="res://Deprecated/ui_tower_button.gd" id="2_ke31m"]
+[ext_resource type="Texture2D" uid="uid://npq8124uqckw" path="res://Deprecated/baddy.png" id="3_ke31m"]
+
+[node name="UiTowerButton" type="TextureButton"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1024.0
+offset_bottom = -520.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("1_yv24t")
+texture_pressed = ExtResource("1_yv24t")
+texture_hover = ExtResource("1_yv24t")
+script = ExtResource("2_ke31m")
+
+[node name="Power" type="Sprite2D" parent="."]
+position = Vector2(64, 72)
+texture = ExtResource("2_jcent")
+
+[node name="Weapon1" type="Sprite2D" parent="."]
+position = Vector2(24, 0)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("3_ke31m")
+
+[node name="Weapon2" type="Sprite2D" parent="."]
+position = Vector2(64, -8)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("3_ke31m")
+
+[node name="Weapon3" type="Sprite2D" parent="."]
+position = Vector2(104, 0)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("3_ke31m")
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]
