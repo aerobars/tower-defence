@@ -75,7 +75,7 @@ func initiate_build_mode(tower_type: String, dict: Dictionary[StaticBody2D, Towe
 	build_data = dict
 	build_type = tower_type
 	build_mode = true
-	$UI.set_tower_preview(build_type, get_global_mouse_position(), dict)
+	$UI.set_tower_preview(build_type, get_global_mouse_position(), build_data)
 
 func update_tower_preview() -> void:
 	var mouse_pos := get_global_mouse_position()
@@ -101,6 +101,7 @@ func verify_and_build() -> void:
 		var new_tower = load("res://GameData/Towers/" + build_type + ".tscn").instantiate()
 		new_tower.position = build_location
 		new_tower.is_built = true
+		new_tower.buil
 		#type not needed for tower base
 #		new_tower.type = build_type
 #		new_tower.category = GameData.tower_data[build_type]["category"]
