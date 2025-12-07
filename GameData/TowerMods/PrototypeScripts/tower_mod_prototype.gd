@@ -8,7 +8,6 @@ var mod_slot_ref : StaticBody2D
 var enemy_array : Array
 var enemy
 var aura_targets : Array
-var aura_data : TowerMod
 var reloaded := true
 var powered : bool
 
@@ -76,7 +75,6 @@ func fire():
 			elif data.projectile_tag == data.ProjectileType.INSTANT:
 				fire_gun()
 			enemy.on_hit(data.current_damage)
-			print (data.current_damage)
 		data.ModType.AURA:
 			apply_debuff()
 	await(get_tree().create_timer(data.current_attack_speed).timeout)

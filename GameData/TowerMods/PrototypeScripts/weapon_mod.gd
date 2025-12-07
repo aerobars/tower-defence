@@ -15,7 +15,7 @@ enum AttackType { PIERCE, BLUNT, EXPLOSION }
 @export var attack_type : AttackType
 @export var attack_tags: Array = [attack_type]
 
-#level base variables
+#level based variables
 @export var base_range_levels : Array[float]
 @export var base_damage_levels : Array[float]
 @export var base_attack_speed_levels : Array[float] ##measured in attacks per second
@@ -37,7 +37,6 @@ func recalculate_stats(stat_addends, stat_multipliers) -> void:
 	current_attack_speed = base_attack_speed_levels[level]
 	current_crit_chance = base_crit_chance[level]
 	current_aoe = base_aoe_levels[level]
-	print("power ", current_power, " range", current_range)
 	
 	#addends first so it benefits from multipliers
 	for stat_name in stat_addends:

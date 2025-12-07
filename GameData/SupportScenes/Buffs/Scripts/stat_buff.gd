@@ -1,4 +1,4 @@
-class_name StatBuff extends Resource
+class_name StatBuff extends Buff
 
 enum BuffType {ADD, MULTIPLY}
 
@@ -11,4 +11,3 @@ func _init(_stat: AllBuffableStats.AllBuffableStats = AllBuffableStats.AllBuffab
 	stat = _stat
 	buff_type = _buff_type
 	buff_amount = _buff_amount
-	print(stat, buff_type, buff_amount)

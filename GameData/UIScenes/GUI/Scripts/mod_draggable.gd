@@ -22,6 +22,7 @@ signal clear_popup
 func _ready() -> void:
 	hover_timer.wait_time = HOVER_DELAY
 	hover_timer.one_shot = true
+	scale = Vector2(0.6, 0.6)
 
 func _process(_delta: float) -> void:
 	if draggable:

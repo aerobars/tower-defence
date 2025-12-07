@@ -9,22 +9,10 @@ region = Rect2(16, 16, 32, 32)
 
 [resource]
 script = ExtResource("1_pjor1")
+level = null
+base_power_levels = Array[int]([5])
+mod_class = 1
 name = "Test Power"
 description = "Testing Power Mod"
 texture = SubResource("AtlasTexture_l4mn2")
-mod_class = 1
-level = null
-base_power_levels = Array[int]([5])
-base_range_levels = null
-damage_type = null
-debuff_proc_rate = null
-range_mod = null
-is_aura = null
-attack_tags = null
-projectile_tag = null
-attack_type = null
-base_damage_levels = null
-base_attack_speed_levels = null
-base_aoe_levels = null
-base_crit_chance = null
 metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

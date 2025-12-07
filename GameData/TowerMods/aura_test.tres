@@ -9,6 +9,7 @@ resource_local_to_scene = true
 script = ExtResource("1_qib6m")
 stat = 1
 buff_amount = 1.0
+buff_type = null
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qib6m"]
