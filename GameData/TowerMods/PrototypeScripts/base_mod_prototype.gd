@@ -1,0 +1,63 @@
+class_name TowerMod extends Resource
+
+enum ModType { AURA, POWER, WEAPON }
+
+#stats for all mod types
+@export var level : int = 0
+@export var base_power_levels : Array[int]
+var current_power : int
+@export var mod_class : ModType
+
+@export var name : String
+@export_multiline var description : String
+@export var texture : Texture2D
+var class_string : String: 
+	get: 
+		return ModType.keys()[ModType.values().find(mod_class)]
+
+#first level is level 0 to line up with arrays
+var level_names := ["Basic", "Advanced", "Expert", "Master", "Grandmaster"]
+var current_level_name : String: 
+	get:
+		return level_names[level]
+
+var stat_buffs : Array[StatBuff]
+
+
+func _init() -> void:
+	setup_stats.call_deferred()
+
+func setup_stats() -> void:
+	recalculate_buffs()
+
+func add_buff(buff: StatBuff) -> void:
+	stat_buffs.append(buff)
+	recalculate_buffs.call_deferred()
+
+func remove_buff(buff: StatBuff) -> void:
+	stat_buffs.erase(buff)
+	recalculate_buffs.call_deferred()
+
+func recalculate_buffs() -> void:
+	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
+	var stat_addends: Dictionary = {} #Amt to add to stats
+	for buff in stat_buffs:
+		if buff_check(buff.stat):
+			var stat_name: String = AllBuffableStats.AllBuffableStats.keys()[buff.stat].to_lower()
+			match buff.buff_type:
+				StatBuff.BuffType.ADD:
+					if not stat_addends.has(stat_name):
+						stat_addends[stat_name] = 0.0
+					stat_addends[stat_name] += buff.buff_amount
+				StatBuff.BuffType.MULTIPLY:
+					if not stat_multipliers.has(stat_name):
+						stat_multipliers[stat_name] = 1.0
+					stat_multipliers[stat_name] += buff.buff_amount
+	recalculate_stats(stat_addends, stat_multipliers)
+
+#dummy funcitons to avoid errors
+func buff_check(_dummy) -> bool:
+	return false
+
+func recalculate_stats(_thing1, _thing2) -> void:
+	pass

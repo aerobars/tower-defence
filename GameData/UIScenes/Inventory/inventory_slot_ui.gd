@@ -1,13 +1,22 @@
 class_name InventorySlotUi extends Button
 
+signal hovered(data: TowerMod)
+signal clear_popup
+
 #SlotData holds TowerMod and quantity
 var slot_data : SlotData : set = set_slot_data
 
 @onready var image : TextureRect = $TextureRect
-@onready var amount : Label = $Label
+@onready var amount : Label = $ColorRect/Label
+@onready var hover_timer = $Timer
 
+const HOVER_DELAY : float = 0.5
+
+
+#timer timeout signal connected to game_scene
 func _ready() -> void:
-	pass
+	hover_timer.wait_time = HOVER_DELAY
+	hover_timer.one_shot = true
 
 func set_slot_data(value: SlotData):
 	slot_data = value
@@ -17,5 +26,12 @@ func set_slot_data(value: SlotData):
 	image.texture = value.tower_mod.texture
 	amount.text = str(value.quantity)
 
-func update_amount(value: int) -> void:
-	amount.text = str(value)
+func _on_mouse_entered() -> void:
+	hover_timer.start()
+
+func _on_mouse_exited() -> void:
+	hover_timer.stop()
+	clear_popup.emit()
+
+func _on_timer_timeout() -> void:
+	hovered.emit(slot_data.tower_mod)

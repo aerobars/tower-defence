@@ -1,30 +1,39 @@
 [gd_scene load_steps=5 format=3 uid="uid://iq7vcv16hyni"]
 
-[ext_resource type="Texture2D" uid="uid://d3vu5aysgdi61" path="res://Assets/UI/Buttons/button_square_gradient.png" id="1_sxrlo"]
-[ext_resource type="Script" uid="uid://ca6gk23vpyi7s" path="res://GameData/UIScenes/GUI/tower_button.gd" id="2_0hnoc"]
+[ext_resource type="Texture2D" uid="uid://ceqhep7if173u" path="res://Assets/UI/Buttons/button_round_line.png" id="1_ge1wo"]
+[ext_resource type="Script" uid="uid://ca6gk23vpyi7s" path="res://GameData/UIScenes/GUI/Scripts/tower_button.gd" id="2_0hnoc"]
 [ext_resource type="PackedScene" uid="uid://bii7ege1adnq6" path="res://GameData/UIScenes/GUI/mod_slot.tscn" id="2_ge1wo"]
-[ext_resource type="Texture2D" uid="uid://ctr4gkegia16c" path="res://Assets/Towers/towerDefense_tile249.png" id="3_0hnoc"]
+[ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="4_ge1wo"]
 
 [node name="BuildTowerButton" type="TextureButton" groups=["build_buttons"]]
 custom_minimum_size = Vector2(80, 80)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = ExtResource("1_sxrlo")
+texture_normal = ExtResource("1_ge1wo")
 stretch_mode = 0
 script = ExtResource("2_0hnoc")
 
 [node name="ModSlot" parent="." instance=ExtResource("2_ge1wo")]
 position = Vector2(40, -24)
 
+[node name="ModSlot2" parent="." instance=ExtResource("2_ge1wo")]
+position = Vector2(-16, 0)
+
+[node name="ModSlot3" parent="." instance=ExtResource("2_ge1wo")]
+position = Vector2(96, 0)
+
 [node name="Icon" type="TextureRect" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = -5.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -27.0
+offset_top = -27.0
+offset_right = 37.0
+offset_bottom = 37.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_0hnoc")
+scale = Vector2(0.85, 0.85)
+texture = ExtResource("4_ge1wo")

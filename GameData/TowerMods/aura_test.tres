@@ -1,7 +1,15 @@
-[gd_resource type="Resource" script_class="AuraMod" load_steps=4 format=3 uid="uid://dvvbt8ew2bu0w"]
+[gd_resource type="Resource" script_class="AuraMod" load_steps=6 format=3 uid="uid://dvvbt8ew2bu0w"]
 
-[ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/aura_mod.gd" id="1_lenb6"]
+[ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/aura_mod.gd" id="1_lenb6"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/Scripts/stat_buff.gd" id="1_qib6m"]
 [ext_resource type="Texture2D" uid="uid://ccyo3a5ler4aa" path="res://icon.svg" id="2_0n1xm"]
+
+[sub_resource type="Resource" id="Resource_0jkmk"]
+resource_local_to_scene = true
+script = ExtResource("1_qib6m")
+stat = 1
+buff_amount = 1.0
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qib6m"]
 atlas = ExtResource("2_0n1xm")
@@ -9,14 +17,10 @@ region = Rect2(28, 45.5, 32, 32)
 
 [resource]
 script = ExtResource("1_lenb6")
-damage_type = 0
-damage_mod = 1.0
-attack_speed_mod = 1.0
-move_speed_mod = 1.0
-debuff_proc_rate = 0.0
-range_mod = 1.0
-name = ""
-description = ""
+base_range_levels = Array[float]([300.0])
+buffing_stats = SubResource("Resource_0jkmk")
+base_power_levels = Array[int]([-1])
+name = "Test Aura"
+description = "Testing AuraMod"
 texture = SubResource("AtlasTexture_qib6m")
-mod_class = 0
 metadata/_custom_type_script = "uid://bshp47gjxu8sm"

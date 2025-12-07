@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bii7ege1adnq6"]
 
-[ext_resource type="Script" uid="uid://dbwt1vxl8r3tq" path="res://GameData/UIScenes/GUI/mod_slot.gd" id="1_xjtiu"]
+[ext_resource type="Script" uid="uid://dbwt1vxl8r3tq" path="res://GameData/UIScenes/GUI/Scripts/mod_slot.gd" id="1_xjtiu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exgtw"]
 size = Vector2(32, 32)

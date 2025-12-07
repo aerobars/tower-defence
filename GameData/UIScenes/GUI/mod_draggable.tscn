@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://2eyhy1p2h3n1"]
 
-[ext_resource type="Script" uid="uid://30g7ngs8qgpj" path="res://GameData/UIScenes/GUI/mod_draggable.gd" id="1_nyg7q"]
+[ext_resource type="Script" uid="uid://30g7ngs8qgpj" path="res://GameData/UIScenes/GUI/Scripts/mod_draggable.gd" id="1_nyg7q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eql1v"]
 size = Vector2(32, 32)
@@ -19,7 +19,10 @@ position = Vector2(-16, -16)
 position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_eql1v")
 
+[node name="Timer" type="Timer" parent="."]
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

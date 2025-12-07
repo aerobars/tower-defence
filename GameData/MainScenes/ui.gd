@@ -5,32 +5,31 @@ extends CanvasLayer
 @onready var texture := preload("res://Assets/UI/range_overlay.png")
 
 #runs via GameScenes initiate_build_mod func
-func set_tower_preview(tower_type: String, mouse_pos: Vector2, dict: Dictionary[StaticBody2D,TowerMod]) -> void:
+func set_tower_preview(tower_type: String, mouse_pos: Vector2, dict: Dictionary) -> void:
 	var drag_tower = load("res://GameData/Towers/" + tower_type + ".tscn").instantiate()
 	drag_tower.set_name("DragTower")
-	drag_tower.modulate = Color("ad54ff")
+	drag_tower.modulate = Color("GREEN")
 	
 	var control := Control.new()
-	var range_texture: Sprite2D
-	var mod_texture: Sprite2D
-	for key in dict:
-		if dict[key] != null:
-			#adds range indictator to auras and weapons
-			if (dict[key].mod_class == dict[key].ModType.AURA and dict[key].is_aura) or dict[key].mod_class == dict[key].ModType.WEAPON:
+	var range_texture : Sprite2D
+
+	#adds range indictator to auras and weapons
+	for key in dict["mods"]:
+		if dict["mods"][key] != null:
+			if (dict["mods"][key].mod_class == dict["mods"][key].ModType.AURA) or dict["mods"][key].mod_class == dict["mods"][key].ModType.WEAPON:
 				range_texture = Sprite2D.new()
 				#position needed if range is offest from tower
 				#range_texture.position = Vector2(32,32)
-				var scaling: float = dict[key].range / 600.0
+				var scaling: float = dict["mods"][key].current_range / 600.0
 				range_texture.scale = Vector2(scaling, scaling)
 				range_texture.texture = texture
-				if dict[key].mod_class == dict[key].ModType.WEAPON:
+				if dict["mods"][key].mod_class == dict["mods"][key].ModType.WEAPON:
 					range_texture.modulate = Color("CRIMSON")
-				else:
+				elif dict["aura_tower"]:
 					range_texture.modulate = Color("BLUE")
 				control.add_child(range_texture, true)
 			#add mod texture
-			pass
-	
+
 	control.add_child(drag_tower, true)
 	control.set_position(mouse_pos)
 	control.set_name("TowerPreview")

@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://b2g1d102vqt4h"]
+
+[ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/Scripts/blue_tank.gd" id="1_a3nyt"]
+[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/Scripts/baddy_stats.gd" id="2_tji8d"]
+[ext_resource type="Texture2D" uid="uid://bcqowggr8c0o2" path="res://Assets/Baddies/tank_blue.png" id="2_ymvcl"]
+[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="3_ymvcl"]
+
+[sub_resource type="Resource" id="Resource_tji8d"]
+script = ExtResource("2_tji8d")
+base_max_health = 1000.0
+base_damage = 21.0
+base_move_speed = 150.0
+metadata/_custom_type_script = "uid://citwba61de3ku"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7b3mk"]
+size = Vector2(42, 42)
+
+[node name="BlueTank" type="PathFollow2D" groups=["baddies"]]
+loop = false
+script = ExtResource("1_a3nyt")
+data = SubResource("Resource_tji8d")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["baddies"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" groups=["baddies"]]
+shape = SubResource("RectangleShape2D_7b3mk")
+
+[node name="Sprite2D" type="Sprite2D" parent="." groups=["baddies"]]
+texture = ExtResource("2_ymvcl")
+
+[node name="HealthBar" type="TextureProgressBar" parent="."]
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = -24.0
+value = 50.0
+nine_patch_stretch = true
+texture_under = ExtResource("3_ymvcl")
+texture_progress = ExtResource("3_ymvcl")
+tint_under = Color(0.207843, 0.207843, 0.207843, 1)
+tint_progress = Color(3.60981e-06, 0.629484, 0, 1)
+
+[node name="Impact" type="Marker2D" parent="."]
+position = Vector2(-15, -15)

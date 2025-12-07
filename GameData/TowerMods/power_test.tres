@@ -1,18 +1,30 @@
 [gd_resource type="Resource" script_class="PowerMod" load_steps=4 format=3 uid="uid://c0b02to1odbhe"]
 
-[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/power_mod.gd" id="1_pjor1"]
-[ext_resource type="Texture2D" uid="uid://m5diaf4lgcc8" path="res://Assets/UI/Buttons/towerDefense_tile295.png" id="2_6h1hl"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/power_mod.gd" id="1_pjor1"]
+[ext_resource type="Texture2D" uid="uid://m5diaf4lgcc8" path="res://Assets/Effects/towerDefense_tile295.png" id="2_pjor1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l4mn2"]
-atlas = ExtResource("2_6h1hl")
+atlas = ExtResource("2_pjor1")
 region = Rect2(16, 16, 32, 32)
 
 [resource]
 script = ExtResource("1_pjor1")
-power_supply = Array[int]([])
-name = ""
-description = ""
+name = "Test Power"
+description = "Testing Power Mod"
 texture = SubResource("AtlasTexture_l4mn2")
 mod_class = 1
-range = 0
+level = null
+base_power_levels = Array[int]([5])
+base_range_levels = null
+damage_type = null
+debuff_proc_rate = null
+range_mod = null
+is_aura = null
+attack_tags = null
+projectile_tag = null
+attack_type = null
+base_damage_levels = null
+base_attack_speed_levels = null
+base_aoe_levels = null
+base_crit_chance = null
 metadata/_custom_type_script = "uid://cypg7wm5b3ytj"
