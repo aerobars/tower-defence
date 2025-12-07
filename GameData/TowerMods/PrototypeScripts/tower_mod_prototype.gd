@@ -76,7 +76,7 @@ func fire():
 				fire_gun()
 			enemy.on_hit(data.current_damage)
 		data.ModType.AURA:
-			apply_debuff()
+			apply_buff(enemy)
 	await(get_tree().create_timer(data.current_attack_speed).timeout)
 	reloaded = true
 
@@ -101,10 +101,7 @@ func _on_range_body_exited(body) -> void:
 		aura_targets.erase(body)
 
 func apply_buff(body) -> void:
-	body.data.add_buff(data.buffing_stats)
+	body.data.add_buff(data.buff_data)
 
 func clear_buffs(body) -> void:
-	body.data.remove_buff(data.buffing_stats)
-
-func apply_debuff() -> void:
-	pass
+	body.data.remove_buff(data.buff_data)

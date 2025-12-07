@@ -4,12 +4,8 @@
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/Scripts/stat_buff.gd" id="1_qib6m"]
 [ext_resource type="Texture2D" uid="uid://ccyo3a5ler4aa" path="res://icon.svg" id="2_0n1xm"]
 
-[sub_resource type="Resource" id="Resource_0jkmk"]
-resource_local_to_scene = true
+[sub_resource type="Resource" id="Resource_qib6m"]
 script = ExtResource("1_qib6m")
-stat = 1
-buff_amount = 1.0
-buff_type = null
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qib6m"]
@@ -19,7 +15,7 @@ region = Rect2(28, 45.5, 32, 32)
 [resource]
 script = ExtResource("1_lenb6")
 base_range_levels = Array[float]([300.0])
-buffing_stats = SubResource("Resource_0jkmk")
+buff_data = SubResource("Resource_qib6m")
 base_power_levels = Array[int]([-1])
 name = "Test Aura"
 description = "Testing AuraMod"

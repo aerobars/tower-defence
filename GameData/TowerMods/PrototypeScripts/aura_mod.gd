@@ -11,7 +11,7 @@ var current_range : float
 
 enum DamageType {NONE, FIRE, COLD, POISON, PHYSICAL}
 @export var damage_type : DamageType = DamageType.NONE
-@export var buffing_stats : StatBuff
+@export var buff_data : Buff 
 @export var debuff_proc_rate : Array[float]
 @export var range_mod : Array[float]
 @export var base_attack_speed_levels : Array[float]
@@ -26,7 +26,6 @@ func buff_check(buff_stat) -> bool:
 func recalculate_stats(stat_addends, stat_multipliers) -> void:
 	current_power = base_power_levels[level]
 	current_range = base_range_levels[level]
-	print("power ", current_power, " range", current_range)
 	
 	#addends first so it benefits from multipliers
 	for stat_name in stat_addends:

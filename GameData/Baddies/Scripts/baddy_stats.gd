@@ -2,6 +2,7 @@ class_name BaddyStats extends Resource
 
 signal health_depleted
 signal health_changed(current_health: int, max_health: int)
+signal create_dot_timers(dot_data: DotBuff)
 
 enum BaddyBuffableStats {
 	MAX_HEALTH,
@@ -28,6 +29,7 @@ var current_move_speed : float
 var health : float = 0 : set = _on_health_set
 
 var stat_buffs: Array[StatBuff]
+var dot_buffs: Array[DotBuff]
 
 func _init() -> void:
 	setup_stats.call_deferred()
@@ -36,13 +38,22 @@ func setup_stats() -> void:
 	recalculate_stats()
 	health = current_max_health
 
-func add_buff(buff: StatBuff) -> void:
-	stat_buffs.append(buff)
-	recalculate_stats.call_deferred()
+func add_buff(buff: Buff) -> void:
+	match buff:
+		DotBuff:
+			dot_buffs.append(buff)
+			create_dot_timers.emit(buff)
+		StatBuff:
+			stat_buffs.append(buff)
+			recalculate_stats.call_deferred()
 
-func remove_buff(buff: StatBuff) -> void:
-	stat_buffs.erase(buff)
-	recalculate_stats.call_deferred()
+func remove_buff(buff: Buff) -> void:
+	match buff:
+		DotBuff:
+			dot_buffs.append(buff)
+		StatBuff:
+			stat_buffs.erase(buff)
+			recalculate_stats.call_deferred()
 
 func recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
