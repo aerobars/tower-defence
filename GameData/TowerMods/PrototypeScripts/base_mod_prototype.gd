@@ -22,7 +22,7 @@ var current_level_name : String:
 		return level_names[level]
 
 var stat_buffs : Array[StatBuff]
-
+var dot_buffs : Array[DotBuff]
 
 func _init() -> void:
 	setup_stats.call_deferred()
@@ -30,13 +30,19 @@ func _init() -> void:
 func setup_stats() -> void:
 	recalculate_buffs()
 
-func add_buff(buff: StatBuff) -> void:
-	stat_buffs.append(buff)
-	recalculate_buffs.call_deferred()
+func add_buff(buff: Buff) -> void:
+	if buff is DotBuff:
+		dot_buffs.append(buff)
+	if buff is StatBuff:
+		stat_buffs.append(buff)
+		recalculate_stats.call_deferred()
 
-func remove_buff(buff: StatBuff) -> void:
-	stat_buffs.erase(buff)
-	recalculate_buffs.call_deferred()
+func remove_buff(buff: Buff) -> void:
+	if buff is DotBuff:
+		dot_buffs.erase(buff)
+	if buff is StatBuff:
+		stat_buffs.erase(buff)
+		recalculate_stats.call_deferred()
 
 func recalculate_buffs() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by

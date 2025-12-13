@@ -5,6 +5,7 @@
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="3_5hcvs"]
 
 [node name="InfoPopup" type="Node2D"]
+top_level = true
 script = ExtResource("2_te2c5")
 
 [node name="Background" type="PanelContainer" parent="."]
@@ -32,5 +33,7 @@ layout_mode = 2
 text = "A.S.:"
 
 [node name="Description" type="Label" parent="Background/VBoxContainer"]
+custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 text = "Description: "
+autowrap_mode = 3

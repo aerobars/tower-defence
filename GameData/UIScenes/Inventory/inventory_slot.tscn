@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://m1p3oucnboti"]
 
 [ext_resource type="Texture2D" uid="uid://m5diaf4lgcc8" path="res://Assets/Effects/towerDefense_tile295.png" id="1_j7v43"]
-[ext_resource type="Script" uid="uid://lo556pytiuf3" path="res://GameData/UIScenes/Inventory/inventory_slot_ui.gd" id="1_knema"]
+[ext_resource type="Script" uid="uid://lo556pytiuf3" path="res://GameData/UIScenes/Inventory/Scripts/inventory_slot_ui.gd" id="1_knema"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_orvv1"]
 atlas = ExtResource("1_j7v43")

@@ -1,6 +1,25 @@
 class_name BuildTowerButton extends TextureButton
 
+
+##Setup
+@onready var mod_slot := preload("res://GameData/UIScenes/GUI/mod_slot.tscn")
+@export var slot_count : int
+@export var slot_radius : float
+var tower := "tower_base"
+
+
 var data : Dictionary : get = get_tower_mods
+
+func _ready() -> void:
+	for i in slot_count:
+		update_mod_slots(i)
+
+func update_mod_slots(mod_num) -> void:
+	var new_mod = mod_slot.instantiate()
+	var angle = (TAU * mod_num) / slot_count
+	new_mod.position.x = slot_radius * cos(angle) + size.x/2
+	new_mod.position.y = slot_radius * sin(angle) + size.y/2
+	add_child(new_mod)
 
 func get_tower_mods() -> Dictionary:
 	var dict : Dictionary

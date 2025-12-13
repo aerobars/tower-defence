@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="PowerMod" load_steps=4 format=3 uid="uid://c0b02to1odbhe"]
 
 [ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/power_mod.gd" id="1_pjor1"]
-[ext_resource type="Texture2D" uid="uid://m5diaf4lgcc8" path="res://Assets/Effects/towerDefense_tile295.png" id="2_pjor1"]
+[ext_resource type="Texture2D" uid="uid://c5d7v1851rr54" path="res://Assets/Icons/power.png" id="2_pjor1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l4mn2"]
 atlas = ExtResource("2_pjor1")
-region = Rect2(16, 16, 32, 32)
+region = Rect2(10, 11, 32, 32)
 
 [resource]
 script = ExtResource("1_pjor1")
@@ -13,6 +13,6 @@ level = null
 base_power_levels = Array[int]([5])
 mod_class = 1
 name = "Test Power"
-description = "Testing Power Mod"
+description = "Used to power the function of other tower mods"
 texture = SubResource("AtlasTexture_l4mn2")
 metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

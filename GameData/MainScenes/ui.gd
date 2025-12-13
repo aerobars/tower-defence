@@ -1,12 +1,14 @@
 extends CanvasLayer
 
 @onready var hp_bar := $HUD/InfoBar/InfoContainer/HealthBar
-@onready var hp_bar_tween := $HUD/InfoBar/InfoContainer/HealthBar.create_tween()
+@onready var hp_text := $HUD/InfoBar/InfoContainer/HealthBar/HealthAmount
 @onready var texture := preload("res://Assets/UI/range_overlay.png")
+@onready var tower = preload("res://GameData/Towers/tower_base.tscn")
+
 
 #runs via GameScenes initiate_build_mod func
-func set_tower_preview(tower_type: String, mouse_pos: Vector2, dict: Dictionary) -> void:
-	var drag_tower = load("res://GameData/Towers/" + tower_type + ".tscn").instantiate()
+func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary) -> void:
+	var drag_tower = tower.instantiate()
 	drag_tower.set_name("DragTower")
 	drag_tower.modulate = Color("GREEN")
 	
@@ -43,9 +45,8 @@ func update_tower_preview(new_pos, color):
 		$TowerPreview/DragTower.modulate = Color(color)
 		#$TowerPreview/Sprite2D.modulate = Color(color)
 
-##
+
 ## Game Control Functions
-##
 
 func _on_pause_play_pressed() -> void:
 	if get_parent().build_mode:
@@ -66,11 +67,13 @@ func _on_fast_forward_pressed() -> void:
 	else:
 		Engine.set_time_scale(2.0)
 
-func update_health_bar(base_health):
-	hp_bar_tween.tween_property(hp_bar, "value", base_health, 0.1)
-	if base_health >= 60:
+func update_health_bar(cur_health, max_health):
+	var hp_bar_tween := $HUD/InfoBar/InfoContainer/HealthBar.create_tween()
+	hp_bar_tween.tween_property(hp_bar, "value", cur_health, 0.1)
+	hp_text.text = str(cur_health) + "/" + str(max_health)
+	if cur_health >= 60:
 		hp_bar.set_tint_progress("00a800")#Green
-	elif base_health >= 25:
+	elif cur_health >= 25:
 		hp_bar.set_tint_progress("c77200")#Orange
 	else:
 		hp_bar.set_tint_progress("ff0000")#Red

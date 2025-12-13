@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://iq7vcv16hyni"]
+[gd_scene load_steps=4 format=3 uid="uid://iq7vcv16hyni"]
 
 [ext_resource type="Texture2D" uid="uid://ceqhep7if173u" path="res://Assets/UI/Buttons/button_round_line.png" id="1_ge1wo"]
 [ext_resource type="Script" uid="uid://ca6gk23vpyi7s" path="res://GameData/UIScenes/GUI/Scripts/tower_button.gd" id="2_0hnoc"]
-[ext_resource type="PackedScene" uid="uid://bii7ege1adnq6" path="res://GameData/UIScenes/GUI/mod_slot.tscn" id="2_ge1wo"]
 [ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="4_ge1wo"]
 
 [node name="BuildTowerButton" type="TextureButton" groups=["build_buttons"]]
@@ -12,15 +11,6 @@ size_flags_vertical = 4
 texture_normal = ExtResource("1_ge1wo")
 stretch_mode = 0
 script = ExtResource("2_0hnoc")
-
-[node name="ModSlot" parent="." instance=ExtResource("2_ge1wo")]
-position = Vector2(40, -24)
-
-[node name="ModSlot2" parent="." instance=ExtResource("2_ge1wo")]
-position = Vector2(-16, 0)
-
-[node name="ModSlot3" parent="." instance=ExtResource("2_ge1wo")]
-position = Vector2(96, 0)
 
 [node name="Icon" type="TextureRect" parent="."]
 layout_mode = 1

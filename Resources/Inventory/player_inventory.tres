@@ -1,30 +1,37 @@
-[gd_resource type="Resource" script_class="InventoryData" load_steps=9 format=3 uid="uid://c3m5eg7swenlw"]
+[gd_resource type="Resource" script_class="InventoryData" load_steps=11 format=3 uid="uid://c3m5eg7swenlw"]
 
-[ext_resource type="Script" uid="uid://bjmi2gnp5s1tf" path="res://GameData/UIScenes/Inventory/inventory_data.gd" id="1_qwddm"]
-[ext_resource type="Script" uid="uid://b4so26n1sqyy1" path="res://GameData/UIScenes/Inventory/slot_data.gd" id="2_4t8we"]
+[ext_resource type="Script" uid="uid://bjmi2gnp5s1tf" path="res://GameData/UIScenes/Inventory/Scripts/inventory_data.gd" id="1_fy7e0"]
+[ext_resource type="Script" uid="uid://b4so26n1sqyy1" path="res://GameData/UIScenes/Inventory/Scripts/slot_data.gd" id="2_4t8we"]
 [ext_resource type="Resource" uid="uid://c0b02to1odbhe" path="res://GameData/TowerMods/power_test.tres" id="3_4t8we"]
-[ext_resource type="Resource" uid="uid://dvvbt8ew2bu0w" path="res://GameData/TowerMods/aura_test.tres" id="4_fy7e0"]
+[ext_resource type="Resource" uid="uid://dvvbt8ew2bu0w" path="res://GameData/TowerMods/dmg_aura_test.tres" id="4_tixu4"]
 [ext_resource type="Resource" uid="uid://csfw8j2u8n72r" path="res://GameData/TowerMods/wep_test.tres" id="5_tixu4"]
+[ext_resource type="Resource" uid="uid://bqlb20t172exs" path="res://GameData/TowerMods/burn_aura_test.tres" id="6_pk4ny"]
 
 [sub_resource type="Resource" id="Resource_afwgh"]
 script = ExtResource("2_4t8we")
 tower_mod = ExtResource("3_4t8we")
-quantity = 1
+quantity = 99
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
 [sub_resource type="Resource" id="Resource_fy7e0"]
 script = ExtResource("2_4t8we")
-tower_mod = ExtResource("4_fy7e0")
-quantity = 2
+tower_mod = ExtResource("4_tixu4")
+quantity = 99
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
 [sub_resource type="Resource" id="Resource_tixu4"]
 script = ExtResource("2_4t8we")
 tower_mod = ExtResource("5_tixu4")
-quantity = 3
+quantity = 99
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[sub_resource type="Resource" id="Resource_6uspd"]
+script = ExtResource("2_4t8we")
+tower_mod = ExtResource("6_pk4ny")
+quantity = 99
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
 [resource]
-script = ExtResource("1_qwddm")
-slots = Array[ExtResource("2_4t8we")]([SubResource("Resource_afwgh"), SubResource("Resource_fy7e0"), SubResource("Resource_tixu4")])
+script = ExtResource("1_fy7e0")
+slots = Array[ExtResource("2_4t8we")]([SubResource("Resource_afwgh"), SubResource("Resource_fy7e0"), SubResource("Resource_tixu4"), SubResource("Resource_6uspd")])
 metadata/_custom_type_script = "uid://bjmi2gnp5s1tf"

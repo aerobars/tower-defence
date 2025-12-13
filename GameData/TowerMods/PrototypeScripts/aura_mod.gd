@@ -9,15 +9,14 @@ enum AuraBuffableStats{
 @export var base_range_levels : Array[float]
 var current_range : float
 
-enum DamageType {NONE, FIRE, COLD, POISON, PHYSICAL}
-@export var damage_type : DamageType = DamageType.NONE
+#enum DamageType {NONE, FIRE, COLD, POISON, PHYSICAL}
+#@export var damage_type : DamageType = DamageType.NONE
 @export var buff_data : Buff 
-@export var debuff_proc_rate : Array[float]
-@export var range_mod : Array[float]
+#@export var range_mod : Array[float]
 @export var base_attack_speed_levels : Array[float]
 var current_attack_speed : float
 
-@export var is_aura : bool = false
+var is_aura : bool = false
 @export var offensive_aura : bool = false
 
 func buff_check(buff_stat) -> bool:
@@ -26,6 +25,7 @@ func buff_check(buff_stat) -> bool:
 func recalculate_stats(stat_addends, stat_multipliers) -> void:
 	current_power = base_power_levels[level]
 	current_range = base_range_levels[level]
+	current_attack_speed = base_attack_speed_levels[level]
 	
 	#addends first so it benefits from multipliers
 	for stat_name in stat_addends:

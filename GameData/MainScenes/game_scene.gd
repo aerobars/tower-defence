@@ -2,16 +2,17 @@ extends Node2D
 
 signal game_finished(result)
 
-#ui variables
+##ui variables
 var map_node : Node
 const POPUP_PANEL := preload("res://GameData/UIScenes/GUI/InfoPopup.tscn")
 const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
 @onready var new_slot := $UI/HUD/BuildBar/InventoryContainer/InventoryGrid.connect("slot_created", connect_inv_button_signal)
 @onready var build_bar := $UI/HUD/BuildBar
 @onready var inventory_ui := $UI/HUD/BuildBar/InventoryContainer/InventoryGrid
+@onready var baddy_info_foldable := $UI/HUD/BaddyInfo/VBoxContainer
 var cur_popup : Node2D
 
-#pathfinding variables
+##pathfinding variables
 @onready var ground_layer := $Map/Ground
 @onready var exclusion_layer := $Map/Exclusion
 @onready var pathing_layer := $Map/Pathfinding
@@ -29,7 +30,7 @@ const CELL := Vector2(CELL_SIZE, CELL_SIZE)
 const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
 var previous_tile: Vector2i
 
-#build mode variables
+##build mode variables
 var build_mode := false
 var build_valid := false
 var build_tile
@@ -37,15 +38,17 @@ var build_location
 var build_type : String
 var build_data : Dictionary
 
-#gameplay variables
+##gameplay variables
 var current_wave := 0
-var enemies_in_wave := 0
-
-var base_health := 100
+var enemies_in_wave := 1
+var current_act = 1
+@export var max_player_health : int = 100
+var current_player_health : int
 
 func _ready() -> void:
 	map_node = $Map #turn into variable if using multiple maps
-
+	current_player_health = max_player_health
+	
 	astar.cell_size = Vector2(CELL_SIZE, CELL_SIZE)
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_AT_LEAST_ONE_WALKABLE
 	astar.region = ground_layer.get_used_rect()
@@ -56,8 +59,7 @@ func _ready() -> void:
 	baddy_path_update()
 	
 	for i in get_tree().get_nodes_in_group("build_buttons"):
-		i.pressed.connect(func(): initiate_build_mode(i.name.to_snake_case(), i.data))
-	
+		i.pressed.connect(func(): initiate_build_mode(i.tower, i.data))
 
 func _process(_delta: float) -> void:
 	if build_mode:
@@ -76,29 +78,49 @@ func _unhandled_input(event: InputEvent) -> void:
 ## Wave Functions
 
 func start_next_wave() -> void:
+	current_wave += 1
 	var wave_data = retrieve_wave_data()
-	await(get_tree().create_timer(0.2)).timeout ##padding between wave
+	await(get_tree().create_timer(0.2, false)).timeout #padding between wave
 	spawn_enemies(wave_data)
 
 func retrieve_wave_data() -> Array:
-	var wave_data = [["blue_tank", 3.0], ["blue_tank", 0.1]]
-	current_wave += 1
-	enemies_in_wave = wave_data.size()
+	var wave_data = GameData.get_wave_data(current_act)
 	return wave_data
 
 func spawn_enemies(wave_data) -> void:
 	for i in wave_data:
-		var new_enemy = load("res://GameData/Baddies/" + i[0] + ".tscn").instantiate()
-		new_enemy.connect("base_damage", Callable(self, "on_base_damage"))
-		map_node.get_node("Path").add_child(new_enemy, true)
-		await(get_tree().create_timer(i[1])).timeout
+		var spawn_count : int = 1
+		var baddy_scene = load("res://GameData/Baddies/" + i + ".tscn")
+		var new_baddy = baddy_scene.instantiate()
+		enemies_in_wave = new_baddy.data.spawns_per_wave
+		update_baddy_info(new_baddy)
+		new_baddy.base_damage.connect(on_base_damage)
+		map_node.get_node("Path").add_child(new_baddy, true)
+		await(get_tree().create_timer(new_baddy.data.spawn_interval, false)).timeout
+		while spawn_count != enemies_in_wave: #only run if more than 1 enemy is spawned in the wave
+			new_baddy = baddy_scene.instantiate()
+			new_baddy.base_damage.connect(on_base_damage)
+			map_node.get_node("Path").add_child(new_baddy, true)
+			spawn_count += 1
+			await(get_tree().create_timer(new_baddy.data.spawn_interval, false)).timeout
+			if spawn_count == enemies_in_wave:
+				continue
+
+func update_baddy_info(baddy) -> void:
+	baddy_info_foldable.get_node("Name").text = "Name: " + baddy.name.replace("([a-z])([A-Z])", "$1 $2")
+	baddy_info_foldable.get_node("Health").text = "Health: " + str(baddy.data.base_max_health)
+	baddy_info_foldable.get_node("Damage").text = "Damage: " + str(baddy.data.base_damage)
+	baddy_info_foldable.get_node("Defence").text = "Defence: " + str(baddy.data.base_defence)
+	baddy_info_foldable.get_node("MoveSpeed").text = "Move Speed: " + str(baddy.data.base_move_speed)
+	baddy_info_foldable.get_node("Description").text = "baddy description goes here"
+	$UI/HUD/BaddyInfo.set_folded(false)
 
 func on_base_damage(damage) -> void:
-	base_health -= damage
-	if base_health <= 0:
-		emit_signal("game_finished", false)
+	current_player_health -= damage
+	if current_player_health <= 0:
+		game_finished.emit(false)
 	else:
-		$UI.update_health_bar(base_health)
+		$UI.update_health_bar(current_player_health, max_player_health)
 
 
 ## Pathfinding Functions
@@ -124,7 +146,7 @@ func pathfinding_update() -> void:
 
 ## Building Functions
 
-##connected to build buttons' pressed signal, data contains tower mods and aura tower status
+#connected to build buttons' pressed signal, data contains tower mods and aura tower status
 func initiate_build_mode(tower_type: String, data: Dictionary) -> void:
 	if build_mode:
 		cancel_build_mode()
@@ -171,12 +193,9 @@ func verify_and_build() -> void:
 		new_tower.is_built = true
 		new_tower.build_btn_mods = build_data["mods"]
 		new_tower.aura_tower = build_data["aura_tower"]
+		new_tower.marker_count = build_data["mods"].size()
 		
-		#type not needed for mods/tower base
-#		new_tower.type = build_type
-#		new_tower.category = GameData.tower_data[build_type]["category"]
-
-		##TowerContainer is in Map Scene
+		#TowerContainer is in Map Scene
 		map_node.get_node("TowerContainer").add_child(new_tower, true)
 		exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
 		astar.set_point_solid(build_tile, true)
@@ -192,7 +211,7 @@ func connect_inv_button_signal(inventory_slot) -> void: #connects new inventory 
 	inventory_slot.hovered.connect(create_popup)
 	inventory_slot.clear_popup.connect(clear_popup)
 
-##button down for inventory slot
+#button down for inventory slot
 func on_inv_button_down(_inventory_slot, tower_mod) -> void:
 	var new_draggable = DRAGGABLE_MOD.instantiate()
 	GameData.is_dragging = true

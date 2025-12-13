@@ -1,10 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://b7d7kfemno1ex"]
+[gd_scene load_steps=16 format=3 uid="uid://b7d7kfemno1ex"]
 
 [ext_resource type="PackedScene" uid="uid://egfxblymqfqd" path="res://GameData/Maps/map.tscn" id="1_akvmk"]
 [ext_resource type="Script" uid="uid://djsr0kjgwaton" path="res://GameData/MainScenes/game_scene.gd" id="1_g2kuy"]
 [ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/MainScenes/ui.gd" id="3_ibdpl"]
 [ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://Resources/Inventory/inventory_bg.tres" id="4_syms3"]
-[ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/inventory_ui.gd" id="5_waasu"]
+[ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="5_waasu"]
 [ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://Resources/Inventory/player_inventory.tres" id="6_qo4eh"]
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="7_674w2"]
 [ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="8_a0jnf"]
@@ -14,6 +14,7 @@
 [ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://Resources/Fonts/kfn_30_o1.tres" id="11_sl8sw"]
 [ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="12_jvyjn"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="13_541wh"]
+[ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
 
 [node name="GameScene" type="Node2D"]
 script = ExtResource("1_g2kuy")
@@ -83,19 +84,30 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -82.0
-offset_top = -80.0
-offset_right = 82.0
+offset_left = -280.0
+offset_top = -144.0
+offset_right = 95.0
+offset_bottom = -64.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 4
 size_flags_vertical = 8
-theme_override_constants/separation = 30
+theme_override_constants/separation = 150
+alignment = 1
 
 [node name="TowerBase" parent="UI/HUD/BuildBar/HBoxContainer" instance=ExtResource("11_s26dc")]
 show_behind_parent = true
 z_index = -1
 layout_mode = 2
+slot_count = 3
+slot_radius = 64.0
+
+[node name="TowerBase2" parent="UI/HUD/BuildBar/HBoxContainer" instance=ExtResource("11_s26dc")]
+show_behind_parent = true
+z_index = -1
+layout_mode = 2
+slot_count = 4
+slot_radius = 64.0
 
 [node name="InfoBar" type="ColorRect" parent="UI/HUD"]
 self_modulate = Color(0, 0, 0, 0.470588)
@@ -103,6 +115,7 @@ custom_minimum_size = Vector2(0, 60)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
+offset_bottom = 60.0
 grow_horizontal = 2
 
 [node name="InfoContainer" type="HBoxContainer" parent="UI/HUD/InfoBar"]
@@ -110,6 +123,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 272.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -149,6 +163,23 @@ texture_under = ExtResource("13_541wh")
 texture_progress = ExtResource("13_541wh")
 tint_under = Color(0.215686, 0.215686, 0.215686, 1)
 tint_progress = Color(0, 0.658824, 0, 1)
+
+[node name="HealthAmount" type="Label" parent="UI/HUD/InfoBar/InfoContainer/HealthBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "100/100"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Control" type="Control" parent="UI/HUD/InfoBar/InfoContainer"]
 custom_minimum_size = Vector2(70, 0)
@@ -191,6 +222,45 @@ size_flags_vertical = 4
 texture_normal = ExtResource("9_clpeu")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="BaddyInfo" type="FoldableContainer" parent="UI/HUD"]
+layout_mode = 1
+offset_top = 24.0
+offset_right = 275.0
+offset_bottom = 185.0
+size_flags_horizontal = 3
+folded = true
+title = "Baddy Info"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/HUD/BaddyInfo"]
+visible = false
+layout_mode = 2
+theme = ExtResource("15_wrp27")
+
+[node name="Name" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Name:"
+
+[node name="Health" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
+layout_mode = 2
+text = "Health:"
+
+[node name="Damage" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
+layout_mode = 2
+text = "Damage:"
+
+[node name="Defence" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
+layout_mode = 2
+text = "Defence: test"
+
+[node name="MoveSpeed" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
+layout_mode = 2
+text = "Move Speed: test"
+
+[node name="Description" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
+layout_mode = 2
+text = "Description: "
 
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="UI" method="_on_pause_play_pressed"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/FastForward" to="UI" method="_on_fast_forward_pressed"]

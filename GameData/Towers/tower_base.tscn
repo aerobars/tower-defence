@@ -14,9 +14,3 @@ texture = ExtResource("2_idrxg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_clhox")
-
-[node name="ModPosition" type="Marker2D" parent="."]
-
-[node name="ModPosition2" type="Marker2D" parent="."]
-
-[node name="ModPosition3" type="Marker2D" parent="."]

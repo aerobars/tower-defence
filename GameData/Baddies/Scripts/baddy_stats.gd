@@ -4,6 +4,10 @@ signal health_depleted
 signal health_changed(current_health: int, max_health: int)
 signal create_dot_timers(dot_data: DotBuff)
 
+@export var spawns_per_wave: int
+@export var spawn_interval: float
+
+##Baddy Stats
 enum BaddyBuffableStats {
 	MAX_HEALTH,
 	DAMAGE,
@@ -31,6 +35,8 @@ var health : float = 0 : set = _on_health_set
 var stat_buffs: Array[StatBuff]
 var dot_buffs: Array[DotBuff]
 
+
+##Stats Setup and Adjustment
 func _init() -> void:
 	setup_stats.call_deferred()
 
@@ -39,21 +45,19 @@ func setup_stats() -> void:
 	health = current_max_health
 
 func add_buff(buff: Buff) -> void:
-	match buff:
-		DotBuff:
-			dot_buffs.append(buff)
-			create_dot_timers.emit(buff)
-		StatBuff:
-			stat_buffs.append(buff)
-			recalculate_stats.call_deferred()
+	if buff is DotBuff:
+		dot_buffs.append(buff)
+		create_dot_timers.emit(buff)
+	elif buff is StatBuff:
+		stat_buffs.append(buff)
+		recalculate_stats.call_deferred()
 
 func remove_buff(buff: Buff) -> void:
-	match buff:
-		DotBuff:
-			dot_buffs.append(buff)
-		StatBuff:
-			stat_buffs.erase(buff)
-			recalculate_stats.call_deferred()
+	if buff is DotBuff:
+		dot_buffs.erase(buff)
+	elif buff is StatBuff:
+		stat_buffs.erase(buff)
+		recalculate_stats.call_deferred()
 
 func recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
@@ -88,7 +92,7 @@ func recalculate_stats() -> void:
 func _on_health_set(new_value: float) -> void:
 	health = clamp(new_value, 0, current_max_health)
 	health_changed.emit(health, current_max_health)
-	if health <= 0:
+	if health == 0:
 		health_depleted.emit()
 
 func _on_experience_set(new_value: int) -> void:

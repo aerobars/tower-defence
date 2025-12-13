@@ -1,9 +1,9 @@
 class_name TowerBase extends StaticBody2D
 
-#level 0 to line up with arrays
-var level := 0
-var marker_count : int = 0
-var marker_pos_radius : float = 10
+
+@export var marker_pos_radius : float = 10
+var level := 0 #level 0 to line up with arrays
+var marker_count : int = 0 #set during verify and build Game Scene function
 var all_marker_pos : Dictionary[Marker2D,Vector2]
 var marker_keys : Array
 
@@ -14,15 +14,11 @@ var aura_tower : bool
 var is_powered := false
 var net_power : int
 
-var tower_mod_proto = preload("res://GameData/TowerMods/tower_mod.tscn")
+var tower_mod_proto := preload("res://GameData/TowerMods/tower_mod.tscn")
 var is_built := false
 
 func _ready() -> void:
-	#use markers instead of directly setting TowerMod scene so that this can show mod textures during build mode
-	for child in get_children():
-		if child.get_class() == "Marker2D":
-			set_marker_pos(child)
-	marker_position()
+	marker_setup() #use markers instead of directly setting TowerMod scene so that this can show mod textures during build mode
 	if build_btn_mods.size() > 0:
 		for i in range(build_btn_mods.size()):
 			marker_keys = all_marker_pos.keys()
@@ -48,25 +44,25 @@ func level_up() -> void:
 		child.level_up()
 
 ## Marker Functions
-func marker_position() -> void:
-	var count : int = 0
-	for marker in all_marker_pos:
-		var angle = (TAU * count) / marker_count
-		marker.position.x = marker_pos_radius * cos(angle)
-		marker.position.y = marker_pos_radius * sin(angle)
-		all_marker_pos[marker] = marker.position
-		count += 1
+func marker_setup() -> void:
+	for i in marker_count:
+		var marker = Marker2D.new()
+		set_marker_pos(marker, i)
+		add_child(marker)
 
-func set_marker_pos(child) -> void:
-	all_marker_pos.set(child, child.position)
-	marker_count += 1
+func set_marker_pos(marker, count) -> void:
+	var angle = (TAU * count) / marker_count
+	marker.position.x = marker_pos_radius * cos(angle)
+	marker.position.y = marker_pos_radius * sin(angle)
+	all_marker_pos[marker] = marker.position
 
-##called if # of markers gets updated
+#called if # of markers gets updated
 func update_markers() -> void:
+	var count = 0
 	for child in get_children():
-		if child.get_class() == "Marker2D":
-			set_marker_pos(child)
-	marker_position()
+		if child is Marker2D:
+			set_marker_pos(child, count)
+			count +=1
 
 func power_check() -> void:
 	for child in get_children():
