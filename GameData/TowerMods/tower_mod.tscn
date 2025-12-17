@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://bp51akjapuerf"]
+[gd_scene load_steps=8 format=3 uid="uid://bp51akjapuerf"]
 
 [ext_resource type="Script" uid="uid://dvux8hj1euiax" path="res://GameData/TowerMods/PrototypeScripts/tower_mod_prototype.gd" id="1_uu2uq"]
-[ext_resource type="Texture2D" uid="uid://ctr4gkegia16c" path="res://Assets/Towers/towerDefense_tile249.png" id="2_lrybp"]
 [ext_resource type="Texture2D" uid="uid://cl37gw4ii0o7t" path="res://Assets/Effects/towerDefense_tile297.png" id="3_ptglf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_uu2uq"]
@@ -55,7 +54,7 @@ script = ExtResource("1_uu2uq")
 shape = SubResource("CircleShape2D_uu2uq")
 
 [node name="Turret" type="Sprite2D" parent="."]
-texture = ExtResource("2_lrybp")
+scale = Vector2(0.7, 0.7)
 offset = Vector2(12, 0)
 
 [node name="Muzzle" type="Marker2D" parent="Turret"]

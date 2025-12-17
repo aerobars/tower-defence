@@ -15,6 +15,7 @@ atlas = ExtResource("3_4hcia")
 region = Rect2(16, 15, 32, 32)
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("2_jme3j")
 base_range_levels = Array[float]([300.0])
 buff_data = SubResource("Resource_qib6m")

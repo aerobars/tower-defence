@@ -8,8 +8,8 @@ atlas = ExtResource("2_pjor1")
 region = Rect2(10, 11, 32, 32)
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("1_pjor1")
-level = null
 base_power_levels = Array[int]([5])
 mod_class = 1
 name = "Test Power"

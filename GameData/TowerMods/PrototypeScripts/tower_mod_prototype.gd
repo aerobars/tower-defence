@@ -44,17 +44,16 @@ func mod_slot_updated(mod_slot : StaticBody2D, mod_slot_data : TowerMod) -> void
 
 func _physics_process(_delta: float) -> void:
 	if data != null and get_parent().is_powered:
-		if target_array.size() != 0:
-			if reloaded:
-				if data.mod_class == data.ModType.AURA and data.offensive_aura:
-					for i in target_array:
-						target = i
-						fire()
-				elif data.mod_class == data.ModType.WEAPON:
-					select_target()
-					if not $AnimationPlayer.is_playing():
-						turn()
+		if target_array.size() != 0 and reloaded:
+			if data.mod_class == data.ModType.AURA and data.offensive_aura:
+				for i in target_array:
+					target = i
 					fire()
+			elif data.mod_class == data.ModType.WEAPON:
+				select_target()
+				if not $AnimationPlayer.is_playing():
+					turn()
+				fire()
 		else:
 			target = null
 
@@ -89,7 +88,7 @@ func fire_projectile():
 	pass
 
 func fire_gun():
-	get_node("AnimationPlayer").play("fire")
+	$AnimationPlayer.play("fire")
 
 func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
@@ -109,7 +108,7 @@ func _on_range_body_exited(body) -> void:
 		aura_targets.erase(body)
 
 func apply_buff(body) -> void:
-	body.data.add_buff(data.buff_data)
+	body.data.add_buff(data.buff_data.duplicate(true))
 
 func clear_buffs(body) -> void:
 	body.data.remove_buff(data.buff_data)

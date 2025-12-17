@@ -8,6 +8,7 @@ atlas = ExtResource("2_c8iad")
 region = Rect2(28, 16, 32, 32)
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("1_42vnw")
 attack_tags = []
 base_range_levels = Array[float]([300.0])

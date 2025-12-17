@@ -8,8 +8,8 @@
 script = ExtResource("1_3fqf4")
 damage_type = 1
 damage_amount = 1.0
-damage_interval = 0.5
-dot_duration = 3.0
+damage_interval = 1.0
+dot_duration = 2.0
 metadata/_custom_type_script = "uid://2ja3gh17qp02"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vl5nd"]
@@ -17,6 +17,7 @@ atlas = ExtResource("3_s1fdh")
 region = Rect2(16, 16, 32, 32)
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("1_85a3l")
 base_range_levels = Array[float]([600.0])
 buff_data = SubResource("Resource_s1fdh")

@@ -6,6 +6,8 @@ signal base_damage(damage)
 
 @onready var health_bar = $HealthBar
 @onready var impact_area = $Impact
+@onready var damage_number_origin = $DamageNumberOrigin
+@onready var hit_flash = $HitFlashAnimation
 var projectile_impact = preload("res://GameData/SupportScenes/projectile_impact.tscn")
 
 func _ready() -> void:
@@ -45,10 +47,12 @@ func initialize_dot(dot) -> void:
 func dot_tick(dot) -> void:
 	while dot.is_active:
 		await(get_tree().create_timer(dot.damage_interval, false).timeout)
+		hit_flash.play("hit_flash")
 		calculate_damage(dot.damage_amount)
 
 func calculate_damage(dmg) -> void:
 	data.health -= dmg
+	DamageNumbers.display_number(dmg, damage_number_origin.global_position, null, false)
 
 func healthbar_update(health, max_health) -> void:
 	health_bar.max_value = max_health
@@ -61,6 +65,7 @@ func impact() -> void:
 	var new_impact = projectile_impact.instantiate()
 	new_impact.position = impact_location
 	impact_area.add_child(new_impact)
+	
 
 func destroy() -> void:
 	$CharacterBody2D.queue_free()

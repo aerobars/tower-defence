@@ -122,6 +122,8 @@ func on_base_damage(damage) -> void:
 	else:
 		$UI.update_health_bar(current_player_health, max_player_health)
 
+func on_wave_clear() -> void:
+	pass
 
 ## Pathfinding Functions
 
@@ -229,8 +231,8 @@ func create_popup(data) -> void:
 	var popup = POPUP_PANEL.instantiate()
 	var popup_size = popup.get_child(0).size
 	popup.data = data
-	popup.global_position = Vector2(get_global_mouse_position().x + (popup_size.x/2), get_global_mouse_position().y - popup_size.y)
-	add_child(popup)
+	popup.global_position = Vector2(get_global_mouse_position().x + 15, get_global_mouse_position().y - popup_size.y)
+	$UI.add_child(popup)
 	clear_popup()
 	cur_popup = popup
 

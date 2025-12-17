@@ -78,21 +78,22 @@ func _run_tween_async(tween: Tween, object: ModDraggable, property: NodePath, en
 
 #react to player mousing over mod, scales when not in inventory
 func _on_area_2d_mouse_entered() -> void:
-	hover_timer.start()
+	#hover_timer.start()
 	if not GameData.is_dragging and not in_inventory:
 		draggable = true
 		scale = Vector2(1.05, 1.05)
 
 func _on_area_2d_mouse_exited() -> void:
-	clear_popup.emit()
+	#clear_popup.emit()
 	if not GameData.is_dragging:
 		draggable = false
 		if not in_inventory:
 			scale = Vector2(1, 1)
 
 func _on_timer_timeout() -> void:
-	if not GameData.is_dragging:
-		hovered.emit(data)
+	#if not GameData.is_dragging:
+		#hovered.emit(data)
+	pass
 
 
 #react to player dragging over mod slot
