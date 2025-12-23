@@ -1,0 +1,47 @@
+[gd_scene load_steps=4 format=3 uid="uid://c2oh548fodlg1"]
+
+[ext_resource type="Script" uid="uid://bk62k3c6krdiu" path="res://GameData/UIScenes/GUI/Scripts/info_popup.gd" id="1_gcb5b"]
+[ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://Resources/Inventory/inventory_bg.tres" id="2_slva4"]
+[ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="3_6ln7u"]
+
+[node name="RewardCard" type="Control"]
+modulate = Color(1, 1, 1, 0.8627451)
+top_level = true
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_gcb5b")
+
+[node name="Background" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_top = -88.0
+offset_right = 148.0
+offset_bottom = 12.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = ExtResource("2_slva4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background"]
+layout_mode = 2
+theme = ExtResource("3_6ln7u")
+
+[node name="Name" type="Label" parent="Background/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Mod Name"
+
+[node name="Icon" type="TextureRect" parent="Background/VBoxContainer"]
+layout_mode = 2
+
+[node name="Class" type="Label" parent="Background/VBoxContainer"]
+layout_mode = 2
+text = "Mod Class"
+
+[node name="Power" type="Label" parent="Background/VBoxContainer"]
+layout_mode = 2
+text = "A.S.:"
+
+[node name="Description" type="Label" parent="Background/VBoxContainer"]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "Description: "
+autowrap_mode = 3

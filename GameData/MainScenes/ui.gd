@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+
 @onready var hp_bar := $HUD/InfoBar/InfoContainer/HealthBar
 @onready var hp_text := $HUD/InfoBar/InfoContainer/HealthBar/HealthAmount
 @onready var texture := preload("res://Assets/UI/range_overlay.png")
@@ -48,24 +49,9 @@ func update_tower_preview(new_pos, color):
 
 ## Game Control Functions
 
-func _on_pause_play_pressed() -> void:
-	if get_parent().build_mode:
-		get_parent().cancel_build_mode()
-	if get_tree().is_paused():
-		get_tree().paused = false
-	elif get_parent().current_wave == 0:
-		get_parent().current_wave = 1
-		get_parent().start_next_wave()
-	else:
-		get_tree().paused = true
 
-func _on_fast_forward_pressed() -> void:
-	if get_parent().build_mode:
-		get_parent().cancel_build_mode()
-	if Engine.get_time_scale() == 2.0:
-		Engine.set_time_scale(1.0)
-	else:
-		Engine.set_time_scale(2.0)
+
+## Gameplay Functions
 
 func update_health_bar(cur_health, max_health):
 	var hp_bar_tween := $HUD/InfoBar/InfoContainer/HealthBar.create_tween()
@@ -77,3 +63,6 @@ func update_health_bar(cur_health, max_health):
 		hp_bar.set_tint_progress("c77200")#Orange
 	else:
 		hp_bar.set_tint_progress("ff0000")#Red
+
+func end_game(result) -> void:
+	pass

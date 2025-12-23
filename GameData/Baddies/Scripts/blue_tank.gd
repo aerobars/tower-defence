@@ -1,5 +1,6 @@
 class_name Baddy extends PathFollow2D
 
+signal baddy_death
 signal base_damage(damage)
 
 @export var data : BaddyStats
@@ -65,9 +66,10 @@ func impact() -> void:
 	var new_impact = projectile_impact.instantiate()
 	new_impact.position = impact_location
 	impact_area.add_child(new_impact)
-	
+
 
 func destroy() -> void:
+	baddy_death.emit()
 	$CharacterBody2D.queue_free()
 	await (get_tree().create_timer(0.2).timeout)
 	self.queue_free()

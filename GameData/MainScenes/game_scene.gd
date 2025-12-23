@@ -4,12 +4,14 @@ signal game_finished(result)
 
 ##ui variables
 var map_node : Node
-const POPUP_PANEL := preload("res://GameData/UIScenes/GUI/InfoPopup.tscn")
+const POPUP_PANEL := preload("res://GameData/UIScenes/GUI/info_popup.tscn")
 const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
-@onready var new_slot := $UI/HUD/BuildBar/InventoryContainer/InventoryGrid.connect("slot_created", connect_inv_button_signal)
+@onready var ui := $UI
 @onready var build_bar := $UI/HUD/BuildBar
+@onready var new_slot := $UI/HUD/BuildBar/InventoryContainer/InventoryGrid.connect("slot_created", connect_inv_button_signal)
 @onready var inventory_ui := $UI/HUD/BuildBar/InventoryContainer/InventoryGrid
 @onready var baddy_info_foldable := $UI/HUD/BaddyInfo/VBoxContainer
+@onready var end_game_message = $UI/EndGameMessage.text
 var cur_popup : Node2D
 
 ##pathfinding variables
@@ -40,10 +42,13 @@ var build_data : Dictionary
 
 ##gameplay variables
 var current_wave := 0
-var enemies_in_wave := 1
-var current_act = 1
+var spawns_per_wave := 1 
+var wave_total := 0
+var current_act = 0
+var wave_kill_count := 0
 @export var max_player_health : int = 100
 var current_player_health : int
+var character : String = "Tester"
 
 func _ready() -> void:
 	map_node = $Map #turn into variable if using multiple maps
@@ -75,6 +80,26 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("press_build_button_1"):
 		build_bar.get_node("HBoxContainer/TowerBase").pressed.emit()
 
+func _on_pause_play_pressed() -> void:
+	if build_mode:
+		cancel_build_mode()
+	if get_tree().is_paused():
+		get_tree().paused = false
+	elif current_wave == 0:
+		current_wave = 1
+		start_next_wave()
+	else:
+		get_tree().paused = true
+
+func _on_fast_forward_pressed() -> void:
+	if build_mode:
+		cancel_build_mode()
+	if Engine.get_time_scale() == 2.0:
+		Engine.set_time_scale(1.0)
+	else:
+		Engine.set_time_scale(2.0)
+
+
 ## Wave Functions
 
 func start_next_wave() -> void:
@@ -88,22 +113,25 @@ func retrieve_wave_data() -> Array:
 	return wave_data
 
 func spawn_enemies(wave_data) -> void:
-	for i in wave_data:
+	for i in wave_data: 
 		var spawn_count : int = 1
-		var baddy_scene = load("res://GameData/Baddies/" + i + ".tscn")
-		var new_baddy = baddy_scene.instantiate()
-		enemies_in_wave = new_baddy.data.spawns_per_wave
+		var baddy_scene = load("res://GameData/Baddies/Act" + current_act + "/" + i)
+		var new_baddy = baddy_scene.instantiate() 
+		#first instantiate outside of loop for one-time variable setting
+		spawns_per_wave = new_baddy.data.spawns_per_wave
+		wave_total += spawns_per_wave
 		update_baddy_info(new_baddy)
 		new_baddy.base_damage.connect(on_base_damage)
+		new_baddy.baddy_death.connect(on_baddy_death)
 		map_node.get_node("Path").add_child(new_baddy, true)
 		await(get_tree().create_timer(new_baddy.data.spawn_interval, false)).timeout
-		while spawn_count != enemies_in_wave: #only run if more than 1 enemy is spawned in the wave
+		while spawn_count != spawns_per_wave: #only run if more than 1 enemy is spawned in the wave
 			new_baddy = baddy_scene.instantiate()
 			new_baddy.base_damage.connect(on_base_damage)
 			map_node.get_node("Path").add_child(new_baddy, true)
 			spawn_count += 1
 			await(get_tree().create_timer(new_baddy.data.spawn_interval, false)).timeout
-			if spawn_count == enemies_in_wave:
+			if spawn_count == spawns_per_wave:
 				continue
 
 func update_baddy_info(baddy) -> void:
@@ -118,9 +146,18 @@ func update_baddy_info(baddy) -> void:
 func on_base_damage(damage) -> void:
 	current_player_health -= damage
 	if current_player_health <= 0:
+		end_game_message = "You lose!"
 		game_finished.emit(false)
 	else:
 		$UI.update_health_bar(current_player_health, max_player_health)
+		on_baddy_death()
+
+func on_baddy_death() -> void:
+	wave_kill_count += 1
+	if wave_kill_count == wave_total:
+		on_wave_clear()
+		end_game_message = "You win!"
+		game_finished.emit(true)
 
 func on_wave_clear() -> void:
 	pass

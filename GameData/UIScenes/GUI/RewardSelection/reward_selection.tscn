@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://sho7au84mvxg"]
+
+[ext_resource type="Script" uid="uid://bi7mdp3y8hqe8" path="res://GameData/UIScenes/GUI/RewardSelection/reward_selection.gd" id="1_gipd4"]
+[ext_resource type="Texture2D" uid="uid://clhk7px75x85h" path="res://Assets/UI/Buttons/button_square_line.png" id="2_u260h"]
+[ext_resource type="PackedScene" uid="uid://c2oh548fodlg1" path="res://GameData/UIScenes/GUI/RewardSelection/reward_card.tscn" id="3_whhxv"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_whhxv"]
+texture = ExtResource("2_u260h")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+
+[node name="RewardSelection" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gipd4")
+
+[node name="TextureRect" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -96.0
+offset_right = 128.0
+offset_bottom = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_whhxv")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TextureRect"]
+layout_mode = 2
+
+[node name="RewardCard" parent="TextureRect/HBoxContainer" instance=ExtResource("3_whhxv")]
+layout_mode = 2
+size_flags_horizontal = 4
