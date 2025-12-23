@@ -4,6 +4,7 @@ signal baddy_death
 signal base_damage(damage)
 
 @export var data : BaddyStats
+@export_multiline var description: String
 
 @onready var health_bar = $HealthBar
 @onready var impact_area = $Impact

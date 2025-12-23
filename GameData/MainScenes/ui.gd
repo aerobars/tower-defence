@@ -1,11 +1,11 @@
 extends CanvasLayer
 
 
-@onready var hp_bar := $HUD/InfoBar/InfoContainer/HealthBar
-@onready var hp_text := $HUD/InfoBar/InfoContainer/HealthBar/HealthAmount
+@export var hp_bar : TextureProgressBar
+@export var hp_text : Label
+@export var cash_display : Label
 @onready var texture := preload("res://Assets/UI/range_overlay.png")
 @onready var tower = preload("res://GameData/Towers/tower_base.tscn")
-
 
 #runs via GameScenes initiate_build_mod func
 func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary) -> void:
@@ -47,10 +47,6 @@ func update_tower_preview(new_pos, color):
 		#$TowerPreview/Sprite2D.modulate = Color(color)
 
 
-## Game Control Functions
-
-
-
 ## Gameplay Functions
 
 func update_health_bar(cur_health, max_health):
@@ -64,5 +60,5 @@ func update_health_bar(cur_health, max_health):
 	else:
 		hp_bar.set_tint_progress("ff0000")#Red
 
-func end_game(result) -> void:
+func end_game(_result) -> void:
 	pass

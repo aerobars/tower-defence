@@ -6,11 +6,12 @@ signal game_finished(result)
 var map_node : Node
 const POPUP_PANEL := preload("res://GameData/UIScenes/GUI/info_popup.tscn")
 const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
+const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
 @onready var ui := $UI
 @onready var build_bar := $UI/HUD/BuildBar
 @onready var new_slot := $UI/HUD/BuildBar/InventoryContainer/InventoryGrid.connect("slot_created", connect_inv_button_signal)
 @onready var inventory_ui := $UI/HUD/BuildBar/InventoryContainer/InventoryGrid
-@onready var baddy_info_foldable := $UI/HUD/BaddyInfo/VBoxContainer
+@onready var baddy_info_foldable := $UI/HUD/BaddyInfo
 @onready var end_game_message = $UI/EndGameMessage.text
 var cur_popup : Node2D
 
@@ -46,9 +47,10 @@ var spawns_per_wave := 1
 var wave_total := 0
 var current_act = 0
 var wave_kill_count := 0
-@export var max_player_health : int = 100
+@export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
 var current_player_health : int
 var character : String = "Tester"
+@export var player_cash : int = 100
 
 func _ready() -> void:
 	map_node = $Map #turn into variable if using multiple maps
@@ -115,12 +117,12 @@ func retrieve_wave_data() -> Array:
 func spawn_enemies(wave_data) -> void:
 	for i in wave_data: 
 		var spawn_count : int = 1
-		var baddy_scene = load("res://GameData/Baddies/Act" + current_act + "/" + i)
+		var baddy_scene = load("res://GameData/Baddies/Act" + str(current_act + 1) + "/" + i)
 		var new_baddy = baddy_scene.instantiate() 
 		#first instantiate outside of loop for one-time variable setting
 		spawns_per_wave = new_baddy.data.spawns_per_wave
 		wave_total += spawns_per_wave
-		update_baddy_info(new_baddy)
+		baddy_info_foldable.update_baddy_info(new_baddy)
 		new_baddy.base_damage.connect(on_base_damage)
 		new_baddy.baddy_death.connect(on_baddy_death)
 		map_node.get_node("Path").add_child(new_baddy, true)
@@ -134,14 +136,6 @@ func spawn_enemies(wave_data) -> void:
 			if spawn_count == spawns_per_wave:
 				continue
 
-func update_baddy_info(baddy) -> void:
-	baddy_info_foldable.get_node("Name").text = "Name: " + baddy.name.replace("([a-z])([A-Z])", "$1 $2")
-	baddy_info_foldable.get_node("Health").text = "Health: " + str(baddy.data.base_max_health)
-	baddy_info_foldable.get_node("Damage").text = "Damage: " + str(baddy.data.base_damage)
-	baddy_info_foldable.get_node("Defence").text = "Defence: " + str(baddy.data.base_defence)
-	baddy_info_foldable.get_node("MoveSpeed").text = "Move Speed: " + str(baddy.data.base_move_speed)
-	baddy_info_foldable.get_node("Description").text = "baddy description goes here"
-	$UI/HUD/BaddyInfo.set_folded(false)
 
 func on_base_damage(damage) -> void:
 	current_player_health -= damage
@@ -161,6 +155,9 @@ func on_baddy_death() -> void:
 
 func on_wave_clear() -> void:
 	pass
+	#load reward ui
+	#load next level/wave selection
+	
 
 ## Pathfinding Functions
 
@@ -239,8 +236,8 @@ func verify_and_build() -> void:
 		exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
 		astar.set_point_solid(build_tile, true)
 		baddy_path_update()
-		#deduct cash
-		#update cash label
+		#deduct player cash
+		$UI.cash_display = player_cash
 
 
 ## Inventory Functions

@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://egfxblymqfqd" path="res://GameData/Maps/map.tscn" id="1_akvmk"]
 [ext_resource type="Script" uid="uid://djsr0kjgwaton" path="res://GameData/MainScenes/game_scene.gd" id="1_g2kuy"]
 [ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/MainScenes/ui.gd" id="3_ibdpl"]
-[ext_resource type="PackedScene" uid="uid://sho7au84mvxg" path="res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn" id="4_dts4o"]
 [ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://Resources/Inventory/inventory_bg.tres" id="4_syms3"]
 [ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="5_waasu"]
 [ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://Resources/Inventory/player_inventory.tres" id="6_qo4eh"]
@@ -15,6 +14,7 @@
 [ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://Resources/Fonts/kfn_30_o1.tres" id="11_sl8sw"]
 [ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="12_jvyjn"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="13_541wh"]
+[ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/MainScenes/baddy_info.gd" id="15_dts4o"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
 
 [node name="GameScene" type="Node2D"]
@@ -30,11 +30,11 @@ joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display")]
 script = ExtResource("3_ibdpl")
-
-[node name="RewardSelection" parent="UI" instance=ExtResource("4_dts4o")]
-size_flags_vertical = 4
+hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
+hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
+cash_display = NodePath("HUD/InfoBar/InfoContainer/Money")
 
 [node name="HUD" type="Control" parent="UI"]
 layout_mode = 3
@@ -235,6 +235,7 @@ offset_bottom = 185.0
 size_flags_horizontal = 3
 folded = true
 title = "Baddy Info"
+script = ExtResource("15_dts4o")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/HUD/BaddyInfo"]
 visible = false

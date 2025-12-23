@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AuraMod" load_steps=6 format=3 uid="uid://dvvbt8ew2bu0w"]
 
-[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/Scripts/stat_buff.gd" id="1_rrixb"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/stat_buff.gd" id="1_rrixb"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/aura_mod.gd" id="2_jme3j"]
 [ext_resource type="Texture2D" uid="uid://b5r5e50k8ljca" path="res://Assets/Effects/explosion3.png" id="3_4hcia"]
 

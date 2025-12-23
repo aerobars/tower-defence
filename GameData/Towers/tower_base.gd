@@ -14,7 +14,7 @@ var aura_tower : bool
 var is_powered := false
 var net_power : int
 
-var tower_mod_proto := preload("res://GameData/TowerMods/tower_mod.tscn")
+var tower_mod_proto := preload("res://GameData/Towers/tower_mod.tscn")
 var is_built := false
 
 func _ready() -> void:

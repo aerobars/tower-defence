@@ -9,10 +9,7 @@ enum AuraBuffableStats{
 @export var base_range_levels : Array[float]
 var current_range : float
 
-#enum DamageType {NONE, FIRE, COLD, POISON, PHYSICAL}
-#@export var damage_type : DamageType = DamageType.NONE
 @export var buff_data : Buff 
-#@export var range_mod : Array[float]
 @export var base_attack_speed_levels : Array[float]
 var current_attack_speed : float
 

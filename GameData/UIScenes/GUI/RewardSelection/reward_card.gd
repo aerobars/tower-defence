@@ -1,15 +1,17 @@
-class_name InfoPopup extends Node2D
+class_name RewardCard extends Control
 
 var data : TowerMod
 @onready var container : VBoxContainer = $Background/VBoxContainer
 @onready var mod_name : Label = $Background/VBoxContainer/Name
 @onready var mod_class : Label = $Background/VBoxContainer/Class
+@onready var icon : TextureRect = $Background/VBoxContainer/Icon
 @onready var power : Label = $Background/VBoxContainer/Power
 @onready var description : Label = $Background/VBoxContainer/Description
 var level = 0
 
 func _ready() -> void:
 	mod_name.text = data.name
+	icon.texture = data.texture
 	mod_class.text = data.class_string.to_pascal_case() + " class"
 	stats_setup()
 	description.text = data.description
@@ -40,3 +42,12 @@ func stats_setup() -> void:
 			container.move_child(mod_range, 4)
 			power.text = "Power Cost: " + str(data.base_power_levels[level])
 			power.text = "Power Cost: " + str(data.base_power_levels[level])
+
+
+
+func _on_background_mouse_entered() -> void:
+	scale = Vector2(1.05, 1.05)
+
+
+func _on_background_mouse_exited() -> void:
+	scale = Vector2 (1, 1)
