@@ -2,45 +2,6 @@ extends Node2D
 
 signal game_finished(result)
 
-##ui variables
-var map_node : Node
-const POPUP_PANEL := preload("res://GameData/UIScenes/GUI/info_popup.tscn")
-const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
-const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
-@onready var ui := $UI
-@onready var build_bar := $UI/HUD/BuildBar
-@onready var new_slot := $UI/HUD/BuildBar/InventoryContainer/InventoryGrid.connect("slot_created", connect_inv_button_signal)
-@onready var inventory_ui := $UI/HUD/BuildBar/InventoryContainer/InventoryGrid
-@onready var baddy_info_foldable := $UI/HUD/BaddyInfo
-@onready var end_game_message = $UI/EndGameMessage.text
-var cur_popup : Node2D
-
-##pathfinding variables
-@onready var ground_layer := $Map/Ground
-@onready var exclusion_layer := $Map/Exclusion
-@onready var pathing_layer := $Map/Pathfinding
-@onready var start_cell := $Map/StartPoint
-@onready var end_cell := $Map/EndPoint
-@onready var baddy_path := $Map/Path
-@onready var path_debug := $PathDebug
-
-var astar : AStarGrid2D = AStarGrid2D.new()
-var path : PackedVector2Array = []
-const WALL_TILE_COORD = Vector2i(0,0)
-const FLOOR_TILE_COORD = Vector2i(0,0)
-const CELL_SIZE = 64
-const CELL := Vector2(CELL_SIZE, CELL_SIZE)
-const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
-var previous_tile: Vector2i
-
-##build mode variables
-var build_mode := false
-var build_valid := false
-var build_tile
-var build_location
-var build_type : String
-var build_data : Dictionary
-
 ##gameplay variables
 var current_wave := 0
 var spawns_per_wave := 1 
@@ -52,8 +13,50 @@ var current_player_health : int
 var character : String = "Tester"
 @export var player_cash : int = 100
 
+##ui variables
+const POPUP_PANEL := preload("res://GameData/UIScenes/GUI/info_popup.tscn")
+const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
+const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
+@export_group("Scene Paths")
+@export_subgroup("UI")
+@export var ui : CanvasLayer
+@export var build_bar : ColorRect
+@export var inventory_ui : GridContainer
+@export var baddy_info_foldable : FoldableContainer
+@onready var end_game_message = $UI/EndGameMessage.text
+@onready var new_slot := inventory_ui.connect("slot_created", connect_inv_button_signal)
+var cur_popup : Node2D
+
+##pathfinding variables
+@export_subgroup("Map and Pathfinding")
+@export var map_node : Node2D #set in _ready instead if using multiple maps
+@export var path_debug :Line2D
+@onready var ground_layer : TileMapLayer = $Map/Ground
+@onready var exclusion_layer : TileMapLayer = $Map/Exclusion
+@onready var pathing_layer : TileMapLayer = $Map/Pathfinding
+@onready var start_cell : Marker2D = $Map/StartPoint
+@onready var end_cell : Marker2D = $Map/EndPoint
+@onready var baddy_path : Path2D = $Map/Path
+
+var astar : AStarGrid2D = AStarGrid2D.new()
+var path : PackedVector2Array = []
+const WALL_TILE_COORD := Vector2i(0,0)
+const FLOOR_TILE_COORD := Vector2i(0,0)
+const CELL_SIZE : int = 64
+const CELL := Vector2(CELL_SIZE, CELL_SIZE)
+const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
+var previous_tile := Vector2i(0, 0)
+
+##build mode variables
+var build_mode : bool = false
+var build_valid : bool = false
+var build_tile
+var build_location
+var build_type : String
+var build_data : Dictionary
+
+
 func _ready() -> void:
-	map_node = $Map #turn into variable if using multiple maps
 	current_player_health = max_player_health
 	
 	astar.cell_size = Vector2(CELL_SIZE, CELL_SIZE)
@@ -107,21 +110,21 @@ func _on_fast_forward_pressed() -> void:
 func start_next_wave() -> void:
 	current_wave += 1
 	var wave_data = retrieve_wave_data()
-	await(get_tree().create_timer(0.2, false)).timeout #padding between wave
-	spawn_enemies(wave_data)
+	wave_total = wave_data["wave_total"]
+	await(get_tree().create_timer(0.2, false)).timeout #padding between wave, not sure if this is necesary 
+	spawn_baddies(wave_data["wave_baddies"])
 
-func retrieve_wave_data() -> Array:
+func retrieve_wave_data() -> Dictionary:
 	var wave_data = GameData.get_wave_data(current_act)
 	return wave_data
 
-func spawn_enemies(wave_data) -> void:
+func spawn_baddies(wave_data) -> void:
 	for i in wave_data: 
 		var spawn_count : int = 1
 		var baddy_scene = load("res://GameData/Baddies/Act" + str(current_act + 1) + "/" + i)
 		var new_baddy = baddy_scene.instantiate() 
 		#first instantiate outside of loop for one-time variable setting
 		spawns_per_wave = new_baddy.data.spawns_per_wave
-		wave_total += spawns_per_wave
 		baddy_info_foldable.update_baddy_info(new_baddy)
 		new_baddy.base_damage.connect(on_base_damage)
 		new_baddy.baddy_death.connect(on_baddy_death)
@@ -130,12 +133,12 @@ func spawn_enemies(wave_data) -> void:
 		while spawn_count != spawns_per_wave: #only run if more than 1 enemy is spawned in the wave
 			new_baddy = baddy_scene.instantiate()
 			new_baddy.base_damage.connect(on_base_damage)
+			new_baddy.baddy_death.connect(on_baddy_death)
 			map_node.get_node("Path").add_child(new_baddy, true)
 			spawn_count += 1
 			await(get_tree().create_timer(new_baddy.data.spawn_interval, false)).timeout
 			if spawn_count == spawns_per_wave:
 				continue
-
 
 func on_base_damage(damage) -> void:
 	current_player_health -= damage
@@ -149,15 +152,19 @@ func on_base_damage(damage) -> void:
 func on_baddy_death() -> void:
 	wave_kill_count += 1
 	if wave_kill_count == wave_total:
-		on_wave_clear()
-		end_game_message = "You win!"
-		game_finished.emit(true)
+		wave_cleared()
+		#game_finished.emit(true)
 
-func on_wave_clear() -> void:
-	pass
-	#load reward ui
+func wave_cleared() -> void:
+	_on_pause_play_pressed()
+	var new_reward = REWARD_UI.instantiate()
+	new_reward.connect_reward_card.connect(reward_signal_connection)
+	ui.add_child(new_reward)
 	#load next level/wave selection
-	
+
+func reward_signal_connection(reward_card) -> void:
+	reward_card.reward_selected.connect(inventory_ui.data.update_inventory)
+
 
 ## Pathfinding Functions
 
@@ -182,15 +189,15 @@ func pathfinding_update() -> void:
 
 ## Building Functions
 
-#connected to build buttons' pressed signal, data contains tower mods and aura tower status
-func initiate_build_mode(tower_type: String, data: Dictionary) -> void:
+
+func initiate_build_mode(tower_type: String, data: Dictionary) -> void: #connected to build buttons' pressed signal, data contains tower mods and aura tower status
 	if build_mode:
 		cancel_build_mode()
 	build_data = data
 	build_type = tower_type
 	build_mode = true
 	previous_tile = Vector2i(-100,-100)
-	$UI.set_tower_preview(build_type, get_global_mouse_position(), build_data)
+	ui.set_tower_preview(build_type, get_global_mouse_position(), build_data)
 
 func update_tower_preview() -> void:
 	var mouse_pos: Vector2 = get_global_mouse_position()
@@ -208,12 +215,12 @@ func update_tower_preview() -> void:
 	pathfinding_update()
 	
 	if exclusion_layer.get_cell_source_id(current_tile) == -1 and not path.is_empty():
-		$UI.update_tower_preview(tile_pos, "GREEN")
+		ui.update_tower_preview(tile_pos, "GREEN")
 		build_valid = true
 		build_location = tile_pos
 		build_tile = current_tile
 	else:
-		$UI.update_tower_preview(tile_pos, "CRIMSON")
+		ui.update_tower_preview(tile_pos, "CRIMSON")
 		build_valid = false
 
 func cancel_build_mode() -> void:
@@ -237,7 +244,7 @@ func verify_and_build() -> void:
 		astar.set_point_solid(build_tile, true)
 		baddy_path_update()
 		#deduct player cash
-		$UI.cash_display = player_cash
+		#ui.cash_display = player_cash
 
 
 ## Inventory Functions
@@ -247,8 +254,7 @@ func connect_inv_button_signal(inventory_slot) -> void: #connects new inventory 
 	inventory_slot.hovered.connect(create_popup)
 	inventory_slot.clear_popup.connect(clear_popup)
 
-#button down for inventory slot
-func on_inv_button_down(_inventory_slot, tower_mod) -> void:
+func on_inv_button_down(_inventory_slot, tower_mod) -> void: #button down for inventory slot
 	var new_draggable = DRAGGABLE_MOD.instantiate()
 	GameData.is_dragging = true
 	new_draggable.draggable = true

@@ -7,8 +7,9 @@ extends CanvasLayer
 @onready var texture := preload("res://Assets/UI/range_overlay.png")
 @onready var tower = preload("res://GameData/Towers/tower_base.tscn")
 
-#runs via GameScenes initiate_build_mod func
-func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary) -> void:
+## Tower Preview
+
+func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary) -> void: #runs via GameScenes initiate_build_mod func
 	var drag_tower = tower.instantiate()
 	drag_tower.set_name("DragTower")
 	drag_tower.modulate = Color("GREEN")
@@ -16,8 +17,7 @@ func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary
 	var control := Control.new()
 	var range_texture : Sprite2D
 
-	#adds range indictator to auras and weapons
-	for key in dict["mods"]:
+	for key in dict["mods"]: #adds range indictator to auras and weapons
 		if dict["mods"][key] != null:
 			if (dict["mods"][key].mod_class == dict["mods"][key].ModType.AURA) or dict["mods"][key].mod_class == dict["mods"][key].ModType.WEAPON:
 				range_texture = Sprite2D.new()
@@ -39,15 +39,17 @@ func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary
 	add_child(control, true)
 	move_child($TowerPreview, 0)
 
-#runs via GameScene's process func
-func update_tower_preview(new_pos, color):
+func update_tower_preview(new_pos, color): #runs via GameScene's process func
 	$TowerPreview.set_position(new_pos)
 	if $TowerPreview/DragTower.modulate != Color(color):
 		$TowerPreview/DragTower.modulate = Color(color)
 		#$TowerPreview/Sprite2D.modulate = Color(color)
 
+## UI
 
-## Gameplay Functions
+
+
+## Gameplay
 
 func update_health_bar(cur_health, max_health):
 	var hp_bar_tween := $HUD/InfoBar/InfoContainer/HealthBar.create_tween()

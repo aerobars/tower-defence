@@ -1,5 +1,7 @@
 class_name RewardCard extends Control
 
+signal reward_selected(towermod: TowerMod)
+
 var data : TowerMod
 @onready var container : VBoxContainer = $Background/VBoxContainer
 @onready var mod_name : Label = $Background/VBoxContainer/Name
@@ -43,11 +45,15 @@ func stats_setup() -> void:
 			power.text = "Power Cost: " + str(data.base_power_levels[level])
 			power.text = "Power Cost: " + str(data.base_power_levels[level])
 
-
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			reward_selected.emit(data)
 
 func _on_background_mouse_entered() -> void:
-	scale = Vector2(1.05, 1.05)
+	scale = Vector2(1.03, 1.03)
 
 
 func _on_background_mouse_exited() -> void:
 	scale = Vector2 (1, 1)
+	pass

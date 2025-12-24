@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c2oh548fodlg1"]
 
-[ext_resource type="Script" uid="uid://btuyeecvj67w4" path="res://GameData/UIScenes/GUI/RewardSelection/reward_card.gd" id="1_gcb5b"]
+[ext_resource type="Script" uid="uid://btuyeecvj67w4" path="res://GameData/UIScenes/GUI/RewardSelection/Scripts/reward_card.gd" id="1_gcb5b"]
 [ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://Resources/Inventory/inventory_bg.tres" id="2_slva4"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="3_6ln7u"]
 
@@ -29,6 +29,7 @@ offset_bottom = 104.0
 grow_horizontal = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
+mouse_filter = 1
 theme_override_styles/panel = ExtResource("2_slva4")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background"]

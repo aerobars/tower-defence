@@ -44,12 +44,15 @@ func get_mod_data(filepath: String, dir_name) -> void:
 	else:
 		print("An error occurred when trying to access the path.")
 
-func get_wave_data(cur_act) -> Array:
-	var wave_baddies : Array
+func get_wave_data(cur_act) -> Dictionary:
+	var wave_data : Dictionary = {"wave_baddies" : [], "wave_total" : 0}
 	var act_size : int = act_baddies[cur_act].size()
-	wave_baddies = [act_baddies[cur_act][randi() % act_size], act_baddies[cur_act][randi() % act_size]]
-	if previous_wave.has(wave_baddies[0]) and previous_wave.has(wave_baddies[1]): #prevents same wave back to back
+	wave_data["wave_baddies"] = [act_baddies[cur_act][randi() % act_size], act_baddies[cur_act][randi() % act_size]]
+	if previous_wave.has(wave_data["wave_baddies"][0]) and previous_wave.has(wave_data["wave_baddies"][1]): #prevents same wave back to back
 		return get_wave_data(cur_act)
 	else:
-		previous_wave = wave_baddies
-		return wave_baddies
+		for i in wave_data["wave_baddies"]:
+			var spawn_data = load("res://GameData/Baddies/Act" + str(cur_act + 1) + "/" + i).instantiate()
+			wave_data["wave_total"] += spawn_data.data.spawns_per_wave
+		previous_wave = wave_data["wave_baddies"]
+		return wave_data

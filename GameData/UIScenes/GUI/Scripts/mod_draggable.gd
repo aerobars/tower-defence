@@ -1,5 +1,11 @@
 class_name ModDraggable extends Node2D
 
+signal mod_dropped #connected to inventory_ui
+signal hovered(data: TowerMod)
+signal clear_popup
+
+var data : TowerMod
+
 var draggable := false
 var inside_droppable := false
 var mod_slot_ref : StaticBody2D
@@ -12,12 +18,7 @@ var in_inventory : bool = true
 @onready var hover_timer := $Timer
 const HOVER_DELAY : float = 0.5
 
-var data : TowerMod
 
-#connected to inventory_ui
-signal mod_dropped
-signal hovered(data: TowerMod)
-signal clear_popup
 
 func _ready() -> void:
 	hover_timer.wait_time = HOVER_DELAY
@@ -43,13 +44,10 @@ func droppable_check() -> void:
 		in_inventory = false
 		mod_slot_ref.data = data
 		
-		#check if mod slot is occupied with different mod
-		if mod_slot_ref.occupied and mod_slot_ref.occupying_mod != self:
-			#returns old mod back to inventory
-			mod_slot_ref.occupying_mod.mod_dropped.emit(mod_slot_ref.occupying_mod.data, 1)
-			#mod_updated connected to inventory_ui
-			_run_tween_async(tween, mod_slot_ref.occupying_mod, "global_position", mod_slot_ref.occupying_mod.inventory_pos, 0.2)
-			mod_dropped.emit(data, -1)
+		if mod_slot_ref.occupied and mod_slot_ref.occupying_mod != self: #check if mod slot is occupied with different mod
+			mod_slot_ref.occupying_mod.mod_dropped.emit(mod_slot_ref.occupying_mod.data, 1) #returns old mod back to inventory
+			_run_tween_async(tween, mod_slot_ref.occupying_mod, "global_position", mod_slot_ref.occupying_mod.inventory_pos, 0.2) 
+			mod_dropped.emit(data, -1) #mod_updated connected to inventory_ui
 		#elif stops inventory from subtracting if occupying mod is returned to same slot
 		elif not mod_slot_ref.occupied:
 			mod_dropped.emit(data, -1)
@@ -76,8 +74,7 @@ func _run_tween_async(tween: Tween, object: ModDraggable, property: NodePath, en
 	await tween.finished
 	object.queue_free()
 
-#react to player mousing over mod, scales when not in inventory
-func _on_area_2d_mouse_entered() -> void:
+func _on_area_2d_mouse_entered() -> void: #react to player mousing over mod, scales when not in inventory
 	#hover_timer.start()
 	if not GameData.is_dragging and not in_inventory:
 		draggable = true
@@ -95,9 +92,7 @@ func _on_timer_timeout() -> void:
 		#hovered.emit(data)
 	pass
 
-
-#react to player dragging over mod slot
-func _on_area_2d_body_entered(body: StaticBody2D) -> void:
+func _on_area_2d_body_entered(body: StaticBody2D) -> void: #react to player dragging over mod slot
 	if body.is_in_group("droppable"):
 		inside_droppable = true
 		body.modulate = Color(Color.BISQUE, 1)

@@ -10,25 +10,25 @@
 [sub_resource type="Resource" id="Resource_afwgh"]
 script = ExtResource("2_4t8we")
 tower_mod = ExtResource("3_4t8we")
-quantity = 99
+quantity = 10
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
 [sub_resource type="Resource" id="Resource_fy7e0"]
 script = ExtResource("2_4t8we")
 tower_mod = ExtResource("4_tixu4")
-quantity = 99
+quantity = 10
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
 [sub_resource type="Resource" id="Resource_tixu4"]
 script = ExtResource("2_4t8we")
 tower_mod = ExtResource("5_tixu4")
-quantity = 99
+quantity = 10
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
 [sub_resource type="Resource" id="Resource_6uspd"]
 script = ExtResource("2_4t8we")
 tower_mod = ExtResource("6_pk4ny")
-quantity = 99
+quantity = 10
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
 [resource]

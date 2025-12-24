@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://sho7au84mvxg"]
 
-[ext_resource type="Script" uid="uid://bi7mdp3y8hqe8" path="res://GameData/UIScenes/GUI/RewardSelection/reward_selection.gd" id="1_gipd4"]
+[ext_resource type="Script" uid="uid://bi7mdp3y8hqe8" path="res://GameData/UIScenes/GUI/RewardSelection/Scripts/reward_selection.gd" id="1_gipd4"]
 [ext_resource type="Texture2D" uid="uid://clhk7px75x85h" path="res://Assets/UI/Buttons/button_square_line.png" id="2_u260h"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_whhxv"]
