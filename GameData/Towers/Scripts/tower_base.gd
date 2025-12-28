@@ -56,8 +56,7 @@ func set_marker_pos(marker, count) -> void:
 	marker.position.y = marker_pos_radius * sin(angle)
 	all_marker_pos[marker] = marker.position
 
-#called if # of markers gets updated
-func update_markers() -> void:
+func update_markers() -> void: #called if # of markers gets updated
 	var count = 0
 	for child in get_children():
 		if child is Marker2D:

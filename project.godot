@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 GameData="*res://GameData/Global/game_data.gd"
 DamageNumbers="*res://GameData/Global/damage_numbers.gd"
 
+[debug]
+
+shapes/collision/shape_color=Color(0, 0.6, 0.69803923, 0.07058824)
+
 [display]
 
 window/size/viewport_width=1280

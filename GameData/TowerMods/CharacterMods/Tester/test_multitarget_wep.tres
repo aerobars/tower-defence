@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=4 format=3 uid="uid://dsf3pyhaly61o"]
+
+[ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/weapon_mod.gd" id="1_hrpc8"]
+[ext_resource type="Texture2D" uid="uid://dbxyrgxdvkwxj" path="res://Assets/Towers/towerDefense_tile250.png" id="2_jtafa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jv5fv"]
+atlas = ExtResource("2_jtafa")
+region = Rect2(32, 16, 32, 32)
+
+[resource]
+script = ExtResource("1_hrpc8")
+base_aoe_levels = Array[float]([0.0])
+base_attack_speed_levels = Array[float]([1.0])
+base_crit_chance_levels = Array[float]([0.0])
+base_damage_levels = Array[float]([1.0])
+base_multitarget_levels = Array[int]([3])
+base_range_levels = Array[float]([300.0])
+base_power_levels = Array[int]([-1])
+mod_class = 2
+name = "Multitarget"
+texture = SubResource("AtlasTexture_jv5fv")
+metadata/_custom_type_script = "uid://djuix1w1w7p4i"

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ci4b2d4m6qd7c"]
 
-[ext_resource type="Script" uid="uid://7fki6cw7vhh8" path="res://GameData/Towers/tower_base.gd" id="1_wmpor"]
+[ext_resource type="Script" uid="uid://7fki6cw7vhh8" path="res://GameData/Towers/Scripts/tower_base.gd" id="1_wmpor"]
 [ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="2_idrxg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_clhox"]

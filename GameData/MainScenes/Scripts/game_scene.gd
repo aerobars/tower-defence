@@ -238,8 +238,7 @@ func verify_and_build() -> void:
 		new_tower.aura_tower = build_data["aura_tower"]
 		new_tower.marker_count = build_data["mods"].size()
 		
-		#TowerContainer is in Map Scene
-		map_node.get_node("TowerContainer").add_child(new_tower, true)
+		map_node.get_node("TowerContainer").add_child(new_tower, true) #TowerContainer is in Map Scene
 		exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
 		astar.set_point_solid(build_tile, true)
 		baddy_path_update()

@@ -5,7 +5,7 @@ extends CanvasLayer
 @export var hp_text : Label
 @export var cash_display : Label
 @onready var texture := preload("res://Assets/UI/range_overlay.png")
-@onready var tower = preload("res://GameData/Towers/tower_base.tscn")
+@onready var tower := preload("res://GameData/Towers/tower_base.tscn")
 
 ## Tower Preview
 
@@ -21,9 +21,8 @@ func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary
 		if dict["mods"][key] != null:
 			if (dict["mods"][key].mod_class == dict["mods"][key].ModType.AURA) or dict["mods"][key].mod_class == dict["mods"][key].ModType.WEAPON:
 				range_texture = Sprite2D.new()
-				#position needed if range is offest from tower
-				#range_texture.position = Vector2(32,32)
-				var scaling: float = dict["mods"][key].current_range / 600.0
+				#range_texture.position = Vector2(32,32) #position needed if range is offest from tower
+				var scaling: float = dict["mods"][key].current_range / 300.0
 				range_texture.scale = Vector2(scaling, scaling)
 				range_texture.texture = texture
 				if dict["mods"][key].mod_class == dict["mods"][key].ModType.WEAPON:

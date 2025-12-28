@@ -6,12 +6,12 @@ enum AuraBuffableStats{
 	ATTACK_SPEED
 }
 
-@export var base_range_levels : Array[float]
+@export var base_range_levels : Array[float] #range value is radius of range circle
+@export var base_attack_speed_levels : Array[float]
+@export var buff_data : Buff 
+var current_attack_speed : float
 var current_range : float
 
-@export var buff_data : Buff 
-@export var base_attack_speed_levels : Array[float]
-var current_attack_speed : float
 
 var is_aura : bool = false
 @export var offensive_aura : bool = false

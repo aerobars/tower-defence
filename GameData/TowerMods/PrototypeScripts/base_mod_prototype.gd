@@ -1,3 +1,4 @@
+@abstract
 class_name TowerMod extends Resource
 
 enum ModType { AURA, POWER, WEAPON }
@@ -61,9 +62,8 @@ func recalculate_buffs() -> void:
 					stat_multipliers[stat_name] += buff.buff_amount
 	recalculate_stats(stat_addends, stat_multipliers)
 
-#dummy funcitons to avoid errors
-func buff_check(_dummy) -> bool:
-	return false
+@abstract
+func buff_check(_dummy) -> bool
 
-func recalculate_stats(_thing1, _thing2) -> void:
-	pass
+@abstract
+func recalculate_stats(_thing1, _thing2) -> void

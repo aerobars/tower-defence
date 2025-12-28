@@ -11,9 +11,9 @@ region = Rect2(16, 16, 32, 32)
 [resource]
 resource_local_to_scene = true
 script = ExtResource("2_mx055")
-base_range_levels = Array[float]([600.0])
-buff_data = ExtResource("1_ksu01")
+base_range_levels = Array[float]([300.0])
 base_attack_speed_levels = Array[float]([1.0])
+buff_data = ExtResource("1_ksu01")
 offensive_aura = true
 base_power_levels = Array[int]([-1])
 name = "Burn Aura"
