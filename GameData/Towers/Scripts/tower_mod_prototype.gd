@@ -107,10 +107,10 @@ func fire(target):
 				await get_tree().physics_frame
 				for body in aoe.get_overlapping_bodies():
 					if body.is_in_group("baddies"):
-						body.get_parent().on_hit(data.current_damage, data.dot_buffs)
+						body.get_parent().on_hit(data.calculate_damage(), data.dot_buffs)
 				aoe.queue_free()
 			else:
-				target.on_hit(data.current_damage, data.dot_buffs)
+				target.on_hit(data.calculate_damage(), data.dot_buffs)
 		data.ModType.AURA:
 			apply_buff(target)
 	await(get_tree().create_timer(data.current_attack_speed, false).timeout)

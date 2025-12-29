@@ -33,7 +33,7 @@ func move(delta) -> void:
 	set_progress(get_progress() + data.current_move_speed * delta)
 	health_bar.position = position - Vector2(30, 30)
 
-func on_hit(dmg: float, debuff: Array[DotBuff]) -> void:
+func on_hit(dmg: Array, debuff: Array[DotBuff]) -> void:
 	impact()
 	calculate_damage(dmg)
 	if debuff != null:
@@ -52,9 +52,9 @@ func dot_tick(dot) -> void:
 		hit_flash.play("hit_flash")
 		calculate_damage(dot.damage_amount)
 
-func calculate_damage(dmg) -> void:
-	data.health -= dmg
-	DamageNumbers.display_number(dmg, damage_number_origin.global_position, null, false)
+func calculate_damage(dmg: Array) -> void:
+	data.health -= dmg[1]
+	DamageNumbers.display_number(dmg[1], damage_number_origin.global_position, null, dmg[0])
 
 func healthbar_update(health, max_health) -> void:
 	health_bar.max_value = max_health

@@ -1,5 +1,7 @@
 extends Node
 
+var game_scene
+
 func _ready() -> void:
 	load_main_menu()
 
@@ -11,7 +13,9 @@ func on_new_game_pressed():
 	get_node("MainMenu").queue_free()
 	var new_game = load("res://GameData/MainScenes/game_scene.tscn").instantiate()
 	new_game.game_finished.connect(endgame_check)
+	game_scene = new_game
 	add_child(new_game)
+	print(game_scene)
 
 func on_quit_pressed():
 	get_tree().quit()
@@ -21,7 +25,7 @@ func endgame_check(_result) -> void:
 	unload_game()
 
 func unload_game():
-	$GameScene.queue_free()
+	game_scene.queue_free()
 	var main_menu = load("res://GameData/UIScenes/main_menu.tscn").instantiate()
 	add_child(main_menu)
 	load_main_menu()

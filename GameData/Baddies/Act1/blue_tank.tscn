@@ -71,6 +71,7 @@ data = SubResource("Resource_tji8d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" groups=["baddies"]]
 shape = SubResource("RectangleShape2D_7b3mk")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="." groups=["baddies"]]
 material = SubResource("ShaderMaterial_44shp")
