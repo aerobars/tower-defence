@@ -50,7 +50,7 @@ func recalculate_buffs() -> void:
 	var stat_addends: Dictionary = {} #Amt to add to stats
 	for buff in stat_buffs:
 		if buff_check(buff.stat):
-			var stat_name: String = AllBuffableStats.AllBuffableStats.keys()[buff.stat].to_lower()
+			var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()
 			match buff.buff_type:
 				StatBuff.BuffType.ADD:
 					if not stat_addends.has(stat_name):

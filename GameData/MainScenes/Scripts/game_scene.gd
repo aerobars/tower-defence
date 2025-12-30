@@ -3,7 +3,6 @@ extends Node2D
 signal game_finished(result)
 
 ##gameplay variables
-var current_wave := 0
 var spawns_per_wave := 1 
 var wave_total := 0
 var current_act = 0
@@ -85,13 +84,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("press_build_button_1"):
 		build_bar.get_node("HBoxContainer/TowerBase").pressed.emit()
 
-func _on_pause_play_pressed() -> void:
+func pause_game() -> void:
 	if build_mode:
 		cancel_build_mode()
 	if get_tree().is_paused():
 		get_tree().paused = false
-	elif current_wave == 0:
-		current_wave = 1
+	elif GameData.current_wave == 0:
+		GameData.current_wave = 1
 		start_next_wave()
 	else:
 		get_tree().paused = true
@@ -108,10 +107,10 @@ func _on_fast_forward_pressed() -> void:
 ## Wave Functions
 
 func start_next_wave() -> void:
-	current_wave += 1
+	GameData.current_wave += 1
 	var wave_data = retrieve_wave_data()
 	wave_total = wave_data["wave_total"]
-	await(get_tree().create_timer(0.2, false)).timeout #padding between wave, not sure if this is necesary 
+	await(get_tree().create_timer(3.0, false)).timeout #padding befor wave start
 	spawn_baddies(wave_data["wave_baddies"])
 
 func retrieve_wave_data() -> Dictionary:
@@ -156,7 +155,8 @@ func on_baddy_death() -> void:
 		#game_finished.emit(true)
 
 func wave_cleared() -> void:
-	_on_pause_play_pressed()
+	await get_tree().create_timer(5.0, false).timeout
+	pause_game()
 	var new_reward = REWARD_UI.instantiate()
 	new_reward.connect_reward_card.connect(reward_signal_connection)
 	ui.add_child(new_reward)
@@ -164,6 +164,7 @@ func wave_cleared() -> void:
 
 func reward_signal_connection(reward_card) -> void:
 	reward_card.reward_selected.connect(inventory_ui.data.update_inventory)
+	reward_card.reward_selected.connect(start_next_wave)
 
 
 ## Pathfinding Functions

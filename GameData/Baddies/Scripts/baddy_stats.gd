@@ -23,6 +23,10 @@ const BASE_LEVEL_XP : float = 100.0
 @export var base_move_speed : float
 @export var experience : int = 0: set = _on_experience_set
 
+var level_ratio : 
+	get:
+		return 1 + (1 - GameData.current_wave)/10.0
+
 var level : int:
 	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
 var current_max_health : float
@@ -75,10 +79,10 @@ func recalculate_stats() -> void:
 				stat_multipliers[stat_name] += buff.buff_amount
 	
 	#var stat_sample_pos: float = level
-	current_max_health = base_max_health
-	current_damage = base_damage 
-	current_defence = base_defence
-	current_move_speed = base_move_speed
+	current_max_health = base_max_health * level_ratio
+	current_damage = base_damage * level_ratio
+	current_defence = base_defence * level_ratio
+	current_move_speed = base_move_speed * level_ratio
 	
 	#addends first so it benefits from multipliers
 	for stat_name in stat_addends:

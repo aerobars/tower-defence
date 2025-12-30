@@ -5,7 +5,7 @@ enum PowerBuffableStats {
 }
 
 func buff_check(buff_stat) -> bool:
-	return AllBuffableStats.AllBuffableStats.keys()[buff_stat] in PowerBuffableStats.keys()
+	return AllBuffableStats.BuffableStats.keys()[buff_stat] in PowerBuffableStats.keys()
 
 func recalculate_stats(stat_addends, stat_multipliers) -> void:
 	current_power = base_power_levels[level]

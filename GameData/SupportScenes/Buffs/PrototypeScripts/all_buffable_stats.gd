@@ -1,6 +1,6 @@
 class_name AllBuffableStats extends Resource
 
-enum AllBuffableStats {
+enum BuffableStats {
 	MAX_HEALTH,
 	DAMAGE,
 	CRIT_CHANCE,

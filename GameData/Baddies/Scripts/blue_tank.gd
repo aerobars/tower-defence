@@ -33,8 +33,8 @@ func move(delta) -> void:
 	set_progress(get_progress() + data.current_move_speed * delta)
 	health_bar.position = position - Vector2(30, 30)
 
-func on_hit(dmg: Array, debuff: Array[DotBuff]) -> void:
-	impact()
+func on_hit(dmg: Array, debuff: Array[DotBuff] = [null]) -> void:
+	impact(dmg[1])
 	calculate_damage(dmg)
 	if debuff != null:
 		for i in debuff:
@@ -49,24 +49,31 @@ func initialize_dot(dot) -> void:
 func dot_tick(dot) -> void:
 	while dot.is_active:
 		await(get_tree().create_timer(dot.damage_interval, false).timeout)
-		hit_flash.play("hit_flash")
-		calculate_damage(dot.damage_amount)
+		on_hit([dot.damage_amount, dot.damage_type, false])
 
 func calculate_damage(dmg: Array) -> void:
-	data.health -= dmg[1]
-	DamageNumbers.display_number(dmg[1], damage_number_origin.global_position, null, dmg[0])
+	data.health -= dmg[0]
+	DamageNumbers.display_number(dmg[0], damage_number_origin.global_position, dmg[1], dmg[2])
 
 func healthbar_update(health, max_health) -> void:
 	health_bar.max_value = max_health
 	health_bar.value = health
 
-func impact() -> void:
-	var x_pos = randi() % 31
-	var y_pos = randi() % 31
-	var impact_location = Vector2(x_pos, y_pos)
-	var new_impact = projectile_impact.instantiate()
-	new_impact.position = impact_location
-	impact_area.add_child(new_impact)
+func impact(damage_type: AllDamageTags.DamageTag) -> void:
+	match damage_type:
+		1: #Burn
+			hit_flash.play("hit_flash")
+		4: #Poison
+			hit_flash.play("hit_flash")
+		0, 2, 3: # Blunt, Explosion, and Pierce
+			var x_pos = randi() % 31
+			var y_pos = randi() % 31
+			var impact_location = Vector2(x_pos, y_pos)
+			var new_impact = projectile_impact.instantiate()
+			new_impact.position = impact_location
+			impact_area.add_child(new_impact)
+	
+	hit_flash.play("hit_flash")
 
 
 func destroy() -> void:

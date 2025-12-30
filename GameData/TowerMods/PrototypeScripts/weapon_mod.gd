@@ -9,10 +9,9 @@ enum WeaponBuffableStats {
 	POWER
 }
 
-enum ProjectileType { INSTANT, PROJECTILE }
-enum AttackType { PIERCE, BLUNT, EXPLOSION }
-@export var projectile_tag: ProjectileType
-@export var attack_type : AttackType
+enum ProjectileTag { INSTANT, PROJECTILE }
+@export var projectile_tag: ProjectileTag
+@export var damage_tag : AllDamageTags.DamageTag = AllDamageTags.DamageTag.PIERCE
 #@export var attack_tags: Array = [attack_type]
 
 #level based variables
@@ -32,7 +31,7 @@ var current_multitarget : int
 var current_range : float
 
 func buff_check(buff_stat) -> bool:
-	return AllBuffableStats.AllBuffableStats.keys()[buff_stat] in WeaponBuffableStats.keys()
+	return AllBuffableStats.BuffableStats.keys()[buff_stat] in WeaponBuffableStats.keys()
 
 func recalculate_stats(stat_addends, stat_multipliers) -> void:
 	current_aoe = base_aoe_levels[level]
@@ -53,8 +52,8 @@ func recalculate_stats(stat_addends, stat_multipliers) -> void:
 		var cur_property_name: String = str("current_" + stat_name)
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
 
-func calculate_damage() -> Array: #returns [did the attack crit, total attack damage]
+func calculate_damage() -> Array: #returns [total attack damage, did the attack crit]
 	if current_crit_chance > randi() % 100:
-		return [true, current_damage * current_crit_multiplier]
+		return [current_damage * current_crit_multiplier, true]
 	else:
-		return [false, current_damage]
+		return [current_damage, false]

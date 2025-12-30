@@ -275,6 +275,7 @@ layout_mode = 2
 text = "Description: "
 
 [node name="GameStartInfo" parent="UI/HUD" instance=ExtResource("17_nh22g")]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -301,5 +302,5 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 75
 text = "Test!"
 
-[connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="." method="_on_pause_play_pressed"]
+[connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="." method="pause_game"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/FastForward" to="." method="_on_fast_forward_pressed"]

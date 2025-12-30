@@ -7,8 +7,18 @@ func display_number(value: int, position: Vector2, damage_source, is_critical: b
 	number.z_index = 5
 	number.label_settings = LabelSettings.new()
 	
-	var colour = "#FFF"
+	var colour : Color = "#FFF"
 	match damage_source:
+		0: #Blunt
+			pass
+		1: #Burn
+			colour = "#9c4706" #Orange
+		2: #Explosion
+			pass
+		3: #Pierce
+			pass
+		4: #Poison
+			colour = "#235417" #Dark Green
 		_:
 			pass
 	if is_critical:

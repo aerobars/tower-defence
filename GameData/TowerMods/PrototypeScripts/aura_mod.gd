@@ -17,7 +17,7 @@ var is_aura : bool = false
 @export var offensive_aura : bool = false
 
 func buff_check(buff_stat) -> bool:
-	return AllBuffableStats.AllBuffableStats.keys()[buff_stat] in AuraBuffableStats.keys()
+	return AllBuffableStats.BuffableStats.keys()[buff_stat] in AuraBuffableStats.keys()
 
 func recalculate_stats(stat_addends, stat_multipliers) -> void:
 	current_power = base_power_levels[level]

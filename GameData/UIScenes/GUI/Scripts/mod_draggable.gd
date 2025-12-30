@@ -68,6 +68,7 @@ func droppable_check() -> void:
 		#print("test3")
 		await tween.finished
 		queue_free()
+	draggable = false
 
 func _run_tween_async(tween: Tween, object: ModDraggable, property: NodePath, end_pos: Variant, duration: float) -> void:
 	tween.tween_property(object, property, end_pos, duration).set_ease(Tween.EASE_OUT)

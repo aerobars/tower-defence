@@ -8,6 +8,8 @@ const TOTAL_ACTS = 1
 var character_mods : Dictionary = {}
 var act_baddies : Dictionary = {}
 var previous_wave : Array = []
+var current_wave : int
+var current_act : int
 
 func _ready() -> void:
 	get_act_data(BADDY_FILEPATH + "Act")
