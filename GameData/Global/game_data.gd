@@ -8,8 +8,8 @@ const TOTAL_ACTS = 1
 var character_mods : Dictionary = {}
 var act_baddies : Dictionary = {}
 var previous_wave : Array = []
-var current_wave : int
-var current_act : int
+var current_wave : int = 0
+var current_act : int = 0
 
 func _ready() -> void:
 	get_act_data(BADDY_FILEPATH + "Act")
@@ -46,15 +46,15 @@ func get_mod_data(filepath: String, dir_name) -> void:
 	else:
 		print("An error occurred when trying to access the path.")
 
-func get_wave_data(cur_act) -> Dictionary:
+func get_wave_data() -> Dictionary:
 	var wave_data : Dictionary = {"wave_baddies" : [], "wave_total" : 0}
-	var act_size : int = act_baddies[cur_act].size()
-	wave_data["wave_baddies"] = [act_baddies[cur_act][randi() % act_size], act_baddies[cur_act][randi() % act_size]]
-	if previous_wave.has(wave_data["wave_baddies"][0]) and previous_wave.has(wave_data["wave_baddies"][1]): #prevents same wave back to back
-		return get_wave_data(cur_act)
-	else:
-		for i in wave_data["wave_baddies"]:
-			var spawn_data = load("res://GameData/Baddies/Act" + str(cur_act + 1) + "/" + i).instantiate()
-			wave_data["wave_total"] += spawn_data.data.spawns_per_wave
-		previous_wave = wave_data["wave_baddies"]
-		return wave_data
+	var act_size : int = act_baddies[current_act].size()
+	wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
+	#if previous_wave.has(wave_data["wave_baddies"][0]) and previous_wave.has(wave_data["wave_baddies"][1]): #prevents same wave back to back
+		#return wave_data #get_wave_data()
+	#else:
+	for i in wave_data["wave_baddies"]:
+		var spawn_data = load("res://GameData/Baddies/Act" + str(current_act + 1) + "/" + i).instantiate()
+		wave_data["wave_total"] += spawn_data.data.spawns_per_wave
+	previous_wave = wave_data["wave_baddies"]
+	return wave_data

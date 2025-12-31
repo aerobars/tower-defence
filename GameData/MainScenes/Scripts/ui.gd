@@ -19,13 +19,13 @@ func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary
 
 	for key in dict["mods"]: #adds range indictator to auras and weapons
 		if dict["mods"][key] != null:
-			if (dict["mods"][key].mod_class == dict["mods"][key].ModType.AURA) or dict["mods"][key].mod_class == dict["mods"][key].ModType.WEAPON:
+			if (dict["mods"][key].mod_class == dict["mods"][key].ModClass.AURA) or dict["mods"][key].mod_class == dict["mods"][key].ModClass.WEAPON:
 				range_texture = Sprite2D.new()
 				#range_texture.position = Vector2(32,32) #position needed if range is offest from tower
 				var scaling: float = dict["mods"][key].current_range / 300.0
 				range_texture.scale = Vector2(scaling, scaling)
 				range_texture.texture = texture
-				if dict["mods"][key].mod_class == dict["mods"][key].ModType.WEAPON:
+				if dict["mods"][key].mod_class == dict["mods"][key].ModClass.WEAPON:
 					range_texture.modulate = Color("CRIMSON")
 				elif dict["aura_tower"]:
 					range_texture.modulate = Color("BLUE")

@@ -7,20 +7,7 @@ func display_number(value: int, position: Vector2, damage_source, is_critical: b
 	number.z_index = 5
 	number.label_settings = LabelSettings.new()
 	
-	var colour : Color = "#FFF"
-	match damage_source:
-		0: #Blunt
-			pass
-		1: #Burn
-			colour = "#9c4706" #Orange
-		2: #Explosion
-			pass
-		3: #Pierce
-			pass
-		4: #Poison
-			colour = "#235417" #Dark Green
-		_:
-			pass
+	var colour = match_damage_source(damage_source)
 	if is_critical:
 		colour = "#B22"
 	if value == 0:
@@ -51,3 +38,18 @@ func display_number(value: int, position: Vector2, damage_source, is_critical: b
 	
 	await tween.finished
 	number.queue_free()
+
+func match_damage_source(damage_source) -> Color:
+	match damage_source:
+		0: #Blunt
+			return "#FFF"
+		1: #Burn
+			return "#f26d07" #Orange
+		2: #Explosion
+			return "#FFF"
+		3: #Pierce
+			return "#FFF"
+		4: #Poison
+			return "#235417" #Dark Green
+		_:
+			return "#FFF"

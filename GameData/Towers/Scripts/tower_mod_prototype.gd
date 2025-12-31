@@ -23,18 +23,18 @@ func _ready():
 ##Mod Updates
 
 func update_mod() -> void:
-	if data.mod_class != data.ModType.POWER:
+	if data.mod_class != data.ModClass.POWER:
 		$Range/CollisionShape2D.get_shape().radius = data.current_range
 	$Turret.texture = data.texture
 	power_check.emit()
-	if data.mod_class == data.ModType.AURA or data.mod_class == data.ModType.WEAPON:
+	if data.mod_class == data.ModClass.AURA or data.mod_class == data.ModClass.WEAPON:
 		add_to_group("turret")
 	else:
 		remove_from_group("turret")
 
 func mod_slot_updated(mod_slot : StaticBody2D, mod_slot_data : TowerMod) -> void:
 	if mod_slot == mod_slot_ref:
-		if data != null and data.mod_class == data.ModType.AURA:
+		if data != null and data.mod_class == data.ModClass.AURA:
 			for body in aura_targets:
 				clear_buffs(body)
 		data = mod_slot_data
@@ -46,10 +46,10 @@ func mod_slot_updated(mod_slot : StaticBody2D, mod_slot_data : TowerMod) -> void
 func _physics_process(_delta: float) -> void:
 	if data != null and get_parent().is_powered:
 		if baddies_in_range.size() != 0 and reloaded:
-			if data.mod_class == data.ModType.AURA and data.offensive_aura:
+			if data.mod_class == data.ModClass.AURA and data.offensive_aura:
 				for baddy in baddies_in_range:
 					fire(baddy)
-			elif data.mod_class == data.ModType.WEAPON:
+			elif data.mod_class == data.ModClass.WEAPON:
 				targets = select_targets()
 				if not $AnimationPlayer.is_playing():
 					turn()
@@ -62,7 +62,7 @@ func _physics_process(_delta: float) -> void:
 func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body.get_parent())
-	elif data != null and data.mod_class == data.ModType.AURA and body.is_in_group("turret"):
+	elif data != null and data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
 		if data.offensive_aura and get_parent().aura_tower:
 			pass #nothing gets added to aura_targets for offensive auras in aura mode
 		else:
@@ -72,7 +72,7 @@ func _on_range_body_entered(body) -> void:
 func _on_range_body_exited(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body.get_parent())
-	elif data != null and data.mod_class == data.ModType.AURA and body.is_in_group("turret"):
+	elif data != null and data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
 		clear_buffs(body)
 		aura_targets.erase(body)
 
@@ -96,10 +96,10 @@ func turn():
 func fire(target):
 	reloaded = false
 	match data.mod_class: 
-		data.ModType.WEAPON: 
-			if data.projectile_tag == data.ProjectileType.PROJECTILE:
+		data.ModClass.WEAPON: 
+			if data.projectile_tag == data.ProjectileTag.PROJECTILE:
 				fire_projectile()
-			elif data.projectile_tag == data.ProjectileType.INSTANT:
+			elif data.projectile_tag == data.ProjectileTag.INSTANT:
 				fire_gun()
 			if data.current_aoe > 0:
 				var aoe = setup_aoe()
@@ -111,7 +111,7 @@ func fire(target):
 				aoe.queue_free()
 			else:
 				target.on_hit(data.calculate_damage(), data.dot_buffs)
-		data.ModType.AURA:
+		data.ModClass.AURA:
 			apply_buff(target)
 	await(get_tree().create_timer(data.current_attack_speed, false).timeout)
 	reloaded = true

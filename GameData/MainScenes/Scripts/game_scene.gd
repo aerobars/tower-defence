@@ -5,8 +5,6 @@ signal game_finished(result)
 ##gameplay variables
 var spawns_per_wave := 1 
 var wave_total := 0
-var current_act = 0
-var wave_kill_count := 0
 @export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
 var current_player_health : int
 var character : String = "Tester"
@@ -22,7 +20,8 @@ const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_se
 @export var build_bar : ColorRect
 @export var inventory_ui : GridContainer
 @export var baddy_info_foldable : FoldableContainer
-@onready var end_game_message = $UI/EndGameMessage.text
+@export var pause_button : TextureButton
+@export var game_message : Label
 @onready var new_slot := inventory_ui.connect("slot_created", connect_inv_button_signal)
 var cur_popup : Node2D
 
@@ -84,14 +83,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("press_build_button_1"):
 		build_bar.get_node("HBoxContainer/TowerBase").pressed.emit()
 
-func pause_game() -> void:
+func pause_resume_game() -> void:
 	if build_mode:
 		cancel_build_mode()
 	if get_tree().is_paused():
 		get_tree().paused = false
 	elif GameData.current_wave == 0:
-		GameData.current_wave = 1
-		start_next_wave()
+		start_next_wave(0)
 	else:
 		get_tree().paused = true
 
@@ -106,21 +104,24 @@ func _on_fast_forward_pressed() -> void:
 
 ## Wave Functions
 
-func start_next_wave() -> void:
+func start_next_wave(_data) -> void:
+	if get_tree().is_paused():
+		pause_resume_game()
+		pause_button.set_pressed_no_signal(true)
 	GameData.current_wave += 1
-	var wave_data = retrieve_wave_data()
+	var wave_data = GameData.get_wave_data()
 	wave_total = wave_data["wave_total"]
-	await(get_tree().create_timer(3.0, false)).timeout #padding befor wave start
+	if GameData.current_wave > 1:
+		game_message.text = "Next wave starting"
+		game_message.visible = true
+		await(get_tree().create_timer(3.0, false)).timeout #padding befor wave start
+		game_message.visible = false
 	spawn_baddies(wave_data["wave_baddies"])
-
-func retrieve_wave_data() -> Dictionary:
-	var wave_data = GameData.get_wave_data(current_act)
-	return wave_data
 
 func spawn_baddies(wave_data) -> void:
 	for i in wave_data: 
 		var spawn_count : int = 1
-		var baddy_scene = load("res://GameData/Baddies/Act" + str(current_act + 1) + "/" + i)
+		var baddy_scene = load("res://GameData/Baddies/Act" + str(GameData.current_act + 1) + "/" + i)
 		var new_baddy = baddy_scene.instantiate() 
 		#first instantiate outside of loop for one-time variable setting
 		spawns_per_wave = new_baddy.data.spawns_per_wave
@@ -142,21 +143,26 @@ func spawn_baddies(wave_data) -> void:
 func on_base_damage(damage) -> void:
 	current_player_health -= damage
 	if current_player_health <= 0:
-		end_game_message = "You lose!"
+		game_message.text = "You lose!"
+		game_message.visible = true
 		game_finished.emit(false)
 	else:
 		$UI.update_health_bar(current_player_health, max_player_health)
 		on_baddy_death()
 
 func on_baddy_death() -> void:
-	wave_kill_count += 1
-	if wave_kill_count == wave_total:
+	wave_total -= 1
+	if wave_total == 0:
 		wave_cleared()
 		#game_finished.emit(true)
 
 func wave_cleared() -> void:
-	await get_tree().create_timer(5.0, false).timeout
-	pause_game()
+	game_message.text = "Wave Cleared!"
+	game_message.visible = true
+	await get_tree().create_timer(3.0, false).timeout
+	game_message.visible = false
+	pause_resume_game()
+	pause_button.set_pressed_no_signal(false)
 	var new_reward = REWARD_UI.instantiate()
 	new_reward.connect_reward_card.connect(reward_signal_connection)
 	ui.add_child(new_reward)

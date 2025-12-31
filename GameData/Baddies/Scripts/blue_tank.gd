@@ -14,8 +14,7 @@ var projectile_impact = preload("res://GameData/SupportScenes/projectile_impact.
 
 func _ready() -> void:
 	#healthbar setup
-	health_bar.max_value = data.current_max_health
-	health_bar.value = data.health
+	healthbar_update(data.health, data.health)
 	health_bar.set_as_top_level(true)
 	
 	#signal connections
@@ -36,7 +35,7 @@ func move(delta) -> void:
 func on_hit(dmg: Array, debuff: Array[DotBuff] = [null]) -> void:
 	impact(dmg[1])
 	calculate_damage(dmg)
-	if debuff != null:
+	if debuff != [null]:
 		for i in debuff:
 			initialize_dot(i)
 
@@ -49,7 +48,7 @@ func initialize_dot(dot) -> void:
 func dot_tick(dot) -> void:
 	while dot.is_active:
 		await(get_tree().create_timer(dot.damage_interval, false).timeout)
-		on_hit([dot.damage_amount, dot.damage_type, false])
+		on_hit([dot.damage_amount, dot.damage_tag, false])
 
 func calculate_damage(dmg: Array) -> void:
 	data.health -= dmg[0]
@@ -72,9 +71,6 @@ func impact(damage_type: AllDamageTags.DamageTag) -> void:
 			var new_impact = projectile_impact.instantiate()
 			new_impact.position = impact_location
 			impact_area.add_child(new_impact)
-	
-	hit_flash.play("hit_flash")
-
 
 func destroy() -> void:
 	baddy_death.emit()

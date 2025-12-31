@@ -1,20 +1,20 @@
 @abstract
 class_name TowerMod extends Resource
 
-enum ModType { AURA, POWER, WEAPON }
+enum ModClass { AURA, POWER, WEAPON }
 
 #stats for all mod types
 @export var level : int = 0
 @export var base_power_levels : Array[int]
 var current_power : int
-@export var mod_class : ModType
+@export var mod_class : ModClass
 
 @export var name : String
 @export_multiline var description : String
 @export var texture : Texture2D
 var class_string : String: 
 	get: 
-		return ModType.keys()[ModType.values().find(mod_class)]
+		return ModClass.keys()[ModClass.values().find(mod_class)]
 
 #first level is level 0 to line up with arrays
 var level_names := ["Basic", "Advanced", "Expert", "Master", "Grandmaster"]

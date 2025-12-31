@@ -15,17 +15,19 @@ enum BaddyBuffableStats {
 	MOVE_SPEED
 }
 
+
 const BASE_LEVEL_XP : float = 100.0
 
 @export var base_max_health : float
 @export var base_damage : float
 @export var base_defence : float
+@export var defence_tag : AllDamageTags.BaddyArmorTags = AllDamageTags.BaddyArmorTags.UNARMORED
 @export var base_move_speed : float
 @export var experience : int = 0: set = _on_experience_set
 
 var level_ratio : 
 	get:
-		return 1 + (1 - GameData.current_wave)/10.0
+		return 1 + (GameData.current_wave - 1)/10.0
 
 var level : int:
 	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
@@ -80,7 +82,7 @@ func recalculate_stats() -> void:
 	
 	#var stat_sample_pos: float = level
 	current_max_health = base_max_health * level_ratio
-	current_damage = base_damage * level_ratio
+	current_damage = base_damage #don't scale base damage
 	current_defence = base_defence * level_ratio
 	current_move_speed = base_move_speed * level_ratio
 	
@@ -94,8 +96,8 @@ func recalculate_stats() -> void:
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
 
 func _on_health_set(new_value: float) -> void:
-	health = clamp(new_value, 0, current_max_health)
-	health_changed.emit(health, current_max_health)
+	health = int(clamp(new_value, 0, current_max_health))
+	health_changed.emit(health, int(current_max_health))
 	if health == 0:
 		health_depleted.emit()
 

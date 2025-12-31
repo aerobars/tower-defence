@@ -54,6 +54,6 @@ func recalculate_stats(stat_addends, stat_multipliers) -> void:
 
 func calculate_damage() -> Array: #returns [total attack damage, did the attack crit]
 	if current_crit_chance > randi() % 100:
-		return [current_damage * current_crit_multiplier, true]
+		return [current_damage * current_crit_multiplier, damage_tag, true]
 	else:
-		return [current_damage, false]
+		return [current_damage, damage_tag, false]

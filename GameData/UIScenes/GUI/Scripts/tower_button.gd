@@ -32,9 +32,9 @@ func get_tower_mods() -> Dictionary:
 		if child.is_class("StaticBody2D"):
 			dict[child] = child.data
 			if not has_wep and dict[child] != null:
-				if child.data.mod_class == child.data.ModType.WEAPON:
+				if child.data.mod_class == child.data.ModClass.WEAPON:
 					has_wep = true
-				elif child.data.mod_class == child.data.ModType.AURA:
+				elif child.data.mod_class == child.data.ModClass.AURA:
 					has_aura = true
 	
 	if has_aura and not has_wep:
