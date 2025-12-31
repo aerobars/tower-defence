@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="InventoryData" load_steps=15 format=3 uid="uid://c3m5eg7swenlw"]
+[gd_resource type="Resource" script_class="InventoryData" load_steps=17 format=3 uid="uid://c3m5eg7swenlw"]
 
 [ext_resource type="Script" uid="uid://bjmi2gnp5s1tf" path="res://GameData/UIScenes/Inventory/Scripts/inventory_data.gd" id="1_fy7e0"]
 [ext_resource type="Script" uid="uid://b4so26n1sqyy1" path="res://GameData/UIScenes/Inventory/Scripts/slot_data.gd" id="2_4t8we"]
@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://bqlb20t172exs" path="res://GameData/TowerMods/CharacterMods/Tester/test_burn_aura.tres" id="6_pk4ny"]
 [ext_resource type="Resource" uid="uid://dsf3pyhaly61o" path="res://GameData/TowerMods/CharacterMods/Tester/test_multitarget_wep.tres" id="7_573rb"]
 [ext_resource type="Resource" uid="uid://brep14nhiu8em" path="res://GameData/TowerMods/CharacterMods/Tester/test_aoe_wep.tres" id="8_4w820"]
+[ext_resource type="Resource" uid="uid://cda1enewweprf" path="res://GameData/TowerMods/CharacterMods/Tester/test_poison_aura.tres" id="9_dm0u8"]
 
 [sub_resource type="Resource" id="Resource_afwgh"]
 script = ExtResource("2_4t8we")
@@ -45,7 +46,13 @@ tower_mod = ExtResource("8_4w820")
 quantity = 10
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
+[sub_resource type="Resource" id="Resource_drdga"]
+script = ExtResource("2_4t8we")
+tower_mod = ExtResource("9_dm0u8")
+quantity = 10
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
 [resource]
 script = ExtResource("1_fy7e0")
-slots = Array[ExtResource("2_4t8we")]([SubResource("Resource_afwgh"), SubResource("Resource_fy7e0"), SubResource("Resource_tixu4"), SubResource("Resource_6uspd"), SubResource("Resource_4w820"), SubResource("Resource_dm0u8")])
+slots = Array[ExtResource("2_4t8we")]([SubResource("Resource_afwgh"), SubResource("Resource_fy7e0"), SubResource("Resource_tixu4"), SubResource("Resource_6uspd"), SubResource("Resource_4w820"), SubResource("Resource_dm0u8"), SubResource("Resource_drdga")])
 metadata/_custom_type_script = "uid://bjmi2gnp5s1tf"

@@ -1,11 +1,11 @@
 class_name AllBuffableStats extends Resource
 
 enum BuffableStats {
-	MAX_HEALTH,
-	DAMAGE,
-	CRIT_CHANCE,
-	ATTACK_SPEED,
 	AOE,
+	ATTACK_SPEED,
+	CRIT_CHANCE,
+	DAMAGE,
 	DEFENCE,
+	MAX_HEALTH,
 	MOVE_SPEED
 }

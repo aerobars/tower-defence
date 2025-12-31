@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AuraMod" load_steps=5 format=3 uid="uid://cda1enewweprf"]
+
+[ext_resource type="Resource" uid="uid://cs5wggl128vc4" path="res://GameData/SupportScenes/Buffs/test_poison.tres" id="1_jteku"]
+[ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/aura_mod.gd" id="1_lrwic"]
+[ext_resource type="Texture2D" uid="uid://vey2hsb1283a" path="res://Assets/Effects/towerDefense_tile134.png" id="3_jteku"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_762i5"]
+resource_local_to_scene = true
+atlas = ExtResource("3_jteku")
+region = Rect2(16, 16, 32, 32)
+
+[resource]
+script = ExtResource("1_lrwic")
+base_range_levels = Array[float]([300.0])
+base_attack_speed_levels = Array[float]([1.0])
+buff_data = ExtResource("1_jteku")
+offensive_aura = true
+base_power_levels = Array[int]([-1])
+name = "Poison Aura"
+description = "Adds a movespeed slow to the connected tower's weapons, or slows the movespeed of baddies in aura range. Slow effect stacks"
+texture = SubResource("AtlasTexture_762i5")
+metadata/_custom_type_script = "uid://bshp47gjxu8sm"

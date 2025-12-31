@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/aura_mod.gd" id="2_mx055"]
 [ext_resource type="Texture2D" uid="uid://m5diaf4lgcc8" path="res://Assets/Effects/towerDefense_tile295.png" id="3_jtub3"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vl5nd"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ksu01"]
+resource_local_to_scene = true
 atlas = ExtResource("3_jtub3")
 region = Rect2(16, 16, 32, 32)
 
@@ -18,5 +19,5 @@ offensive_aura = true
 base_power_levels = Array[int]([-1])
 name = "Burn Aura"
 description = "Adds burn dot to tower weapons, or as an aura, applies burn to enemies in aoe"
-texture = SubResource("AtlasTexture_vl5nd")
+texture = SubResource("AtlasTexture_ksu01")
 metadata/_custom_type_script = "uid://bshp47gjxu8sm"

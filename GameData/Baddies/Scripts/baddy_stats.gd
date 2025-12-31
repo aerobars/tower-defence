@@ -8,12 +8,12 @@ signal create_dot_timers(dot_data: DotBuff)
 @export var spawn_interval: float
 
 ##Baddy Stats
-enum BaddyBuffableStats {
-	MAX_HEALTH,
-	DAMAGE,
-	DEFENCE,
-	MOVE_SPEED
-}
+const BADDY_BUFFABLE_STATS = [ #values to line up with AllBuffableStats enum values
+	AllBuffableStats.BuffableStats.DAMAGE,
+	AllBuffableStats.BuffableStats.DEFENCE,
+	AllBuffableStats.BuffableStats.MAX_HEALTH,
+	AllBuffableStats.BuffableStats.MOVE_SPEED
+]
 
 
 const BASE_LEVEL_XP : float = 100.0
@@ -49,6 +49,7 @@ func _init() -> void:
 func setup_stats() -> void:
 	recalculate_stats()
 	health = current_max_health
+	current_move_speed = max(current_move_speed, 0.1)
 
 func add_buff(buff: Buff) -> void:
 	if buff is DotBuff:
@@ -69,7 +70,7 @@ func recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
 	var stat_addends: Dictionary = {} #Amt to add to stats
 	for buff in stat_buffs:
-		var stat_name: String = BaddyBuffableStats.keys()[buff.stat].to_lower()
+		var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()
 		match buff.buff_type:
 			StatBuff.BuffType.ADD:
 				if not stat_addends.has(stat_name):
