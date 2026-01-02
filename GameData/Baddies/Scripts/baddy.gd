@@ -43,7 +43,7 @@ func initialize_buff(buff) -> void:
 	if buff is DotBuff: 
 		dot_tick(buff)
 	await(get_tree().create_timer(buff.buff_duration, false).timeout)
-	if buff :
+	if buff is DotBuff:
 		buff.is_active = false
 	data.remove_buff(buff)
 

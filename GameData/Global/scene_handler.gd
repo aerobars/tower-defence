@@ -14,10 +14,8 @@ func on_new_game_pressed():
 	var new_game = load("res://GameData/MainScenes/game_scene.tscn").instantiate()
 	new_game.game_finished.connect(endgame_check)
 	game_scene = new_game
-	if GameData.current_wave != 0:
-		GameData.current_wave = 0
-	if GameData.current_act != 0:
-		GameData.current_act = 0
+	GameData.current_wave = 0
+	GameData.current_act = 0
 	add_child(new_game)
 
 func on_quit_pressed():

@@ -142,12 +142,13 @@ func spawn_baddies(wave_data) -> void:
 
 func on_base_damage(damage) -> void:
 	current_player_health -= damage
+	$UI.update_health_bar(current_player_health, max_player_health)
 	if current_player_health <= 0:
 		game_message.text = "You lose!"
 		game_message.visible = true
 		game_finished.emit(false)
+		game_finished.disconnect(get_parent().endgame_check)
 	else:
-		$UI.update_health_bar(current_player_health, max_player_health)
 		on_baddy_death()
 
 func on_baddy_death() -> void:

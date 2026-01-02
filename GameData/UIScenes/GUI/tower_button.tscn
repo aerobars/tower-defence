@@ -4,13 +4,14 @@
 [ext_resource type="Script" uid="uid://ca6gk23vpyi7s" path="res://GameData/UIScenes/GUI/Scripts/tower_button.gd" id="2_0hnoc"]
 [ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="4_ge1wo"]
 
-[node name="BuildTowerButton" type="TextureButton" groups=["build_buttons"]]
+[node name="BuildTowerButton" type="TextureButton" node_paths=PackedStringArray("build_cost_label") groups=["build_buttons"]]
 custom_minimum_size = Vector2(80, 80)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture_normal = ExtResource("1_ge1wo")
 stretch_mode = 0
 script = ExtResource("2_0hnoc")
+build_cost_label = NodePath("BuildCostDisplay")
 
 [node name="Icon" type="TextureRect" parent="."]
 layout_mode = 1
@@ -27,3 +28,18 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.85, 0.85)
 texture = ExtResource("4_ge1wo")
+
+[node name="BuildCostDisplay" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -5.0
+offset_top = -23.0
+offset_right = 5.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.18717614, 0.18717614, 0.18717614, 1)
+text = "$"

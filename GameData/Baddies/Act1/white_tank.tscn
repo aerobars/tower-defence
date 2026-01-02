@@ -1,14 +1,14 @@
-[gd_scene load_steps=12 format=3 uid="uid://b2g1d102vqt4h"]
+[gd_scene load_steps=12 format=3 uid="uid://bygeape63hk3h"]
 
-[ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/Scripts/baddy.gd" id="1_a3nyt"]
-[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/Scripts/baddy_stats.gd" id="2_tji8d"]
-[ext_resource type="Texture2D" uid="uid://bcqowggr8c0o2" path="res://Assets/Baddies/tank_blue.png" id="2_ymvcl"]
-[ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/Scripts/hit_flash.tres" id="3_hfqpt"]
-[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="3_ymvcl"]
+[ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/Scripts/baddy.gd" id="1_hn474"]
+[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/Scripts/baddy_stats.gd" id="2_hsavp"]
+[ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/Scripts/hit_flash.tres" id="3_8mqqa"]
+[ext_resource type="Texture2D" uid="uid://lil6eb5m36u7" path="res://Assets/Baddies/tank_sand.png" id="4_hn474"]
+[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="5_g51c1"]
 
 [sub_resource type="Resource" id="Resource_tji8d"]
 resource_local_to_scene = true
-script = ExtResource("2_tji8d")
+script = ExtResource("2_hsavp")
 spawns_per_wave = 10
 spawn_interval = 0.5
 base_max_health = 50.0
@@ -21,7 +21,7 @@ size = Vector2(42, 42)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_44shp"]
 resource_local_to_scene = true
-shader = ExtResource("3_hfqpt")
+shader = ExtResource("3_8mqqa")
 shader_parameter/enabled = false
 shader_parameter/tint = Color(18.328726, 18.328726, 18.328726, 1)
 
@@ -62,9 +62,9 @@ _data = {
 &"hit_flash": SubResource("Animation_kdlqi")
 }
 
-[node name="BlueTank" type="PathFollow2D" groups=["baddies"]]
+[node name="WhiteTank" type="PathFollow2D" groups=["baddies"]]
 loop = false
-script = ExtResource("1_a3nyt")
+script = ExtResource("1_hn474")
 data = SubResource("Resource_tji8d")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["baddies"]]
@@ -75,7 +75,7 @@ debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="." groups=["baddies"]]
 material = SubResource("ShaderMaterial_44shp")
-texture = ExtResource("2_ymvcl")
+texture = ExtResource("4_hn474")
 
 [node name="HealthBar" type="TextureProgressBar" parent="."]
 offset_left = -30.0
@@ -84,8 +84,8 @@ offset_right = 30.0
 offset_bottom = -24.0
 value = 50.0
 nine_patch_stretch = true
-texture_under = ExtResource("3_ymvcl")
-texture_progress = ExtResource("3_ymvcl")
+texture_under = ExtResource("5_g51c1")
+texture_progress = ExtResource("5_g51c1")
 tint_under = Color(0.207843, 0.207843, 0.207843, 1)
 tint_progress = Color(3.60981e-06, 0.629484, 0, 1)
 

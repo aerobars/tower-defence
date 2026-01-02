@@ -4,8 +4,9 @@ extends CanvasLayer
 @export var hp_bar : TextureProgressBar
 @export var hp_text : Label
 @export var cash_display : Label
-@onready var texture := preload("res://Assets/UI/range_overlay.png")
-@onready var tower := preload("res://GameData/Towers/tower_base.tscn")
+@onready var texture : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
+@onready var tower : PackedScene = preload("res://GameData/Towers/tower_base.tscn")
+
 
 ## Tower Preview
 
@@ -38,7 +39,7 @@ func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary
 	add_child(control, true)
 	move_child($TowerPreview, 0)
 
-func update_tower_preview(new_pos, color): #runs via GameScene's process func
+func update_tower_preview(new_pos, color) -> void: #runs via GameScene's process func
 	$TowerPreview.set_position(new_pos)
 	if $TowerPreview/DragTower.modulate != Color(color):
 		$TowerPreview/DragTower.modulate = Color(color)
@@ -46,20 +47,19 @@ func update_tower_preview(new_pos, color): #runs via GameScene's process func
 
 ## UI
 
-
-
-## Gameplay
-
-func update_health_bar(cur_health, max_health):
+func update_health_bar(cur_health: int, max_health: int) -> void:
 	var hp_bar_tween := $HUD/InfoBar/InfoContainer/HealthBar.create_tween()
 	hp_bar_tween.tween_property(hp_bar, "value", cur_health, 0.1)
-	hp_text.text = str(cur_health) + "/" + str(max_health)
+	hp_text.text = str(max(cur_health, 0)) + "/" + str(max_health)
 	if cur_health >= 60:
 		hp_bar.set_tint_progress("00a800")#Green
 	elif cur_health >= 25:
 		hp_bar.set_tint_progress("c77200")#Orange
 	else:
 		hp_bar.set_tint_progress("ff0000")#Red
+
+func update_cash(amount: int) -> void:
+	cash_display.text = str(amount)
 
 func end_game(_result) -> void:
 	pass
