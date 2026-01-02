@@ -11,11 +11,10 @@ region = Rect2(16, 16, 32, 32)
 
 [resource]
 script = ExtResource("1_lrwic")
-base_range_levels = Array[float]([300.0])
-base_attack_speed_levels = Array[float]([1.0])
 buff_data = ExtResource("1_jteku")
 offensive_aura = true
 base_power_levels = Array[int]([-1])
+base_range_levels = Array[float]([300.0])
 name = "Poison Aura"
 description = "Adds a movespeed slow to the connected tower's weapons, or slows the movespeed of baddies in aura range. Slow effect stacks"
 texture = SubResource("AtlasTexture_762i5")

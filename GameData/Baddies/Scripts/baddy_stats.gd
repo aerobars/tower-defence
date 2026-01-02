@@ -2,7 +2,7 @@ class_name BaddyStats extends Resource
 
 signal health_depleted
 signal health_changed(current_health: int, max_health: int)
-signal create_dot_timers(dot_data: DotBuff)
+signal create_buff_timer(buff_data: Buff)
 
 @export var spawns_per_wave: int
 @export var spawn_interval: float
@@ -38,8 +38,7 @@ var current_move_speed : float
 
 var health : float = 0 : set = _on_health_set
 
-var stat_buffs: Array[StatBuff]
-var dot_buffs: Array[DotBuff]
+var active_buffs: Array[Buff]
 
 
 ##Stats Setup and Adjustment
@@ -52,34 +51,29 @@ func setup_stats() -> void:
 	current_move_speed = max(current_move_speed, 0.1)
 
 func add_buff(buff: Buff) -> void:
-	if buff is DotBuff:
-		dot_buffs.append(buff)
-		create_dot_timers.emit(buff)
-	elif buff is StatBuff:
-		stat_buffs.append(buff)
-		recalculate_stats.call_deferred()
+	active_buffs.append(buff)
+	create_buff_timer.emit(buff)
+	recalculate_stats.call_deferred()
 
 func remove_buff(buff: Buff) -> void:
-	if buff is DotBuff:
-		dot_buffs.erase(buff)
-	elif buff is StatBuff:
-		stat_buffs.erase(buff)
-		recalculate_stats.call_deferred()
+	active_buffs.erase(buff)
+	recalculate_stats.call_deferred()
 
 func recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
 	var stat_addends: Dictionary = {} #Amt to add to stats
-	for buff in stat_buffs:
-		var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()
-		match buff.buff_type:
-			StatBuff.BuffType.ADD:
-				if not stat_addends.has(stat_name):
-					stat_addends[stat_name] = 0.0
-				stat_addends[stat_name] += buff.buff_amount
-			StatBuff.BuffType.MULTIPLY:
-				if not stat_multipliers.has(stat_name):
-					stat_multipliers[stat_name] = 1.0
-				stat_multipliers[stat_name] += buff.buff_amount
+	for buff in active_buffs:
+		if buff is StatBuff:
+			var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()
+			match buff.buff_type:
+				StatBuff.BuffType.ADD:
+					if not stat_addends.has(stat_name):
+						stat_addends[stat_name] = 0.0
+					stat_addends[stat_name] += buff.buff_amount
+				StatBuff.BuffType.MULTIPLY:
+					if not stat_multipliers.has(stat_name):
+						stat_multipliers[stat_name] = 1.0
+					stat_multipliers[stat_name] += buff.buff_amount
 	
 	#var stat_sample_pos: float = level
 	current_max_health = base_max_health * level_ratio

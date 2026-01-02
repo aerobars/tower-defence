@@ -18,7 +18,7 @@ func _ready() -> void:
 	health_bar.set_as_top_level(true)
 	
 	#signal connections
-	data.create_dot_timers.connect(initialize_dot)
+	data.create_buff_timer.connect(initialize_buff)
 	data.health_changed.connect(healthbar_update)
 	data.health_depleted.connect(destroy)
 
@@ -37,13 +37,15 @@ func on_hit(dmg: Array, debuff: Array[DotBuff] = [null]) -> void:
 	calculate_damage(dmg)
 	if debuff != [null]:
 		for i in debuff:
-			initialize_dot(i)
+			initialize_buff(i)
 
-func initialize_dot(dot) -> void:
-	dot_tick(dot)
-	await(get_tree().create_timer(dot.dot_duration, false).timeout)
-	dot.is_active = false
-	data.remove_buff(dot)
+func initialize_buff(buff) -> void:
+	if buff is DotBuff: 
+		dot_tick(buff)
+	await(get_tree().create_timer(buff.buff_duration, false).timeout)
+	if buff :
+		buff.is_active = false
+	data.remove_buff(buff)
 
 func dot_tick(dot) -> void:
 	while dot.is_active:

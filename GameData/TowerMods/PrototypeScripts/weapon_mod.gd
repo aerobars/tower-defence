@@ -21,14 +21,12 @@ enum ProjectileTag { INSTANT, PROJECTILE }
 @export var base_crit_multiplier_levels: Array[float]
 @export var base_damage_levels : Array[float]
 @export var base_multitarget_levels : Array [int] = [1]
-@export var base_range_levels : Array[float] #range value is radius of range circle
 var current_aoe : float
 var current_attack_speed : float
 var current_crit_chance : int
 var current_crit_multiplier: float
 var current_damage : float
 var current_multitarget : int
-var current_range : float
 
 func buff_check(buff_stat) -> bool:
 	return AllBuffableStats.BuffableStats.keys()[buff_stat] in WeaponBuffableStats.keys()

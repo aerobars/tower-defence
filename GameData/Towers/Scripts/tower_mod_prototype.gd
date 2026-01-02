@@ -62,6 +62,8 @@ func _physics_process(_delta: float) -> void:
 func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body.get_parent())
+		if data.mod_class == data.ModClass.AURA and data.offensive_aura and get_parent().aura_tower:
+			apply_buff(body.get_parent())
 	elif data != null and data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
 		if data.offensive_aura and get_parent().aura_tower:
 			pass #nothing gets added to aura_targets for offensive auras in aura mode

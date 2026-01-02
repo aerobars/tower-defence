@@ -7,5 +7,5 @@ script = ExtResource("1_imnq3")
 damage_tag = 1
 damage_amount = 1.0
 damage_interval = 1.0
-dot_duration = 2.0
+buff_duration = 3.0
 metadata/_custom_type_script = "uid://2ja3gh17qp02"

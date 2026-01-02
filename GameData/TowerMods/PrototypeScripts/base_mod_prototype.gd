@@ -6,7 +6,9 @@ enum ModClass { AURA, POWER, WEAPON }
 #stats for all mod types
 @export var level : int = 0
 @export var base_power_levels : Array[int]
+@export var base_range_levels : Array[float] = [26] #range is radius of range circle #default is 1/2 turret base
 var current_power : int
+var current_range : float
 @export var mod_class : ModClass
 
 @export var name : String
@@ -63,7 +65,7 @@ func recalculate_buffs() -> void:
 	recalculate_stats(stat_addends, stat_multipliers)
 
 @abstract
-func buff_check(_dummy) -> bool
+func buff_check(buff_stat) -> bool
 
 @abstract
 func recalculate_stats(_thing1, _thing2) -> void
