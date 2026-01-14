@@ -7,5 +7,6 @@ script = ExtResource("1_p1gpv")
 stat = 6
 buff_amount = -0.1
 buff_type = 1
+name = "Poison"
 buff_duration = 3.0
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

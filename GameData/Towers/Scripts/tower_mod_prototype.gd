@@ -6,9 +6,9 @@ var data : TowerMod
 var mod_slot_ref : StaticBody2D
 
 var baddies_in_range : Array
-var targets: Array
+var targets : Array
 var aura_targets : Array
-var reloaded := true
+var attack_timer : float = 0.0
 var powered : bool
 
 
@@ -43,27 +43,30 @@ func mod_slot_updated(mod_slot : StaticBody2D, mod_slot_data : TowerMod) -> void
 
 ##In Game Function
 
-func _physics_process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if data != null and get_parent().is_powered:
-		if baddies_in_range.size() != 0 and reloaded:
-			if data.mod_class == data.ModClass.AURA and data.offensive_aura:
-				for baddy in baddies_in_range:
-					fire(baddy)
-			elif data.mod_class == data.ModClass.WEAPON:
-				targets = select_targets()
-				if not $AnimationPlayer.is_playing():
-					turn()
-				for i in data.current_multitarget:
-					if i < targets.size():
-						fire(targets[i])
-		else:
-			targets = [null]
+		if (data.mod_class == data.ModClass.AURA and data.offensive_aura) or data.mod_class == data.ModClass.WEAPON:
+			attack_timer += delta
+			if attack_timer >= data.current_attack_speed:
+				attack_timer = 0.0
+				if baddies_in_range.size() != 0:
+					match data.mod_class:
+						data.ModClass.AURA:
+							for baddy in baddies_in_range:
+								fire(baddy)
+						data.ModClass.WEAPON:
+							targets = select_targets()
+							if not $AnimationPlayer.is_playing():
+								turn()
+							for i in data.current_multitarget:
+								if i < targets.size():
+									fire(targets[i])
+				else:
+					targets = [null]
 
 func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body.get_parent())
-		if data.mod_class == data.ModClass.AURA and data.offensive_aura and get_parent().aura_tower:
-			apply_buff(body.get_parent())
 	elif data != null and data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
 		if data.offensive_aura and get_parent().aura_tower:
 			pass #nothing gets added to aura_targets for offensive auras in aura mode
@@ -79,7 +82,7 @@ func _on_range_body_exited(body) -> void:
 		aura_targets.erase(body)
 
 func apply_buff(body) -> void:
-	body.data.add_buff(data.buff_data.duplicate(true))
+	body.data.add_buff(data.buff_data)
 
 func clear_buffs(body) -> void:
 	body.data.remove_buff(data.buff_data)
@@ -96,7 +99,6 @@ func turn():
 	$Turret.look_at(targets[0].position)
 
 func fire(target):
-	reloaded = false
 	match data.mod_class: 
 		data.ModClass.WEAPON: 
 			if data.projectile_tag == data.ProjectileTag.PROJECTILE:
@@ -115,8 +117,6 @@ func fire(target):
 				target.on_hit(data.calculate_damage(), data.dot_buffs)
 		data.ModClass.AURA:
 			apply_buff(target)
-	await(get_tree().create_timer(data.current_attack_speed, false).timeout)
-	reloaded = true
 
 func fire_projectile() -> void:
 	pass

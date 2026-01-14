@@ -18,9 +18,19 @@ func _ready() -> void:
 	health_bar.set_as_top_level(true)
 	
 	#signal connections
-	data.create_buff_timer.connect(initialize_buff)
+#	data.initialize_buff.connect(initialize_buff)
 	data.health_changed.connect(healthbar_update)
 	data.health_depleted.connect(destroy)
+
+func _process(delta: float) -> void:
+	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
+		var inst = data.active_buffs[buff]
+		inst.update(delta)
+		if buff is DotBuff and inst.dot_timer >= buff.dot_interval:
+			calculate_damage([buff.damage_amount * inst.stacks, buff.damage_tag, false])
+			inst.dot_timer = 0.0
+		if inst.time_remaining <= 0:
+			data.remove_buff(buff)
 
 func _physics_process(delta: float) -> void:
 	if progress_ratio == 1.0:
@@ -32,28 +42,31 @@ func move(delta) -> void:
 	set_progress(get_progress() + data.current_move_speed * delta)
 	health_bar.position = position - Vector2(30, 30)
 
-func on_hit(dmg: Array, debuff: Array[DotBuff] = [null]) -> void:
-	impact(dmg[1])
+func on_hit(dmg: Array, debuff: Array[Buff] = []) -> void: #Array contains dmg amt, dmg tag, and crit status
 	calculate_damage(dmg)
-	if debuff != [null]:
+	for buff in data.active_buffs.keys():
+		if buff is OnHitBuff and data.active_buffs[buff].on_hit_check:
+			on_hit_effect(buff)
+	if debuff != []:
 		for i in debuff:
-			initialize_buff(i)
+			data.add_buff(i)
 
-func initialize_buff(buff) -> void:
-	if buff is DotBuff: 
-		dot_tick(buff)
-	await(get_tree().create_timer(buff.buff_duration, false).timeout)
-	if buff is DotBuff:
-		buff.is_active = false
+func on_hit_effect(buff: OnHitBuff)-> void:
+	match buff.name.to_pascal_case():
+		"shock":
+			shock(buff)
+
+func shock(buff) -> void:
+	var move_speed = data.current_move_speed
+	data.current_move_speed = 0.0
+	calculate_damage([buff.damage_amount, buff.damage_tag, false])
 	data.remove_buff(buff)
+	await get_tree().create_timer(buff.effect_duration, false).timeout
+	data.current_move_speed = move_speed
 
-func dot_tick(dot) -> void:
-	while dot.is_active:
-		await(get_tree().create_timer(dot.damage_interval, false).timeout)
-		on_hit([dot.damage_amount, dot.damage_tag, false])
-
-func calculate_damage(dmg: Array) -> void:
+func calculate_damage(dmg: Array) -> void:#Array contains dmg amt, dmg tag, and crit status
 	data.health -= dmg[0]
+	impact(dmg[1])
 	DamageNumbers.display_number(dmg[0], damage_number_origin.global_position, dmg[1], dmg[2])
 
 func healthbar_update(health, max_health) -> void:

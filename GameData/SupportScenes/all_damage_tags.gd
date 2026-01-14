@@ -6,6 +6,7 @@ enum DamageTag {
 	CONCUSSIVE,
 	PIERCE,
 	POISON,
+	SHOCK,
 }
 
 enum BaddyArmorTags {

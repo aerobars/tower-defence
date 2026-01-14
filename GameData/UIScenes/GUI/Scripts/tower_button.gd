@@ -19,6 +19,15 @@ func _ready() -> void:
 		new_mod_slot()
 	update_mod_slots()
 
+func slot_added() -> void:
+	slot_count += 1
+	new_mod_slot()
+	update_mod_slots()
+
+func slot_removed() -> void:
+	slot_count -= 1
+	update_mod_slots()
+
 func new_mod_slot() -> void:
 	var new_mod = mod_slot.instantiate()
 	add_child(new_mod)
@@ -27,7 +36,11 @@ func update_mod_slots() -> void:
 	var slot_num := 0
 	for slot in get_children():
 		if slot is ButtonModSlot:
-			var angle = (TAU * slot_num) / slot_count
+			var angle = 0
+			if slot_count > 4:
+				angle = -PI/2 + slot_num * (TAU / (slot_count))
+			else:
+				angle = -(slot_num * (PI / (slot_count-1)))
 			slot.position.x = slot_radius * cos(angle) + size.x/2
 			slot.position.y = slot_radius * sin(angle) + size.y/2
 			slot_num += 1
