@@ -1,6 +1,6 @@
 class_name InventorySlotUi extends Button
 
-signal hovered(data: TowerMod)
+signal hovered(info_popup, data: TowerMod)
 signal clear_popup
 
 #SlotData holds TowerMod and quantity
@@ -11,6 +11,7 @@ var slot_data : SlotData : set = set_slot_data
 @onready var hover_timer = $Timer
 
 const HOVER_DELAY : float = 0.5
+const POPUP_TYPE : String = "info"
 
 
 #timer timeout signal connected to game_scene
@@ -34,4 +35,4 @@ func _on_mouse_exited() -> void:
 	clear_popup.emit()
 
 func _on_timer_timeout() -> void:
-	hovered.emit(slot_data.tower_mod)
+	hovered.emit(POPUP_TYPE, slot_data.tower_mod)

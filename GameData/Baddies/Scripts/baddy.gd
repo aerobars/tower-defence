@@ -42,7 +42,7 @@ func move(delta) -> void:
 	set_progress(get_progress() + data.current_move_speed * delta)
 	health_bar.position = position - Vector2(30, 30)
 
-func on_hit(dmg: Array, debuff: Array[Buff] = []) -> void: #Array contains dmg amt, dmg tag, and crit status
+func on_hit(dmg: Array, debuff: Array = []) -> void: #Array contains dmg amt, dmg tag, and crit status
 	calculate_damage(dmg)
 	for buff in data.active_buffs.keys():
 		if buff is OnHitBuff and data.active_buffs[buff].on_hit_check:

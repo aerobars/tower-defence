@@ -48,24 +48,21 @@ func droppable_check() -> void:
 			mod_slot_ref.occupying_mod.mod_dropped.emit(mod_slot_ref.occupying_mod.data, 1) #returns old mod back to inventory
 			_run_tween_async(tween, mod_slot_ref.occupying_mod, "global_position", mod_slot_ref.occupying_mod.inventory_pos, 0.2) 
 			mod_dropped.emit(data, -1) #mod_updated connected to inventory_ui
-		#elif stops inventory from subtracting if occupying mod is returned to same slot
-		elif not mod_slot_ref.occupied:
+		elif not mod_slot_ref.occupied:#stops inventory from subtracting if occupying mod is returned to same slot
 			mod_dropped.emit(data, -1)
-		#signals built towers to update associated mods
-		mod_slot_ref.mod_updated.emit(mod_slot_ref, data)
+		mod_slot_ref.mod_updated.emit(mod_slot_ref, data) #signals built towers to update associated mods
 		mod_slot_ref.occupied = true
 		mod_slot_ref.occupying_mod = self
 		#mod_slot_ref.get_parent().data
-	elif in_inventory:
+	elif in_inventory: #if mod slot started in inventory and wasn't added to mod slot
 		tween.tween_property(self, "global_position", initial_pos, 0.2).set_ease(Tween.EASE_OUT)
-		#print("test2")
 		await tween.finished
 		queue_free()
-	else:
+	else: #if mod started in mod slot and removed back to inventory
 		tween.tween_property(self, "global_position", inventory_pos, 0.2).set_ease(Tween.EASE_OUT)
 		mod_dropped.emit(data, 1)
+		mod_slot_ref.mod_updated.emit(mod_slot_ref, null)
 		mod_slot_ref.occupied = false
-		#print("test3")
 		await tween.finished
 		queue_free()
 	draggable = false

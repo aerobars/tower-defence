@@ -1,21 +1,24 @@
 class_name TowerBase extends StaticBody2D
 
+signal show_upgrade_panel(popup_type : String, tower_data)
 
+##Setup
 @export var marker_pos_radius : float = 10
-var level := 0 #level 0 to line up with arrays
 var marker_count : int = 0 #set during verify and build Game Scene function
 var all_marker_pos : Dictionary[Marker2D,Vector2]
 var marker_keys : Array
-
 var build_btn_mods : Dictionary
 var build_keys : Array
 
+##Gameplay
+const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/tower_mod.tscn")
+const POPUP_TYPE : String = "upgrade"
 var aura_tower : bool
+var is_built := false
 var is_powered := false
+var level := 0 #level 0 to line up with arrays
 var net_power : int
 
-var tower_mod_proto := preload("res://GameData/Towers/tower_mod.tscn")
-var is_built := false
 
 func _ready() -> void:
 	marker_setup() #use markers instead of directly setting TowerMod scene so that this can show mod textures during build mode
@@ -25,7 +28,7 @@ func _ready() -> void:
 			build_keys = build_btn_mods.keys()
 			var marker_key = marker_keys[i]
 			var build_key = build_keys[i]
-			var tower_mod = tower_mod_proto.instantiate()
+			var tower_mod = TOWER_MOD_PROTO.instantiate()
 			tower_mod.position = all_marker_pos[marker_key]
 			#set mod textures on tower preview, or full mod data if built
 			#does not do former for now
@@ -39,11 +42,8 @@ func _ready() -> void:
 				#tower_mod.get_child(0).texture = build_btn_mods[build_key].texture
 			add_child(tower_mod)
 
-func level_up() -> void:
-	for child in get_children():
-		child.level_up()
-
 ## Marker Functions
+
 func marker_setup() -> void:
 	for i in marker_count:
 		var marker = Marker2D.new()
@@ -63,6 +63,20 @@ func update_markers() -> void: #called if # of markers gets updated
 			set_marker_pos(child, count)
 			count +=1
 
+
+## Gameplay
+func _input(event: InputEvent) -> void:
+	if event.is_action("click"):
+		var tower_data : Array
+		for child in get_children():
+			if child is TowerModPrototype and child.data != null:
+				tower_data.append(child.data)
+		show_upgrade_panel.emit(POPUP_TYPE, tower_data)
+
+func level_up() -> void:
+	for child in get_children():
+		child.level_up()
+
 func power_check() -> void:
 	for child in get_children():
 		if child is TowerModPrototype and child.data != null:
@@ -72,3 +86,7 @@ func power_check() -> void:
 	else:
 		is_powered = false
 		#display low power symbol on tower
+
+func aura_update(aura_status : bool) -> void:
+	aura_tower = aura_status
+	print("aura updated")

@@ -7,6 +7,7 @@
 size = Vector2(52, 52)
 
 [node name="TowerBase" type="StaticBody2D"]
+input_pickable = true
 script = ExtResource("1_wmpor")
 
 [node name="Base" type="Sprite2D" parent="."]

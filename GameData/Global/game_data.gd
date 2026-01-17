@@ -1,5 +1,7 @@
 extends Node
 
+signal mod_update_check(mod: StaticBody2D)
+
 var is_dragging = false
 
 const BADDY_FILEPATH = "res://GameData/Baddies/"
@@ -58,3 +60,6 @@ func get_wave_data() -> Dictionary:
 		wave_data["wave_total"] += spawn_data.data.spawns_per_wave
 	previous_wave = wave_data["wave_baddies"]
 	return wave_data
+
+func mod_updated(mod: StaticBody2D) -> void:
+	mod_update_check.emit(mod)

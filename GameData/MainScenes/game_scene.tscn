@@ -20,6 +20,8 @@
 
 [node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "pause_button", "game_message", "map_node", "path_debug")]
 script = ExtResource("1_g2kuy")
+max_player_health = null
+player_cash = null
 ui = NodePath("UI")
 build_bar = NodePath("UI/HUD/BuildBar")
 inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryGrid")

@@ -2,7 +2,7 @@ extends Node2D
 
 signal game_finished(result)
 
-##gameplay variables
+##gameplay 
 var spawns_per_wave := 1 
 var wave_total := 0
 @export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
@@ -10,8 +10,11 @@ var current_player_health : int
 var character : String = "Tester"
 @export var player_cash : int = 100
 
-##ui variables
-const POPUP_PANEL := preload("res://GameData/UIScenes/GUI/info_popup.tscn")
+##ui
+const POPUPS : Dictionary = {
+	"info" : preload("res://GameData/UIScenes/GUI/info_popup.tscn"),
+	"upgrade" : preload("res://GameData/UIScenes/GUI/upgrade_panel.tscn")
+}
 const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
 const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
 @export_group("Scene Paths")
@@ -25,7 +28,7 @@ const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_se
 @onready var new_slot := inventory_ui.connect("slot_created", connect_inv_button_signal)
 var cur_popup : Node2D
 
-##pathfinding variables
+##pathfinding
 @export_subgroup("Map and Pathfinding")
 @export var map_node : Node2D #set in _ready instead if using multiple maps
 @export var path_debug :Line2D
@@ -45,13 +48,14 @@ const CELL := Vector2(CELL_SIZE, CELL_SIZE)
 const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
 var previous_tile := Vector2i(0, 0)
 
-##build mode variables
-var build_mode : bool = false
-var build_valid : bool = false
-var build_tile
-var build_location
-var build_type : String
+##build mode
+var build_btn_ref
 var build_data : Dictionary
+var build_location
+var build_mode : bool = false
+var build_tile
+var build_type : String
+var build_valid : bool = false
 
 
 func _ready() -> void:
@@ -67,7 +71,7 @@ func _ready() -> void:
 	baddy_path_update()
 	
 	for i in get_tree().get_nodes_in_group("build_buttons"):
-		i.pressed.connect(func(): initiate_build_mode(i.tower, i.data))
+		i.pressed.connect(func(): initiate_build_mode(i.data, i, i.tower))
 
 func _process(_delta: float) -> void:
 	if build_mode:
@@ -198,12 +202,13 @@ func pathfinding_update() -> void:
 ## Building Functions
 
 
-func initiate_build_mode(tower_type: String, data: Dictionary) -> void: #connected to build buttons' pressed signal, data contains tower mods and aura tower status
+func initiate_build_mode(data: Dictionary, btn_ref, tower_type: String = "tower_base") -> void: #connected to build buttons' pressed signal, data contains tower mods and aura tower status
 	if build_mode:
 		cancel_build_mode()
+	build_btn_ref = btn_ref
 	build_data = data
-	build_type = tower_type
 	build_mode = true
+	build_type = tower_type
 	previous_tile = Vector2i(-100,-100)
 	ui.set_tower_preview(build_type, get_global_mouse_position(), build_data)
 
@@ -245,6 +250,8 @@ func verify_and_build() -> void:
 		new_tower.build_btn_mods = build_data["mods"]
 		new_tower.aura_tower = build_data["aura_tower"]
 		new_tower.marker_count = build_data["mods"].size()
+		new_tower.show_upgrade_panel.connect(create_popup)
+		build_btn_ref.aura_update.connect(new_tower.aura_update)
 		
 		map_node.get_node("TowerContainer").add_child(new_tower, true) #TowerContainer is in Map Scene
 		exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
@@ -274,11 +281,11 @@ func on_inv_button_down(_inventory_slot, tower_mod) -> void: #button down for in
 	new_draggable.inventory_pos = Vector2((inventory_ui.global_position.x + inventory_ui.size.x/2), (inventory_ui.global_position.y + inventory_ui.size.y/2))
 	new_draggable.initial_pos = get_global_mouse_position()
 
-func create_popup(data) -> void:
-	var popup = POPUP_PANEL.instantiate()
+func create_popup(popup_type: String , data) -> void:
+	var popup = POPUPS[popup_type].instantiate()
 	var popup_size = popup.get_child(0).size
 	popup.data = data
-	popup.global_position = Vector2(get_global_mouse_position().x + 15, get_global_mouse_position().y - popup_size.y)
+	popup.global_position = Vector2(get_global_mouse_position().x + 15, get_global_mouse_position().y - popup_size.y/2)
 	$UI.add_child(popup)
 	clear_popup()
 	cur_popup = popup
