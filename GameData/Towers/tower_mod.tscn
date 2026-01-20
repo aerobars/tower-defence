@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://bp51akjapuerf"]
 
-[ext_resource type="Script" uid="uid://dvux8hj1euiax" path="res://GameData/Towers/Scripts/tower_mod_prototype.gd" id="1_uu2uq"]
+[ext_resource type="Script" uid="uid://dvux8hj1euiax" path="res://GameData/Towers/Scripts/tower_mod.gd" id="1_uu2uq"]
 [ext_resource type="Texture2D" uid="uid://c44rk0b010555" path="res://Assets/Effects/towerDefense_tile297.png" id="3_ptglf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_uu2uq"]

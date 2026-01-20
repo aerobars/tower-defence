@@ -26,11 +26,6 @@ func _process(delta: float) -> void:
 	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
 		var inst = data.active_buffs[buff]
 		inst.update(delta)
-		if buff is DotBuff and inst.dot_timer >= buff.dot_interval:
-			calculate_damage([buff.damage_amount * inst.stacks, buff.damage_tag, false])
-			inst.dot_timer = 0.0
-		if inst.time_remaining <= 0:
-			data.remove_buff(buff)
 
 func _physics_process(delta: float) -> void:
 	if progress_ratio == 1.0:
@@ -46,23 +41,12 @@ func on_hit(dmg: Array, debuff: Array = []) -> void: #Array contains dmg amt, dm
 	calculate_damage(dmg)
 	for buff in data.active_buffs.keys():
 		if buff is OnHitBuff and data.active_buffs[buff].on_hit_check:
-			on_hit_effect(buff)
+			data.active_buffs[buff].on_hit_effect()
 	if debuff != []:
 		for i in debuff:
-			data.add_buff(i)
+			data.add_buff(i, self)
 
-func on_hit_effect(buff: OnHitBuff)-> void:
-	match buff.name.to_pascal_case():
-		"shock":
-			shock(buff)
 
-func shock(buff) -> void:
-	var move_speed = data.current_move_speed
-	data.current_move_speed = 0.0
-	calculate_damage([buff.damage_amount, buff.damage_tag, false])
-	data.remove_buff(buff)
-	await get_tree().create_timer(buff.effect_duration, false).timeout
-	data.current_move_speed = move_speed
 
 func calculate_damage(dmg: Array) -> void:#Array contains dmg amt, dmg tag, and crit status
 	data.health -= dmg[0]

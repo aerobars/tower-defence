@@ -1,9 +1,10 @@
 @abstract
-class_name TowerMod extends Resource
+class_name PrototypeMod extends Resource
 
 enum ModClass { AURA, POWER, WEAPON }
 
 #stats for all mod types
+#first level is level 0 to line up with arrays
 @export var level : int = 0
 @export var base_power_levels : Array[int]
 @export var base_range_levels : Array[float] = [26] #range is radius of range circle #default is 1/2 turret base
@@ -18,11 +19,6 @@ var class_string : String:
 	get: 
 		return ModClass.keys()[ModClass.values().find(mod_class)]
 
-#first level is level 0 to line up with arrays
-var level_names := ["Basic", "Advanced", "Expert", "Master", "Grandmaster"]
-var current_level_name : String: 
-	get:
-		return level_names[level]
 
 var stat_buffs : Array[StatBuff]
 var dot_buffs : Array[DotBuff]
@@ -33,7 +29,7 @@ func _init() -> void:
 func setup_stats() -> void:
 	recalculate_buffs()
 
-func add_buff(buff: Buff) -> void:
+func add_buff(buff: Buff, _buff_owner) -> void:
 	if buff is DotBuff:
 		dot_buffs.append(buff)
 	if buff is StatBuff:

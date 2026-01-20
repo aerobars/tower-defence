@@ -1,4 +1,4 @@
-class_name PowerMod extends TowerMod
+class_name PowerMod extends PrototypeMod
 
 enum PowerBuffableStats {
 	POWER

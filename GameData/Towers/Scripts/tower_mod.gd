@@ -1,4 +1,4 @@
-class_name TowerModPrototype extends Node2D
+class_name TowerMod extends Node2D
 
 signal power_check
 signal mod_updated(mod: StaticBody2D)
@@ -95,7 +95,7 @@ func _on_range_body_exited(body) -> void:
 		aura_targets.erase(body)
 
 func apply_buff(body) -> void:
-	body.data.add_buff(data.buff_data)
+	body.data.add_buff(data.buff_data, body)
 
 func clear_buffs(body) -> void:
 	body.data.remove_buff(data.buff_data)

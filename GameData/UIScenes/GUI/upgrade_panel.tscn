@@ -29,16 +29,14 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "Mod Name"
 
-[node name="Class" type="Label" parent="Background/VBoxContainer"]
-layout_mode = 2
-text = "Mod Class"
-
-[node name="Power" type="Label" parent="Background/VBoxContainer"]
-layout_mode = 2
-text = "A.S.:"
-
 [node name="Description" type="Label" parent="Background/VBoxContainer"]
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
-text = "Description: "
+text = "Description: placeholder"
 autowrap_mode = 3
+
+[node name="Button" type="Button" parent="Background/VBoxContainer"]
+layout_mode = 2
+text = "Upgrade"
+
+[connection signal="pressed" from="Background/VBoxContainer/Button" to="." method="_on_button_pressed"]

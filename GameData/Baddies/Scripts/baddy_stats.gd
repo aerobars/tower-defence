@@ -50,10 +50,10 @@ func setup_stats() -> void:
 	health = current_max_health
 	current_move_speed = max(current_move_speed, 0.1)
 
-func add_buff(buff: Buff, amt : int = 1) -> void:
+func add_buff(buff: Buff, buff_owner : Node2D, amt : int = 1) -> void:
 	for i in amt: #amt allows to apply multiple stacks from a single source
 		if not active_buffs.has(buff):
-			var new_inst = BuffInstance.new(buff)
+			var new_inst = BuffInstance.new(buff, buff_owner)
 			active_buffs[buff] = new_inst
 		var inst = active_buffs[buff]
 		inst.stacks = min(inst.stacks + amt, buff.stack_limit)

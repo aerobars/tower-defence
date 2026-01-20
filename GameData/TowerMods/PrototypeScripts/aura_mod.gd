@@ -1,4 +1,4 @@
-class_name AuraMod extends TowerMod
+class_name AuraMod extends PrototypeMod
 
 enum AuraBuffableStats{
 	RANGE,

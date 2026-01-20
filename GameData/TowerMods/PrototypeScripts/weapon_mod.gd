@@ -1,4 +1,4 @@
-class_name WeaponMod extends TowerMod
+class_name WeaponMod extends PrototypeMod
 
 enum WeaponBuffableStats {
 	DAMAGE,

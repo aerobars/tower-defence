@@ -251,6 +251,7 @@ func verify_and_build() -> void:
 		new_tower.aura_tower = build_data["aura_tower"]
 		new_tower.marker_count = build_data["mods"].size()
 		new_tower.show_upgrade_panel.connect(create_popup)
+		new_tower.clear_panel.connect(clear_popup)
 		build_btn_ref.aura_update.connect(new_tower.aura_update)
 		
 		map_node.get_node("TowerContainer").add_child(new_tower, true) #TowerContainer is in Map Scene
@@ -281,13 +282,15 @@ func on_inv_button_down(_inventory_slot, tower_mod) -> void: #button down for in
 	new_draggable.inventory_pos = Vector2((inventory_ui.global_position.x + inventory_ui.size.x/2), (inventory_ui.global_position.y + inventory_ui.size.y/2))
 	new_draggable.initial_pos = get_global_mouse_position()
 
-func create_popup(popup_type: String , data) -> void:
+func create_popup(popup_type: String , data, popup_owner : TowerBase = null) -> void:
+	clear_popup()
 	var popup = POPUPS[popup_type].instantiate()
 	var popup_size = popup.get_child(0).size
 	popup.data = data
 	popup.global_position = Vector2(get_global_mouse_position().x + 15, get_global_mouse_position().y - popup_size.y/2)
+	if popup_owner != null:
+		popup.upgrade.connect(popup_owner.level_up)
 	$UI.add_child(popup)
-	clear_popup()
 	cur_popup = popup
 
 func clear_popup() -> void:

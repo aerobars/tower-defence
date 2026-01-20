@@ -5,6 +5,9 @@
 [resource]
 script = ExtResource("1_4gp76")
 success_chance_per_stack = 10
+damage_tag = 5
+damage_amount = 2.0
+damage_aoe = 50.0
 name = "Shock"
 stack_limit = 10
 buff_duration = 5.0
