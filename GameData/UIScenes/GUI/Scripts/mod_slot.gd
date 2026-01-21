@@ -1,10 +1,10 @@
 class_name ButtonModSlot extends Node2D
 
-var data : TowerMod
+var data : PrototypeMod
 var occupied := false
 var occupying_mod : ModDraggable
 
-signal mod_updated(StaticBody2D, TowerMod)
+signal mod_updated(StaticBody2D, PrototypeMod)
 
 func _ready() -> void:
 	modulate = Color(Color.AZURE, 0.7)

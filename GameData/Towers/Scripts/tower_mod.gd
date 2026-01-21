@@ -3,7 +3,7 @@ class_name TowerMod extends Node2D
 signal power_check
 signal mod_updated(mod: StaticBody2D)
 
-var data : TowerMod
+var data : PrototypeMod
 var mod_slot_ref : StaticBody2D
 
 var baddies_in_range : Array
@@ -40,7 +40,7 @@ func update_mod() -> void:
 	power_check.emit()
 	mod_updated.emit(self)
 
-func mod_slot_updated(mod_slot : StaticBody2D, mod_slot_data : TowerMod) -> void:
+func mod_slot_updated(mod_slot : StaticBody2D, mod_slot_data : PrototypeMod) -> void:
 	if mod_slot == mod_slot_ref:
 		if data != null and data.mod_class == data.ModClass.AURA:
 			for body in aura_targets:

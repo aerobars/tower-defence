@@ -1,10 +1,10 @@
 class_name ModDraggable extends Node2D
 
 signal mod_dropped #connected to inventory_ui
-signal hovered(data: TowerMod)
+signal hovered(data: PrototypeMod)
 signal clear_popup
 
-var data : TowerMod
+var data : PrototypeMod
 
 var draggable := false
 var inside_droppable := false
@@ -27,13 +27,13 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if draggable:
-		if Input.is_action_just_pressed("click") and not in_inventory:
+		if Input.is_action_just_pressed("ui_accept") and not in_inventory:
 			initial_pos = global_position
 			offset = get_global_mouse_position() - initial_pos
 			GameData.is_dragging = true
-		if Input.is_action_pressed("click"):
+		if Input.is_action_pressed("ui_accept"):
 			global_position = get_global_mouse_position() - offset
-		elif Input.is_action_just_released("click"):
+		elif Input.is_action_just_released("ui_accept"):
 			GameData.is_dragging = false
 			droppable_check()
 

@@ -80,10 +80,12 @@ func _process(_delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_released("ui_cancel") and build_mode:
 		cancel_build_mode()
-	if event.is_action_released("ui_accept") and build_mode:
-		#Verify player has enough cash and only proceed with below if true
-		verify_and_build()
-		cancel_build_mode()
+	if event.is_action("ui_accept"): 
+		clear_popup()
+		if build_mode:
+			#Verify player has enough cash and only proceed with below if true
+			verify_and_build()
+			cancel_build_mode()
 	if event.is_action_pressed("press_build_button_1"):
 		build_bar.get_node("HBoxContainer/TowerBase").pressed.emit()
 
@@ -251,7 +253,6 @@ func verify_and_build() -> void:
 		new_tower.aura_tower = build_data["aura_tower"]
 		new_tower.marker_count = build_data["mods"].size()
 		new_tower.show_upgrade_panel.connect(create_popup)
-		new_tower.clear_panel.connect(clear_popup)
 		build_btn_ref.aura_update.connect(new_tower.aura_update)
 		
 		map_node.get_node("TowerContainer").add_child(new_tower, true) #TowerContainer is in Map Scene
@@ -260,6 +261,7 @@ func verify_and_build() -> void:
 		baddy_path_update()
 		#deduct player cash
 		#ui.cash_display = player_cash
+
 
 
 ## Inventory Functions
@@ -276,8 +278,6 @@ func on_inv_button_down(_inventory_slot, tower_mod) -> void: #button down for in
 	new_draggable.data = tower_mod
 	new_draggable.get_child(0).texture = tower_mod.texture
 	new_draggable.mod_dropped.connect(inventory_ui.data.update_inventory)
-	new_draggable.hovered.connect(create_popup)
-	new_draggable.clear_popup.connect(clear_popup)
 	build_bar.add_child(new_draggable)
 	new_draggable.inventory_pos = Vector2((inventory_ui.global_position.x + inventory_ui.size.x/2), (inventory_ui.global_position.y + inventory_ui.size.y/2))
 	new_draggable.initial_pos = get_global_mouse_position()
@@ -286,7 +286,7 @@ func create_popup(popup_type: String , data, popup_owner : TowerBase = null) -> 
 	clear_popup()
 	var popup = POPUPS[popup_type].instantiate()
 	var popup_size = popup.get_child(0).size
-	popup.data = data
+	popup.data = data #data is ModPrototype if it is from inventory, Array if it's from TowerBase
 	popup.global_position = Vector2(get_global_mouse_position().x + 15, get_global_mouse_position().y - popup_size.y/2)
 	if popup_owner != null:
 		popup.upgrade.connect(popup_owner.level_up)

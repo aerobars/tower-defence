@@ -9,9 +9,14 @@ var data : Array #contains all towermod data of tower's mods, last array entry i
 #@onready var power : Label = $Background/VBoxContainer/Power
 #@onready var description : Label = $Background/VBoxContainer/Description
 var level = 0
+var level_names := ["Basic", "Advanced", "Expert", "Master", "Grandmaster"]
+var current_level_name : String: 
+	get:
+		return level_names[level]
 
 func _ready() -> void:
-	tower_name.text = data[-1] + " Tower"
+	level = data[-1]
+	tower_name.text = current_level_name + " Tower"
 	for i in data:
 		pass
 
@@ -22,4 +27,6 @@ func _ready() -> void:
 func _on_button_pressed() -> void:
 	#confirm sufficient cash for upgrade before proceeding
 	#deduct cash
+	level = min(level + 1, 4)
+	tower_name.text = current_level_name + " Tower"
 	upgrade.emit()

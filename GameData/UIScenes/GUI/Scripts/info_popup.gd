@@ -1,6 +1,6 @@
 class_name InfoPopup extends Node2D
 
-var data : TowerMod
+var data : PrototypeMod
 @onready var container : VBoxContainer = $Background/VBoxContainer
 @onready var mod_name : Label = $Background/VBoxContainer/Name
 @onready var mod_class : Label = $Background/VBoxContainer/Class

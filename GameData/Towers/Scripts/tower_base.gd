@@ -1,7 +1,6 @@
 class_name TowerBase extends StaticBody2D
 
 signal show_upgrade_panel(popup_type : String, tower_data, tower_id : TowerBase)
-signal clear_panel
 
 ##Setup
 @export var marker_pos_radius : float = 10
@@ -11,10 +10,6 @@ var all_marker_pos : Dictionary[Marker2D,Vector2]
 var marker_keys : Array
 var build_btn_mods : Dictionary
 var build_keys : Array
-var level_names := ["Basic", "Advanced", "Expert", "Master", "Grandmaster"]
-var current_level_name : String: 
-	get:
-		return level_names[level]
 
 ##Gameplay
 const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/tower_mod.tscn")
@@ -22,9 +17,9 @@ const POPUP_TYPE : String = "upgrade"
 var aura_tower : bool
 var is_built := false
 var is_powered := false
-var level := 0 #level 0 to line up with arrays
+var level := 3 #level 0 to line up with arrays
 var net_power : int
-var popup_active := true
+
 
 
 func _ready() -> void:
@@ -72,22 +67,16 @@ func update_markers() -> void: #called if # of markers gets updated
 
 
 ## Gameplay
-func _input(event: InputEvent) -> void:
-	if popup_active:
-		if event.is_action("click"):
-			clear_panel.emit()
-			popup_active = false
-
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if not popup_active:
-		if event.is_action("click"):
+	if is_built:
+		if event.is_action("ui_accept"):
 			var tower_data : Array
 			for child in get_children():
 				if child is TowerMod and child.data != null:
 					tower_data.append(child.data)
-			tower_data.append(current_level_name)
+			tower_data.append(level)
 			show_upgrade_panel.emit(POPUP_TYPE, tower_data, self)
-		popup_active = true
+
 
 func level_up() -> void:
 	level = min(level + 1, MAX_LEVEL)
