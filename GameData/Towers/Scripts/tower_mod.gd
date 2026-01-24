@@ -1,17 +1,21 @@
 class_name TowerMod extends Node2D
 
+##Signals
 signal power_check
 signal mod_updated(mod: StaticBody2D)
 
+##Tower Setup
 var data : PrototypeMod
 var mod_slot_ref : StaticBody2D
 
+##Gametime
 var baddies_in_range : Array
 var targets : Array
 var aura_targets : Array
 var attack_timer : float = 0.0
 
 
+##Initial Setup
 func _ready():
 	$Range.global_position = get_parent().global_position
 	if data != null:
@@ -20,10 +24,10 @@ func _ready():
 		_on_range_body_entered(body)
 	mod_updated.connect(GameData.mod_updated)
 	GameData.mod_update_check.connect(_on_mod_updated)
+	#above signals allow other mods to be added to auras after they are updated
 
 
 ##Mod Updates
-
 func update_mod() -> void:
 	if data == null:
 		$Range/CollisionShape2D.get_shape().radius = 0.0
@@ -36,6 +40,7 @@ func update_mod() -> void:
 		add_to_group("turret")
 	else:
 		remove_from_group("turret")
+	data.level = get_parent().level
 	$Turret.texture = data.texture
 	power_check.emit()
 	mod_updated.emit(self)
@@ -52,8 +57,8 @@ func _on_mod_updated(updated_mod: StaticBody2D) -> void:
 	if updated_mod in $Range.get_overlapping_bodies() and updated_mod != self:
 		_on_range_body_entered(updated_mod)
 
-##In Game Function
 
+##In-Game Function
 func _process(delta: float) -> void:
 	if data != null and get_parent().is_powered:
 		if (data.mod_class == data.ModClass.AURA and data.offensive_aura and get_parent().aura_tower) or data.mod_class == data.ModClass.WEAPON:
@@ -101,12 +106,10 @@ func clear_buffs(body) -> void:
 	body.data.remove_buff(data.buff_data)
 
 ##Weapon Function
-
 func select_targets() -> Array:
 	var target_progress_array := baddies_in_range
 	target_progress_array.sort_custom(func(a, b): return a.progress > b.progress)
 	return target_progress_array
-
 
 func turn():
 	$Turret.look_at(targets[0].position)

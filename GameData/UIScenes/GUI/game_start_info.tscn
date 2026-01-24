@@ -64,4 +64,5 @@ With weapons -> aura effects all weapon mods of the tower.
 Without wepons -> aura effects all towers or enemies within range"
 autowrap_mode = 2
 
+[connection signal="button_up" from="TextureRect/Button" to="." method="_on_button_button_up"]
 [connection signal="pressed" from="TextureRect/Button" to="." method="_on_button_pressed"]

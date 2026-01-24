@@ -25,6 +25,7 @@ const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_se
 @export var baddy_info_foldable : FoldableContainer
 @export var pause_button : TextureButton
 @export var game_message : Label
+@export var game_bookend_popup : Control
 @onready var new_slot := inventory_ui.connect("slot_created", connect_inv_button_signal)
 var cur_popup : Node2D
 
@@ -149,11 +150,16 @@ func spawn_baddies(wave_data) -> void:
 func on_base_damage(damage) -> void:
 	current_player_health -= damage
 	$UI.update_health_bar(current_player_health, max_player_health)
-	if current_player_health <= 0:
-		game_message.text = "You lose!"
+	if current_player_health <= 0 and not game_bookend_popup.game_over:
+		game_bookend_popup.game_over = true
+		game_message.text = "Game Over!"
 		game_message.visible = true
-		game_finished.emit(false)
-		game_finished.disconnect(get_parent().endgame_check)
+		await get_tree().create_timer(2.0, true).timeout
+		game_message.visible = false
+		game_bookend_popup.get_node("TextureRect/Label").text = "Thank you for playing! 
+		Please click the button below to complete a quick feedback survey and return to the main menu (and start a new game (＾ ＾)b )"
+		game_bookend_popup.get_node("TextureRect/Button").text = "Go to survey"
+		game_bookend_popup.visible = true
 	else:
 		on_baddy_death()
 

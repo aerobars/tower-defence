@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cdjrl4stpjh86"]
 
 [ext_resource type="Script" uid="uid://k23igyttqbm8" path="res://GameData/Global/scene_handler.gd" id="1_sy2fw"]
-[ext_resource type="PackedScene" uid="uid://de1fv8ifwa5fh" path="res://GameData/UIScenes/main_menu.tscn" id="2_qjdn2"]
+[ext_resource type="PackedScene" uid="uid://de1fv8ifwa5fh" path="res://GameData/MainScenes/main_menu.tscn" id="2_qjdn2"]
 
 [node name="SceneHandler" type="Node"]
 script = ExtResource("1_sy2fw")

@@ -10,7 +10,7 @@ region = Rect2(10, 11, 32, 32)
 [resource]
 resource_local_to_scene = true
 script = ExtResource("1_pjor1")
-base_power_levels = Array[int]([5])
+base_power_levels = Array[int]([5, 5, 5, 5, 5])
 mod_class = 1
 name = "Test Power"
 description = "Used to power the function of other tower mods"

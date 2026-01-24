@@ -12,15 +12,15 @@ enum WeaponBuffableStats {
 enum ProjectileTag { INSTANT, PROJECTILE }
 @export var projectile_tag: ProjectileTag
 @export var damage_tag : AllDamageTags.DamageTag = AllDamageTags.DamageTag.PIERCE
-#@export var attack_tags: Array = [attack_type]
+#var attack_tags: Array = [damage_tag]
 
-#level based variables
-@export var base_aoe_levels : Array[float]
-@export var base_attack_speed_levels : Array[float] ##measured in attacks per second
-@export var base_crit_chance_levels : Array[int]
-@export var base_crit_multiplier_levels: Array[float]
-@export var base_damage_levels : Array[float]
-@export var base_multitarget_levels : Array [int] = [1]
+##level based variables
+@export var base_aoe_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
+@export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] #cd between attacks in seconds
+@export var base_crit_chance_levels : Array[int] = [0, 0, 0, 0, 0]
+@export var base_crit_multiplier_levels: Array[float] = [1.5, 1.5, 1.5, 1.5, 1.5]
+@export var base_damage_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0]
+@export var base_multitarget_levels : Array [int] = [1, 1, 1, 1, 1]
 var current_aoe : float
 var current_attack_speed : float
 var current_crit_chance : int

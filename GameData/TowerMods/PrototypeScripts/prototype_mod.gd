@@ -4,10 +4,9 @@ class_name PrototypeMod extends Resource
 enum ModClass { AURA, POWER, WEAPON }
 
 #stats for all mod types
-#first level is level 0 to line up with arrays
-@export var level : int = 0
-@export var base_power_levels : Array[int]
-@export var base_range_levels : Array[float] = [26] #range is radius of range circle #default is 1/2 turret base
+var level : int #first level will be 0 after setup_stats to line up with arrays
+@export var base_power_levels : Array[int] = [0, 0, 0, 0, 0]
+@export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] #range is radius of range circle #default is 1/2 turret base
 var current_power : int
 var current_range : float
 @export var mod_class : ModClass
@@ -26,7 +25,8 @@ var dot_buffs : Array[DotBuff]
 func _init() -> void:
 	setup_stats.call_deferred()
 
-func setup_stats() -> void:
+func setup_stats(new_level : int = 0) -> void:
+	level = new_level
 	recalculate_buffs()
 
 func add_buff(buff: Buff, _buff_owner) -> void:

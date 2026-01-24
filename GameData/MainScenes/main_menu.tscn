@@ -67,7 +67,7 @@ text = "New Game"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Settings" type="TextureButton" parent="Margin/VBox"]
+[node name="Feedback" type="TextureButton" parent="Margin/VBox"]
 custom_minimum_size = Vector2(350, 75)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -75,7 +75,7 @@ texture_normal = ExtResource("2_ctc6w")
 texture_pressed = ExtResource("3_ctc6w")
 stretch_mode = 0
 
-[node name="Label" type="Label" parent="Margin/VBox/Settings"]
+[node name="Label" type="Label" parent="Margin/VBox/Feedback"]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -88,11 +88,12 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 1
 theme_override_fonts/font = ExtResource("4_iyrik")
 theme_override_font_sizes/font_size = 40
-text = "Settings"
+text = "Feedback"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="About" type="TextureButton" parent="Margin/VBox"]
+visible = false
 custom_minimum_size = Vector2(350, 75)
 layout_mode = 2
 size_flags_horizontal = 4

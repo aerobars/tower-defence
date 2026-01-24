@@ -1,15 +1,17 @@
 extends Node
 
 var game_scene
+var main_menu = preload("res://GameData/MainScenes/main_menu.tscn")
 
 func _ready() -> void:
 	load_main_menu()
 
-func load_main_menu():
+func load_main_menu() -> void:
 	$MainMenu/Margin/VBox/NewGame.pressed.connect(on_new_game_pressed)
 	$MainMenu/Margin/VBox/Quit.pressed.connect(on_quit_pressed)
+	$MainMenu/Margin/VBox/Feedback.pressed.connect(on_feedback_pressed)
 
-func on_new_game_pressed():
+func on_new_game_pressed() -> void:
 	get_node("MainMenu").queue_free()
 	var new_game = load("res://GameData/MainScenes/game_scene.tscn").instantiate()
 	new_game.game_finished.connect(endgame_check)
@@ -18,15 +20,17 @@ func on_new_game_pressed():
 	GameData.current_act = 0
 	add_child(new_game)
 
-func on_quit_pressed():
+func on_quit_pressed() -> void:
 	get_tree().quit()
 
+func on_feedback_pressed() -> void:
+	OS.shell_open("https://forms.gle/1gdVhHvJ8LJ4wVLX9")
+
 func endgame_check(_result) -> void:
-	await get_tree().create_timer(5.0, true).timeout
 	unload_game()
 
 func unload_game():
 	game_scene.queue_free()
-	var main_menu = load("res://GameData/UIScenes/main_menu.tscn").instantiate()
-	add_child(main_menu)
+	var new_menu = main_menu.instantiate()
+	add_child(new_menu)
 	load_main_menu()

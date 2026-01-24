@@ -18,7 +18,7 @@
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
 [ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/game_start_info.tscn" id="17_nh22g"]
 
-[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "pause_button", "game_message", "map_node", "path_debug")]
+[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "pause_button", "game_message", "game_bookend_popup", "map_node", "path_debug")]
 script = ExtResource("1_g2kuy")
 max_player_health = null
 player_cash = null
@@ -28,13 +28,13 @@ inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryGrid")
 baddy_info_foldable = NodePath("UI/HUD/BaddyInfo")
 pause_button = NodePath("UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay")
 game_message = NodePath("UI/GameMessage")
+game_bookend_popup = NodePath("UI/HUD/GameStartInfo")
 map_node = NodePath("Map")
 path_debug = NodePath("PathDebug")
 
 [node name="Map" parent="." instance=ExtResource("1_akvmk")]
 
 [node name="PathDebug" type="Line2D" parent="."]
-visible = false
 width = 5.0
 default_color = Color(0, 0, 0, 1)
 joint_mode = 2
@@ -280,7 +280,6 @@ layout_mode = 2
 text = "Description: "
 
 [node name="GameStartInfo" parent="UI/HUD" instance=ExtResource("17_nh22g")]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -304,7 +303,6 @@ size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 1, 1, 0.78431374)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 75
-text = "Test!"
 
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="." method="pause_resume_game"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/FastForward" to="." method="_on_fast_forward_pressed"]

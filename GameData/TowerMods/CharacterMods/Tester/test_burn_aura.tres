@@ -12,12 +12,10 @@ region = Rect2(16, 16, 32, 32)
 [resource]
 resource_local_to_scene = true
 script = ExtResource("2_mx055")
-base_attack_speed_levels = Array[float]([1.0])
 buff_data = ExtResource("1_ksu01")
 offensive_aura = true
-level = null
-base_power_levels = Array[int]([-1])
-base_range_levels = Array[float]([300.0])
+base_power_levels = Array[int]([-1, -1, -1, -1, -1])
+base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 name = "Burn Aura"
 description = "Adds burn dot to tower weapons, or as an aura, applies burn to enemies in aoe"
 texture = SubResource("AtlasTexture_ksu01")

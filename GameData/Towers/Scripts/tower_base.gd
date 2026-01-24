@@ -17,9 +17,15 @@ const POPUP_TYPE : String = "upgrade"
 var aura_tower : bool
 var is_built := false
 var is_powered := false
-var level := 3 #level 0 to line up with arrays
+var level := 0 #level 0 to line up with arrays
 var net_power : int
-
+var tower_children : Array :
+	get:
+		var children : Array
+		for child in get_children():
+			if child is TowerMod and child.data != null:
+				children.append(child)
+		return children
 
 
 func _ready() -> void:
@@ -43,6 +49,7 @@ func _ready() -> void:
 				#print(tower_mod.get_child(0))
 				#tower_mod.get_child(0).texture = build_btn_mods[build_key].texture
 			add_child(tower_mod)
+
 
 ## Marker Functions
 
@@ -71,21 +78,19 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 	if is_built:
 		if event.is_action("ui_accept"):
 			var tower_data : Array
-			for child in get_children():
-				if child is TowerMod and child.data != null:
-					tower_data.append(child.data)
+			for child in tower_children:
+				tower_data.append(child.data)
 			tower_data.append(level)
 			show_upgrade_panel.emit(POPUP_TYPE, tower_data, self)
 
-
 func level_up() -> void:
 	level = min(level + 1, MAX_LEVEL)
-	print("level up!")
+	for child in tower_children:
+		child.data.setup_stats(level)
 
 func power_check() -> void:
-	for child in get_children():
-		if child is TowerMod and child.data != null:
-			net_power += child.data.current_power
+	for child in tower_children:
+		net_power += child.data.current_power
 	if net_power >= 0:
 		is_powered = true
 	else:
