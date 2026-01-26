@@ -13,7 +13,7 @@ var tower := "tower_base"
 ##Gametime
 var build_cost : int : 
 	set(value): 
-		build_cost = 4 + value * 2 #value should always be slot count
+		build_cost = 1 + value * 3 #value should always be slot count
 		build_cost_label.text = "$" + str(build_cost)
 var current_mod_slots : Array : 
 	get:
@@ -84,7 +84,6 @@ func get_tower_mods() -> Dictionary:
 		}
 
 func aura_check(_thing1, _thing2) -> void:
-	print('checking aura')
 	var has_wep := false
 	var has_aura := false
 	var aura_tower := false

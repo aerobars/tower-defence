@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://cn2pld5lqeati"]
 
 [ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://Resources/Inventory/inventory_bg.tres" id="1_lkauk"]
-[ext_resource type="Script" uid="uid://bk62k3c6krdiu" path="res://GameData/UIScenes/GUI/Scripts/info_popup.gd" id="2_te2c5"]
+[ext_resource type="Script" uid="uid://bk62k3c6krdiu" path="res://GameData/UIScenes/GUI/Scripts/mod_popup.gd" id="2_te2c5"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="3_5hcvs"]
 
 [node name="InfoPopup" type="Node2D"]
-modulate = Color(1, 1, 1, 0.8627451)
+modulate = Color(1, 1, 1, 0.9019608)
 top_level = true
 script = ExtResource("2_te2c5")
 

@@ -1,21 +1,21 @@
 class_name TowerMod extends Node2D
 
-##Signals
+## Signals
 signal power_check
 signal mod_updated(mod: StaticBody2D)
 
-##Tower Setup
+## Tower Setup
 var data : PrototypeMod
 var mod_slot_ref : StaticBody2D
 
-##Gametime
+## Gametime
 var baddies_in_range : Array
 var targets : Array
 var aura_targets : Array
 var attack_timer : float = 0.0
 
 
-##Initial Setup
+## Initial Setup
 func _ready():
 	$Range.global_position = get_parent().global_position
 	if data != null:
@@ -27,7 +27,7 @@ func _ready():
 	#above signals allow other mods to be added to auras after they are updated
 
 
-##Mod Updates
+## Mod Updates
 func update_mod() -> void:
 	if data == null:
 		$Range/CollisionShape2D.get_shape().radius = 0.0
@@ -85,10 +85,8 @@ func _on_range_body_entered(body) -> void:
 		baddies_in_range.append(body.get_parent())
 	elif data != null and data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
 		if data.offensive_aura and get_parent().aura_tower:
-			print('aura tower')
 			pass #nothing gets added to aura_targets for offensive auras in aura mode
 		else:
-			print('not aura tower')
 			aura_targets.append(body)
 			apply_buff(body)
 
@@ -120,10 +118,11 @@ func fire(target):
 			if data.projectile_tag == data.ProjectileTag.PROJECTILE:
 				fire_projectile()
 			elif data.projectile_tag == data.ProjectileTag.INSTANT:
-				fire_gun()
+				fire_instant()
 			if data.current_aoe > 0:
 				var aoe = setup_aoe()
 				aoe.global_position = target.position
+				await get_tree().process_frame
 				await get_tree().physics_frame
 				for body in aoe.get_overlapping_bodies():
 					if body.is_in_group("baddies"):
@@ -137,7 +136,7 @@ func fire(target):
 func fire_projectile() -> void:
 	pass
 
-func fire_gun() -> void:
+func fire_instant() -> void:
 	$AnimationPlayer.play("fire")
 
 func setup_aoe() -> Area2D:
@@ -145,6 +144,7 @@ func setup_aoe() -> Area2D:
 	var aoe_range = CollisionShape2D.new()
 	aoe_range.shape = CircleShape2D.new()
 	aoe_range.get_shape().radius = data.current_aoe
+	
 	aoe.add_child(aoe_range)
 	add_child(aoe)
 	return aoe

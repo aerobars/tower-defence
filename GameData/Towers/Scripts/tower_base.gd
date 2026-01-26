@@ -2,30 +2,23 @@ class_name TowerBase extends StaticBody2D
 
 signal show_upgrade_panel(popup_type : String, tower_data, tower_id : TowerBase)
 
-##Setup
+## Setup
 @export var marker_pos_radius : float = 10
 const MAX_LEVEL = 4
-var marker_count : int = 0 #set during verify and build Game Scene function
+var mod_slot_count : int = 0 #set during verify and build Game Scene function
 var all_marker_pos : Dictionary[Marker2D,Vector2]
 var marker_keys : Array
 var build_btn_mods : Dictionary
 var build_keys : Array
 
-##Gameplay
+## Gameplay
 const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/tower_mod.tscn")
-const POPUP_TYPE : String = "upgrade"
+const POPUP_TYPE : String = "tower"
 var aura_tower : bool
 var is_built := false
 var is_powered := false
 var level := 0 #level 0 to line up with arrays
-var net_power : int
-var tower_children : Array :
-	get:
-		var children : Array
-		for child in get_children():
-			if child is TowerMod and child.data != null:
-				children.append(child)
-		return children
+var net_power : int = 0
 
 
 func _ready() -> void:
@@ -52,15 +45,14 @@ func _ready() -> void:
 
 
 ## Marker Functions
-
 func marker_setup() -> void:
-	for i in marker_count:
+	for i in mod_slot_count:
 		var marker = Marker2D.new()
 		set_marker_pos(marker, i)
 		add_child(marker)
 
 func set_marker_pos(marker, count) -> void:
-	var angle = (TAU * count) / marker_count
+	var angle = (TAU * count) / mod_slot_count
 	marker.position.x = marker_pos_radius * cos(angle)
 	marker.position.y = marker_pos_radius * sin(angle)
 	all_marker_pos[marker] = marker.position
@@ -72,25 +64,27 @@ func update_markers() -> void: #called if # of markers gets updated
 			set_marker_pos(child, count)
 			count +=1
 
-
 ## Gameplay
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if is_built:
 		if event.is_action("ui_accept"):
 			var tower_data : Array
-			for child in tower_children:
-				tower_data.append(child.data)
-			tower_data.append(level)
+			for child in get_children():
+				if child is TowerMod and child.data != null:
+					tower_data.append(child.data)
 			show_upgrade_panel.emit(POPUP_TYPE, tower_data, self)
 
 func level_up() -> void:
 	level = min(level + 1, MAX_LEVEL)
-	for child in tower_children:
-		child.data.setup_stats(level)
+	for child in get_children():
+		if child is TowerMod and child.data != null:
+			child.data.setup_stats(level)
 
 func power_check() -> void:
-	for child in tower_children:
-		net_power += child.data.current_power
+	net_power = 0
+	for child in get_children():
+		if child is TowerMod and child.data != null:
+			net_power += child.data.current_power
 	if net_power >= 0:
 		is_powered = true
 	else:
@@ -99,4 +93,3 @@ func power_check() -> void:
 
 func aura_update(aura_status : bool) -> void:
 	aura_tower = aura_status
-	print("aura updated")

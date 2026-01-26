@@ -34,7 +34,7 @@ func add_buff(buff: Buff, _buff_owner) -> void:
 		dot_buffs.append(buff)
 	if buff is StatBuff:
 		stat_buffs.append(buff)
-		recalculate_stats.call_deferred()
+		recalculate_buffs.call_deferred()
 
 func remove_buff(buff: Buff) -> void:
 	if buff is DotBuff:

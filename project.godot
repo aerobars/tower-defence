@@ -109,3 +109,7 @@ press_build_button_1={
 
 2d_physics/layer_2="baddies"
 2d_physics/layer_8="test"
+
+[rendering]
+
+textures/vram_compression/import_etc2_astc=true

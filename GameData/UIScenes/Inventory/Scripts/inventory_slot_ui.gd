@@ -11,7 +11,7 @@ var slot_data : SlotData : set = set_slot_data
 @onready var hover_timer = $Timer
 
 const HOVER_DELAY : float = 0.5
-const POPUP_TYPE : String = "info"
+const POPUP_TYPE : String = "mod"
 
 
 #timer timeout signal connected to game_scene

@@ -18,17 +18,15 @@
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
 [ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/game_start_info.tscn" id="17_nh22g"]
 
-[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "pause_button", "game_message", "game_bookend_popup", "map_node", "path_debug")]
+[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "pause_button", "game_bookend_popup", "map_node", "path_debug")]
 script = ExtResource("1_g2kuy")
-max_player_health = null
-player_cash = null
+player_cash = 30
 ui = NodePath("UI")
 build_bar = NodePath("UI/HUD/BuildBar")
 inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryGrid")
 baddy_info_foldable = NodePath("UI/HUD/BaddyInfo")
 pause_button = NodePath("UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay")
-game_message = NodePath("UI/GameMessage")
-game_bookend_popup = NodePath("UI/HUD/GameStartInfo")
+game_bookend_popup = NodePath("UI/HUD/GameBookendInfo")
 map_node = NodePath("Map")
 path_debug = NodePath("PathDebug")
 
@@ -41,11 +39,12 @@ joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 
-[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display")]
+[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display", "game_message")]
 script = ExtResource("3_ibdpl")
 hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
 hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
 cash_display = NodePath("HUD/InfoBar/InfoContainer/Money")
+game_message = NodePath("HUD/GameMessage")
 
 [node name="HUD" type="Control" parent="UI"]
 layout_mode = 3
@@ -279,7 +278,7 @@ text = "Move Speed: test"
 layout_mode = 2
 text = "Description: "
 
-[node name="GameStartInfo" parent="UI/HUD" instance=ExtResource("17_nh22g")]
+[node name="GameBookendInfo" parent="UI/HUD" instance=ExtResource("17_nh22g")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -287,7 +286,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 
-[node name="GameMessage" type="Label" parent="UI"]
+[node name="GameMessage" type="Label" parent="UI/HUD"]
+visible = false
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

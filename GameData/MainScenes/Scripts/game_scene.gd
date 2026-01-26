@@ -2,18 +2,18 @@ extends Node2D
 
 signal game_finished(result)
 
-##gameplay 
+## Gameplay 
 var spawns_per_wave := 1 
 var wave_total := 0
 @export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
 var current_player_health : int
 var character : String = "Tester"
-@export var player_cash : int = 100
+@export_range(0, 1000, 1.0, "suffix: coins") var player_cash : int
 
-##ui
+## UI
 const POPUPS : Dictionary = {
-	"info" : preload("res://GameData/UIScenes/GUI/info_popup.tscn"),
-	"upgrade" : preload("res://GameData/UIScenes/GUI/upgrade_panel.tscn")
+	"mod" : preload("res://GameData/UIScenes/GUI/mod_popup.tscn"),
+	"tower" : preload("res://GameData/UIScenes/GUI/tower_popup.tscn")
 }
 const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
 const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
@@ -24,12 +24,11 @@ const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_se
 @export var inventory_ui : GridContainer
 @export var baddy_info_foldable : FoldableContainer
 @export var pause_button : TextureButton
-@export var game_message : Label
 @export var game_bookend_popup : Control
 @onready var new_slot := inventory_ui.connect("slot_created", connect_inv_button_signal)
 var cur_popup : Node2D
 
-##pathfinding
+## Pathfinding
 @export_subgroup("Map and Pathfinding")
 @export var map_node : Node2D #set in _ready instead if using multiple maps
 @export var path_debug :Line2D
@@ -49,7 +48,7 @@ const CELL := Vector2(CELL_SIZE, CELL_SIZE)
 const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
 var previous_tile := Vector2i(0, 0)
 
-##build mode
+## Build Mode
 var build_btn_ref
 var build_data : Dictionary
 var build_location
@@ -60,8 +59,7 @@ var build_valid : bool = false
 
 
 func _ready() -> void:
-	current_player_health = max_player_health
-	
+	## Pathfinding setup
 	astar.cell_size = Vector2(CELL_SIZE, CELL_SIZE)
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_AT_LEAST_ONE_WALKABLE
 	astar.region = ground_layer.get_used_rect()
@@ -71,6 +69,9 @@ func _ready() -> void:
 		astar.set_point_solid(tile, true)
 	baddy_path_update()
 	
+	## UI Setup
+	current_player_health = max_player_health
+	ui.update_cash_display(player_cash)
 	for i in get_tree().get_nodes_in_group("build_buttons"):
 		i.pressed.connect(func(): initiate_build_mode(i.data, i, i.tower))
 
@@ -84,7 +85,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action("ui_accept"): 
 		clear_popup()
 		if build_mode:
-			#Verify player has enough cash and only proceed with below if true
 			verify_and_build()
 			cancel_build_mode()
 	if event.is_action_pressed("press_build_button_1"):
@@ -108,9 +108,7 @@ func _on_fast_forward_pressed() -> void:
 	else:
 		Engine.set_time_scale(2.0)
 
-
 ## Wave Functions
-
 func start_next_wave(_data) -> void:
 	if get_tree().is_paused():
 		pause_resume_game()
@@ -119,10 +117,7 @@ func start_next_wave(_data) -> void:
 	var wave_data = GameData.get_wave_data()
 	wave_total = wave_data["wave_total"]
 	if GameData.current_wave > 1:
-		game_message.text = "Next wave starting"
-		game_message.visible = true
-		await(get_tree().create_timer(3.0, false)).timeout #padding befor wave start
-		game_message.visible = false
+		ui.update_game_message("Next wave starting", 3.0, 0.5) #padding before wave start
 	spawn_baddies(wave_data["wave_baddies"])
 
 func spawn_baddies(wave_data) -> void:
@@ -152,10 +147,7 @@ func on_base_damage(damage) -> void:
 	$UI.update_health_bar(current_player_health, max_player_health)
 	if current_player_health <= 0 and not game_bookend_popup.game_over:
 		game_bookend_popup.game_over = true
-		game_message.text = "Game Over!"
-		game_message.visible = true
-		await get_tree().create_timer(2.0, true).timeout
-		game_message.visible = false
+		ui.update_game_message("Game Over!", 2.0, 0.0, 75)
 		game_bookend_popup.get_node("TextureRect/Label").text = "Thank you for playing! 
 		Please click the button below to complete a quick feedback survey and return to the main menu (and start a new game (＾ ＾)b )"
 		game_bookend_popup.get_node("TextureRect/Button").text = "Go to survey"
@@ -170,10 +162,7 @@ func on_baddy_death() -> void:
 		#game_finished.emit(true)
 
 func wave_cleared() -> void:
-	game_message.text = "Wave Cleared!"
-	game_message.visible = true
-	await get_tree().create_timer(3.0, false).timeout
-	game_message.visible = false
+	ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
 	pause_resume_game()
 	pause_button.set_pressed_no_signal(false)
 	var new_reward = REWARD_UI.instantiate()
@@ -185,9 +174,7 @@ func reward_signal_connection(reward_card) -> void:
 	reward_card.reward_selected.connect(inventory_ui.data.update_inventory)
 	reward_card.reward_selected.connect(start_next_wave)
 
-
 ## Pathfinding Functions
-
 func baddy_path_update() -> void:
 	#not needed if whole map is set at initiation, called in _ready
 	#astar.update()
@@ -208,11 +195,12 @@ func pathfinding_update() -> void:
 		path_debug.add_point(cell + CELL_CENTRE)
 
 ## Building Functions
-
-
 func initiate_build_mode(data: Dictionary, btn_ref, tower_type: String = "tower_base") -> void: #connected to build buttons' pressed signal, data contains tower mods and aura tower status
 	if build_mode:
 		cancel_build_mode()
+	if player_cash < btn_ref.build_cost:
+		ui.update_game_message("Unable to build: insufficient funds", 1.0, 0.5)
+		return
 	build_btn_ref = btn_ref
 	build_data = data
 	build_mode = true
@@ -257,7 +245,7 @@ func verify_and_build() -> void:
 		new_tower.is_built = true
 		new_tower.build_btn_mods = build_data["mods"]
 		new_tower.aura_tower = build_data["aura_tower"]
-		new_tower.marker_count = build_data["mods"].size()
+		new_tower.mod_slot_count = build_data["mods"].size()
 		new_tower.show_upgrade_panel.connect(create_popup)
 		build_btn_ref.aura_update.connect(new_tower.aura_update)
 		
@@ -265,13 +253,25 @@ func verify_and_build() -> void:
 		exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
 		astar.set_point_solid(build_tile, true)
 		baddy_path_update()
-		#deduct player cash
-		#ui.cash_display = player_cash
+		player_cash -= build_btn_ref.build_cost
+		ui.update_cash_display(player_cash)
 
+func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) -> void:
+	if player_cash < upgrade_cost:
+		ui.update_game_message("Unable to upgrade: insufficient funds", 1.0, 0.5)
+	else:
+		tower.level_up()
+		popup.setup_stats()
+		player_cash -= upgrade_cost
+		ui.update_cash_display(player_cash)
+	
 
+func sell_tower(sell_value : int, tower : TowerBase) -> void:
+	player_cash += sell_value
+	ui.update_cash_display(player_cash)
+	tower.queue_free()
 
-## Inventory Functions
-
+## UI Functions
 func connect_inv_button_signal(inventory_slot) -> void: #connects new inventory slot signal
 	inventory_slot.button_down.connect(on_inv_button_down.bind(inventory_slot, inventory_slot.slot_data.tower_mod))
 	inventory_slot.hovered.connect(create_popup)
@@ -295,8 +295,10 @@ func create_popup(popup_type: String , data, popup_owner : TowerBase = null) -> 
 	popup.data = data #data is ModPrototype if it is from inventory, Array if it's from TowerBase
 	popup.global_position = Vector2(get_global_mouse_position().x + 15, get_global_mouse_position().y - popup_size.y/2)
 	if popup_owner != null:
-		popup.upgrade.connect(popup_owner.level_up)
-	$UI.add_child(popup)
+		popup.popup_owner = popup_owner
+		popup.upgrade_check.connect(upgrade_check)
+		popup.sell.connect(sell_tower)
+	ui.add_child(popup)
 	cur_popup = popup
 
 func clear_popup() -> void:
