@@ -2,7 +2,7 @@ class_name BaddyStats extends Resource
 
 signal health_depleted
 signal health_changed(current_health: int, max_health: int)
-signal initialize_buff(buff_data: Buff)
+
 
 @export var spawns_per_wave: int
 @export var spawn_interval: float
@@ -39,7 +39,7 @@ var current_move_speed : float
 var health : float = 0 : set = _on_health_set
 
 var active_buffs: Dictionary[Buff, BuffInstance] = {}
-
+var buff_owner : Node2D
 
 ##Stats Setup and Adjustment
 func _init() -> void:
@@ -50,7 +50,7 @@ func setup_stats() -> void:
 	health = current_max_health
 	current_move_speed = max(current_move_speed, 0.1)
 
-func add_buff(buff: Buff, buff_owner : Node2D, amt : int = 1) -> void:
+func add_buff(buff: Buff, amt : int = 1) -> void:
 	for i in amt: #amt allows to apply multiple stacks from a single source
 		if not active_buffs.has(buff):
 			var new_inst = BuffInstance.new(buff, buff_owner)
@@ -58,7 +58,6 @@ func add_buff(buff: Buff, buff_owner : Node2D, amt : int = 1) -> void:
 		var inst = active_buffs[buff]
 		inst.stacks = min(inst.stacks + amt, buff.stack_limit)
 		inst.time_remaining = buff.buff_duration
-		initialize_buff.emit(buff)
 		recalculate_stats.call_deferred()
 
 func remove_buff(buff: Buff, _amt = 1) -> void:
@@ -98,10 +97,11 @@ func recalculate_stats() -> void:
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
 
 func _on_health_set(new_value: float) -> void:
-	health = int(clamp(new_value, 0, current_max_health))
-	health_changed.emit(health, int(current_max_health))
+	health = clamp(new_value, 0, current_max_health)
+	health_changed.emit(health, current_max_health)
 	if health == 0:
 		health_depleted.emit()
+
 
 func _on_experience_set(new_value: int) -> void:
 	var old_level : int = level

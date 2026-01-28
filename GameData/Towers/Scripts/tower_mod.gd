@@ -33,7 +33,6 @@ func update_mod() -> void:
 		$Range/CollisionShape2D.get_shape().radius = 0.0
 		$Turret.texture = null
 		remove_from_group("turret")
-		power_check.emit()
 		return
 	elif data.mod_class != data.ModClass.POWER:
 		$Range/CollisionShape2D.get_shape().radius = data.current_range
@@ -42,7 +41,6 @@ func update_mod() -> void:
 		remove_from_group("turret")
 	data.level = get_parent().level
 	$Turret.texture = data.texture
-	power_check.emit()
 	mod_updated.emit(self)
 
 func mod_slot_updated(mod_slot : StaticBody2D, mod_slot_data : PrototypeMod) -> void:
@@ -58,27 +56,31 @@ func _on_mod_updated(updated_mod: StaticBody2D) -> void:
 		_on_range_body_entered(updated_mod)
 
 
-##In-Game Function
+## In-Game Function
 func _process(delta: float) -> void:
-	if data != null and get_parent().is_powered:
-		if (data.mod_class == data.ModClass.AURA and data.offensive_aura and get_parent().aura_tower) or data.mod_class == data.ModClass.WEAPON:
-			attack_timer += delta
-			if attack_timer >= data.current_attack_speed:
-				attack_timer = 0.0
-				if baddies_in_range.size() != 0:
-					match data.mod_class:
-						data.ModClass.AURA:
-							for baddy in baddies_in_range:
-								fire(baddy)
-						data.ModClass.WEAPON:
-							targets = select_targets()
-							if not $AnimationPlayer.is_playing():
-								turn()
-							for i in data.current_multitarget:
-								if i < targets.size():
-									fire(targets[i])
-				else:
-					targets = [null]
+	if data == null: 
+		return
+	if get_parent().net_power < 0:
+		#display low power symbol
+		return
+	if (data.mod_class == data.ModClass.AURA and data.offensive_aura and get_parent().aura_tower) or data.mod_class == data.ModClass.WEAPON:
+		attack_timer += delta
+		if attack_timer >= data.current_attack_speed:
+			attack_timer = 0.0
+			if baddies_in_range.size() != 0:
+				match data.mod_class:
+					data.ModClass.AURA:
+						for baddy in baddies_in_range:
+							fire(baddy)
+					data.ModClass.WEAPON:
+						targets = select_targets()
+						if not $AnimationPlayer.is_playing():
+							turn()
+						for i in data.current_multitarget:
+							if i < targets.size():
+								fire(targets[i])
+			else:
+				targets = [null]
 
 func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
@@ -98,12 +100,20 @@ func _on_range_body_exited(body) -> void:
 		aura_targets.erase(body)
 
 func apply_buff(body) -> void:
-	body.data.add_buff(data.buff_data, body)
+	body.data.add_buff(data.buff_data)
 
 func clear_buffs(body) -> void:
 	body.data.remove_buff(data.buff_data)
 
-##Weapon Function
+func power_update(net_power, power_surplus_buffs) -> void:
+	if data == null:
+		return
+	data.power_surplus_buffs = power_surplus_buffs
+	data.net_power = net_power
+	if net_power >= 0:
+		data.recalculate_buffs()
+
+## Weapon Function
 func select_targets() -> Array:
 	var target_progress_array := baddies_in_range
 	target_progress_array.sort_custom(func(a, b): return a.progress > b.progress)

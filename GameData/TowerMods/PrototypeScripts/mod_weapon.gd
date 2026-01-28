@@ -29,9 +29,11 @@ var current_damage : float
 var current_multitarget : int
 
 func buff_check(buff_stat) -> bool:
-	return AllBuffableStats.BuffableStats.keys()[buff_stat] in WeaponBuffableStats.keys()
+	if buff_stat is int:
+		buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
+	return WeaponBuffableStats.keys().has(buff_stat.to_upper())
 
-func recalculate_stats(stat_addends, stat_multipliers) -> void:
+func set_current_stats() -> void:
 	current_aoe = base_aoe_levels[level]
 	current_attack_speed = base_attack_speed_levels[level]
 	current_crit_chance = base_crit_chance_levels[level]
@@ -40,15 +42,7 @@ func recalculate_stats(stat_addends, stat_multipliers) -> void:
 	current_multitarget = base_multitarget_levels[level]
 	current_power = base_power_levels[level]
 	current_range = base_range_levels[level]
-	
-	#addends first so it benefits from multipliers
-	for stat_name in stat_addends:
-		var cur_property_name: String = str("current_" + stat_name)
-		set(cur_property_name, get(cur_property_name) + stat_addends[stat_name])
 
-	for stat_name in stat_multipliers:
-		var cur_property_name: String = str("current_" + stat_name)
-		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
 
 func calculate_damage() -> Array: #returns [total attack damage, did the attack crit]
 	if current_crit_chance > randi() % 100:

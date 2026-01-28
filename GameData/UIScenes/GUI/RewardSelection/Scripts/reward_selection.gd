@@ -19,8 +19,8 @@ func _ready() -> void:
 		new_card.reward_selected.connect(_on_reward_selected)
 		connect_reward_card.emit(new_card)
 
-func get_rewards() -> Array[TowerMod]:
-	var rewards : Array[TowerMod] = []
+func get_rewards() -> Array[PrototypeMod]:
+	var rewards : Array[PrototypeMod] = []
 	for i in total_rewards:
 		var mod = load(filepath + GameData.character_mods[character][randi() % GameData.character_mods[character].size()])
 		while rewards.has(mod): #duplicate prevention

@@ -1,40 +1,35 @@
 class_name BuildTowerButton extends TextureButton
 
-##Signals
+## Signals
 signal aura_update(aura_status: bool)
+signal power_update()
 
-##Setup
+## Setup
 @onready var mod_slot_scene := preload("res://GameData/UIScenes/GUI/mod_slot.tscn")
 @export var build_cost_label : Label
+@export var net_power_display : Label
 @export var slot_count : int
 @export var slot_radius : float
 var tower := "tower_base"
 
-##Gametime
+## Gametime
 var build_cost : int : 
 	set(value): 
 		build_cost = 1 + value * 3 #value should always be slot count
 		build_cost_label.text = "$" + str(build_cost)
-var current_mod_slots : Array : 
-	get:
-		var children : Array
-		for child in get_children(): #adds mods to data Dictionary and checks if it is an aura tower
-			if child.is_class("StaticBody2D"):
-				children.append(child)
-		return children
 var data : Dictionary : get = get_tower_mods
 
-
-##Setup
+## Setup
 func _ready() -> void:
 	for i in slot_count:
 		new_mod_slot()
 	update_mod_slots()
+	$PowerIcon.modulate.a = 0.5
 
 func new_mod_slot() -> void:
 	var new_mod = mod_slot_scene.instantiate()
 	add_child(new_mod)
-	new_mod.mod_updated.connect(aura_check)
+	new_mod.mod_updated.connect(on_mod_update)
 
 func update_mod_slots() -> void:
 	var slot_num := 0
@@ -50,8 +45,7 @@ func update_mod_slots() -> void:
 			slot_num += 1
 	build_cost = slot_count
 
-
-##In-Game
+## In-Game
 func slot_added() -> void:
 	slot_count += 1
 	new_mod_slot()
@@ -62,39 +56,77 @@ func slot_removed() -> void:
 	update_mod_slots()
 
 func get_tower_mods() -> Dictionary:
-	var dict : Dictionary
+	var mod_dict : Dictionary
+	var power_surplus_buffs : Dictionary
 	var has_wep := false
 	var has_aura := false
 	var aura_tower := false
 	
-	for mod in current_mod_slots:
-		dict[mod] = mod.data
-		if not has_wep and dict[mod] != null:
-			if mod.data.mod_class == mod.data.ModClass.WEAPON:
-				has_wep = true
-			elif mod.data.mod_class == mod.data.ModClass.AURA:
-				has_aura = true
+	for child in get_children(): #adds mods to data Dictionary and checks if it is an aura tower
+		if child is ButtonModSlot:
+			mod_dict[child] = child.data
+			if not has_wep and mod_dict[child] != null:
+				if child.data.mod_class == child.data.ModClass.WEAPON:
+					has_wep = true
+				elif child.data.mod_class == child.data.ModClass.AURA:
+					has_aura = true
+			if child.data is PowerMod:
+				for i in child.data.power_surplus_buffable_stats:
+					var stat_name : String = AllBuffableStats.BuffableStats.keys()[i].to_lower()
+					if not power_surplus_buffs.has(stat_name):
+						power_surplus_buffs[stat_name] = 0
+					power_surplus_buffs[stat_name] += 1
 	
 	if has_aura and not has_wep:
 		aura_tower = true
 	
 	return {
 		"aura_tower": aura_tower,
-		"mods": dict
+		"mods": mod_dict,
+		"power_buffs": power_surplus_buffs,
 		}
 
-func aura_check(_thing1, _thing2) -> void:
+func on_mod_update(_thing1, mod) -> void:
+	power_check()
+	if mod is not PowerMod:
+		aura_check()
+
+func aura_check() -> void:
 	var has_wep := false
 	var has_aura := false
 	var aura_tower := false
 	
-	for mod in current_mod_slots:
-		if mod.data != null and not has_wep:
-			if mod.data.mod_class == mod.data.ModClass.WEAPON:
-				has_wep = true
-			elif mod.data.mod_class == mod.data.ModClass.AURA:
-				has_aura = true
+	for child in get_children(): #adds mods to data Dictionary and checks if it is an aura tower
+		if child is ButtonModSlot:
+			if child.data != null and not has_wep:
+				if child.data.mod_class == child.data.ModClass.WEAPON:
+					has_wep = true
+				elif child.data.mod_class == child.data.ModClass.AURA:
+					has_aura = true
 	
-	if has_aura and not has_wep:
-		aura_tower = true
+		if has_aura and not has_wep:
+			aura_tower = true
 	aura_update.emit(aura_tower)
+
+func power_check() -> void: #display net power on button
+	var net_power = 0
+	var power_surplus_buffs : Dictionary = {}
+	for child in get_children(): #adds mods to data Dictionary and checks if it is an aura tower
+		if child is ButtonModSlot and child.data != null:
+			net_power += child.data.base_power_levels[0]
+			if child.data is PowerMod:
+				for i in child.data.power_surplus_buffable_stats:
+					var stat_name : String = AllBuffableStats.BuffableStats.keys()[i].to_lower()
+					if not power_surplus_buffs.has(stat_name):
+						power_surplus_buffs[stat_name] = 0
+					power_surplus_buffs[stat_name] += 1
+	
+	if net_power > 0: #set color for power states
+		#net_power_display.add_theme_color_override("font_color", GameData.positive_color)
+		pass
+	else: 
+		#net_power_display.add_theme_color_override("font_color", GameData.negative_color)
+		pass
+	net_power_display.text = str(net_power)
+	power_update.emit(power_surplus_buffs)
+		#display low power symbol on tower

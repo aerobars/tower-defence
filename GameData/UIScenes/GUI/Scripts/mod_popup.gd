@@ -11,10 +11,10 @@ var level = 0
 func _ready() -> void:
 	mod_name.text = data.name
 	mod_class.text = data.class_string.to_pascal_case() + " class"
-	stats_setup()
+	setup_stats()
 	description.text = data.description
 
-func stats_setup() -> void:
+func setup_stats() -> void:
 	match data.mod_class:
 		0: #Aura
 			var mod_range = Label.new()
@@ -22,6 +22,7 @@ func stats_setup() -> void:
 			container.add_child(mod_range)
 			container.move_child(mod_range, 2)
 			power.text = "Power Cost: " + str(data.base_power_levels[level])
+			#set power font color to positive color
 		1: #Power
 			power.text = "Power Supply: " + str(data.base_power_levels[level])
 		2: #Weapon

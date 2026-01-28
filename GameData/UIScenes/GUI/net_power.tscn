@@ -1,0 +1,45 @@
+[gd_scene load_steps=3 format=3 uid="uid://bn72kuukhwo5t"]
+
+[ext_resource type="Texture2D" uid="uid://c5d7v1851rr54" path="res://Assets/Icons/power.png" id="1_pdhsj"]
+
+[sub_resource type="GDScript" id="GDScript_0uqh8"]
+script/source = "extends Control
+
+var texture = $TextureRect.texture
+var label = $Label.text
+
+func _ready() -> void:
+	
+"
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1200.0
+offset_bottom = -640.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_0uqh8")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_pdhsj")
+stretch_mode = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

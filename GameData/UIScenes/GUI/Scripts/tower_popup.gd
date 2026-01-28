@@ -27,11 +27,11 @@ var sell_value : int = 0:
 		sell_button.text = "Sell: +$" + str(sell_value)
 
 func _ready() -> void:
-	stats_setup()
+	setup_stats()
 	for i in data:
 		pass
 
-func stats_setup() -> void:
+func setup_stats() -> void:
 	tower_name.text = current_level_name + " Tower"
 	upgrade_cost = popup_owner.mod_slot_count
 	sell_value = popup_owner.mod_slot_count

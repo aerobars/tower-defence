@@ -1,6 +1,7 @@
 class_name TowerBase extends StaticBody2D
 
 signal show_upgrade_panel(popup_type : String, tower_data, tower_id : TowerBase)
+signal power_to_mods(net_power : int)
 
 ## Setup
 @export var marker_pos_radius : float = 10
@@ -10,15 +11,15 @@ var all_marker_pos : Dictionary[Marker2D,Vector2]
 var marker_keys : Array
 var build_btn_mods : Dictionary
 var build_keys : Array
+var init_power_buffs : Dictionary
 
 ## Gameplay
 const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/tower_mod.tscn")
 const POPUP_TYPE : String = "tower"
 var aura_tower : bool
 var is_built := false
-var is_powered := false
-var level := 0 #level 0 to line up with arrays
 var net_power : int = 0
+var level := 0 #level 0 to line up with arrays
 
 
 func _ready() -> void:
@@ -37,11 +38,12 @@ func _ready() -> void:
 				tower_mod.data = build_btn_mods[build_key]
 				tower_mod.mod_slot_ref = build_key
 				build_key.mod_updated.connect(tower_mod.mod_slot_updated) 
-				tower_mod.power_check.connect(power_check)
+				power_to_mods.connect(tower_mod.power_update)
 			#else:
 				#print(tower_mod.get_child(0))
 				#tower_mod.get_child(0).texture = build_btn_mods[build_key].texture
 			add_child(tower_mod)
+	power_update(init_power_buffs)
 
 
 ## Marker Functions
@@ -80,16 +82,14 @@ func level_up() -> void:
 		if child is TowerMod and child.data != null:
 			child.data.setup_stats(level)
 
-func power_check() -> void:
+func power_update(power_surplus_buffs) -> void:
 	net_power = 0
 	for child in get_children():
 		if child is TowerMod and child.data != null:
 			net_power += child.data.current_power
-	if net_power >= 0:
-		is_powered = true
-	else:
-		is_powered = false
-		#display low power symbol on tower
+	power_to_mods.emit(net_power, power_surplus_buffs)
+	#wep damage is increased by surplus power
+
 
 func aura_update(aura_status : bool) -> void:
 	aura_tower = aura_status

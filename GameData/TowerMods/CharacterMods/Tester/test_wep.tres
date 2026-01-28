@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="WeaponMod" load_steps=4 format=3 uid="uid://csfw8j2u8n72r"]
 
-[ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/weapon_mod.gd" id="1_42vnw"]
+[ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="1_qilkd"]
 [ext_resource type="Texture2D" uid="uid://ctr4gkegia16c" path="res://Assets/Towers/towerDefense_tile249.png" id="2_c8iad"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rgfe8"]
@@ -9,8 +9,8 @@ region = Rect2(28, 16, 32, 32)
 
 [resource]
 resource_local_to_scene = true
-script = ExtResource("1_42vnw")
-base_damage_levels = Array[float]([1.0, 2.0, 3.0, 4.0, 5.0])
+script = ExtResource("1_qilkd")
+base_damage_levels = Array[float]([2.0, 4.0, 6.0, 8.0, 10.0])
 base_power_levels = Array[int]([-1, -1, -1, -1, -1])
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 mod_class = 2

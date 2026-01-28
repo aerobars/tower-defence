@@ -35,6 +35,7 @@ text = "Mod Class"
 
 [node name="Power" type="Label" parent="Background/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.80925393, 0.19851857, 0.10881647, 1)
 text = "A.S.:"
 
 [node name="Description" type="Label" parent="Background/VBoxContainer"]

@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/MainScenes/Scripts/ui.gd" id="3_ibdpl"]
 [ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://Resources/Inventory/inventory_bg.tres" id="4_syms3"]
 [ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="5_waasu"]
-[ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://GameData/UIScenes/Inventory/player_inventory.tres" id="6_qo4eh"]
+[ext_resource type="Resource" uid="uid://cin7we6rrg05o" path="res://GameData/UIScenes/Inventory/test_inventory.tres" id="6_nh22g"]
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="7_674w2"]
 [ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="8_a0jnf"]
 [ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="9_clpeu"]
@@ -20,7 +20,7 @@
 
 [node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "pause_button", "game_bookend_popup", "map_node", "path_debug")]
 script = ExtResource("1_g2kuy")
-player_cash = 30
+player_cash = 1000
 ui = NodePath("UI")
 build_bar = NodePath("UI/HUD/BuildBar")
 inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryGrid")
@@ -84,12 +84,13 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = ExtResource("4_syms3")
 
-[node name="InventoryGrid" type="GridContainer" parent="UI/HUD/BuildBar/InventoryContainer"]
+[node name="InventoryGrid" type="GridContainer" parent="UI/HUD/BuildBar/InventoryContainer" node_paths=PackedStringArray("game_scene")]
 layout_mode = 2
 mouse_filter = 2
 columns = 3
 script = ExtResource("5_waasu")
-data = ExtResource("6_qo4eh")
+data = ExtResource("6_nh22g")
+game_scene = NodePath("../../../../..")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/BuildBar"]
 layout_mode = 1
@@ -243,6 +244,7 @@ offset_top = 24.0
 offset_right = 275.0
 offset_bottom = 185.0
 size_flags_horizontal = 3
+mouse_filter = 2
 folded = true
 title = "Baddy Info"
 script = ExtResource("15_dts4o")
@@ -279,6 +281,7 @@ layout_mode = 2
 text = "Description: "
 
 [node name="GameBookendInfo" parent="UI/HUD" instance=ExtResource("17_nh22g")]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

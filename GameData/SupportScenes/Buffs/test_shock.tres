@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="OnHitBuff" load_steps=2 format=3 uid="uid://d28awyyh0t1la"]
 
-[ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/on_hit_buff.gd" id="1_4gp76"]
+[ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_on_hit.gd" id="1_4gp76"]
 
 [resource]
 script = ExtResource("1_4gp76")

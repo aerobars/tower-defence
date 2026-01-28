@@ -1,10 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://iq7vcv16hyni"]
+[gd_scene load_steps=5 format=3 uid="uid://iq7vcv16hyni"]
 
 [ext_resource type="Texture2D" uid="uid://ceqhep7if173u" path="res://Assets/UI/Buttons/button_round_line.png" id="1_ge1wo"]
 [ext_resource type="Script" uid="uid://ca6gk23vpyi7s" path="res://GameData/UIScenes/GUI/Scripts/tower_button.gd" id="2_0hnoc"]
+[ext_resource type="Texture2D" uid="uid://c5d7v1851rr54" path="res://Assets/Icons/power.png" id="4_0hnoc"]
 [ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="4_ge1wo"]
 
-[node name="BuildTowerButton" type="TextureButton" node_paths=PackedStringArray("build_cost_label") groups=["build_buttons"]]
+[node name="BuildTowerButton" type="TextureButton" node_paths=PackedStringArray("build_cost_label", "net_power_display") groups=["build_buttons"]]
 custom_minimum_size = Vector2(80, 80)
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -12,8 +13,9 @@ texture_normal = ExtResource("1_ge1wo")
 stretch_mode = 0
 script = ExtResource("2_0hnoc")
 build_cost_label = NodePath("BuildCostDisplay")
+net_power_display = NodePath("NetPower")
 
-[node name="Icon" type="TextureRect" parent="."]
+[node name="TowerIcon" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -43,3 +45,36 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.18717614, 0.18717614, 0.18717614, 1)
 text = "$"
+
+[node name="PowerIcon" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_0hnoc")
+stretch_mode = 2
+
+[node name="NetPower" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -24.5
+offset_right = 20.0
+offset_bottom = 24.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 35
+text = "0"
+horizontal_alignment = 1

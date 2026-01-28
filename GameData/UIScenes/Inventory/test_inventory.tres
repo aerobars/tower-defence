@@ -1,16 +1,58 @@
-[gd_resource type="Resource" script_class="InventoryData" load_steps=5 format=3 uid="uid://cin7we6rrg05o"]
+[gd_resource type="Resource" script_class="InventoryData" load_steps=17 format=3 uid="uid://cin7we6rrg05o"]
 
 [ext_resource type="Script" uid="uid://bjmi2gnp5s1tf" path="res://GameData/UIScenes/Inventory/Scripts/inventory_data.gd" id="1_fnqn5"]
-[ext_resource type="Script" uid="uid://b4so26n1sqyy1" path="res://GameData/UIScenes/Inventory/Scripts/slot_data.gd" id="2_will3"]
+[ext_resource type="Script" uid="uid://b4so26n1sqyy1" path="res://GameData/UIScenes/Inventory/Scripts/inventory_slot_data.gd" id="2_will3"]
+[ext_resource type="Resource" uid="uid://csfw8j2u8n72r" path="res://GameData/TowerMods/CharacterMods/Tester/test_wep.tres" id="3_5gb1x"]
 [ext_resource type="Resource" uid="uid://c0b02to1odbhe" path="res://GameData/TowerMods/CharacterMods/Tester/test_power.tres" id="3_will3"]
+[ext_resource type="Resource" uid="uid://brep14nhiu8em" path="res://GameData/TowerMods/CharacterMods/Tester/test_aoe_wep.tres" id="5_motvc"]
+[ext_resource type="Resource" uid="uid://dvvbt8ew2bu0w" path="res://GameData/TowerMods/CharacterMods/Tester/test_dmg_aura.tres" id="6_ajr3i"]
+[ext_resource type="Resource" uid="uid://bqlb20t172exs" path="res://GameData/TowerMods/CharacterMods/Tester/test_burn_aura.tres" id="7_twur1"]
+[ext_resource type="Resource" uid="uid://cda1enewweprf" path="res://GameData/TowerMods/CharacterMods/Tester/test_poison_aura.tres" id="8_o02sd"]
+[ext_resource type="Resource" uid="uid://dsf3pyhaly61o" path="res://GameData/TowerMods/CharacterMods/Tester/test_multitarget_wep.tres" id="9_cxpuf"]
 
 [sub_resource type="Resource" id="Resource_korw4"]
 script = ExtResource("2_will3")
-tower_mod = ExtResource("3_will3")
-quantity = 1
+inventory_mod = ExtResource("3_5gb1x")
+quantity = 10
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[sub_resource type="Resource" id="Resource_6jds8"]
+script = ExtResource("2_will3")
+inventory_mod = ExtResource("3_will3")
+quantity = 10
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[sub_resource type="Resource" id="Resource_ejh4u"]
+script = ExtResource("2_will3")
+inventory_mod = ExtResource("5_motvc")
+quantity = 10
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[sub_resource type="Resource" id="Resource_se5ds"]
+script = ExtResource("2_will3")
+inventory_mod = ExtResource("6_ajr3i")
+quantity = 10
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[sub_resource type="Resource" id="Resource_18yw3"]
+script = ExtResource("2_will3")
+inventory_mod = ExtResource("7_twur1")
+quantity = 10
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[sub_resource type="Resource" id="Resource_nrrgd"]
+script = ExtResource("2_will3")
+inventory_mod = ExtResource("8_o02sd")
+quantity = 10
+metadata/_custom_type_script = "uid://b4so26n1sqyy1"
+
+[sub_resource type="Resource" id="Resource_4myts"]
+script = ExtResource("2_will3")
+inventory_mod = ExtResource("9_cxpuf")
+quantity = 10
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
 [resource]
 script = ExtResource("1_fnqn5")
-slots = Array[ExtResource("2_will3")]([SubResource("Resource_korw4")])
+slots = Array[ExtResource("2_will3")]([SubResource("Resource_korw4"), SubResource("Resource_6jds8"), SubResource("Resource_ejh4u"), SubResource("Resource_se5ds"), SubResource("Resource_18yw3"), SubResource("Resource_nrrgd"), SubResource("Resource_4myts")])
 metadata/_custom_type_script = "uid://bjmi2gnp5s1tf"

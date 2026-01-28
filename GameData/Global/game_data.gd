@@ -3,6 +3,8 @@ extends Node
 signal mod_update_check(mod: StaticBody2D)
 
 var is_dragging = false
+var positive_color : Color = Color(0.25, 0.39, 0.92, 1.0)
+var negative_color : Color = Color(0.8, 0.19, 0.1, 1.0)
 
 const BADDY_FILEPATH = "res://GameData/Baddies/"
 const CHAR_FILEPATH = "res://GameData/TowerMods/CharacterMods/"

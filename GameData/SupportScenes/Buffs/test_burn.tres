@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="DotBuff" load_steps=2 format=3 uid="uid://bi5uxnya2aq4d"]
 
-[ext_resource type="Script" uid="uid://2ja3gh17qp02" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/dot_buff.gd" id="1_imnq3"]
+[ext_resource type="Script" uid="uid://2ja3gh17qp02" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_dot.gd" id="1_imnq3"]
 
 [resource]
 script = ExtResource("1_imnq3")

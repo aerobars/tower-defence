@@ -1,7 +1,8 @@
 extends Node
 
-var game_scene
+const GAME_SCENE = preload("res://GameData/MainScenes/game_scene.tscn")
 var main_menu = preload("res://GameData/MainScenes/main_menu.tscn")
+var game_instance
 
 func _ready() -> void:
 	load_main_menu()
@@ -13,9 +14,9 @@ func load_main_menu() -> void:
 
 func on_new_game_pressed() -> void:
 	get_node("MainMenu").queue_free()
-	var new_game = load("res://GameData/MainScenes/game_scene.tscn").instantiate()
+	var new_game = GAME_SCENE.instantiate()
 	new_game.game_finished.connect(endgame_check)
-	game_scene = new_game
+	game_instance = new_game
 	GameData.current_wave = 0
 	GameData.current_act = 0
 	add_child(new_game)
@@ -30,7 +31,7 @@ func endgame_check(_result) -> void:
 	unload_game()
 
 func unload_game():
-	game_scene.queue_free()
+	game_instance.queue_free()
 	var new_menu = main_menu.instantiate()
 	add_child(new_menu)
 	load_main_menu()

@@ -245,9 +245,11 @@ func verify_and_build() -> void:
 		new_tower.is_built = true
 		new_tower.build_btn_mods = build_data["mods"]
 		new_tower.aura_tower = build_data["aura_tower"]
+		new_tower.init_power_buffs = build_data["power_buffs"]
 		new_tower.mod_slot_count = build_data["mods"].size()
 		new_tower.show_upgrade_panel.connect(create_popup)
 		build_btn_ref.aura_update.connect(new_tower.aura_update)
+		build_btn_ref.power_update.connect(new_tower.power_update)
 		
 		map_node.get_node("TowerContainer").add_child(new_tower, true) #TowerContainer is in Map Scene
 		exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
@@ -273,7 +275,7 @@ func sell_tower(sell_value : int, tower : TowerBase) -> void:
 
 ## UI Functions
 func connect_inv_button_signal(inventory_slot) -> void: #connects new inventory slot signal
-	inventory_slot.button_down.connect(on_inv_button_down.bind(inventory_slot, inventory_slot.slot_data.tower_mod))
+	inventory_slot.button_down.connect(on_inv_button_down.bind(inventory_slot, inventory_slot.slot_data.inventory_mod))
 	inventory_slot.hovered.connect(create_popup)
 	inventory_slot.clear_popup.connect(clear_popup)
 

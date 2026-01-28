@@ -1,13 +1,14 @@
 class_name InventoryUI extends Control
 
+signal slot_created(new_slot)
+
 const INVENTORY_SLOT = preload("res://GameData/UIScenes/Inventory/inventory_slot.tscn")
 
 #InventoryData holds and array of SlotData and Update Inventory function
 @export var data : InventoryData
 
-@onready var game_scene := $"../../../../.."
+@export var game_scene : Node2D
 
-signal slot_created(new_slot)
 
 func _ready() -> void:
 	await game_scene.ready
@@ -17,7 +18,7 @@ func _ready() -> void:
 
 func update_slot(slot_data) -> void:
 	for child in get_children():
-		if slot_data.tower_mod.name == child.slot_data.tower_mod.name:
+		if slot_data.inventory_mod.name == child.slot_data.inventory_mod.name:
 			child.set_slot_data(slot_data)
 			if slot_data.quantity <= 0:
 				remove_slot(child)

@@ -13,12 +13,12 @@ signal base_damage(damage)
 var projectile_impact = preload("res://GameData/SupportScenes/projectile_impact.tscn")
 
 func _ready() -> void:
+	data.buff_owner = self
 	#healthbar setup
 	healthbar_update(data.health, data.health)
 	health_bar.set_as_top_level(true)
 	
 	#signal connections
-#	data.initialize_buff.connect(initialize_buff)
 	data.health_changed.connect(healthbar_update)
 	data.health_depleted.connect(destroy)
 
@@ -44,9 +44,7 @@ func on_hit(dmg: Array, debuff: Array = []) -> void: #Array contains dmg amt, dm
 			data.active_buffs[buff].on_hit_effect()
 	if debuff != []:
 		for i in debuff:
-			data.add_buff(i, self)
-
-
+			data.add_buff(i)
 
 func calculate_damage(dmg: Array) -> void:#Array contains dmg amt, dmg tag, and crit status
 	data.health -= dmg[0]
@@ -72,6 +70,7 @@ func impact(damage_type: AllDamageTags.DamageTag) -> void:
 			impact_area.add_child(new_impact)
 
 func destroy() -> void:
+	data.health_depleted.disconnect(destroy)
 	baddy_death.emit()
 	$CharacterBody2D.queue_free()
 	await (get_tree().create_timer(0.2).timeout)

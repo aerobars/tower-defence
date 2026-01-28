@@ -21,6 +21,8 @@ var class_string : String:
 
 var stat_buffs : Array[StatBuff]
 var dot_buffs : Array[DotBuff]
+var net_power : int = 0
+var power_surplus_buffs : Dictionary = {"damage" : 1}
 
 func _init() -> void:
 	setup_stats.call_deferred()
@@ -29,7 +31,7 @@ func setup_stats(new_level : int = 0) -> void:
 	level = new_level
 	recalculate_buffs()
 
-func add_buff(buff: Buff, _buff_owner) -> void:
+func add_buff(buff: Buff) -> void:
 	if buff is DotBuff:
 		dot_buffs.append(buff)
 	if buff is StatBuff:
@@ -58,10 +60,25 @@ func recalculate_buffs() -> void:
 					if not stat_multipliers.has(stat_name):
 						stat_multipliers[stat_name] = 1.0
 					stat_multipliers[stat_name] += buff.buff_amount
+	set_current_stats()
 	recalculate_stats(stat_addends, stat_multipliers)
 
 @abstract
 func buff_check(buff_stat) -> bool
 
 @abstract
-func recalculate_stats(_thing1, _thing2) -> void
+func set_current_stats() -> void
+
+func recalculate_stats(stat_addends, stat_multipliers) -> void:
+	#addends first so it benefits from multipliers
+	for stat_name in stat_addends:
+		var cur_property_name: String = str("current_" + stat_name)
+		set(cur_property_name, get(cur_property_name) + stat_addends[stat_name])
+
+	for stat_name in stat_multipliers:
+		var cur_property_name: String = str("current_" + stat_name)
+		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
+	for stat_name in power_surplus_buffs.keys():
+		if buff_check(stat_name):
+			var cur_property_name: String = str("current_" + stat_name)
+			set(cur_property_name, get(cur_property_name) * (1 + float(net_power) * float(power_surplus_buffs[stat_name])/10))
