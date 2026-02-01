@@ -12,6 +12,7 @@ signal base_damage(damage)
 @onready var hit_flash = $HitFlashAnimation
 var projectile_impact = preload("res://GameData/SupportScenes/projectile_impact.tscn")
 
+
 func _ready() -> void:
 	data.buff_owner = self
 	#healthbar setup
@@ -24,8 +25,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
-		var inst = data.active_buffs[buff]
-		inst.update(delta)
+		data.active_buffs[buff].update(delta, progress)
 
 func _physics_process(delta: float) -> void:
 	if progress_ratio == 1.0:
@@ -40,8 +40,8 @@ func move(delta) -> void:
 func on_hit(dmg: Array, debuff: Array = []) -> void: #Array contains dmg amt, dmg tag, and crit status
 	calculate_damage(dmg)
 	for buff in data.active_buffs.keys():
-		if buff is OnHitBuff and data.active_buffs[buff].on_hit_check:
-			data.active_buffs[buff].on_hit_effect()
+		if buff is OnHitBuff:
+			data.active_buffs[buff].on_hit_check()
 	if debuff != []:
 		for i in debuff:
 			data.add_buff(i)
@@ -71,7 +71,7 @@ func impact(damage_type: AllDamageTags.DamageTag) -> void:
 
 func destroy() -> void:
 	data.health_depleted.disconnect(destroy)
-	baddy_death.emit()
 	$CharacterBody2D.queue_free()
 	await (get_tree().create_timer(0.2).timeout)
 	self.queue_free()
+	baddy_death.emit()

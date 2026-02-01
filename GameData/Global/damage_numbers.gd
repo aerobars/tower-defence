@@ -9,7 +9,7 @@ func display_number(value: int, position: Vector2, damage_source, is_critical: b
 	
 	var colour = match_damage_source(damage_source)
 	if is_critical:
-		colour = "#B22"
+		colour = GameData.critical_colour
 	if value == 0:
 		colour = "#FFF8"
 	
@@ -40,16 +40,20 @@ func display_number(value: int, position: Vector2, damage_source, is_critical: b
 	number.queue_free()
 
 func match_damage_source(damage_source) -> Color:
-	match damage_source:
-		0: #Blunt
+	match AllDamageTags.DamageTag.keys()[damage_source]:
+		"BLEED":
 			return "#FFF"
-		1: #Burn
-			return "#f26d07" #Orange
-		2: #Explosion
+		"BLUNT": #Blunt
 			return "#FFF"
-		3: #Pierce
+		"BURN": #Burn
+			return GameData.burn_colour #Orange
+		"EXPLOSION": #Explosion
 			return "#FFF"
-		4: #Poison
-			return "#235417" #Dark Green
+		"PIERCE": #Pierce
+			return "#FFF"
+		"POISON": #Poison
+			return GameData.poison_colour #Dark Green
+		"SHOCK": #Shock
+			return GameData.shock_colour
 		_:
 			return "#FFF"

@@ -4,17 +4,22 @@
 [ext_resource type="Script" uid="uid://bk62k3c6krdiu" path="res://GameData/UIScenes/GUI/Scripts/mod_popup.gd" id="2_te2c5"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="3_5hcvs"]
 
-[node name="InfoPopup" type="Node2D"]
+[node name="InfoPopup" type="Node2D" node_paths=PackedStringArray("container", "mod_name", "mod_class", "power", "description")]
 modulate = Color(1, 1, 1, 0.9019608)
 top_level = true
 script = ExtResource("2_te2c5")
+container = NodePath("Background/VBoxContainer")
+mod_name = NodePath("Background/VBoxContainer/Name")
+mod_class = NodePath("Background/VBoxContainer/Class")
+power = NodePath("Background/VBoxContainer/Power")
+description = NodePath("Background/VBoxContainer/Description")
 
 [node name="Background" type="PanelContainer" parent="."]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_top = -100.0
-offset_right = 148.0
+offset_right = 256.0
 grow_vertical = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
@@ -33,10 +38,11 @@ text = "Mod Name"
 layout_mode = 2
 text = "Mod Class"
 
-[node name="Power" type="Label" parent="Background/VBoxContainer"]
+[node name="Power" type="RichTextLabel" parent="Background/VBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.80925393, 0.19851857, 0.10881647, 1)
+bbcode_enabled = true
 text = "A.S.:"
+fit_content = true
 
 [node name="Description" type="Label" parent="Background/VBoxContainer"]
 custom_minimum_size = Vector2(128, 0)

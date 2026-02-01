@@ -1,9 +1,11 @@
 class_name AllDamageTags extends Resource
 
 enum DamageTag {
+	BLEED,
 	BLUNT,
 	BURN,
 	CONCUSSIVE,
+	HEAL,
 	PIERCE,
 	POISON,
 	SHOCK,

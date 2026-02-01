@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_p1gpv"]
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("1_p1gpv")
 stat = 6
 buff_amount = -0.1

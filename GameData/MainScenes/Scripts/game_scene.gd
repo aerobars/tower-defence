@@ -5,6 +5,7 @@ signal game_finished(result)
 ## Gameplay 
 var spawns_per_wave := 1 
 var wave_total := 0
+var cleared := false
 @export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
 var current_player_health : int
 var character : String = "Tester"
@@ -32,12 +33,7 @@ var cur_popup : Node2D
 @export_subgroup("Map and Pathfinding")
 @export var map_node : Node2D #set in _ready instead if using multiple maps
 @export var path_debug :Line2D
-@onready var ground_layer : TileMapLayer = $Map/Ground
-@onready var exclusion_layer : TileMapLayer = $Map/Exclusion
-@onready var pathing_layer : TileMapLayer = $Map/Pathfinding
-@onready var start_cell : Marker2D = $Map/StartPoint
-@onready var end_cell : Marker2D = $Map/EndPoint
-@onready var baddy_path : Path2D = $Map/Path
+
 
 var astar : AStarGrid2D = AStarGrid2D.new()
 var path : PackedVector2Array = []
@@ -62,9 +58,9 @@ func _ready() -> void:
 	## Pathfinding setup
 	astar.cell_size = Vector2(CELL_SIZE, CELL_SIZE)
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_AT_LEAST_ONE_WALKABLE
-	astar.region = ground_layer.get_used_rect()
+	astar.region = map_node.ground_layer.get_used_rect()
 	astar.update()
-	for tile in exclusion_layer.get_used_cells():
+	for tile in map_node.exclusion_layer.get_used_cells():
 		#pathing_layer.set_cell(tile, 0, Vector2i(0,0), 0)
 		astar.set_point_solid(tile, true)
 	baddy_path_update()
@@ -114,6 +110,7 @@ func start_next_wave(_data) -> void:
 		pause_resume_game()
 		pause_button.set_pressed_no_signal(true)
 	GameData.current_wave += 1
+	cleared = false
 	var wave_data = GameData.get_wave_data()
 	wave_total = wave_data["wave_total"]
 	if GameData.current_wave > 1:
@@ -130,13 +127,13 @@ func spawn_baddies(wave_data) -> void:
 		baddy_info_foldable.update_baddy_info(new_baddy)
 		new_baddy.base_damage.connect(on_base_damage)
 		new_baddy.baddy_death.connect(on_baddy_death)
-		map_node.get_node("Path").add_child(new_baddy, true)
+		map_node.baddy_path.add_child(new_baddy, true)
 		await(get_tree().create_timer(new_baddy.data.spawn_interval, false)).timeout
 		while spawn_count != spawns_per_wave: #only run if more than 1 enemy is spawned in the wave
 			new_baddy = baddy_scene.instantiate()
 			new_baddy.base_damage.connect(on_base_damage)
 			new_baddy.baddy_death.connect(on_baddy_death)
-			map_node.get_node("Path").add_child(new_baddy, true)
+			map_node.baddy_path.add_child(new_baddy, true)
 			spawn_count += 1
 			await(get_tree().create_timer(new_baddy.data.spawn_interval, false)).timeout
 			if spawn_count == spawns_per_wave:
@@ -156,10 +153,13 @@ func on_base_damage(damage) -> void:
 		on_baddy_death()
 
 func on_baddy_death() -> void:
-	wave_total -= 1
-	if wave_total == 0:
+	if get_tree().get_node_count_in_group("baddies") == 0 and not cleared:
+		cleared = true
 		wave_cleared()
-		#game_finished.emit(true)
+#	wave_total -= 1
+#	if wave_total == 0:
+#		wave_cleared()
+#		game_finished.emit(true)
 
 func wave_cleared() -> void:
 	ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
@@ -179,17 +179,17 @@ func baddy_path_update() -> void:
 	#not needed if whole map is set at initiation, called in _ready
 	#astar.update()
 	
-	path = astar.get_point_path(start_cell.position / CELL_SIZE, end_cell.position / CELL_SIZE)
+	path = astar.get_point_path(map_node.start_point.position / CELL_SIZE, map_node.end_point.position / CELL_SIZE)
 	var curve = Curve2D.new()
 	path_debug.clear_points()
 	for cell in path:
 		curve.add_point(cell + CELL_CENTRE)
 		path_debug.add_point(cell + CELL_CENTRE)
-	baddy_path.curve = curve
+	map_node.baddy_path.curve = curve
 	path.clear()
 
 func pathfinding_update() -> void:
-	path = astar.get_point_path(start_cell.position / CELL_SIZE, end_cell.position / CELL_SIZE)
+	path = astar.get_point_path(map_node.start_point.position / CELL_SIZE, map_node.end_point.position / CELL_SIZE)
 	path_debug.clear_points()
 	for cell in path:
 		path_debug.add_point(cell + CELL_CENTRE)
@@ -210,20 +210,20 @@ func initiate_build_mode(data: Dictionary, btn_ref, tower_type: String = "tower_
 
 func update_tower_preview() -> void:
 	var mouse_pos: Vector2 = get_global_mouse_position()
-	var current_tile: Vector2i = exclusion_layer.local_to_map(mouse_pos)
-	var tile_pos: Vector2 = exclusion_layer.map_to_local(current_tile)
+	var current_tile: Vector2i = map_node.exclusion_layer.local_to_map(mouse_pos)
+	var tile_pos: Vector2 = map_node.exclusion_layer.map_to_local(current_tile)
 	
-	pathing_layer.set_cell(current_tile, 0, Vector2i(0,0), 0)
+	map_node.pathfinding_layer.set_cell(current_tile, 0, Vector2i(0,0), 0)
 	astar.set_point_solid(current_tile, true)
 	if previous_tile != current_tile:
-		if exclusion_layer.get_cell_source_id(previous_tile) == -1:
+		if map_node.exclusion_layer.get_cell_source_id(previous_tile) == -1:
 			astar.set_point_solid(previous_tile, false)
-		pathing_layer.clear()
+		map_node.pathfinding_layer.clear()
 		previous_tile = current_tile
 	
 	pathfinding_update()
 	
-	if exclusion_layer.get_cell_source_id(current_tile) == -1 and not path.is_empty():
+	if map_node.exclusion_layer.get_cell_source_id(current_tile) == -1 and not path.is_empty():
 		ui.update_tower_preview(tile_pos, "GREEN")
 		build_valid = true
 		build_location = tile_pos
@@ -235,7 +235,7 @@ func update_tower_preview() -> void:
 func cancel_build_mode() -> void:
 	build_mode = false
 	build_valid = false
-	pathing_layer.clear()
+	map_node.pathfinding_layer.clear()
 	$UI/TowerPreview.free()
 
 func verify_and_build() -> void:
@@ -251,8 +251,8 @@ func verify_and_build() -> void:
 		build_btn_ref.aura_update.connect(new_tower.aura_update)
 		build_btn_ref.power_update.connect(new_tower.power_update)
 		
-		map_node.get_node("TowerContainer").add_child(new_tower, true) #TowerContainer is in Map Scene
-		exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
+		map_node.tower_container.add_child(new_tower, true) #TowerContainer is in Map Scene
+		map_node.exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
 		astar.set_point_solid(build_tile, true)
 		baddy_path_update()
 		player_cash -= build_btn_ref.build_cost
@@ -283,7 +283,7 @@ func on_inv_button_down(_inventory_slot, tower_mod) -> void: #button down for in
 	var new_draggable = DRAGGABLE_MOD.instantiate()
 	GameData.is_dragging = true
 	new_draggable.draggable = true
-	new_draggable.data = tower_mod
+	new_draggable.data = tower_mod.duplicate()
 	new_draggable.get_child(0).texture = tower_mod.texture
 	new_draggable.mod_dropped.connect(inventory_ui.data.update_inventory)
 	build_bar.add_child(new_draggable)

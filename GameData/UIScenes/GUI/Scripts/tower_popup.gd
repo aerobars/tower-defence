@@ -10,7 +10,7 @@ var data : Array #contains all towermod data of tower's mods, last array entry i
 @export var upgrade_button : Button
 @export var sell_button : Button
 #@onready var mod_class : Label = $Background/VBoxContainer/Class
-#@onready var power : Label = $Background/VBoxContainer/Power
+@export var power : Label
 #@onready var description : Label = $Background/VBoxContainer/Description
 var popup_owner : TowerBase
 var level_names := ["Basic", "Advanced", "Expert", "Master", "Grandmaster"]

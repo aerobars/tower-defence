@@ -5,51 +5,45 @@ var buff_owner : Node2D
 var stacks : int = 0
 var dot_timer : float
 var time_remaining : float
+var last_progress: float = 0.0
+#var aura_effect : bool
 
-func _init(_buff: Buff, _buff_owner) -> void:
+func _init(_buff: Buff, _buff_owner, _buff_duration : float = _buff.buff_duration) -> void:
 	buff = _buff
 	buff_owner = _buff_owner
-	time_remaining = buff.buff_duration
+	time_remaining = _buff_duration
+	#if time_remaining == -1.0: #-1 = persistent/aura effect
+		#aura_effect = true
 
-func update(delta: float) -> void:
-	time_remaining -= delta
+func update(delta: float, progress: float) -> void:
 	if buff is DotBuff:
-		dot_timer += delta
+		match AllDamageTags.DamageTag.keys()[buff.damage_tag]:
+			"BLEED":
+				dot_timer += abs(progress - last_progress)
+				last_progress = progress
+			"BURN":
+				dot_timer += delta
 		if dot_timer >= buff.dot_interval:
 			buff_owner.calculate_damage([buff.damage_amount * stacks, buff.damage_tag, false])
 			dot_timer = 0.0
+	#if aura_effect: #prevents aura buffs from expiring while 
+		#return
+	time_remaining -= delta
 	if time_remaining <= 0:
 		buff_owner.data.remove_buff(buff)
 
 func on_hit_check() -> void:
-	if randi() % 100 > buff.success_chance_per_stack * stacks:
-		match buff.name.to_pascal_case():
-			"shock":
-				shock()
-
-func stun() -> void:
-	var current_stat : float
-	if buff_owner is Baddy:
-			current_stat = buff_owner.data.current_move_speed
-			buff_owner.data.current_move_speed = 0.0
-	elif buff_owner is TowerBase:
-			pass#set attack_speed to 0
-	await buff_owner.get_tree().create_timer(buff.effect_duration, false).timeout
-	if buff_owner is Baddy:
-			buff_owner.data.current_move_speed = current_stat
-	elif buff_owner is TowerBase:
-			pass#set attack_speed to 0
+	if randf() <= float(buff.success_chance_per_stack * stacks):
+		call(buff.name.to_snake_case())
 
 func shock() -> void:
 	var aoe = setup_aoe()
-	aoe.global_position = buff_owner.position
+	await buff_owner.get_tree().process_frame
 	await buff_owner.get_tree().physics_frame
 	for body in aoe.get_overlapping_bodies():
 		if body.is_in_group("baddies"):
-			body.get_parent().on_hit(buff_owner.calculate_damage([buff.damage_amount * stacks, buff.damage_tag, false]))
-	stun()
-	buff_owner.data.remove_buff(buff)
-
+			body.get_parent().calculate_damage([buff.damage_amount, buff.damage_tag, false])
+			stun()
 
 func setup_aoe() -> Area2D:
 	var aoe = Area2D.new()
@@ -58,4 +52,13 @@ func setup_aoe() -> Area2D:
 	aoe_range.get_shape().radius = buff.damage_aoe
 	aoe.add_child(aoe_range)
 	buff_owner.add_child(aoe)
+	aoe.global_position = buff_owner.position
 	return aoe
+
+func stun() -> void:
+	var stat_ref
+	if buff_owner is Baddy:
+		stat_ref = AllBuffableStats.BuffableStats.MOVE_SPEED
+	elif buff_owner is TowerBase:
+		stat_ref = AllBuffableStats.BuffableStats.ATTACK_SPEED
+	buff_owner.data.add_buff(AbsoluteBuff.new(stat_ref, StatBuff.BuffType.MULTIPLY, 0.0, buff.effect_duration)) 

@@ -6,7 +6,7 @@ class_name DotBuff extends Buff
 @export var dot_interval : float
 
 func _init(
-	_damage_tag: AllDamageTags.DamageTag = AllDamageTags.DamageTag.POISON, 
+	_damage_tag: AllDamageTags.DamageTag = AllDamageTags.DamageTag.BURN, 
 	_damage_amount: float = 1.0,
 	_dot_interval: float = 1.0,
 	_dot_duration: float = 1.0

@@ -2,9 +2,15 @@ extends Node
 
 signal mod_update_check(mod: StaticBody2D)
 
+# Game Colours
+var positive_colour : Color = Color(0.25, 0.39, 0.92, 1.0)
+var negative_colour : Color = Color(0.8, 0.19, 0.1, 1.0)
+var critical_colour : Color = Color.html("#B22")
+var poison_colour : Color = Color.html("#235417")
+var shock_colour : Color = Color.GOLD
+var burn_colour : Color = Color.html("#f26d07")
+
 var is_dragging = false
-var positive_color : Color = Color(0.25, 0.39, 0.92, 1.0)
-var negative_color : Color = Color(0.8, 0.19, 0.1, 1.0)
 
 const BADDY_FILEPATH = "res://GameData/Baddies/"
 const CHAR_FILEPATH = "res://GameData/TowerMods/CharacterMods/"
@@ -54,9 +60,8 @@ func get_wave_data() -> Dictionary:
 	var wave_data : Dictionary = {"wave_baddies" : [], "wave_total" : 0}
 	var act_size : int = act_baddies[current_act].size()
 	wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
-	#if previous_wave.has(wave_data["wave_baddies"][0]) and previous_wave.has(wave_data["wave_baddies"][1]): #prevents same wave back to back
-		#return wave_data #get_wave_data()
-	#else:
+	while previous_wave.has(wave_data["wave_baddies"][0]) and previous_wave.has(wave_data["wave_baddies"][1]): #prevents same wave back to back
+		wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
 	for i in wave_data["wave_baddies"]:
 		var spawn_data = load("res://GameData/Baddies/Act" + str(current_act + 1) + "/" + i).instantiate()
 		wave_data["wave_total"] += spawn_data.data.spawns_per_wave

@@ -10,7 +10,7 @@ const GAME_MESSAGE_A_VALUE = 0.78
 @onready var tower : PackedScene = preload("res://GameData/Towers/tower_base.tscn")
 
 ## Tower Preview
-func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary) -> void: #runs via GameScenes initiate_build_mod func
+func set_tower_preview(_tower_type: String, mouse_pos: Vector2, data: Dictionary) -> void: #runs via GameScenes initiate_build_mod func
 	var drag_tower = tower.instantiate()
 	drag_tower.set_name("DragTower")
 	drag_tower.modulate = Color("GREEN")
@@ -18,19 +18,22 @@ func set_tower_preview(_tower_type: String, mouse_pos: Vector2, dict: Dictionary
 	var control := Control.new()
 	var range_texture : Sprite2D
 
-	for key in dict["mods"]: #adds range indictator to auras and weapons
-		if dict["mods"][key] != null:
-			if (dict["mods"][key].mod_class == dict["mods"][key].ModClass.AURA) or dict["mods"][key].mod_class == dict["mods"][key].ModClass.WEAPON:
-				range_texture = Sprite2D.new()
-				#range_texture.position = Vector2(32,32) #position needed if range is offest from tower
-				var scaling: float = dict["mods"][key].current_range / 300.0
-				range_texture.scale = Vector2(scaling, scaling)
-				range_texture.texture = texture
-				if dict["mods"][key].mod_class == dict["mods"][key].ModClass.WEAPON:
-					range_texture.modulate = Color("CRIMSON")
-				elif dict["aura_tower"]:
-					range_texture.modulate = Color("BLUE")
-				control.add_child(range_texture, true)
+	for key in data["mods"]: #adds range indictator to auras and weapons
+		if data["mods"][key] == null:
+			continue
+		if (data["mods"][key].mod_class == data["mods"][key].ModClass.AURA) or data["mods"][key].mod_class == data["mods"][key].ModClass.WEAPON:
+			range_texture = Sprite2D.new()
+			#range_texture.position = Vector2(32,32) #position needed if range is offest from tower
+			var scaling : float = data["mods"][key].current_range / 300.0
+			range_texture.texture = texture
+			if data["mods"][key].mod_class == data["mods"][key].ModClass.WEAPON:
+				range_texture.modulate = Color("CRIMSON")
+			elif data["aura_tower"]:
+				range_texture.modulate = Color("BLUE")
+			else: #mod is an aura but not aura tower
+				scaling = drag_tower.get_node("CollisionShape2D").shape.size.x / 600.0
+			range_texture.scale = Vector2(scaling, scaling)
+			control.add_child(range_texture, true)
 			#add mod texture
 
 	control.add_child(drag_tower, true)

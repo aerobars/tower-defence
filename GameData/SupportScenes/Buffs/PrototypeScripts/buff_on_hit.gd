@@ -1,6 +1,6 @@
 class_name OnHitBuff extends Buff
 
-@export_range(0.0, 100.0, 1.0, "suffix: %") var success_chance_per_stack : float
+@export_range(0.0, 1.0, 0.1, "suffix: %") var success_chance_per_stack : float
 @export var damage_tag : AllDamageTags.DamageTag
 @export var damage_amount : float
 @export var damage_aoe : float

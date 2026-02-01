@@ -19,7 +19,7 @@ enum ProjectileTag { INSTANT, PROJECTILE }
 @export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] #cd between attacks in seconds
 @export var base_crit_chance_levels : Array[int] = [0, 0, 0, 0, 0]
 @export var base_crit_multiplier_levels: Array[float] = [1.5, 1.5, 1.5, 1.5, 1.5]
-@export var base_damage_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0]
+@export var base_damage_levels : Array[float] = [10.0, 10.0, 10.0, 10.0, 10.0]
 @export var base_multitarget_levels : Array [int] = [1, 1, 1, 1, 1]
 var current_aoe : float
 var current_attack_speed : float

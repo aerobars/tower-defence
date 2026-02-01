@@ -50,19 +50,19 @@ func setup_stats() -> void:
 	health = current_max_health
 	current_move_speed = max(current_move_speed, 0.1)
 
-func add_buff(buff: Buff, amt : int = 1) -> void:
+func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) -> void:
 	for i in amt: #amt allows to apply multiple stacks from a single source
 		if not active_buffs.has(buff):
-			var new_inst = BuffInstance.new(buff, buff_owner)
+			var new_inst = BuffInstance.new(buff, buff_owner, duration)
 			active_buffs[buff] = new_inst
 		var inst = active_buffs[buff]
 		inst.stacks = min(inst.stacks + amt, buff.stack_limit)
 		inst.time_remaining = buff.buff_duration
-		recalculate_stats.call_deferred()
+		recalculate_stats()
 
 func remove_buff(buff: Buff, _amt = 1) -> void:
 	active_buffs.erase(buff)
-	recalculate_stats.call_deferred()
+	recalculate_stats()
 
 func recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
@@ -80,6 +80,7 @@ func recalculate_stats() -> void:
 					if not stat_multipliers.has(stat_name):
 						stat_multipliers[stat_name] = 1.0
 					stat_multipliers[stat_name] += buff.buff_amount * inst.stacks
+					stat_multipliers[stat_name] = max(stat_multipliers[stat_name], 0)
 	
 	#var stat_sample_pos: float = level
 	current_max_health = base_max_health * level_ratio
@@ -95,13 +96,19 @@ func recalculate_stats() -> void:
 	for stat_name in stat_multipliers:
 		var cur_property_name: String = str("current_" + stat_name)
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
+	current_move_speed = clamp(current_move_speed, 50, 500)
+
+	for buff in active_buffs.keys():
+		if buff is AbsoluteBuff:
+			var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()
+			var cur_property_name: String = str("current_" + stat_name)
+			set(cur_property_name, buff.buff_amount)
 
 func _on_health_set(new_value: float) -> void:
 	health = clamp(new_value, 0, current_max_health)
 	health_changed.emit(health, current_max_health)
 	if health == 0:
 		health_depleted.emit()
-
 
 func _on_experience_set(new_value: int) -> void:
 	var old_level : int = level

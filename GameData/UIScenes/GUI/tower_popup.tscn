@@ -51,5 +51,10 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.1254902, 0.08627451, 1)
 text = "Sell: +$"
 
+[node name="RichTextLabel" type="RichTextLabel" parent="Background/VBoxContainer/HBoxContainer/SellButton"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [connection signal="pressed" from="Background/VBoxContainer/HBoxContainer/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
 [connection signal="pressed" from="Background/VBoxContainer/HBoxContainer/SellButton" to="." method="_on_sell_button_pressed"]

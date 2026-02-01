@@ -3,10 +3,11 @@
 [ext_resource type="Script" uid="uid://2ja3gh17qp02" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_dot.gd" id="1_imnq3"]
 
 [resource]
+resource_local_to_scene = true
 script = ExtResource("1_imnq3")
 damage_tag = 1
 damage_amount = 1.0
 dot_interval = 1.0
 name = "Burn"
-buff_duration = 3.0
+buff_duration = 1.01
 metadata/_custom_type_script = "uid://2ja3gh17qp02"

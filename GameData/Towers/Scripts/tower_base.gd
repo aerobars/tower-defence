@@ -19,8 +19,8 @@ const POPUP_TYPE : String = "tower"
 var aura_tower : bool
 var is_built := false
 var net_power : int = 0
-var level := 0 #level 0 to line up with arrays
-
+var level : int = 0 #level 0 to line up with arrays
+var clickable := false
 
 func _ready() -> void:
 	marker_setup() #use markers instead of directly setting TowerMod scene so that this can show mod textures during build mode
@@ -35,16 +35,20 @@ func _ready() -> void:
 			#set mod textures on tower preview, or full mod data if built
 			#does not do former for now
 			if is_built:
-				tower_mod.data = build_btn_mods[build_key]
+				if build_btn_mods[build_key] != null:
+					tower_mod.data = build_btn_mods[build_key].duplicate(true)
+					tower_mod.data.setup_stats(level)
 				tower_mod.mod_slot_ref = build_key
 				build_key.mod_updated.connect(tower_mod.mod_slot_updated) 
 				power_to_mods.connect(tower_mod.power_update)
+				tower_mod.non_aura_radius = marker_pos_radius
 			#else:
 				#print(tower_mod.get_child(0))
 				#tower_mod.get_child(0).texture = build_btn_mods[build_key].texture
 			add_child(tower_mod)
 	power_update(init_power_buffs)
-
+	await get_tree().create_timer(0.25).timeout
+	clickable = true
 
 ## Marker Functions
 func marker_setup() -> void:
@@ -68,7 +72,7 @@ func update_markers() -> void: #called if # of markers gets updated
 
 ## Gameplay
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if is_built:
+	if clickable:
 		if event.is_action("ui_accept"):
 			var tower_data : Array
 			for child in get_children():

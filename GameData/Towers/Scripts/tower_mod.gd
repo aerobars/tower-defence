@@ -5,6 +5,7 @@ signal power_check
 signal mod_updated(mod: StaticBody2D)
 
 ## Tower Setup
+var non_aura_radius : float
 var data : PrototypeMod
 var mod_slot_ref : StaticBody2D
 
@@ -19,13 +20,14 @@ var attack_timer : float = 0.0
 func _ready():
 	$Range.global_position = get_parent().global_position
 	if data != null:
+		data.buff_owner = self
 		update_mod()
 	for body in $Range.get_overlapping_bodies():
 		_on_range_body_entered(body)
+	
 	mod_updated.connect(GameData.mod_updated)
 	GameData.mod_update_check.connect(_on_mod_updated)
 	#above signals allow other mods to be added to auras after they are updated
-
 
 ## Mod Updates
 func update_mod() -> void:
@@ -34,25 +36,40 @@ func update_mod() -> void:
 		$Turret.texture = null
 		remove_from_group("turret")
 		return
-	elif data.mod_class != data.ModClass.POWER:
-		$Range/CollisionShape2D.get_shape().radius = data.current_range
-		add_to_group("turret")
-	else:
-		remove_from_group("turret")
+	data.setup_stats(get_parent().level)
+	match data.mod_class:
+		0: #Aura
+			if get_parent().aura_tower:
+				$Range/CollisionShape2D.get_shape().radius = data.current_range
+			else:
+				$Range/CollisionShape2D.get_shape().radius = non_aura_radius
+			add_to_group("turret")
+		1: #Power
+			$Range/CollisionShape2D.get_shape().radius = non_aura_radius
+			remove_from_group("turret")
+		2: #Weapon
+			$Range/CollisionShape2D.get_shape().radius = data.current_range
+			add_to_group("turret")
 	data.level = get_parent().level
 	$Turret.texture = data.texture
 	mod_updated.emit(self)
 
 func mod_slot_updated(mod_slot : StaticBody2D, mod_slot_data : PrototypeMod) -> void:
-	if mod_slot == mod_slot_ref:
-		if data != null and data.mod_class == data.ModClass.AURA:
-			for body in aura_targets:
+	if mod_slot != mod_slot_ref:
+		return
+	if data != null:
+		if data.mod_class == data.ModClass.AURA: 
+			for body in aura_targets: #clears aura effects of old aura before updating
 				clear_buffs(body)
-		data = mod_slot_data
-		update_mod()
+	if mod_slot_data != null:
+		data = mod_slot_data.duplicate(true)
+	aura_targets = []
+	update_mod()
 
-func _on_mod_updated(updated_mod: StaticBody2D) -> void:
-	if updated_mod in $Range.get_overlapping_bodies() and updated_mod != self:
+func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData, triggers whenever any mod is updated
+	if updated_mod == self:
+		return
+	if updated_mod in $Range.get_overlapping_bodies():
 		_on_range_body_entered(updated_mod)
 
 
@@ -60,50 +77,68 @@ func _on_mod_updated(updated_mod: StaticBody2D) -> void:
 func _process(delta: float) -> void:
 	if data == null: 
 		return
+	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
+		var inst = data.active_buffs[buff]
+		inst.update(delta)
 	if get_parent().net_power < 0:
 		#display low power symbol
 		return
-	if (data.mod_class == data.ModClass.AURA and data.offensive_aura and get_parent().aura_tower) or data.mod_class == data.ModClass.WEAPON:
-		attack_timer += delta
+	attack_timer += delta
+	if baddies_in_range.size() > 0:
+		targets = select_targets()
+		if data.mod_class == data.ModClass.WEAPON:
+			if not $AnimationPlayer.is_playing():
+				turn()
 		if attack_timer >= data.current_attack_speed:
+			if data is AuraMod and data.offensive_aura and get_parent().aura_tower:
+				for baddy in baddies_in_range:
+					apply_buff(baddy)
+			elif data is WeaponMod:
+				for i in data.current_multitarget:
+					if i < targets.size():
+						fire(targets[i])
 			attack_timer = 0.0
-			if baddies_in_range.size() != 0:
-				match data.mod_class:
-					data.ModClass.AURA:
-						for baddy in baddies_in_range:
-							fire(baddy)
-					data.ModClass.WEAPON:
-						targets = select_targets()
-						if not $AnimationPlayer.is_playing():
-							turn()
-						for i in data.current_multitarget:
-							if i < targets.size():
-								fire(targets[i])
-			else:
-				targets = [null]
+	else:
+		targets = [null]
 
 func _on_range_body_entered(body) -> void:
+	if data == null or body == self:
+		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body.get_parent())
-	elif data != null and data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
+	elif data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
 		if data.offensive_aura and get_parent().aura_tower:
-			pass #nothing gets added to aura_targets for offensive auras in aura mode
+			return #nothing gets added to aura_targets for offensive auras in aura mode
 		else:
 			aura_targets.append(body)
 			apply_buff(body)
 
 func _on_range_body_exited(body) -> void:
+	if data == null:
+		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body.get_parent())
-	elif data != null and data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
-		clear_buffs(body)
+	elif data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
 		aura_targets.erase(body)
+		clear_buffs(body)
 
 func apply_buff(body) -> void:
-	body.data.add_buff(data.buff_data)
+	if body is TowerMod:
+		if data.offensive_aura and data.buff_data is StatBuff:
+			body.data.on_hit_effects.append(data.buff_data)
+		else:
+			body.data.add_buff(data.buff_data)
+	elif body is Baddy:
+		body.data.add_buff(data.buff_data)
 
 func clear_buffs(body) -> void:
-	body.data.remove_buff(data.buff_data)
+	if body is TowerMod:
+		if data.offensive_aura and data.buff_data is StatBuff:
+			body.data.on_hit_effects.erase(data.buff_data)
+		else:
+			body.data.remove_buff(data.buff_data)
+	elif body is Baddy:
+		body.data.remove_buff(data.buff_data)
 
 func power_update(net_power, power_surplus_buffs) -> void:
 	if data == null:
@@ -111,7 +146,7 @@ func power_update(net_power, power_surplus_buffs) -> void:
 	data.power_surplus_buffs = power_surplus_buffs
 	data.net_power = net_power
 	if net_power >= 0:
-		data.recalculate_buffs()
+		data.recalculate_stats()
 
 ## Weapon Function
 func select_targets() -> Array:
@@ -123,25 +158,22 @@ func turn():
 	$Turret.look_at(targets[0].position)
 
 func fire(target):
-	match data.mod_class: 
-		data.ModClass.WEAPON: 
-			if data.projectile_tag == data.ProjectileTag.PROJECTILE:
-				fire_projectile()
-			elif data.projectile_tag == data.ProjectileTag.INSTANT:
-				fire_instant()
-			if data.current_aoe > 0:
-				var aoe = setup_aoe()
-				aoe.global_position = target.position
-				await get_tree().process_frame
-				await get_tree().physics_frame
-				for body in aoe.get_overlapping_bodies():
-					if body.is_in_group("baddies"):
-						body.get_parent().on_hit(data.calculate_damage(), data.dot_buffs)
-				aoe.queue_free()
-			else:
-				target.on_hit(data.calculate_damage(), data.dot_buffs)
-		data.ModClass.AURA:
-			apply_buff(target)
+	if data.projectile_tag == data.ProjectileTag.INSTANT:
+		fire_instant()
+	elif data.projectile_tag == data.ProjectileTag.PROJECTILE:
+		fire_projectile()
+	if data.current_aoe > 0:
+		var aoe = setup_aoe()
+		aoe.global_position = target.position
+		await get_tree().process_frame
+		await get_tree().physics_frame
+		for body in aoe.get_overlapping_bodies():
+			if body.is_in_group("baddies"):
+				body.get_parent().on_hit(data.calculate_damage(), data.on_hit_effects)
+		aoe.queue_free()
+	else:
+		target.on_hit(data.calculate_damage(), data.on_hit_effects)
+
 
 func fire_projectile() -> void:
 	pass
