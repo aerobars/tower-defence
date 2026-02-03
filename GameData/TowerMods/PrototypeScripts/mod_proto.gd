@@ -22,13 +22,13 @@ var buff_owner
 var active_buffs: Dictionary[Buff, BuffInstance] = {}
 @export var on_hit_effects : Array[Buff]
 var net_power : int = 0
-var power_surplus_buffs : Dictionary = {"damage" : 1}
+var power_surplus_buffs : Dictionary = {}
 
 func _init() -> void:
 	setup_stats.call_deferred()
 
-func setup_stats(new_level : int = 0) -> void:
-	level = new_level
+func setup_stats(_level : int = 0) -> void:
+	level = _level
 	recalculate_stats()
 
 func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) -> void:
@@ -66,6 +66,7 @@ func recalculate_stats() -> void:
 					if not stat_multipliers.has(stat_name):
 						stat_multipliers[stat_name] = 1.0
 					stat_multipliers[stat_name] += buff.buff_amount
+	
 	set_current_stats()
 	
 	#addends first so it benefits from multipliers
@@ -75,11 +76,13 @@ func recalculate_stats() -> void:
 	
 	for stat_name in stat_multipliers:
 		var cur_property_name: String = str("current_" + stat_name)
-	
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
+	
 	for stat_name in power_surplus_buffs.keys():
+		print('initiating power')
 		if buff_check(stat_name):
 			var cur_property_name: String = str("current_" + stat_name)
+			print(1 + float(net_power) * float(power_surplus_buffs[stat_name])/10)
 			set(cur_property_name, get(cur_property_name) * (1 + float(net_power) * float(power_surplus_buffs[stat_name])/10))
 	
 	for buff in active_buffs.keys():

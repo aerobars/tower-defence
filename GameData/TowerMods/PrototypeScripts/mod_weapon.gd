@@ -29,9 +29,11 @@ var current_damage : float
 var current_multitarget : int
 
 func buff_check(buff_stat) -> bool:
+	var str_buff_stat : String
 	if buff_stat is int:
-		buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
-	return WeaponBuffableStats.keys().has(buff_stat.to_upper())
+		str_buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
+	print('weapon check: ', WeaponBuffableStats.keys().has(buff_stat.to_upper()))
+	return WeaponBuffableStats.keys().has(str_buff_stat.to_upper())
 
 func set_current_stats() -> void:
 	current_aoe = base_aoe_levels[level]

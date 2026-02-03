@@ -15,9 +15,10 @@ var is_aura : bool = false
 @export var offensive_aura : bool = false
 
 func buff_check(buff_stat) -> bool:
+	var str_buff_stat : String
 	if buff_stat is int:
-		buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
-	return AuraBuffableStats.keys().has(buff_stat.to_upper())
+		str_buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
+	return AuraBuffableStats.keys().has(str_buff_stat.to_upper())
 
 func set_current_stats() -> void:
 	current_power = base_power_levels[level]

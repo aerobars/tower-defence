@@ -7,9 +7,10 @@ enum PowerBuffableStats {
 @export var power_surplus_buffable_stats : Array[AllBuffableStats.BuffableStats] = [AllBuffableStats.BuffableStats.DAMAGE]
 
 func buff_check(buff_stat) -> bool:
+	var str_buff_stat : String
 	if buff_stat is int:
-		buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
-	return PowerBuffableStats.keys().has(buff_stat.to_upper())
+		str_buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
+	return PowerBuffableStats.keys().has(str_buff_stat.to_upper())
 
 func set_current_stats() -> void:
 	current_power = base_power_levels[level]

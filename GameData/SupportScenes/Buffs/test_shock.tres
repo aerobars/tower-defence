@@ -6,7 +6,7 @@
 resource_local_to_scene = true
 script = ExtResource("1_4gp76")
 success_chance_per_stack = 0.1
-damage_tag = 5
+damage_tag = 7
 damage_amount = 1.0
 damage_aoe = 50.0
 effect_duration = 0.25

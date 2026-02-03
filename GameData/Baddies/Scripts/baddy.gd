@@ -22,6 +22,9 @@ func _ready() -> void:
 	#signal connections
 	data.health_changed.connect(healthbar_update)
 	data.health_depleted.connect(destroy)
+	
+	for buff in data.initial_buffs:
+		data.add_buff(buff.duplicate(true), buff.buff_duration)
 
 func _process(delta: float) -> void:
 	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs

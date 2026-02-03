@@ -38,7 +38,8 @@ var current_move_speed : float
 
 var health : float = 0 : set = _on_health_set
 
-var active_buffs: Dictionary[Buff, BuffInstance] = {}
+@export var initial_buffs : Array[Buff]
+@export var active_buffs: Dictionary[Buff, BuffInstance]
 var buff_owner : Node2D
 
 ##Stats Setup and Adjustment

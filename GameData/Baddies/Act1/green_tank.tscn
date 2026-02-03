@@ -1,8 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://cxgdpeu8w3qk2"]
+[gd_scene load_steps=15 format=3 uid="uid://cxgdpeu8w3qk2"]
 
 [ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/Scripts/baddy.gd" id="1_n2vo1"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_78f6f"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/Scripts/baddy_stats.gd" id="2_s8kcc"]
+[ext_resource type="Script" uid="uid://cgjshym4topb6" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_instance.gd" id="3_0d63f"]
 [ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/Scripts/hit_flash.tres" id="3_78f6f"]
+[ext_resource type="Resource" uid="uid://bdsnm5ttegmo0" path="res://GameData/SupportScenes/Buffs/test_heal_on_hit.tres" id="4_0d63f"]
 [ext_resource type="Texture2D" uid="uid://5jujfvl5qfbb" path="res://Assets/Baddies/tank_green.png" id="4_n2vo1"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="5_182gs"]
 
@@ -14,6 +17,7 @@ spawn_interval = 0.5
 base_max_health = 100.0
 base_damage = 21.0
 base_move_speed = 150.0
+initial_buffs = Array[ExtResource("2_78f6f")]([ExtResource("4_0d63f")])
 metadata/_custom_type_script = "uid://citwba61de3ku"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7b3mk"]

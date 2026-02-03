@@ -14,6 +14,7 @@ var baddies_in_range : Array
 var targets : Array
 var aura_targets : Array
 var attack_timer : float = 0.0
+var attack_tracker : int
 
 
 ## Initial Setup
@@ -36,6 +37,7 @@ func update_mod() -> void:
 		$Turret.texture = null
 		remove_from_group("turret")
 		return
+	data.level = get_parent().level
 	data.setup_stats(get_parent().level)
 	match data.mod_class:
 		0: #Aura
@@ -50,7 +52,6 @@ func update_mod() -> void:
 		2: #Weapon
 			$Range/CollisionShape2D.get_shape().radius = data.current_range
 			add_to_group("turret")
-	data.level = get_parent().level
 	$Turret.texture = data.texture
 	mod_updated.emit(self)
 
@@ -78,8 +79,7 @@ func _process(delta: float) -> void:
 	if data == null: 
 		return
 	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
-		var inst = data.active_buffs[buff]
-		inst.update(delta)
+		data.active_buffs[buff].update(delta)
 	if get_parent().net_power < 0:
 		#display low power symbol
 		return
@@ -94,6 +94,7 @@ func _process(delta: float) -> void:
 				for baddy in baddies_in_range:
 					apply_buff(baddy)
 			elif data is WeaponMod:
+				attack_tracker += 1
 				for i in data.current_multitarget:
 					if i < targets.size():
 						fire(targets[i])
@@ -140,7 +141,7 @@ func clear_buffs(body) -> void:
 	elif body is Baddy:
 		body.data.remove_buff(data.buff_data)
 
-func power_update(net_power, power_surplus_buffs) -> void:
+func power_update(net_power : int , power_surplus_buffs : Dictionary) -> void:
 	if data == null:
 		return
 	data.power_surplus_buffs = power_surplus_buffs
@@ -163,14 +164,9 @@ func fire(target):
 	elif data.projectile_tag == data.ProjectileTag.PROJECTILE:
 		fire_projectile()
 	if data.current_aoe > 0:
-		var aoe = setup_aoe()
-		aoe.global_position = target.position
-		await get_tree().process_frame
-		await get_tree().physics_frame
-		for body in aoe.get_overlapping_bodies():
-			if body.is_in_group("baddies"):
-				body.get_parent().on_hit(data.calculate_damage(), data.on_hit_effects)
-		aoe.queue_free()
+		var baddies = await setup_aoe(target.position)
+		for baddy in baddies:
+			baddy.on_hit(data.calculate_damage(), data.on_hit_effects)
 	else:
 		target.on_hit(data.calculate_damage(), data.on_hit_effects)
 
@@ -181,12 +177,19 @@ func fire_projectile() -> void:
 func fire_instant() -> void:
 	$AnimationPlayer.play("fire")
 
-func setup_aoe() -> Area2D:
+func setup_aoe(target_pos : Vector2) -> Array:
 	var aoe = Area2D.new()
 	var aoe_range = CollisionShape2D.new()
+	var baddies : Array = []
 	aoe_range.shape = CircleShape2D.new()
 	aoe_range.get_shape().radius = data.current_aoe
-	
 	aoe.add_child(aoe_range)
+	aoe.global_position = target_pos
 	add_child(aoe)
-	return aoe
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	for body in aoe.get_overlapping_bodies():
+		if body.is_in_group("baddies"):
+			baddies.append(body.get_parent())
+	aoe.queue_free()
+	return baddies

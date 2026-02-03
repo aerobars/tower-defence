@@ -5,7 +5,7 @@
 [resource]
 resource_local_to_scene = true
 script = ExtResource("1_imnq3")
-damage_tag = 1
+damage_tag = 2
 damage_amount = 1.0
 dot_interval = 1.0
 name = "Burn"

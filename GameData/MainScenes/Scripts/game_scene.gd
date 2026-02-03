@@ -83,8 +83,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		if build_mode:
 			verify_and_build()
 			cancel_build_mode()
-	if event.is_action_pressed("press_build_button_1"):
+	if event.is_action_pressed("hotkey_button_1"):
 		build_bar.get_node("HBoxContainer/TowerBase").pressed.emit()
+	if event.is_action_pressed("hotkey_button_2"):
+		build_bar.get_node("HBoxContainer/TowerBase2").pressed.emit()
 
 func pause_resume_game() -> void:
 	if build_mode:
@@ -156,10 +158,6 @@ func on_baddy_death() -> void:
 	if get_tree().get_node_count_in_group("baddies") == 0 and not cleared:
 		cleared = true
 		wave_cleared()
-#	wave_total -= 1
-#	if wave_total == 0:
-#		wave_cleared()
-#		game_finished.emit(true)
 
 func wave_cleared() -> void:
 	ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
@@ -269,9 +267,14 @@ func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) ->
 	
 
 func sell_tower(sell_value : int, tower : TowerBase) -> void:
+	var tile_pos: Vector2i = map_node.exclusion_layer.local_to_map(tower.global_position)
+	map_node.exclusion_layer.set_cell(tile_pos)
+	astar.set_point_solid(tile_pos, false)
+	baddy_path_update()
+	tower.queue_free()
+	
 	player_cash += sell_value
 	ui.update_cash_display(player_cash)
-	tower.queue_free()
 
 ## UI Functions
 func connect_inv_button_signal(inventory_slot) -> void: #connects new inventory slot signal

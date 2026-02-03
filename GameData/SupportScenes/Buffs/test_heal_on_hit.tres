@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="OnHitBuff" load_steps=2 format=3 uid="uid://bdsnm5ttegmo0"]
+
+[ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_on_hit.gd" id="1_2cv2h"]
+
+[resource]
+script = ExtResource("1_2cv2h")
+success_chance_per_stack = 0.3
+damage_tag = 4
+damage_amount = 15.0
+damage_aoe = 150.0
+name = "Heal"
+stack_limit = 1
+buff_duration = -1.0
+metadata/_custom_type_script = "uid://cxkis28w2jd6p"
