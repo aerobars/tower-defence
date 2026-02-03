@@ -31,8 +31,9 @@ var current_multitarget : int
 func buff_check(buff_stat) -> bool:
 	var str_buff_stat : String
 	if buff_stat is int:
-		str_buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
-	print('weapon check: ', WeaponBuffableStats.keys().has(buff_stat.to_upper()))
+		str_buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat].to_upper()
+	else:
+		str_buff_stat = buff_stat.to_upper()
 	return WeaponBuffableStats.keys().has(str_buff_stat.to_upper())
 
 func set_current_stats() -> void:

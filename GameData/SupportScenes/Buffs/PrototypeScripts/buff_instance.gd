@@ -39,9 +39,7 @@ func on_hit_check() -> void:
 func heal() -> void:
 	var baddies = await setup_aoe()
 	for baddy in baddies:
-		print('before heal: ', baddy.data.health)
 		baddy.data.health += buff.damage_amount
-		print('after heal: ', baddy.data.health)
 
 func shock() -> void:
 	var baddies = await setup_aoe()

@@ -241,13 +241,12 @@ func verify_and_build() -> void:
 		var new_tower = load("res://GameData/Towers/" + build_type + ".tscn").instantiate()
 		new_tower.position = build_location
 		new_tower.is_built = true
-		new_tower.build_btn_mods = build_data["mods"]
+		new_tower.tower_mods = build_data["mods"]
 		new_tower.aura_tower = build_data["aura_tower"]
 		new_tower.init_power_buffs = build_data["power_buffs"]
 		new_tower.mod_slot_count = build_data["mods"].size()
 		new_tower.show_upgrade_panel.connect(create_popup)
-		build_btn_ref.aura_update.connect(new_tower.aura_update)
-		build_btn_ref.power_update.connect(new_tower.power_update)
+		build_btn_ref.update_towers.connect(new_tower.tower_update)
 		
 		map_node.tower_container.add_child(new_tower, true) #TowerContainer is in Map Scene
 		map_node.exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)

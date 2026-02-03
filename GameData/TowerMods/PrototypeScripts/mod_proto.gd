@@ -79,10 +79,8 @@ func recalculate_stats() -> void:
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
 	
 	for stat_name in power_surplus_buffs.keys():
-		print('initiating power')
 		if buff_check(stat_name):
 			var cur_property_name: String = str("current_" + stat_name)
-			print(1 + float(net_power) * float(power_surplus_buffs[stat_name])/10)
 			set(cur_property_name, get(cur_property_name) * (1 + float(net_power) * float(power_surplus_buffs[stat_name])/10))
 	
 	for buff in active_buffs.keys():

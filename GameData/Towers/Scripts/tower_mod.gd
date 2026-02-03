@@ -7,7 +7,7 @@ signal mod_updated(mod: StaticBody2D)
 ## Tower Setup
 var non_aura_radius : float
 var data : PrototypeMod
-var mod_slot_ref : StaticBody2D
+var button_slot_ref : StaticBody2D
 
 ## Gametime
 var baddies_in_range : Array
@@ -22,7 +22,6 @@ func _ready():
 	$Range.global_position = get_parent().global_position
 	if data != null:
 		data.buff_owner = self
-		update_mod()
 	for body in $Range.get_overlapping_bodies():
 		_on_range_body_entered(body)
 	
@@ -31,13 +30,13 @@ func _ready():
 	#above signals allow other mods to be added to auras after they are updated
 
 ## Mod Updates
-func update_mod() -> void:
+func update_mod(net_power : int = 0) -> void:
 	if data == null:
 		$Range/CollisionShape2D.get_shape().radius = 0.0
 		$Turret.texture = null
 		remove_from_group("turret")
 		return
-	data.level = get_parent().level
+	data.net_power = net_power
 	data.setup_stats(get_parent().level)
 	match data.mod_class:
 		0: #Aura
@@ -55,17 +54,17 @@ func update_mod() -> void:
 	$Turret.texture = data.texture
 	mod_updated.emit(self)
 
-func mod_slot_updated(mod_slot : StaticBody2D, mod_slot_data : PrototypeMod) -> void:
-	if mod_slot != mod_slot_ref:
-		return
-	if data != null:
-		if data.mod_class == data.ModClass.AURA: 
-			for body in aura_targets: #clears aura effects of old aura before updating
-				clear_buffs(body)
-	if mod_slot_data != null:
-		data = mod_slot_data.duplicate(true)
-	aura_targets = []
-	update_mod()
+#func button_slot_updated(button_slot : StaticBody2D, button_slot_data : PrototypeMod) -> void:
+#	if button_slot != button_slot_ref:
+#		return
+#	if data != null:
+#		if data.mod_class == data.ModClass.AURA: 
+#			for body in aura_targets: #clears aura effects of old aura before updating
+#				clear_buffs(body)
+#	if button_slot_data != null:
+#		data = button_slot_data.duplicate(true)
+#	aura_targets = []
+#	update_mod()
 
 func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData, triggers whenever any mod is updated
 	if updated_mod == self:
@@ -81,7 +80,6 @@ func _process(delta: float) -> void:
 	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
 		data.active_buffs[buff].update(delta)
 	if get_parent().net_power < 0:
-		#display low power symbol
 		return
 	attack_timer += delta
 	if baddies_in_range.size() > 0:
