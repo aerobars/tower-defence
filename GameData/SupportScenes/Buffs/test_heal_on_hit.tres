@@ -4,11 +4,5 @@
 
 [resource]
 script = ExtResource("1_2cv2h")
-success_chance_per_stack = 0.3
 damage_tag = 4
-damage_amount = 15.0
-damage_aoe = 150.0
-name = "Heal"
-stack_limit = 1
-buff_duration = -1.0
 metadata/_custom_type_script = "uid://cxkis28w2jd6p"

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="AuraMod" load_steps=5 format=3 uid="uid://dvvbt8ew2bu0w"]
+[gd_resource type="Resource" script_class="AuraMod" load_steps=6 format=3 uid="uid://dvvbt8ew2bu0w"]
 
 [ext_resource type="Resource" uid="uid://b0eukv6yypd4x" path="res://GameData/SupportScenes/Buffs/test_damage.tres" id="1_eih5u"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_3x25p"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="2_jme3j"]
 [ext_resource type="Texture2D" uid="uid://b5r5e50k8ljca" path="res://Assets/Effects/explosion3.png" id="3_4hcia"]
 
@@ -12,7 +13,6 @@ region = Rect2(16, 15, 32, 32)
 resource_local_to_scene = true
 script = ExtResource("2_jme3j")
 buff_data = ExtResource("1_eih5u")
-base_power_levels = Array[int]([-1, -1, -1, -1, -1])
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 name = "Damage Aura"
 description = "Adds damage to weapons, or weapons in aura range"

@@ -75,13 +75,13 @@ func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData,
 
 ## In-Game Function
 func _process(delta: float) -> void:
-	if data == null: 
+	if data == null or data is PowerMod: 
 		return
 	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
 		data.active_buffs[buff].update(delta)
 	if get_parent().net_power < 0:
 		return
-	attack_timer += delta
+	attack_timer = clamp(attack_timer + delta, 0, data.current_attack_speed)
 	if baddies_in_range.size() > 0:
 		targets = select_targets()
 		if data.mod_class == data.ModClass.WEAPON:
@@ -92,7 +92,7 @@ func _process(delta: float) -> void:
 				for baddy in baddies_in_range:
 					apply_buff(baddy)
 			elif data is WeaponMod:
-				attack_tracker += 1
+				#attack_tracker += 1
 				for i in data.current_multitarget:
 					if i < targets.size():
 						fire(targets[i])
@@ -139,14 +139,6 @@ func clear_buffs(body) -> void:
 	elif body is Baddy:
 		body.data.remove_buff(data.buff_data)
 
-func power_update(net_power : int , power_surplus_buffs : Dictionary) -> void:
-	if data == null:
-		return
-	data.power_surplus_buffs = power_surplus_buffs
-	data.net_power = net_power
-	if net_power >= 0:
-		data.recalculate_stats()
-
 ## Weapon Function
 func select_targets() -> Array:
 	var target_progress_array := baddies_in_range
@@ -162,7 +154,7 @@ func fire(target):
 	elif data.projectile_tag == data.ProjectileTag.PROJECTILE:
 		fire_projectile()
 	if data.current_aoe > 0:
-		var baddies = await setup_aoe(target.position)
+		var baddies = await setup_aoe(target.global_position)
 		for baddy in baddies:
 			baddy.on_hit(data.calculate_damage(), data.on_hit_effects)
 	else:
@@ -182,8 +174,8 @@ func setup_aoe(target_pos : Vector2) -> Array:
 	aoe_range.shape = CircleShape2D.new()
 	aoe_range.get_shape().radius = data.current_aoe
 	aoe.add_child(aoe_range)
-	aoe.global_position = target_pos
 	add_child(aoe)
+	aoe.global_position = target_pos
 	await get_tree().process_frame
 	await get_tree().physics_frame
 	for body in aoe.get_overlapping_bodies():

@@ -4,9 +4,4 @@
 
 [resource]
 script = ExtResource("1_hrqa6")
-stat = 6
-buff_amount = 0.25
-buff_type = 1
-stack_limit = 1
-buff_duration = -1.0
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

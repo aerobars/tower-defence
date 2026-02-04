@@ -263,7 +263,6 @@ func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) ->
 		popup.setup_stats()
 		player_cash -= upgrade_cost
 		ui.update_cash_display(player_cash)
-	
 
 func sell_tower(sell_value : int, tower : TowerBase) -> void:
 	var tile_pos: Vector2i = map_node.exclusion_layer.local_to_map(tower.global_position)

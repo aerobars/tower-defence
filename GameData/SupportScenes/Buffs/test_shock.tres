@@ -3,13 +3,12 @@
 [ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_on_hit.gd" id="1_4gp76"]
 
 [resource]
-resource_local_to_scene = true
 script = ExtResource("1_4gp76")
 success_chance_per_stack = 0.1
 damage_tag = 7
-damage_amount = 1.0
+damage_amount = 2.0
 damage_aoe = 50.0
-effect_duration = 0.25
+effect_duration = 150.0
 name = "Shock"
 stack_limit = 10
 buff_duration = 5.0

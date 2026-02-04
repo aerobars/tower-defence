@@ -50,6 +50,7 @@ func on_hit(dmg: Array, debuff: Array = []) -> void: #Array contains dmg amt, dm
 			data.add_buff(i)
 
 func calculate_damage(dmg: Array) -> void:#Array contains dmg amt, dmg tag, and crit status
+	dmg[0] = (dmg[0] - data.current_defence) * AllDamageTags.DEFENCE_TABLE[data.defence_tag][dmg[1]]
 	data.health -= dmg[0]
 	impact(dmg[1])
 	DamageNumbers.display_number(dmg[0], damage_number_origin.global_position, dmg[1], dmg[2])

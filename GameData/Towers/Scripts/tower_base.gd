@@ -26,7 +26,7 @@ var tower_children : Array :
 	get:
 		var children := []
 		for child in get_children():
-			if child is TowerMod and child.data != null:
+			if child is TowerMod:
 				children.append(child)
 		return children
 
@@ -93,8 +93,8 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 
 func level_up() -> void:
 	level = min(level + 1, MAX_LEVEL)
-	for child in get_children():
-		if child is TowerMod and child.data != null:
+	for child in tower_children:
+		if child.data != null:
 			child.data.setup_stats(level)
 
 func tower_update(
@@ -105,20 +105,19 @@ func tower_update(
 	) -> void:
 	aura_tower = aura_status
 	net_power = 0
-	for child in get_children():
-		if child is TowerMod: 
-			if button_slot_ref != null and button_slot_ref == child.button_slot_ref:
-				if child.data != null:
-					if child.data.mod_class == child.data.ModClass.AURA: 
-						for body in child.aura_targets: #clears aura effects of old aura before updating
-							child.clear_buffs(body)
-				if button_mod_data != null:
-					child.data = button_mod_data.duplicate(true)
-				child.aura_targets = []
+	for child in tower_children: 
+		if button_slot_ref != null and button_slot_ref == child.button_slot_ref:
 			if child.data != null:
-				child.data.setup_stats(level)
-				net_power += child.data.current_power
-				child.data.power_surplus_buffs = power_surplus_buffs
+				if child.data.mod_class == child.data.ModClass.AURA: 
+					for body in child.aura_targets: #clears aura effects of old aura before updating
+						child.clear_buffs(body)
+			if button_mod_data != null:
+				child.data = button_mod_data.duplicate(true)
+			child.aura_targets = []
+		if child.data != null:
+			child.data.setup_stats(level)
+			net_power += child.data.current_power
+			child.data.power_surplus_buffs = power_surplus_buffs
 	
 	update_mods.emit(net_power)
 	

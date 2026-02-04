@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_ojdmr")
 damage_amount = 1.0
-dot_interval = 100.0
+dot_interval = 10.0
 name = "Bleed"
 stack_limit = 1
-buff_duration = 5.0
+buff_duration = 1.0
 metadata/_custom_type_script = "uid://2ja3gh17qp02"

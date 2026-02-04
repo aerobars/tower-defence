@@ -1,12 +1,8 @@
-[gd_resource type="Resource" script_class="WeaponMod" load_steps=4 format=3 uid="uid://cqwpmpsvujr5c"]
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=3 format=3 uid="uid://cqwpmpsvujr5c"]
 
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_0wmfm"]
 [ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_qbl03"]
-[ext_resource type="Resource" uid="uid://bruos432h6js" path="res://GameData/SupportScenes/Buffs/test_bleed.tres" id="2_wfoms"]
 
 [resource]
 script = ExtResource("2_qbl03")
-name = "Bleed Tower"
-description = "Attacks cause the baddy to bleed, dealing damage for every 100 units travelled."
-on_hit_effects = Array[ExtResource("1_0wmfm")]([ExtResource("2_wfoms")])
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

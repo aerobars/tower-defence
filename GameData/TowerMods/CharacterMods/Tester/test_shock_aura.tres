@@ -1,21 +1,10 @@
-[gd_resource type="Resource" script_class="AuraMod" load_steps=5 format=3 uid="uid://bersox0rcaonk"]
+[gd_resource type="Resource" script_class="AuraMod" load_steps=3 format=3 uid="uid://bersox0rcaonk"]
 
-[ext_resource type="Resource" uid="uid://d28awyyh0t1la" path="res://GameData/SupportScenes/Buffs/test_shock.tres" id="1_ktnne"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_ktnne"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="1_wftnd"]
-[ext_resource type="Texture2D" uid="uid://cqvhg7gv2q32f" path="res://Assets/Effects/explosionSmoke1.png" id="3_6v0mb"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_a2o3i"]
-atlas = ExtResource("3_6v0mb")
-region = Rect2(14, 14, 32, 32)
 
 [resource]
-resource_local_to_scene = true
 script = ExtResource("1_wftnd")
-buff_data = ExtResource("1_ktnne")
-offensive_aura = true
-name = "Shock Aura"
-description = "Adds shock to the attacks of it's tower's weapons, or as an aura adds a stock of shock to the baddy.
-
-Shock has a chance per stack to stun and deal damage in an aoe whenever the effected baddy is attacked. This clears the baddy of all it's stacks of shock."
-texture = SubResource("AtlasTexture_a2o3i")
+base_power_levels = Array[int]([0, 0, 0, 0, 0])
+name = "Shock"
 metadata/_custom_type_script = "uid://bshp47gjxu8sm"
