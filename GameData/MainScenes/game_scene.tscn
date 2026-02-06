@@ -14,13 +14,12 @@
 [ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://Resources/Fonts/kfn_30_o1.tres" id="11_sl8sw"]
 [ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="12_jvyjn"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="13_541wh"]
-[ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/MainScenes/Scripts/baddy_info.gd" id="15_dts4o"]
+[ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/UIScenes/GUI/Scripts/baddy_info.gd" id="15_dts4o"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
 [ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/game_start_info.tscn" id="17_nh22g"]
 
 [node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "pause_button", "game_bookend_popup", "map_node", "path_debug")]
 script = ExtResource("1_g2kuy")
-player_cash = 1000
 ui = NodePath("UI")
 build_bar = NodePath("UI/HUD/BuildBar")
 inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryGrid")
@@ -29,6 +28,7 @@ pause_button = NodePath("UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay")
 game_bookend_popup = NodePath("UI/HUD/GameBookendInfo")
 map_node = NodePath("Map")
 path_debug = NodePath("PathDebug")
+player_cash = 30
 
 [node name="Map" parent="." instance=ExtResource("1_akvmk")]
 
@@ -39,12 +39,14 @@ joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 
-[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display", "game_message")]
+[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display", "game_message", "baddy_info_foldbable", "baddy_info")]
 script = ExtResource("3_ibdpl")
 hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
 hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
 cash_display = NodePath("HUD/InfoBar/InfoContainer/Money")
 game_message = NodePath("HUD/GameMessage")
+baddy_info_foldbable = NodePath("HUD/BaddyInfo")
+baddy_info = NodePath("HUD/BaddyInfo/VBoxContainer")
 
 [node name="HUD" type="Control" parent="UI"]
 layout_mode = 3
@@ -158,7 +160,6 @@ layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
 theme_override_fonts/font = ExtResource("11_sl8sw")
 theme_override_font_sizes/font_size = 30
-text = "100"
 vertical_alignment = 1
 
 [node name="HealthIcon" type="TextureRect" parent="UI/HUD/InfoBar/InfoContainer"]
@@ -257,28 +258,23 @@ theme = ExtResource("15_wrp27")
 
 [node name="Name" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
 layout_mode = 2
+accessibility_name = "Name"
 theme_override_font_sizes/font_size = 12
-text = "Name:"
 
-[node name="Health" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
+[node name="MaxHealth" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
 layout_mode = 2
-text = "Health:"
 
 [node name="Damage" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
 layout_mode = 2
-text = "Damage:"
 
 [node name="Defence" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
 layout_mode = 2
-text = "Defence: test"
 
 [node name="MoveSpeed" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
 layout_mode = 2
-text = "Move Speed: test"
 
 [node name="Description" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
 layout_mode = 2
-text = "Description: "
 
 [node name="GameBookendInfo" parent="UI/HUD" instance=ExtResource("17_nh22g")]
 visible = false

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AuraMod" load_steps=6 format=3 uid="uid://bqlb20t172exs"]
 
-[ext_resource type="Resource" uid="uid://bi5uxnya2aq4d" path="res://GameData/SupportScenes/Buffs/test_burn.tres" id="1_ksu01"]
+[ext_resource type="Resource" uid="uid://bi5uxnya2aq4d" path="res://GameData/SupportScenes/Buffs/Tower Buffs/test_burn.tres" id="1_ksu01"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_jtub3"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="2_mx055"]
 [ext_resource type="Texture2D" uid="uid://m5diaf4lgcc8" path="res://Assets/Effects/towerDefense_tile295.png" id="3_jtub3"]

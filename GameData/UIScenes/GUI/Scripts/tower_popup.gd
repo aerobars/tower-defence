@@ -1,7 +1,6 @@
 class_name TowerPopup extends Node2D
 
 signal upgrade_check(upgrade_cost : int, popup_owner : TowerBase, self_ref : TowerPopup) 
-signal upgrade
 signal sell
 
 var data : Array #contains all towermod data of tower's mods, last array entry is level name
@@ -39,7 +38,6 @@ func setup_stats() -> void:
 func _on_sell_button_pressed() -> void:
 	sell.emit(sell_value, popup_owner) #connected to GameScene
 	queue_free()
-
 
 func _on_upgrade_button_pressed() -> void:
 	upgrade_check.emit(upgrade_cost, popup_owner, self) #connected to GameScene

@@ -1,21 +1,18 @@
-[gd_scene load_steps=14 format=3 uid="uid://oy706l87qshb"]
+[gd_scene load_steps=14 format=3 uid="uid://cjn6jcx1rl4js"]
 
-[ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/Scripts/baddy.gd" id="1_lx6et"]
-[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/Scripts/baddy_stats.gd" id="2_4iphl"]
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_w41fm"]
-[ext_resource type="Script" uid="uid://cgjshym4topb6" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_instance.gd" id="3_nmkfv"]
-[ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/Scripts/hit_flash.tres" id="3_w41fm"]
-[ext_resource type="Texture2D" uid="uid://5pqxlre1amih" path="res://Assets/Baddies/tank_dark.png" id="4_lx6et"]
-[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="5_i3fbm"]
+[ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/ScriptsAndProtos/baddy.gd" id="1_21g7o"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_ki846"]
+[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="4_soyye"]
+[ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/ScriptsAndProtos/hit_flash.tres" id="5_dic3x"]
+[ext_resource type="Texture2D" uid="uid://5pqxlre1amih" path="res://Assets/Baddies/tank_dark.png" id="6_c006g"]
+[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="7_ssnd0"]
 
 [sub_resource type="Resource" id="Resource_tji8d"]
 resource_local_to_scene = true
-script = ExtResource("2_4iphl")
-spawns_per_wave = 10
-spawn_interval = 0.5
-base_max_health = 100.0
-base_damage = 21.0
-base_move_speed = 150.0
+script = ExtResource("4_soyye")
+name = "Black Tank"
+spawn_per_wave = 10
+base_damage = 10.0
 metadata/_custom_type_script = "uid://citwba61de3ku"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7b3mk"]
@@ -23,7 +20,7 @@ size = Vector2(42, 42)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_44shp"]
 resource_local_to_scene = true
-shader = ExtResource("3_w41fm")
+shader = ExtResource("5_dic3x")
 shader_parameter/enabled = false
 shader_parameter/tint = Color(18.328726, 18.328726, 18.328726, 1)
 
@@ -64,9 +61,11 @@ _data = {
 &"hit_flash": SubResource("Animation_kdlqi")
 }
 
-[node name="BlackTank" type="PathFollow2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_8h6r8"]
+
+[node name="Baddy" type="PathFollow2D"]
 loop = false
-script = ExtResource("1_lx6et")
+script = ExtResource("1_21g7o")
 data = SubResource("Resource_tji8d")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["baddies"]]
@@ -77,7 +76,7 @@ debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_44shp")
-texture = ExtResource("4_lx6et")
+texture = ExtResource("6_c006g")
 
 [node name="HealthBar" type="TextureProgressBar" parent="."]
 offset_left = -30.0
@@ -86,8 +85,8 @@ offset_right = 30.0
 offset_bottom = -24.0
 value = 50.0
 nine_patch_stretch = true
-texture_under = ExtResource("5_i3fbm")
-texture_progress = ExtResource("5_i3fbm")
+texture_under = ExtResource("7_ssnd0")
+texture_progress = ExtResource("7_ssnd0")
 tint_under = Color(0.207843, 0.207843, 0.207843, 1)
 tint_progress = Color(3.60981e-06, 0.629484, 0, 1)
 
@@ -100,3 +99,10 @@ position = Vector2(-15, -15)
 libraries = {
 &"": SubResource("AnimationLibrary_8x5kb")
 }
+
+[node name="AuraRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AuraRange"]
+shape = SubResource("CircleShape2D_8h6r8")
+
+[connection signal="body_entered" from="AuraRange" to="." method="_on_aura_range_body_entered"]

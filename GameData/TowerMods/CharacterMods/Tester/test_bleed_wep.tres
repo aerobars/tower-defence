@@ -5,4 +5,5 @@
 
 [resource]
 script = ExtResource("2_qbl03")
+name = "Bleed"
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

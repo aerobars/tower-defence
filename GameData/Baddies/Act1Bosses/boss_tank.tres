@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BaddyStats" load_steps=3 format=3 uid="uid://bjwds8myfouhh"]
+
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_dkd7s"]
+[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="2_shycp"]
+
+[resource]
+script = ExtResource("2_shycp")
+metadata/_custom_type_script = "uid://citwba61de3ku"

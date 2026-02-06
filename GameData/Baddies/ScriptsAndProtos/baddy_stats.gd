@@ -3,9 +3,14 @@ class_name BaddyStats extends Resource
 signal health_depleted
 signal health_changed(current_health: int, max_health: int)
 
+@export_group("Baddy Info")
+@export var name : String
+@export_multiline var description : String
+@export var texture : Texture2D
 
-@export var spawns_per_wave: int
-@export var spawn_interval: float
+@export_group("Spawn Data", "spawn")
+@export var spawn_per_wave: int = 1
+@export var spawn_interval: float = 0.5
 
 ##Baddy Stats
 const BADDY_BUFFABLE_STATS = [ #values to line up with AllBuffableStats enum values
@@ -18,28 +23,32 @@ const BADDY_BUFFABLE_STATS = [ #values to line up with AllBuffableStats enum val
 
 const BASE_LEVEL_XP : float = 100.0
 
-@export var base_max_health : float
-@export var base_damage : float
-@export var base_defence : float
+@export_group("Base Stats", "base")
+@export var base_max_health : float = 50
+@export var base_damage : float = 1
+@export var base_defence : float = 5
+@export var base_move_speed : float = 150
+@export var base_aura_aoe : float = 0.0
 @export var defence_tag : AllDamageTags.BaddyArmorTags = AllDamageTags.BaddyArmorTags.UNARMORED
-@export var base_move_speed : float
-@export var experience : int = 0: set = _on_experience_set
 
-var level_ratio : 
+@export var experience : int = 0: set = _on_experience_set
+var level_ratio : float :
 	get:
 		return 1 + (GameData.current_wave - 1)/10.0
 
 var level : int:
 	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
 var current_max_health : float
-var current_damage : float
+var current_damage : float :
+	set(value):
+		current_damage = max(value, 1)
 var current_defence : float
 var current_move_speed : float
 
 var health : float = 0 : set = _on_health_set
 
 @export var initial_buffs : Array[Buff]
-@export var active_buffs: Dictionary[Buff, BuffInstance]
+var active_buffs: Dictionary[Buff, BuffInstance]
 var buff_owner : Node2D
 
 ##Stats Setup and Adjustment
@@ -49,7 +58,6 @@ func _init() -> void:
 func setup_stats() -> void:
 	recalculate_stats()
 	health = current_max_health
-	current_move_speed = max(current_move_speed, 0.1)
 
 func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) -> void:
 	for i in amt: #amt allows to apply multiple stacks from a single source
@@ -93,12 +101,12 @@ func recalculate_stats() -> void:
 	for stat_name in stat_addends:
 		var cur_property_name: String = str("current_" + stat_name)
 		set(cur_property_name, get(cur_property_name) + stat_addends[stat_name])
-
+	
 	for stat_name in stat_multipliers:
 		var cur_property_name: String = str("current_" + stat_name)
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
-	current_move_speed = clamp(current_move_speed, 50, 500)
-
+	current_move_speed = clamp(current_move_speed, 50, 500) #don't use setter for this for stun MS
+	
 	for buff in active_buffs.keys():
 		if buff is AbsoluteBuff:
 			var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()

@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="StatBuff" load_steps=2 format=3 uid="uid://e7n1t7sxx8la"]
-
-[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_hrqa6"]
-
-[resource]
-script = ExtResource("1_hrqa6")
-metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

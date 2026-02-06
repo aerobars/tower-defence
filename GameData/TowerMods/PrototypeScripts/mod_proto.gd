@@ -3,7 +3,8 @@ class_name PrototypeMod extends Resource
 
 enum ModClass { AURA, POWER, WEAPON }
 
-#stats for all mod types
+##stats for all mod types
+@export_group("Mod Stats")
 var level : int #first level will be 0 after setup_stats to line up with arrays
 @export var base_power_levels : Array[int] = [-1, -1, -1, -1, -1]
 @export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] #range is radius of range circle #default is 1/2 turret base
@@ -11,6 +12,7 @@ var current_power : int
 var current_range : float
 @export var mod_class : ModClass
 
+@export_group("Mod Info")
 @export var name : String
 @export_multiline var description : String
 @export var texture : Texture2D
@@ -23,6 +25,9 @@ var active_buffs: Dictionary[Buff, BuffInstance] = {}
 @export var on_hit_effects : Array[Buff]
 var net_power : int = 0
 var power_surplus_buffs : Dictionary = {}
+var power_calc : float :
+	get:
+		return (1 + float(net_power)/10) # * float(power_surplus_buffs[stat_name])/10)
 
 func _init() -> void:
 	setup_stats.call_deferred()
@@ -81,7 +86,7 @@ func recalculate_stats() -> void:
 	for stat_name in power_surplus_buffs.keys():
 		if buff_check(stat_name):
 			var cur_property_name: String = str("current_" + stat_name)
-			set(cur_property_name, get(cur_property_name) * (1 + float(net_power) * float(power_surplus_buffs[stat_name])/10))
+			set(cur_property_name, get(cur_property_name) * power_calc)
 	
 	for buff in active_buffs.keys():
 		if buff is AbsoluteBuff:

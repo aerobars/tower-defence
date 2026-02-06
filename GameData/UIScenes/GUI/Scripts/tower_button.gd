@@ -1,8 +1,6 @@
 class_name BuildTowerButton extends TextureButton
 
 ## Signals
-signal aura_update(aura_status: bool)
-signal power_update()
 signal update_towers(mod_slot_ref: StaticBody2D, slot_data: PrototypeMod, aura_status: bool, power_surplus_buffs : Dictionary)
 
 ## Setup
@@ -25,7 +23,7 @@ var build_cost : int :
 	set(value): 
 		build_cost = 1 + value * 3 #value should always be slot count
 		build_cost_label.text = "$" + str(build_cost)
-var data : Dictionary : get = get_tower_mods
+var tower_data : Dictionary : get = get_tower_mods
 
 ## Setup
 func _ready() -> void:
@@ -92,7 +90,7 @@ func get_tower_mods() -> Dictionary:
 		"power_buffs": power_surplus_buffs,
 		}
 
-func on_mod_update(slot_ref, mod) -> void:
+func on_mod_update(slot_ref : ButtonModSlot, data : PrototypeMod) -> void:
 	var net_power := 0
 	var power_surplus_buffs : Dictionary = {}
 	var has_wep := false
@@ -116,7 +114,7 @@ func on_mod_update(slot_ref, mod) -> void:
 						has_aura = true
 	if has_aura and not has_wep:
 		aura_status = true
-	update_towers.emit(aura_status, power_surplus_buffs, slot_ref, mod)
+	update_towers.emit(aura_status, power_surplus_buffs, slot_ref, data)
 	
 	if net_power > 0: #set color for power states
 		#net_power_display.add_theme_color_override("font_color", GameData.positive_color)

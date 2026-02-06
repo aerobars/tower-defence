@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_ojdmr")
+damage_tag = 6
 damage_amount = 1.0
 dot_interval = 10.0
 name = "Bleed"

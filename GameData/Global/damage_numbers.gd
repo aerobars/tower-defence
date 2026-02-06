@@ -47,8 +47,6 @@ func match_damage_source(damage_source) -> Color:
 			return "#FFF"
 		"BURN": #Burn
 			return GameData.burn_colour #Orange
-		"EXPLOSION": #Explosion
-			return "#FFF"
 		"PIERCE": #Pierce
 			return "#FFF"
 		"POISON": #Poison

@@ -8,7 +8,7 @@ class_name OnHitBuff extends Buff
 
 
 func _init(
-	_success_chance_per_stack : float = 10.0,
+	_success_chance_per_stack : float = 0.1,
 	_damage_amount : float = 1.0,
 	_damage_aoe : float = 1.0,
 	_damage_tag : AllDamageTags.DamageTag = AllDamageTags.DamageTag.SHOCK,

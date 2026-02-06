@@ -1,13 +1,15 @@
 class_name TowerMod extends Node2D
 
 ## Signals
-signal power_check
+#signal power_check
 signal mod_updated(mod: StaticBody2D)
 
 ## Tower Setup
 var non_aura_radius : float
 var data : PrototypeMod
 var button_slot_ref : StaticBody2D
+@onready var turret := $Turret
+@onready var range_aoe := $Range/CollisionShape2D
 
 ## Gametime
 var baddies_in_range : Array
@@ -32,8 +34,8 @@ func _ready():
 ## Mod Updates
 func update_mod(net_power : int = 0) -> void:
 	if data == null:
-		$Range/CollisionShape2D.get_shape().radius = 0.0
-		$Turret.texture = null
+		range_aoe.get_shape().radius = 0.0
+		turret.texture = null
 		remove_from_group("turret")
 		return
 	data.net_power = net_power
@@ -51,7 +53,7 @@ func update_mod(net_power : int = 0) -> void:
 		2: #Weapon
 			$Range/CollisionShape2D.get_shape().radius = data.current_range
 			add_to_group("turret")
-	$Turret.texture = data.texture
+	turret.texture = data.texture
 	mod_updated.emit(self)
 
 #func button_slot_updated(button_slot : StaticBody2D, button_slot_data : PrototypeMod) -> void:

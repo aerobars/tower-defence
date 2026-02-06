@@ -8,5 +8,5 @@ damage_tag = 2
 damage_amount = 1.0
 dot_interval = 1.0
 name = "Burn"
-buff_duration = 3.0
+buff_duration = 1.01
 metadata/_custom_type_script = "uid://2ja3gh17qp02"

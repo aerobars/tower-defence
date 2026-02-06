@@ -8,4 +8,5 @@ stat = 3
 buff_amount = 1.25
 buff_type = 1
 name = "Attack Speed"
+buff_duration = -1.0
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

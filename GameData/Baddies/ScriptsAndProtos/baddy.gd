@@ -4,17 +4,22 @@ signal baddy_death
 signal base_damage(damage)
 
 @export var data : BaddyStats
-@export_multiline var description: String
 
-@onready var health_bar = $HealthBar
-@onready var impact_area = $Impact
-@onready var damage_number_origin = $DamageNumberOrigin
-@onready var hit_flash = $HitFlashAnimation
-var projectile_impact = preload("res://GameData/SupportScenes/projectile_impact.tscn")
+## Node Paths
+@onready var health_bar : TextureProgressBar = $HealthBar
+@onready var impact_area : Marker2D = $Impact
+@onready var damage_number_origin : Marker2D = $DamageNumberOrigin
+@onready var hit_flash : AnimationPlayer = $HitFlashAnimation
+@onready var aura : CollisionShape2D = $AuraRange/CollisionShape2D
+@onready var sprite : Sprite2D = $Sprite2D
+var projectile_impact := preload("res://GameData/SupportScenes/projectile_impact.tscn")
 
 
 func _ready() -> void:
 	data.buff_owner = self
+	sprite.texture = data.texture
+	aura.get_shape().radius = data.base_aura_aoe
+	
 	#healthbar setup
 	healthbar_update(data.health, data.health)
 	health_bar.set_as_top_level(true)
@@ -32,6 +37,7 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if progress_ratio == 1.0:
+		$CharacterBody2D.free()
 		base_damage.emit(data.current_damage)
 		queue_free()
 	move(delta)
@@ -50,7 +56,11 @@ func on_hit(dmg: Array, debuff: Array = []) -> void: #Array contains dmg amt, dm
 			data.add_buff(i)
 
 func calculate_damage(dmg: Array) -> void:#Array contains dmg amt, dmg tag, and crit status
-	dmg[0] = (dmg[0] - data.current_defence) * AllDamageTags.DEFENCE_TABLE[data.defence_tag][dmg[1]]
+	match AllDamageTags.DamageTag.keys()[dmg[1]]:
+		"BLUNT", "PIERCE":
+			dmg[0] = max(0, dmg[0] - data.current_defence) * AllDamageTags.DEFENCE_TABLE[data.defence_tag][dmg[1]]
+		_:
+			dmg[0] = dmg[0] * AllDamageTags.DEFENCE_TABLE[data.defence_tag][dmg[1]]
 	data.health -= dmg[0]
 	impact(dmg[1])
 	DamageNumbers.display_number(dmg[0], damage_number_origin.global_position, dmg[1], dmg[2])
@@ -60,12 +70,14 @@ func healthbar_update(health, max_health) -> void:
 	health_bar.value = health
 
 func impact(damage_type: AllDamageTags.DamageTag) -> void:
-	match damage_type:
-		1: #Burn
+	match AllDamageTags.DamageTag.keys()[damage_type]:
+		"BLEED":
 			hit_flash.play("hit_flash")
-		4: #Poison
+		"BURN": #Burn
 			hit_flash.play("hit_flash")
-		0, 2, 3: # Blunt, Explosion, and Pierce
+		"POISON": #Poison
+			hit_flash.play("hit_flash")
+		"BLUNT", "PIERCE": # Blunt, Explosion, and Pierce
 			var x_pos = randi() % 31
 			var y_pos = randi() % 31
 			var impact_location = Vector2(x_pos, y_pos)
@@ -75,7 +87,14 @@ func impact(damage_type: AllDamageTags.DamageTag) -> void:
 
 func destroy() -> void:
 	data.health_depleted.disconnect(destroy)
-	$CharacterBody2D.queue_free()
+	$CharacterBody2D.free()
 	await (get_tree().create_timer(0.2).timeout)
-	self.queue_free()
+	queue_free()
 	baddy_death.emit()
+
+
+func _on_aura_range_body_entered(body: Node2D) -> void:
+	if body is Baddy:
+		pass
+	elif body is TowerMod:
+		pass

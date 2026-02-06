@@ -1,14 +1,15 @@
 class_name ModDraggable extends Node2D
 
 signal mod_dropped #connected to inventory_ui
-signal hovered(data: PrototypeMod)
-signal clear_popup
+#signal hovered(data: PrototypeMod)
+#signal clear_popup
 
 var data : PrototypeMod
 
 var draggable := false
 var inside_droppable := false
-var mod_slot_ref : StaticBody2D
+var mod_slot_ref : ButtonModSlot
+var prev_slot_ref : ButtonModSlot
 
 var offset : Vector2
 var initial_pos :  Vector2
@@ -17,7 +18,6 @@ var in_inventory : bool = true
 
 @onready var hover_timer := $Timer
 const HOVER_DELAY : float = 0.5
-
 
 
 func _ready() -> void:
@@ -31,6 +31,7 @@ func _process(_delta: float) -> void:
 			initial_pos = global_position
 			offset = get_global_mouse_position() - initial_pos
 			GameData.is_dragging = true
+			prev_slot_ref = mod_slot_ref #for moving mods from one button slot to another
 		if Input.is_action_pressed("ui_accept"):
 			global_position = get_global_mouse_position() - offset
 		elif Input.is_action_just_released("ui_accept"):
@@ -40,19 +41,17 @@ func _process(_delta: float) -> void:
 func droppable_check() -> void:
 	var tween = get_tree().create_tween()
 	if inside_droppable:
-		tween.tween_property(self, "global_position", mod_slot_ref.global_position, 0.2).set_ease(Tween.EASE_OUT)
-		in_inventory = false
-		mod_slot_ref.data = data
-		
+		if prev_slot_ref != null: #if it's not null that means it occupied a previous slot
+			prev_slot_ref.update(null, false, null)
 		if mod_slot_ref.occupied and mod_slot_ref.occupying_mod != self: #check if mod slot is occupied with different mod
 			mod_slot_ref.occupying_mod.mod_dropped.emit(mod_slot_ref.occupying_mod.data, 1) #returns old mod back to inventory
 			_run_tween_async(tween, mod_slot_ref.occupying_mod, "global_position", mod_slot_ref.occupying_mod.inventory_pos, 0.2) 
 			mod_dropped.emit(data, -1) #mod_updated connected to inventory_ui
-		elif not mod_slot_ref.occupied:#stops inventory from subtracting if occupying mod is returned to same slot
+		elif not mod_slot_ref.occupied:#unwritten else: stops inventory from subtracting if occupying mod is returned to same slot
 			mod_dropped.emit(data, -1)
-		mod_slot_ref.mod_updated.emit(mod_slot_ref, data) #signals built towers to update associated mods
-		mod_slot_ref.occupied = true
-		mod_slot_ref.occupying_mod = self
+		tween.tween_property(self, "global_position", mod_slot_ref.global_position, 0.2).set_ease(Tween.EASE_OUT)
+		in_inventory = false
+		mod_slot_ref.update(data, true, self)
 		#mod_slot_ref.get_parent().data
 	elif in_inventory: #if mod slot started in inventory and wasn't added to mod slot
 		tween.tween_property(self, "global_position", initial_pos, 0.2).set_ease(Tween.EASE_OUT)
@@ -61,8 +60,7 @@ func droppable_check() -> void:
 	else: #if mod started in mod slot and removed back to inventory
 		tween.tween_property(self, "global_position", inventory_pos, 0.2).set_ease(Tween.EASE_OUT)
 		mod_dropped.emit(data, 1)
-		mod_slot_ref.mod_updated.emit(mod_slot_ref, null)
-		mod_slot_ref.occupied = false
+		prev_slot_ref.update(null, false)
 		await tween.finished
 		queue_free()
 	draggable = false
@@ -90,13 +88,11 @@ func _on_timer_timeout() -> void:
 		#hovered.emit(data)
 	pass
 
-func _on_area_2d_body_entered(body: StaticBody2D) -> void: #react to player dragging over mod slot
-	if body.is_in_group("droppable"):
-		inside_droppable = true
-		body.modulate = Color(Color.BISQUE, 1)
-		mod_slot_ref = body
+func _on_area_2d_body_entered(body: ButtonModSlot) -> void: #react to player dragging over mod slot
+	inside_droppable = true
+	body.modulate = Color(Color.BISQUE, 1)
+	mod_slot_ref = body
 
-func _on_area_2d_body_exited(body: StaticBody2D) -> void:
-		if body.is_in_group("droppable"):
-			inside_droppable = false
-			body.modulate = Color(Color.AZURE, 0.7)
+func _on_area_2d_body_exited(body: ButtonModSlot) -> void:
+	inside_droppable = false
+	body.modulate = Color(Color.AZURE, 0.7)

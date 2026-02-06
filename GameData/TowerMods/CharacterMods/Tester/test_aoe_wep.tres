@@ -10,6 +10,7 @@ region = Rect2(16, 16, 32, 32)
 
 [resource]
 script = ExtResource("1_2d7ff")
+damage_tag = 1
 base_aoe_levels = Array[float]([50.0, 100.0, 150.0, 200.0, 250.0])
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 mod_class = 2

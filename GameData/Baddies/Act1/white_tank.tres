@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BaddyStats" load_steps=4 format=3 uid="uid://bn74heyr3d4a7"]
+
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_fsosn"]
+[ext_resource type="Texture2D" uid="uid://lil6eb5m36u7" path="res://Assets/Baddies/tank_sand.png" id="3_fsosn"]
+[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="3_sv8df"]
+
+[resource]
+script = ExtResource("3_sv8df")
+name = "White Tank"
+texture = ExtResource("3_fsosn")
+spawn_per_wave = 10
+metadata/_custom_type_script = "uid://citwba61de3ku"

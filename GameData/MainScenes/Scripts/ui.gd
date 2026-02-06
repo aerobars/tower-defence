@@ -5,6 +5,8 @@ extends CanvasLayer
 @export var hp_text : Label
 @export var cash_display : Label
 @export var game_message : Label
+@export var baddy_info_foldbable : FoldableContainer
+@export var baddy_info : VBoxContainer
 const GAME_MESSAGE_A_VALUE = 0.78
 @onready var texture : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
 @onready var tower : PackedScene = preload("res://GameData/Towers/tower_base.tscn")
@@ -71,6 +73,31 @@ func update_game_message(message : String, display_time : float = 3.0, fade_time
 	await(get_tree().create_timer(display_time - fade_time, false)).timeout
 	await game_message.create_tween().tween_property(game_message, "modulate:a", 0.0, fade_time).finished
 	game_message.visible = false
+
+func update_baddy_info(baddy) -> void:
+	for child in baddy_info.get_children():
+		if child.text == "":
+			if child.name == "Name":
+				child.text = child.name + ": " + baddy.name
+			elif child.name == "Description":
+				child.text =  child.name + ": " + baddy.description
+			else: 
+				var stat_name : String = str("base_" + child.name.to_snake_case())
+				child.text = child.name + ": " + str(baddy.get(stat_name))
+		else:
+			if child.name == "Name":
+				child.text += " / " + baddy.name
+			elif child.name == "Description":
+				child.text +=  " / " + baddy.description
+			else: 
+				var stat_name : String = str("base_" + child.name.to_snake_case())
+				child.text += " / " + str(baddy.get(stat_name))
+	baddy_info_foldbable.set_folded(false)
+
+func clear_baddy_info() -> void:
+	for child in baddy_info.get_children():
+		child.text = ""
+	baddy_info_foldbable.set_folded(true)
 
 func end_game(_result) -> void:
 	pass

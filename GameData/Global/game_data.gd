@@ -15,8 +15,10 @@ var is_dragging = false
 const BADDY_FILEPATH = "res://GameData/Baddies/"
 const CHAR_FILEPATH = "res://GameData/TowerMods/CharacterMods/"
 const TOTAL_ACTS = 1
+const BOSS_WAVES := [5, 10, 15, 20]
 var character_mods : Dictionary = {}
 var act_baddies : Dictionary = {}
+var act_bosses : Dictionary ={}
 var previous_wave : Array = []
 var current_wave : int = 0
 var current_act : int = 0
@@ -28,6 +30,7 @@ func _ready() -> void:
 func get_act_data(filepath: String) -> void:
 	for i in TOTAL_ACTS:
 		var dir := DirAccess.open(filepath + str(i+1))
+		var boss_dir := DirAccess.open(filepath + str(i+1) + "Bosses")
 		if dir:
 			act_baddies[i] = []
 			dir.list_dir_begin()
@@ -39,7 +42,19 @@ func get_act_data(filepath: String) -> void:
 					act_baddies[i].append(file_name)
 				file_name = dir.get_next()
 		else:
-			print("An error occurred when trying to access the path.")
+			print("An error occurred when trying to access the baddy path.")
+		if boss_dir:
+			act_bosses[i] = []
+			dir.list_dir_begin()
+			var file_name = dir.get_next()
+			while file_name != "":
+				if dir.current_is_dir():
+					continue
+				else:
+					act_bosses[i].append(file_name)
+				file_name = dir.get_next()
+		else:
+			print("An error occurred when trying to access the boss path.")
 
 func get_mod_data(filepath: String, dir_name) -> void:
 	var dir := DirAccess.open(filepath)
@@ -59,13 +74,17 @@ func get_mod_data(filepath: String, dir_name) -> void:
 func get_wave_data() -> Dictionary:
 	var wave_data : Dictionary = {"wave_baddies" : [], "wave_total" : 0}
 	var act_size : int = act_baddies[current_act].size()
-	wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
-	while previous_wave.has(wave_data["wave_baddies"][0]) and previous_wave.has(wave_data["wave_baddies"][1]): #prevents same wave back to back
+	if BOSS_WAVES.has(current_wave):
+		wave_data["wave_baddies"] = [act_bosses[current_act][randi() % act_size]]
+		wave_data["wave_total"] = 1
+	else:
 		wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
-	for i in wave_data["wave_baddies"]:
-		var spawn_data = load("res://GameData/Baddies/Act" + str(current_act + 1) + "/" + i).instantiate()
-		wave_data["wave_total"] += spawn_data.data.spawns_per_wave
-	previous_wave = wave_data["wave_baddies"]
+		while previous_wave.has(wave_data["wave_baddies"][0]) and previous_wave.has(wave_data["wave_baddies"][1]): #prevents same wave back to back
+			wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
+		for i in wave_data["wave_baddies"]:
+			var spawn_data = load("res://GameData/Baddies/Act" + str(current_act + 1) + "/" + i)
+			wave_data["wave_total"] += spawn_data.spawn_per_wave
+		previous_wave = wave_data["wave_baddies"]
 	return wave_data
 
 func mod_updated(mod: StaticBody2D) -> void:

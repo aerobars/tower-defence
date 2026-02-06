@@ -2,24 +2,16 @@ extends Node2D
 
 signal game_finished(result)
 
-## Gameplay 
-var spawns_per_wave := 1 
-var wave_total := 0
-var cleared := false
-@export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
-var current_player_health : int
-var character : String = "Tester"
-@export_range(0, 1000, 1.0, "suffix: coins") var player_cash : int
-
 ## UI
+@export_group("Scene Paths")
+@export_subgroup("UI")
+const BADDY_SCENE := preload("res://GameData/Baddies/ScriptsAndProtos/baddy.tscn")
+const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
+const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
 const POPUPS : Dictionary = {
 	"mod" : preload("res://GameData/UIScenes/GUI/mod_popup.tscn"),
 	"tower" : preload("res://GameData/UIScenes/GUI/tower_popup.tscn")
 }
-const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
-const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
-@export_group("Scene Paths")
-@export_subgroup("UI")
 @export var ui : CanvasLayer
 @export var build_bar : ColorRect
 @export var inventory_ui : GridContainer
@@ -33,8 +25,6 @@ var cur_popup : Node2D
 @export_subgroup("Map and Pathfinding")
 @export var map_node : Node2D #set in _ready instead if using multiple maps
 @export var path_debug :Line2D
-
-
 var astar : AStarGrid2D = AStarGrid2D.new()
 var path : PackedVector2Array = []
 const WALL_TILE_COORD := Vector2i(0,0)
@@ -43,6 +33,25 @@ const CELL_SIZE : int = 64
 const CELL := Vector2(CELL_SIZE, CELL_SIZE)
 const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
 var previous_tile := Vector2i(0, 0)
+
+## Gameplay 
+@export_group("Gameplay")
+var spawn_per_wave := 1 
+var wave_total := 0
+var cleared := false
+@export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
+var current_player_health : int
+var character : String = "Tester"
+@export_range(0, 1000, 1.0, "suffix: coins") var player_cash : int :
+	set(value):
+		player_cash = value
+		if ui:
+			ui.update_cash_display(player_cash)
+var wave_reward : int :
+	get:
+		return randi_range(10, 30)
+
+
 
 ## Build Mode
 var build_btn_ref
@@ -69,7 +78,7 @@ func _ready() -> void:
 	current_player_health = max_player_health
 	ui.update_cash_display(player_cash)
 	for i in get_tree().get_nodes_in_group("build_buttons"):
-		i.pressed.connect(func(): initiate_build_mode(i.data, i, i.tower))
+		i.pressed.connect(func(): initiate_build_mode(i.tower_data, i, i.tower))
 
 func _process(_delta: float) -> void:
 	if build_mode:
@@ -116,34 +125,43 @@ func start_next_wave(_data) -> void:
 	var wave_data = GameData.get_wave_data()
 	wave_total = wave_data["wave_total"]
 	if GameData.current_wave > 1:
-		ui.update_game_message("Next wave starting", 3.0, 0.5) #padding before wave start
+		ui.update_game_message("Next wave starting", 3.0, 0.5)
+		await get_tree().create_timer(3.0, false).timeout #padding before wave start
 	spawn_baddies(wave_data["wave_baddies"])
 
 func spawn_baddies(wave_data) -> void:
+	var wave_baddies : Array[Dictionary]
+	var spawning := true
+	
 	for i in wave_data: 
-		var spawn_count : int = 1
-		var baddy_scene = load("res://GameData/Baddies/Act" + str(GameData.current_act + 1) + "/" + i)
-		var new_baddy = baddy_scene.instantiate() 
-		#first instantiate outside of loop for one-time variable setting
-		spawns_per_wave = new_baddy.data.spawns_per_wave
-		baddy_info_foldable.update_baddy_info(new_baddy)
-		new_baddy.base_damage.connect(on_base_damage)
-		new_baddy.baddy_death.connect(on_baddy_death)
-		map_node.baddy_path.add_child(new_baddy, true)
-		await(get_tree().create_timer(new_baddy.data.spawn_interval, false)).timeout
-		while spawn_count != spawns_per_wave: #only run if more than 1 enemy is spawned in the wave
-			new_baddy = baddy_scene.instantiate()
-			new_baddy.base_damage.connect(on_base_damage)
-			new_baddy.baddy_death.connect(on_baddy_death)
-			map_node.baddy_path.add_child(new_baddy, true)
-			spawn_count += 1
-			await(get_tree().create_timer(new_baddy.data.spawn_interval, false)).timeout
-			if spawn_count == spawns_per_wave:
-				continue
+		var baddy_data = load("res://GameData/Baddies/Act" + str(GameData.current_act + 1) + "/" + i)
+		
+		wave_baddies.append({
+			"data" : baddy_data,
+			"spawn_count" : 0,
+			"spawn_per_wave" : baddy_data.spawn_per_wave,
+			"spawn_interval" : baddy_data.spawn_interval
+			})
+		ui.update_baddy_info(baddy_data)
+		
+	while spawning:
+		spawning = false
+		for baddy in wave_baddies:
+			if baddy.spawn_count < baddy.spawn_per_wave:
+				spawning = true
+				
+				var new_baddy = BADDY_SCENE.instantiate()
+				new_baddy.data = baddy.data.duplicate(true)
+				new_baddy.base_damage.connect(on_base_damage)
+				new_baddy.baddy_death.connect(on_baddy_death)
+				map_node.baddy_path.add_child(new_baddy, true)
+				
+				baddy.spawn_count += 1
+				await(get_tree().create_timer(baddy.spawn_interval, false)).timeout
 
 func on_base_damage(damage) -> void:
 	current_player_health -= damage
-	$UI.update_health_bar(current_player_health, max_player_health)
+	ui.update_health_bar(current_player_health, max_player_health)
 	if current_player_health <= 0 and not game_bookend_popup.game_over:
 		game_bookend_popup.game_over = true
 		ui.update_game_message("Game Over!", 2.0, 0.0, 75)
@@ -155,16 +173,19 @@ func on_base_damage(damage) -> void:
 		on_baddy_death()
 
 func on_baddy_death() -> void:
+	print("baddy count: ", get_tree().get_node_count_in_group("baddies"))
 	if get_tree().get_node_count_in_group("baddies") == 0 and not cleared:
 		cleared = true
 		wave_cleared()
 
 func wave_cleared() -> void:
 	ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
+	player_cash += wave_reward
 	pause_resume_game()
 	pause_button.set_pressed_no_signal(false)
 	var new_reward = REWARD_UI.instantiate()
 	new_reward.connect_reward_card.connect(reward_signal_connection)
+	ui.clear_baddy_info()
 	ui.add_child(new_reward)
 	#load next level/wave selection
 

@@ -17,12 +17,7 @@ func _init(_buff: Buff, _buff_owner, _buff_duration : float = _buff.buff_duratio
 
 func update(delta: float, progress: float = 0.0) -> void:
 	if buff is DotBuff:
-		match AllDamageTags.DamageTag.keys()[buff.damage_tag]:
-			"BLEED":
-				dot_timer += abs(progress - last_progress)
-				last_progress = progress
-			"BURN":
-				dot_timer += delta
+		call(buff.name.to_snake_case(), delta, progress)
 		if dot_timer >= buff.dot_interval:
 			buff_owner.calculate_damage([buff.damage_amount * stacks, buff.damage_tag, false])
 			dot_timer = 0.0
@@ -35,17 +30,6 @@ func update(delta: float, progress: float = 0.0) -> void:
 func on_hit_check() -> void:
 	if randf() <= float(buff.success_chance_per_stack * stacks):
 		call(buff.name.to_snake_case())
-
-func heal() -> void:
-	var baddies = await setup_aoe()
-	for baddy in baddies:
-		baddy.data.health += buff.damage_amount
-
-func shock() -> void:
-	var baddies = await setup_aoe()
-	for baddy in baddies:
-		baddy.calculate_damage([buff.damage_amount, buff.damage_tag, false])
-		stun()
 
 func setup_aoe() -> Array[Node2D]:
 	var baddies : Array[Node2D]
@@ -63,6 +47,24 @@ func setup_aoe() -> Array[Node2D]:
 			baddies.append(body.get_parent())
 	aoe.queue_free()
 	return baddies
+	
+func bleed(_delta : float, progress : float) -> void:
+	dot_timer += abs(progress - last_progress)
+	last_progress = progress
+
+func burn(delta : float, _progress : float) -> void:
+	dot_timer += delta
+
+func heal() -> void:
+	var baddies = await setup_aoe()
+	for baddy in baddies:
+		baddy.data.health += buff.damage_amount
+
+func shock() -> void:
+	var baddies = await setup_aoe()
+	for baddy in baddies:
+		baddy.calculate_damage([buff.damage_amount, buff.damage_tag, false])
+		stun()
 
 func stun() -> void:
 	var stat_ref

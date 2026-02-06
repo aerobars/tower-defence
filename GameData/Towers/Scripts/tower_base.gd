@@ -107,12 +107,13 @@ func tower_update(
 	net_power = 0
 	for child in tower_children: 
 		if button_slot_ref != null and button_slot_ref == child.button_slot_ref:
-			if child.data != null:
-				if child.data.mod_class == child.data.ModClass.AURA: 
-					for body in child.aura_targets: #clears aura effects of old aura before updating
-						child.clear_buffs(body)
+			if child.data != null and child.data.mod_class == child.data.ModClass.AURA: 
+				for body in child.aura_targets: #clears aura effects of old aura before updating
+					child.clear_buffs(body)
 			if button_mod_data != null:
 				child.data = button_mod_data.duplicate(true)
+			else:
+				child.data = null
 			child.aura_targets = []
 		if child.data != null:
 			child.data.setup_stats(level)
@@ -120,5 +121,4 @@ func tower_update(
 			child.data.power_surplus_buffs = power_surplus_buffs
 	
 	update_mods.emit(net_power)
-	
 	#if low power, set low power display
