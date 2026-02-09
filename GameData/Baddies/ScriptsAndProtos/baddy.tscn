@@ -62,10 +62,18 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8h6r8"]
+resource_local_to_scene = true
+radius = 0.01
 
-[node name="Baddy" type="PathFollow2D"]
+[node name="Baddy" type="PathFollow2D" node_paths=PackedStringArray("path_health_bar", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_aura", "path_sprite")]
 loop = false
 script = ExtResource("1_21g7o")
+path_health_bar = NodePath("HealthBar")
+path_impact_area = NodePath("Impact")
+path_damage_number_origin = NodePath("DamageNumberOrigin")
+path_hit_flash = NodePath("HitFlashAnimation")
+path_aura = NodePath("AuraRange/CollisionShape2D")
+path_sprite = NodePath("Sprite2D")
 data = SubResource("Resource_tji8d")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["baddies"]]
@@ -106,3 +114,4 @@ libraries = {
 shape = SubResource("CircleShape2D_8h6r8")
 
 [connection signal="body_entered" from="AuraRange" to="." method="_on_aura_range_body_entered"]
+[connection signal="body_exited" from="AuraRange" to="." method="_on_aura_range_body_exited"]

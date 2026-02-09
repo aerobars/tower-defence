@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="BaddyStats" load_steps=5 format=3 uid="uid://cpqg7aoptfolw"]
 
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_lsdsb"]
-[ext_resource type="Resource" uid="uid://e7n1t7sxx8la" path="res://GameData/SupportScenes/Buffs/Baddy Buffs/test_move_speed.tres" id="2_iks48"]
+[ext_resource type="Resource" uid="uid://e7n1t7sxx8la" path="res://GameData/SupportScenes/Buffs/Baddy Buffs/test_aura_move_speed.tres" id="2_iks48"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="3_j35i5"]
 [ext_resource type="Texture2D" uid="uid://bcqowggr8c0o2" path="res://Assets/Baddies/tank_blue.png" id="4_j35i5"]
 
@@ -11,7 +11,8 @@ name = "Blue Tank"
 description = "Boosts movespeed of nearby baddies"
 texture = ExtResource("4_j35i5")
 spawn_per_wave = 5
-base_move_speed = 150.0
-base_aura_aoe = 200.0
-initial_buffs = Array[ExtResource("1_lsdsb")]([ExtResource("2_iks48")])
+aura_aoe = 200.0
+initial_buffs = Dictionary[ExtResource("1_lsdsb"), int]({
+ExtResource("2_iks48"): 2
+})
 metadata/_custom_type_script = "uid://citwba61de3ku"

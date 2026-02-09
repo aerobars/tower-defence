@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="OnHitBuff" load_steps=2 format=3 uid="uid://c8jua15k88rrw"]
+
+[ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_on_hit.gd" id="1_gf06e"]
+
+[resource]
+script = ExtResource("1_gf06e")
+success_chance_per_stack = 1.0
+effect_duration = 1.0
+name = "Burst Speed"
+stack_limit = 1
+buff_duration = -1.0
+buff_targets = 2
+metadata/_custom_type_script = "uid://cxkis28w2jd6p"

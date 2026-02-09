@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="StatBuff" load_steps=2 format=3 uid="uid://c86gipawtfpeh"]
+
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_nr1oa"]
+
+[resource]
+script = ExtResource("1_nr1oa")
+stat = 3
+buff_amount = 1.0
+name = "Damage Boost"
+buff_duration = -1.0
+buff_targets = 2
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

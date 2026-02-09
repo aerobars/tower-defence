@@ -114,7 +114,6 @@ func tower_update(
 				child.data = button_mod_data.duplicate(true)
 			else:
 				child.data = null
-			child.aura_targets = []
 		if child.data != null:
 			child.data.setup_stats(level)
 			net_power += child.data.current_power

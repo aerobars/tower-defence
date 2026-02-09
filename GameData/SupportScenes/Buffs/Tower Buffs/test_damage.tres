@@ -8,4 +8,5 @@ stat = 3
 buff_amount = 1.0
 name = "Damage Buff"
 buff_duration = -1.0
+buff_targets = 1
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

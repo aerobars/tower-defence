@@ -1,13 +1,14 @@
 [gd_resource type="Resource" script_class="StatBuff" load_steps=2 format=3 uid="uid://e7n1t7sxx8la"]
 
-[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_8dkox"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_i6p2u"]
 
 [resource]
-script = ExtResource("1_8dkox")
+script = ExtResource("1_i6p2u")
 stat = 6
 buff_amount = 0.25
 buff_type = 1
 name = "Move Speed"
 stack_limit = 1
 buff_duration = -1.0
+buff_targets = 2
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

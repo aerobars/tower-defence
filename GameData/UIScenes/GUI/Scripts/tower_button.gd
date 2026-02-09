@@ -76,7 +76,7 @@ func get_tower_mods() -> Dictionary:
 				has_aura = true
 		if child.data is PowerMod:
 			for i in child.data.power_surplus_buffable_stats:
-				var stat_name : String = AllBuffableStats.BuffableStats.keys()[i].to_lower()
+				var stat_name : String = GlobalEnums.BuffableStats.keys()[i].to_lower()
 				if not power_surplus_buffs.has(stat_name):
 					power_surplus_buffs[stat_name] = 0
 				power_surplus_buffs[stat_name] += 1
@@ -102,7 +102,7 @@ func on_mod_update(slot_ref : ButtonModSlot, data : PrototypeMod) -> void:
 			net_power += child.data.base_power_levels[0]
 			if child.data is PowerMod: #power updates
 				for i in child.data.power_surplus_buffable_stats:
-					var stat_name : String = AllBuffableStats.BuffableStats.keys()[i].to_lower()
+					var stat_name : String = GlobalEnums.BuffableStats.keys()[i].to_lower()
 					if not power_surplus_buffs.has(stat_name):
 						power_surplus_buffs[stat_name] = 0
 					power_surplus_buffs[stat_name] += 1

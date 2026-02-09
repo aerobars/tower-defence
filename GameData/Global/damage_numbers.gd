@@ -39,19 +39,11 @@ func display_number(value: int, position: Vector2, damage_source, is_critical: b
 	await tween.finished
 	number.queue_free()
 
-func match_damage_source(damage_source) -> Color:
-	match AllDamageTags.DamageTag.keys()[damage_source]:
-		"BLEED":
-			return "#FFF"
-		"BLUNT": #Blunt
-			return "#FFF"
-		"BURN": #Burn
-			return GameData.burn_colour #Orange
-		"PIERCE": #Pierce
-			return "#FFF"
-		"POISON": #Poison
-			return GameData.poison_colour #Dark Green
-		"SHOCK": #Shock
-			return GameData.shock_colour
-		_:
-			return "#FFF"
+func match_damage_source(_damage_source) -> Color:
+	#if damage_source == GlobalEnums.DamageTag.BLEED: #keeping these for possible future reference
+	#	return "#FFF"
+	#elif damage_source == GlobalEnums.DamageTag.BLUNT:
+	#	return "#FFF"
+	#elif damage_source == GlobalEnums.DamageTag.BURN:
+	#	pass
+	return "#FFF"

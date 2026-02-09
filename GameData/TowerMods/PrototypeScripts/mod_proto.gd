@@ -20,9 +20,9 @@ var class_string : String:
 	get: 
 		return ModClass.keys()[ModClass.values().find(mod_class)]
 
-var buff_owner
+var buff_owner : Node2D
 var active_buffs: Dictionary[Buff, BuffInstance] = {}
-@export var on_hit_effects : Array[Buff]
+@export var on_hit_effects : Array[Buff] = []
 var net_power : int = 0
 var power_surplus_buffs : Dictionary = {}
 var power_calc : float :
@@ -37,7 +37,7 @@ func setup_stats(_level : int = 0) -> void:
 	recalculate_stats()
 
 func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) -> void:
-	if buff is StatBuff:
+	if buff is StatBuff and buff.buff_targets == GlobalEnums.AuraTargets.TOWERS:
 		for i in amt: #amt allows to apply multiple stacks from a single source
 			if not active_buffs.has(buff):
 				var new_inst = BuffInstance.new(buff, buff_owner, duration)
@@ -47,21 +47,27 @@ func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) 
 			inst.time_remaining = buff.buff_duration
 			recalculate_stats.call_deferred()
 	else:
-		on_hit_effects.append(buff)
+		add_on_hit_effect(buff)
 
-func remove_buff(buff: Buff) -> void:
-	if buff is DotBuff:
-		on_hit_effects.erase(buff)
-	if buff is StatBuff:
+func remove_buff(buff : Buff) -> void:
+	if buff is StatBuff and buff.buff_targets == GlobalEnums.AuraTargets.TOWERS:
 		active_buffs.erase(buff)
 		recalculate_stats.call_deferred()
+	else:
+		remove_on_hit_effect(buff)
+
+func add_on_hit_effect(_buff : Buff) -> void: #setup for Weapon Mods
+	pass
+
+func remove_on_hit_effect(_buff : Buff) -> void:#setup for Weapon Mods
+	pass
 
 func recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
 	var stat_addends: Dictionary = {} #Amt to add to stats
 	for buff in active_buffs:
 		if buff_check(buff.stat):
-			var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()
+			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			match buff.buff_type:
 				StatBuff.BuffType.ADD:
 					if not stat_addends.has(stat_name):
@@ -90,7 +96,7 @@ func recalculate_stats() -> void:
 	
 	for buff in active_buffs.keys():
 		if buff is AbsoluteBuff:
-			var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()
+			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			var cur_property_name: String = str("current_" + stat_name)
 			set(cur_property_name, buff.buff_amount)
 

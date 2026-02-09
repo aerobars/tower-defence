@@ -13,14 +13,12 @@ signal health_changed(current_health: int, max_health: int)
 @export var spawn_interval: float = 0.5
 
 ##Baddy Stats
-const BADDY_BUFFABLE_STATS = [ #values to line up with AllBuffableStats enum values
-	AllBuffableStats.BuffableStats.DAMAGE,
-	AllBuffableStats.BuffableStats.DEFENCE,
-	AllBuffableStats.BuffableStats.MAX_HEALTH,
-	AllBuffableStats.BuffableStats.MOVE_SPEED
+const BADDY_BUFFABLE_STATS = [ #values to line up with BuffableStats enum values
+	GlobalEnums.BuffableStats.DAMAGE,
+	GlobalEnums.BuffableStats.DEFENCE,
+	GlobalEnums.BuffableStats.MAX_HEALTH,
+	GlobalEnums.BuffableStats.MOVE_SPEED
 ]
-
-
 const BASE_LEVEL_XP : float = 100.0
 
 @export_group("Base Stats", "base")
@@ -28,16 +26,15 @@ const BASE_LEVEL_XP : float = 100.0
 @export var base_damage : float = 1
 @export var base_defence : float = 5
 @export var base_move_speed : float = 150
-@export var base_aura_aoe : float = 0.0
-@export var defence_tag : AllDamageTags.BaddyArmorTags = AllDamageTags.BaddyArmorTags.UNARMORED
+@export var base_defence_tag : GlobalEnums.BaddyArmorTags = GlobalEnums.BaddyArmorTags.UNARMORED
 
 @export var experience : int = 0: set = _on_experience_set
 var level_ratio : float :
 	get:
 		return 1 + (GameData.current_wave - 1)/10.0
-
 var level : int:
 	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
+
 var current_max_health : float
 var current_damage : float :
 	set(value):
@@ -47,7 +44,11 @@ var current_move_speed : float
 
 var health : float = 0 : set = _on_health_set
 
-@export var initial_buffs : Array[Buff]
+##Buffs and Auras
+@export_group("Buffs and Auras")
+@export var aura_aoe : float = 0.0
+@export var initial_buffs : Array[Buff] = []
+@export var on_death_buffs : Array[Buff] = []
 var active_buffs: Dictionary[Buff, BuffInstance]
 var buff_owner : Node2D
 
@@ -59,6 +60,7 @@ func setup_stats() -> void:
 	recalculate_stats()
 	health = current_max_health
 
+##Runtime
 func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) -> void:
 	for i in amt: #amt allows to apply multiple stacks from a single source
 		if not active_buffs.has(buff):
@@ -79,7 +81,7 @@ func recalculate_stats() -> void:
 	for buff in active_buffs.keys():
 		if buff is StatBuff:
 			var inst = active_buffs[buff]
-			var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()
+			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			match buff.buff_type:
 				StatBuff.BuffType.ADD:
 					if not stat_addends.has(stat_name):
@@ -105,11 +107,11 @@ func recalculate_stats() -> void:
 	for stat_name in stat_multipliers:
 		var cur_property_name: String = str("current_" + stat_name)
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
-	current_move_speed = clamp(current_move_speed, 50, 500) #don't use setter for this for stun MS
+	current_move_speed = clamp(current_move_speed, 75, 500) #don't use setter for this for stun MS
 	
 	for buff in active_buffs.keys():
 		if buff is AbsoluteBuff:
-			var stat_name: String = AllBuffableStats.BuffableStats.keys()[buff.stat].to_lower()
+			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			var cur_property_name: String = str("current_" + stat_name)
 			set(cur_property_name, buff.buff_amount)
 

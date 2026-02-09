@@ -4,12 +4,12 @@ enum PowerBuffableStats {
 	POWER
 }
 
-@export var power_surplus_buffable_stats : Array[AllBuffableStats.BuffableStats] = [AllBuffableStats.BuffableStats.DAMAGE]
+@export var power_surplus_buffable_stats : Array[GlobalEnums.BuffableStats] = [GlobalEnums.BuffableStats.DAMAGE]
 
 func buff_check(buff_stat) -> bool:
 	var str_buff_stat : String
 	if buff_stat is int:
-		str_buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
+		str_buff_stat = GlobalEnums.BuffableStats.keys()[buff_stat]
 	return PowerBuffableStats.keys().has(str_buff_stat.to_upper())
 
 func set_current_stats() -> void:

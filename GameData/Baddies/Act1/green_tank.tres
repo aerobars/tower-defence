@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="BaddyStats" load_steps=5 format=3 uid="uid://or4r8bc00nem"]
 
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_q3e84"]
-[ext_resource type="Resource" uid="uid://bdsnm5ttegmo0" path="res://GameData/SupportScenes/Buffs/Baddy Buffs/test_heal_on_hit.tres" id="2_ai2px"]
+[ext_resource type="Resource" uid="uid://bdsnm5ttegmo0" path="res://GameData/SupportScenes/Buffs/Baddy Buffs/test_oh_heal.tres" id="2_ai2px"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="3_ai2px"]
 [ext_resource type="Texture2D" uid="uid://5jujfvl5qfbb" path="res://Assets/Baddies/tank_green.png" id="4_lace1"]
 
@@ -12,5 +12,7 @@ description = "Chance when hit to heal self and nearby baddies"
 texture = ExtResource("4_lace1")
 spawn_per_wave = 5
 spawn_interval = 1.0
-initial_buffs = Array[ExtResource("1_q3e84")]([ExtResource("2_ai2px")])
+initial_buffs = Dictionary[ExtResource("1_q3e84"), int]({
+ExtResource("2_ai2px"): 0
+})
 metadata/_custom_type_script = "uid://citwba61de3ku"

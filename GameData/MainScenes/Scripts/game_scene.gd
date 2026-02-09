@@ -36,9 +36,10 @@ var previous_tile := Vector2i(0, 0)
 
 ## Gameplay 
 @export_group("Gameplay")
-var spawn_per_wave := 1 
+var remaining_spawns := 0 
 var wave_total := 0
-var cleared := false
+var living_baddies := 0
+var escaped_baddies := 0
 @export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
 var current_player_health : int
 var character : String = "Tester"
@@ -121,9 +122,11 @@ func start_next_wave(_data) -> void:
 		pause_resume_game()
 		pause_button.set_pressed_no_signal(true)
 	GameData.current_wave += 1
-	cleared = false
 	var wave_data = GameData.get_wave_data()
 	wave_total = wave_data["wave_total"]
+	remaining_spawns = wave_total
+	living_baddies = 0
+	escaped_baddies = 0
 	if GameData.current_wave > 1:
 		ui.update_game_message("Next wave starting", 3.0, 0.5)
 		await get_tree().create_timer(3.0, false).timeout #padding before wave start
@@ -157,12 +160,15 @@ func spawn_baddies(wave_data) -> void:
 				map_node.baddy_path.add_child(new_baddy, true)
 				
 				baddy.spawn_count += 1
+				living_baddies += 1
+				remaining_spawns -= 1
 				await(get_tree().create_timer(baddy.spawn_interval, false)).timeout
 
 func on_base_damage(damage) -> void:
 	current_player_health -= damage
 	ui.update_health_bar(current_player_health, max_player_health)
-	if current_player_health <= 0 and not game_bookend_popup.game_over:
+	escaped_baddies += 1
+	if (current_player_health <= 0 or escaped_baddies == wave_total) and not game_bookend_popup.game_over:
 		game_bookend_popup.game_over = true
 		ui.update_game_message("Game Over!", 2.0, 0.0, 75)
 		game_bookend_popup.get_node("TextureRect/Label").text = "Thank you for playing! 
@@ -173,9 +179,8 @@ func on_base_damage(damage) -> void:
 		on_baddy_death()
 
 func on_baddy_death() -> void:
-	print("baddy count: ", get_tree().get_node_count_in_group("baddies"))
-	if get_tree().get_node_count_in_group("baddies") == 0 and not cleared:
-		cleared = true
+	living_baddies -= 1
+	if living_baddies == 0 and remaining_spawns == 0:
 		wave_cleared()
 
 func wave_cleared() -> void:

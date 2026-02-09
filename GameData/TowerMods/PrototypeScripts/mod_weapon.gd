@@ -11,8 +11,7 @@ enum WeaponBuffableStats {
 
 enum ProjectileTag { INSTANT, PROJECTILE }
 @export var projectile_tag: ProjectileTag
-@export var damage_tag : AllDamageTags.DamageTag = AllDamageTags.DamageTag.PIERCE
-#var attack_tags: Array = [damage_tag]
+@export var damage_tags : int = GlobalEnums.DamageTag.PIERCE
 
 ##level based variables
 @export var base_aoe_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
@@ -31,7 +30,7 @@ var current_multitarget : int
 func buff_check(buff_stat) -> bool:
 	var str_buff_stat : String
 	if buff_stat is int:
-		str_buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat].to_upper()
+		str_buff_stat = GlobalEnums.BuffableStats.keys()[buff_stat].to_upper()
 	else:
 		str_buff_stat = buff_stat.to_upper()
 	return WeaponBuffableStats.keys().has(str_buff_stat.to_upper())
@@ -46,9 +45,18 @@ func set_current_stats() -> void:
 	current_power = base_power_levels[level]
 	current_range = base_range_levels[level]
 
-
-func calculate_damage() -> Array: #returns [total attack damage, did the attack crit]
+func calculate_damage() -> Array: #returns [total attack damage, damage tags, did the attack crit]
 	if current_crit_chance > randi() % 100:
-		return [current_damage * current_crit_multiplier, damage_tag, true]
+		return [current_damage * current_crit_multiplier, damage_tags, true]
 	else:
-		return [current_damage, damage_tag, false]
+		return [current_damage, damage_tags, false]
+
+func add_on_hit_effect(buff : Buff) -> void:
+	if buff.damage_tag > 0:
+		damage_tags |= buff.damage_tag
+	on_hit_effects.append(buff)
+
+func remove_on_hit_effect(buff : Buff) -> void:
+	if buff.damage_tag > 0:
+		damage_tags &= ~buff.damage_tag
+	on_hit_effects.erase(buff)

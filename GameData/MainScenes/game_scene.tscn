@@ -277,7 +277,6 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="GameBookendInfo" parent="UI/HUD" instance=ExtResource("17_nh22g")]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

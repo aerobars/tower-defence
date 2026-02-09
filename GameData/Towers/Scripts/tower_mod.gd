@@ -5,7 +5,7 @@ class_name TowerMod extends Node2D
 signal mod_updated(mod: StaticBody2D)
 
 ## Tower Setup
-var non_aura_radius : float
+var non_aura_radius : float #equal to TowerBase's Marker2D radius
 var data : PrototypeMod
 var button_slot_ref : StaticBody2D
 @onready var turret := $Turret
@@ -14,7 +14,7 @@ var button_slot_ref : StaticBody2D
 ## Gametime
 var baddies_in_range : Array
 var targets : Array
-var aura_targets : Array
+#var aura_targets : Array
 var attack_timer : float = 0.0
 var attack_tracker : int
 
@@ -56,17 +56,6 @@ func update_mod(net_power : int = 0) -> void:
 	turret.texture = data.texture
 	mod_updated.emit(self)
 
-#func button_slot_updated(button_slot : StaticBody2D, button_slot_data : PrototypeMod) -> void:
-#	if button_slot != button_slot_ref:
-#		return
-#	if data != null:
-#		if data.mod_class == data.ModClass.AURA: 
-#			for body in aura_targets: #clears aura effects of old aura before updating
-#				clear_buffs(body)
-#	if button_slot_data != null:
-#		data = button_slot_data.duplicate(true)
-#	aura_targets = []
-#	update_mod()
 
 func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData, triggers whenever any mod is updated
 	if updated_mod == self:
@@ -90,9 +79,9 @@ func _process(delta: float) -> void:
 			if not $AnimationPlayer.is_playing():
 				turn()
 		if attack_timer >= data.current_attack_speed:
-			if data is AuraMod and data.offensive_aura and get_parent().aura_tower:
+			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.AuraTargets.BADDIES and get_parent().aura_tower:
 				for baddy in baddies_in_range:
-					apply_buff(baddy)
+					add_buff(baddy)
 			elif data is WeaponMod:
 				#attack_tracker += 1
 				for i in data.current_multitarget:
@@ -108,11 +97,10 @@ func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body.get_parent())
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
-		if data.offensive_aura and get_parent().aura_tower:
-			return #nothing gets added to aura_targets for offensive auras in aura mode
+		if data.buff_data.buff_targets == GlobalEnums.AuraTargets.BADDIES and get_parent().aura_tower:
+			return #nothing gets added for offensive auras in aura mode
 		else:
-			aura_targets.append(body)
-			apply_buff(body)
+			add_buff(body)
 
 func _on_range_body_exited(body) -> void:
 	if data == null:
@@ -120,26 +108,14 @@ func _on_range_body_exited(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body.get_parent())
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
-		aura_targets.erase(body)
-		clear_buffs(body)
+		#aura_targets.erase(body)
+		remove_buff(body)
 
-func apply_buff(body) -> void:
-	if body is TowerMod:
-		if data.offensive_aura and data.buff_data is StatBuff:
-			body.data.on_hit_effects.append(data.buff_data)
-		else:
-			body.data.add_buff(data.buff_data)
-	elif body is Baddy:
-		body.data.add_buff(data.buff_data)
+func add_buff(body) -> void:
+	body.data.add_buff(data.buff_data)
 
-func clear_buffs(body) -> void:
-	if body is TowerMod:
-		if data.offensive_aura and data.buff_data is StatBuff:
-			body.data.on_hit_effects.erase(data.buff_data)
-		else:
-			body.data.remove_buff(data.buff_data)
-	elif body is Baddy:
-		body.data.remove_buff(data.buff_data)
+func remove_buff(body) -> void:
+	body.data.remove_buff(data.buff_data)
 
 ## Weapon Function
 func select_targets() -> Array:

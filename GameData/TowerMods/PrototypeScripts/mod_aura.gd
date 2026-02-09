@@ -11,13 +11,13 @@ enum AuraBuffableStats{
 var current_attack_speed : float
 
 
-var is_aura : bool = false
-@export var offensive_aura : bool = false
+#var is_aura : bool = false
+#@export var offensive_aura : bool = false
 
 func buff_check(buff_stat) -> bool:
 	var str_buff_stat : String
 	if buff_stat is int:
-		str_buff_stat = AllBuffableStats.BuffableStats.keys()[buff_stat]
+		str_buff_stat = GlobalEnums.BuffableStats.keys()[buff_stat]
 	return AuraBuffableStats.keys().has(str_buff_stat.to_upper())
 
 func set_current_stats() -> void:

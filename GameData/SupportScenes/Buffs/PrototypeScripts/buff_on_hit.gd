@@ -1,7 +1,7 @@
 class_name OnHitBuff extends Buff
 
 @export_range(0.0, 1.0, 0.1, "suffix: %") var success_chance_per_stack : float
-@export var damage_tag : AllDamageTags.DamageTag
+@export var damage_tag : GlobalEnums.DamageTag = 0
 @export var damage_amount : float
 @export var damage_aoe : float
 @export var effect_duration : float
@@ -9,9 +9,10 @@ class_name OnHitBuff extends Buff
 
 func _init(
 	_success_chance_per_stack : float = 0.1,
+	_buff_targets: GlobalEnums.AuraTargets = GlobalEnums.AuraTargets.NONE,
 	_damage_amount : float = 1.0,
 	_damage_aoe : float = 1.0,
-	_damage_tag : AllDamageTags.DamageTag = AllDamageTags.DamageTag.SHOCK,
+	_damage_tag : GlobalEnums.DamageTag = GlobalEnums.DamageTag.SHOCK,
 	_effect_duration : float = 1.0
 ) -> void:
 	success_chance_per_stack = _success_chance_per_stack

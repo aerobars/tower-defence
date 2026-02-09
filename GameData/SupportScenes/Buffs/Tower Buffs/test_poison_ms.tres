@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="OnHitBuff" load_steps=2 format=3 uid="uid://cs5wggl128vc4"]
+
+[ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_on_hit.gd" id="1_ouunk"]
+
+[resource]
+script = ExtResource("1_ouunk")
+success_chance_per_stack = 1.0
+damage_tag = 32
+effect_duration = 1.0
+name = "Poison"
+stack_limit = 1
+buff_duration = 1.0
+buff_targets = 2
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
