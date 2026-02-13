@@ -67,16 +67,19 @@ func recalculate_stats() -> void:
 	var stat_addends: Dictionary = {} #Amt to add to stats
 	for buff in active_buffs:
 		if buff_check(buff.stat):
-			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
-			match buff.buff_type:
-				StatBuff.BuffType.ADD:
-					if not stat_addends.has(stat_name):
-						stat_addends[stat_name] = 0.0
-					stat_addends[stat_name] += buff.buff_amount
-				StatBuff.BuffType.MULTIPLY:
-					if not stat_multipliers.has(stat_name):
-						stat_multipliers[stat_name] = 1.0
-					stat_multipliers[stat_name] += buff.buff_amount
+			var stat_name : String = ""
+			for stat in GlobalEnums.BuffableStats.keys():
+				if buff.stat & GlobalEnums.BuffableStats[stat]:
+					stat_name = stat.to_lower()
+					match buff.buff_type:
+						StatBuff.BuffType.ADD:
+							if not stat_addends.has(stat_name):
+								stat_addends[stat_name] = 0.0
+							stat_addends[stat_name] += buff.buff_amount
+						StatBuff.BuffType.MULTIPLY:
+							if not stat_multipliers.has(stat_name):
+								stat_multipliers[stat_name] = 1.0
+							stat_multipliers[stat_name] += buff.buff_amount
 	
 	set_current_stats()
 	

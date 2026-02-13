@@ -16,9 +16,11 @@ const BADDY_FILEPATH = "res://GameData/Baddies/"
 const CHAR_FILEPATH = "res://GameData/TowerMods/CharacterMods/"
 const TOTAL_ACTS = 1
 const BOSS_WAVES := [5, 10, 15, 20]
+
 var character_mods : Dictionary = {}
 var act_baddies : Dictionary = {}
 var act_bosses : Dictionary ={}
+
 var previous_wave : Array = []
 var current_wave : int = 0
 var current_act : int = 0
@@ -78,7 +80,7 @@ func get_wave_data() -> Dictionary:
 		wave_data["wave_baddies"] = [act_bosses[current_act][randi() % act_size]]
 		wave_data["wave_total"] = 1
 	else:
-		wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][0]]
+		wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
 		while previous_wave.has(wave_data["wave_baddies"][0]) and previous_wave.has(wave_data["wave_baddies"][1]): #prevents same wave back to back
 			wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
 		for i in wave_data["wave_baddies"]:

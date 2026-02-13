@@ -50,7 +50,7 @@ var character : String = "Tester"
 			ui.update_cash_display(player_cash)
 var wave_reward : int :
 	get:
-		return randi_range(10, 30)
+		return randi_range(20, 40) #* (1 + float(GameData.current_wave)/10)
 
 
 

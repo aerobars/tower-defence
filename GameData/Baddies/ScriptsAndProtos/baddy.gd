@@ -56,9 +56,11 @@ func move(delta) -> void:
 
 func on_hit(dmg: Array, debuff: Array = []) -> void: #Array contains dmg amt, dmg tags, and crit status
 	calculate_damage(dmg)
+	var pending_buffs : Array[Buff] = []
 	for buff in data.active_buffs.keys():
 		if buff is OnHitBuff:
-			data.active_buffs[buff].on_hit_check()
+			data.active_buffs[buff].on_hit_check(dmg[1], pending_buffs)
+	debuff.append_array(pending_buffs)
 	if debuff != []:
 		for i in debuff:
 			data.add_buff(i)

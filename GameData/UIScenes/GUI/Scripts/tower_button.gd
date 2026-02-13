@@ -75,11 +75,14 @@ func get_tower_mods() -> Dictionary:
 			elif child.data.mod_class == child.data.ModClass.AURA:
 				has_aura = true
 		if child.data is PowerMod:
-			for i in child.data.power_surplus_buffable_stats:
-				var stat_name : String = GlobalEnums.BuffableStats.keys()[i].to_lower()
-				if not power_surplus_buffs.has(stat_name):
-					power_surplus_buffs[stat_name] = 0
-				power_surplus_buffs[stat_name] += 1
+			var stat_name : String = ""
+			for stat in GlobalEnums.BuffableStats.keys():
+				for i in child.data.power_surplus_buffable_stats:
+					if i & GlobalEnums.BuffableStats[stat]:
+						stat_name = stat.to_lower()
+						if not power_surplus_buffs.has(stat_name):
+							power_surplus_buffs[stat_name] = 0
+						power_surplus_buffs[stat_name] += 1
 	
 	if has_aura and not has_wep:
 		aura_tower = true
@@ -101,11 +104,14 @@ func on_mod_update(slot_ref : ButtonModSlot, data : PrototypeMod) -> void:
 		if child.data != null:
 			net_power += child.data.base_power_levels[0]
 			if child.data is PowerMod: #power updates
-				for i in child.data.power_surplus_buffable_stats:
-					var stat_name : String = GlobalEnums.BuffableStats.keys()[i].to_lower()
-					if not power_surplus_buffs.has(stat_name):
-						power_surplus_buffs[stat_name] = 0
-					power_surplus_buffs[stat_name] += 1
+				var stat_name : String = ""
+				for stat in GlobalEnums.BuffableStats.keys():
+					for i in child.data.power_surplus_buffable_stats:
+						if i & GlobalEnums.BuffableStats[stat]:
+							stat_name = stat.to_lower()
+							if not power_surplus_buffs.has(stat_name):
+								power_surplus_buffs[stat_name] = 0
+							power_surplus_buffs[stat_name] += 1
 			else: #aura updates
 				if not has_wep:
 					if child.data.mod_class == child.data.ModClass.WEAPON:

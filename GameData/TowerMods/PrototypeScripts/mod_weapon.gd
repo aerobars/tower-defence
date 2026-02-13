@@ -28,12 +28,14 @@ var current_damage : float
 var current_multitarget : int
 
 func buff_check(buff_stat) -> bool:
-	var str_buff_stat : String
+	var stat_name : String = ""
 	if buff_stat is int:
-		str_buff_stat = GlobalEnums.BuffableStats.keys()[buff_stat].to_upper()
+		for stat in GlobalEnums.BuffableStats.keys():
+			if buff_stat & GlobalEnums.BuffableStats[stat]:
+				stat_name = stat.to_upper()
 	else:
-		str_buff_stat = buff_stat.to_upper()
-	return WeaponBuffableStats.keys().has(str_buff_stat.to_upper())
+		stat_name = buff_stat.to_upper()
+	return WeaponBuffableStats.keys().has(stat_name)
 
 func set_current_stats() -> void:
 	current_aoe = base_aoe_levels[level]

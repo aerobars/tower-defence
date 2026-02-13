@@ -1,13 +1,13 @@
 class_name GlobalEnums extends Resource
 
 enum DamageTag {
-	BLUNT = 1 << 1,
-	PIERCE = 1 << 4, #weapon damage types first to maintain additives before mulitplicatives in damage calculation
-	BLEED = 1 << 0,
-	BURN = 1 << 2,
-	POISON = 1 << 5,
-	SHOCK = 1 << 6,
-	HEAL = 1 << 3,
+	BLUNT = 1 << 1, #2
+	PIERCE = 1 << 4, # 16, weapon damage types first to maintain additives before mulitplicatives in damage calculation
+	BLEED = 1 << 0, #1
+	BURN = 1 << 2, #4
+	POISON = 1 << 5, #32
+	SHOCK = 1 << 6, #64
+	HEAL = 1 << 3, #8
 }
 
 enum BaddyArmorTags {
@@ -53,13 +53,13 @@ const DEFENCE_TABLE : Dictionary = {
 } 
 
 enum BuffableStats {
-	AOE,
-	ATTACK_SPEED,
-	CRIT_CHANCE,
-	DAMAGE,
-	DEFENCE,
-	MAX_HEALTH,
-	MOVE_SPEED
+	AOE = 1 << 0,
+	ATTACK_SPEED = 1 << 1,
+	CRIT_CHANCE = 1 << 2,
+	DAMAGE = 1 << 3,
+	DEFENCE = 1 << 4,
+	MAX_HEALTH = 1 << 5,
+	MOVE_SPEED = 1 << 6,
 }
 
 enum AuraTargets {

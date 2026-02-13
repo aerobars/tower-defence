@@ -1,19 +1,16 @@
 class_name BuffInstance extends Resource
 
-var burst_speed_buff = StatBuff.new(
-	GlobalEnums.BuffableStats.MOVE_SPEED, 
-	GlobalEnums.AuraTargets.BADDIES, 
-	StatBuff.BuffType.MULTIPLY, 
-	0.5, 
-	0.5)
+const BURST_SPEED = preload("res://GameData/SupportScenes/Buffs/Baddy Buffs/burst_speed.tres")
+var poison_stat = preload("res://GameData/SupportScenes/Buffs/Tower Buffs/test_poison_sb.tres")
 
 var buff : Buff
-var buff_owner : Node2D
+var buff_owner : Node2D 
 var stacks : int = 0
 var dot_timer : float
 var time_remaining : float
 var last_progress: float = 0.0
 var aura_effect : bool = false
+var affected_stats : Array[GlobalEnums.BuffableStats]
 
 ##Setup and Updates
 func _init(_buff: Buff, _buff_owner, _buff_duration : float = _buff.buff_duration) -> void:
@@ -63,22 +60,33 @@ func burn(delta : float, _progress : float) -> void:
 	dot_timer += delta
 
 ##On Hit
-func on_hit_check() -> void:
+func on_hit_check(damage_tags : int, pending_buffs) -> void:
 	if randf() <= float(buff.success_chance_per_stack * stacks):
-		call(buff.name.to_snake_case())
+		call(buff.name.to_snake_case(), damage_tags, pending_buffs)
 
-func heal() -> void:
+func burst_speed(_damage_tags, _pending_buffs) -> void:
+	buff_owner.data.add_buff(BURST_SPEED)
+
+func heal(_damage_tags, _pending_buffs) -> void:
 	var baddies = await setup_aoe(buff.damage_aoe)
 	for baddy in baddies:
 		baddy.data.health += buff.damage_amount
 
-func burst_speed() -> void:
-	buff_owner.data.add_buff(burst_speed_buff)
+func poison(damage_tags : int, pending_buffs) -> void:
+	if not damage_tags & GlobalEnums.DamageTag.POISON:
+		return
+	buff_owner.calculate_damage([buff.effect_amount * stacks, buff.damage_tag, false])
 
-func shock() -> void:
-	var baddies = await setup_aoe(buff.damage_aoe)
+	return #below code for stat modification if I choose to go that route
+	for enum_stat in GlobalEnums.BuffableStats.keys():
+		if OnHitBuff.AffectedStat.has(enum_stat) and buff.affected_stats.has(OnHitBuff.AffectedStat[enum_stat]):
+			poison_stat.stat |= GlobalEnums.BuffableStats[enum_stat]
+			pending_buffs.append(poison_stat)
+
+func shock(_damage_tags, _pending_buffs) -> void:
+	var baddies = await setup_aoe(buff.effect_aoe)
 	for baddy in baddies:
-		baddy.calculate_damage([buff.damage_amount, buff.damage_tag, false])
+		baddy.calculate_damage([buff.effect_amount, buff.damage_tag, false])
 		stun()
 
 func stun() -> void:
@@ -87,7 +95,11 @@ func stun() -> void:
 		stat_ref = GlobalEnums.BuffableStats.MOVE_SPEED
 	elif buff_owner.is_in_group("turret"):
 		stat_ref = GlobalEnums.BuffableStats.ATTACK_SPEED
-	buff_owner.data.add_buff(AbsoluteBuff.new(stat_ref, GlobalEnums.AuraTargets.NONE, StatBuff.BuffType.MULTIPLY, 0.0, buff.effect_duration)) 
+	buff_owner.data.add_buff(AbsoluteBuff.new(
+		stat_ref, 
+		StatBuff.BuffType.MULTIPLY, 
+		0.0, 
+		buff.effect_duration)) 
 
 ##On Death
 func on_death_trigger() -> void:

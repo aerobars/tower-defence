@@ -62,6 +62,9 @@ func setup_stats() -> void:
 
 ##Runtime
 func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) -> void:
+#	var buff_names : Array
+#	for _buff in active_buffs:
+#		buff_names.append(_buff.name)
 	for i in amt: #amt allows to apply multiple stacks from a single source
 		if not active_buffs.has(buff):
 			var new_inst = BuffInstance.new(buff, buff_owner, duration)
@@ -81,17 +84,20 @@ func recalculate_stats() -> void:
 	for buff in active_buffs.keys():
 		if buff is StatBuff:
 			var inst = active_buffs[buff]
-			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
-			match buff.buff_type:
-				StatBuff.BuffType.ADD:
-					if not stat_addends.has(stat_name):
-						stat_addends[stat_name] = 0.0
-					stat_addends[stat_name] += buff.buff_amount * inst.stacks
-				StatBuff.BuffType.MULTIPLY:
-					if not stat_multipliers.has(stat_name):
-						stat_multipliers[stat_name] = 1.0
-					stat_multipliers[stat_name] += buff.buff_amount * inst.stacks
-					stat_multipliers[stat_name] = max(stat_multipliers[stat_name], 0)
+			var stat_name : String = ""
+			for stat in GlobalEnums.BuffableStats.keys():
+				if buff.stat & GlobalEnums.BuffableStats[stat]:
+					stat_name = stat.to_lower()
+					match buff.buff_type:
+						StatBuff.BuffType.ADD:
+							if not stat_addends.has(stat_name):
+								stat_addends[stat_name] = 0.0
+							stat_addends[stat_name] += buff.buff_amount * inst.stacks
+						StatBuff.BuffType.MULTIPLY:
+							if not stat_multipliers.has(stat_name):
+								stat_multipliers[stat_name] = 1.0
+							stat_multipliers[stat_name] += buff.buff_amount * inst.stacks
+							stat_multipliers[stat_name] = max(stat_multipliers[stat_name], 0)
 	
 	#var stat_sample_pos: float = level
 	current_max_health = base_max_health * level_ratio

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="StatBuff" load_steps=2 format=3 uid="uid://b3qf5xtk24jpm"]
+
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_v76oq"]
+
+[resource]
+script = ExtResource("1_v76oq")
+stat = 6
+buff_amount = 0.5
+buff_type = 1
+name = "Burst Speed"
+stack_limit = 1
+buff_duration = 0.5
+buff_targets = 2
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

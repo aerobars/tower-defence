@@ -15,10 +15,14 @@ var current_attack_speed : float
 #@export var offensive_aura : bool = false
 
 func buff_check(buff_stat) -> bool:
-	var str_buff_stat : String
+	var stat_name : String = ""
 	if buff_stat is int:
-		str_buff_stat = GlobalEnums.BuffableStats.keys()[buff_stat]
-	return AuraBuffableStats.keys().has(str_buff_stat.to_upper())
+		for stat in GlobalEnums.BuffableStats.keys():
+			if buff_stat & GlobalEnums.BuffableStats[stat]:
+				stat_name = stat.to_upper()
+	else:
+		stat_name = buff_stat.to_upper()
+	return AuraBuffableStats.keys().has(stat_name)
 
 func set_current_stats() -> void:
 	current_power = base_power_levels[level]

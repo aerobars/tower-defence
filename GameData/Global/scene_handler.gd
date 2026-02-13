@@ -4,6 +4,8 @@ const GAME_SCENE = preload("res://GameData/MainScenes/game_scene.tscn")
 var main_menu = preload("res://GameData/MainScenes/main_menu.tscn")
 var game_instance
 
+var profile_data : Resource #variable to profile settings(resolution, sound volumes, etc.)
+
 func _ready() -> void:
 	load_main_menu()
 

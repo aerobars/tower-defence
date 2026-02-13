@@ -7,12 +7,13 @@ class_name DotBuff extends Buff
 
 func _init(
 	_damage_tag: GlobalEnums.DamageTag = GlobalEnums.DamageTag.BURN, 
-	_buff_targets: GlobalEnums.AuraTargets = GlobalEnums.AuraTargets.BADDIES,
 	_damage_amount: float = 1.0,
 	_dot_interval: float = 1.0,
-	_dot_duration: float = 1.0
+	_dot_duration: float = 1.0,
+	_buff_targets: GlobalEnums.AuraTargets = GlobalEnums.AuraTargets.BADDIES,
 	) -> void:
 	damage_tag = _damage_tag
 	damage_amount = _damage_amount
 	dot_interval = _dot_interval
 	buff_duration = _dot_duration
+	buff_targets = _buff_targets
