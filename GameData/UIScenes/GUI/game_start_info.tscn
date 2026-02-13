@@ -67,7 +67,7 @@ The function of aura mods changes depending on whether the tower is equipped wit
 With weapons -> aura effects all weapon mods of the tower.
 Without wepons -> aura effects all towers or enemies within range, depending on their aura
 
-When you're ready to start, unpause the game and the baddies will start spawning!
+When you're ready to start, click on Next Wave and the baddies will start spawning!
 
 "
 autowrap_mode = 2
