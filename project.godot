@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameData="*res://GameData/Global/game_data.gd"
 DamageNumbers="*res://GameData/Global/damage_numbers.gd"
+SaveManager="*res://GameData/Global/save_manager.gd"
 
 [debug]
 

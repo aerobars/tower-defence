@@ -7,6 +7,8 @@ extends CanvasLayer
 @export var game_message : Label
 @export var baddy_info_foldbable : FoldableContainer
 @export var baddy_info : VBoxContainer
+@export var pause_button : TextureButton
+@export var ff_button : TextureButton
 const GAME_MESSAGE_A_VALUE = 0.78
 @onready var texture : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
 @onready var tower : PackedScene = preload("res://GameData/Towers/tower_base.tscn")
@@ -51,6 +53,32 @@ func update_tower_preview(new_pos, color) -> void: #runs via GameScene's process
 		#$TowerPreview/Sprite2D.modulate = Color(color)
 
 ## UI
+func _on_pause_play_pressed() -> void:
+	if get_parent().build_mode:
+		get_parent().cancel_build_mode()
+	if get_tree().is_paused():
+		get_tree().paused = false
+	else:
+		get_tree().paused = true
+
+func _on_next_wave_pressed() -> void:
+	if get_parent().build_mode:
+		get_parent().cancel_build_mode()
+	if get_tree().is_paused():
+		get_tree().paused = false
+		pause_button.set_pressed_no_signal(true)
+	update_game_message("Next wave starting", 3.0, 0.5)
+	await get_tree().create_timer(2.0, false).timeout #padding before wave start
+	get_parent().start_next_wave()
+
+func _on_fast_forward_pressed() -> void:
+	if get_parent().build_mode:
+		get_parent().cancel_build_mode()
+	if Engine.get_time_scale() == 2.0:
+		Engine.set_time_scale(1.0)
+	else:
+		Engine.set_time_scale(2.0)
+
 func update_health_bar(cur_health: int, max_health: int) -> void:
 	var hp_bar_tween := hp_bar.create_tween()
 	hp_bar_tween.tween_property(hp_bar, "value", cur_health, 0.1)

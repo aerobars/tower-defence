@@ -31,7 +31,7 @@ const BASE_LEVEL_XP : float = 100.0
 @export var experience : int = 0: set = _on_experience_set
 var level_ratio : float :
 	get:
-		return 1 + (GameData.current_wave - 1)/10.0
+		return 1 + (SaveManager.save_data_run.current_wave - 1)/10.0
 var level : int:
 	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
 

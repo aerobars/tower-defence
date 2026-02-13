@@ -18,13 +18,12 @@
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
 [ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/game_start_info.tscn" id="17_nh22g"]
 
-[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "pause_button", "game_bookend_popup", "map_node", "path_debug")]
+[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "game_bookend_popup", "map_node", "path_debug")]
 script = ExtResource("1_g2kuy")
 ui = NodePath("UI")
 build_bar = NodePath("UI/HUD/BuildBar")
 inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryGrid")
 baddy_info_foldable = NodePath("UI/HUD/BaddyInfo")
-pause_button = NodePath("UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay")
 game_bookend_popup = NodePath("UI/HUD/GameBookendInfo")
 map_node = NodePath("Map")
 path_debug = NodePath("PathDebug")
@@ -39,7 +38,7 @@ joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 
-[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display", "game_message", "baddy_info_foldbable", "baddy_info")]
+[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display", "game_message", "baddy_info_foldbable", "baddy_info", "pause_button", "ff_button")]
 script = ExtResource("3_ibdpl")
 hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
 hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
@@ -47,6 +46,8 @@ cash_display = NodePath("HUD/InfoBar/InfoContainer/Money")
 game_message = NodePath("HUD/GameMessage")
 baddy_info_foldbable = NodePath("HUD/BaddyInfo")
 baddy_info = NodePath("HUD/BaddyInfo/VBoxContainer")
+pause_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/PausePlay")
+ff_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/FastForward")
 
 [node name="HUD" type="Control" parent="UI"]
 layout_mode = 3
@@ -95,6 +96,7 @@ data = ExtResource("6_nh22g")
 game_scene = NodePath("../../../../..")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/BuildBar"]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -132,7 +134,7 @@ custom_minimum_size = Vector2(0, 60)
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 60.0
+offset_bottom = 71.0
 grow_horizontal = 2
 
 [node name="InfoContainer" type="HBoxContainer" parent="UI/HUD/InfoBar"]
@@ -169,7 +171,7 @@ size_flags_horizontal = 10
 texture = ExtResource("12_jvyjn")
 
 [node name="HealthBar" type="TextureProgressBar" parent="UI/HUD/InfoBar/InfoContainer"]
-custom_minimum_size = Vector2(400, 30)
+custom_minimum_size = Vector2(250, 30)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -214,9 +216,15 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="GameControls" type="HBoxContainer" parent="UI/HUD/InfoBar/MarginContainer"]
+process_mode = 3
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+
+[node name="NextWave" type="Button" parent="UI/HUD/InfoBar/MarginContainer/GameControls"]
+process_mode = 3
+layout_mode = 2
+text = "Next Wave"
 
 [node name="PausePlay" type="TextureButton" parent="UI/HUD/InfoBar/MarginContainer/GameControls"]
 process_mode = 3
@@ -225,6 +233,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 toggle_mode = true
+button_pressed = true
 texture_normal = ExtResource("7_674w2")
 texture_pressed = ExtResource("8_a0jnf")
 ignore_texture_size = true
@@ -303,5 +312,6 @@ theme_override_colors/font_color = Color(1, 1, 1, 0.78431374)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 75
 
-[connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="." method="pause_resume_game"]
-[connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/FastForward" to="." method="_on_fast_forward_pressed"]
+[connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/NextWave" to="UI" method="_on_next_wave_pressed"]
+[connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="UI" method="_on_pause_play_pressed"]
+[connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/FastForward" to="UI" method="_on_fast_forward_pressed"]

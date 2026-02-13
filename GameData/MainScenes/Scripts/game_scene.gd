@@ -16,7 +16,7 @@ const POPUPS : Dictionary = {
 @export var build_bar : ColorRect
 @export var inventory_ui : GridContainer
 @export var baddy_info_foldable : FoldableContainer
-@export var pause_button : TextureButton
+#@export var pause_button : TextureButton
 @export var game_bookend_popup : Control
 @onready var new_slot := inventory_ui.connect("slot_created", connect_inv_button_signal)
 var cur_popup : Node2D
@@ -50,7 +50,7 @@ var character : String = "Tester"
 			ui.update_cash_display(player_cash)
 var wave_reward : int :
 	get:
-		return randi_range(20, 40) #* (1 + float(GameData.current_wave)/10)
+		return randi_range(20, 40) # (1 + float(SaveManager.save_data_run.current_wave)/10)
 
 
 
@@ -80,6 +80,8 @@ func _ready() -> void:
 	ui.update_cash_display(player_cash)
 	for i in get_tree().get_nodes_in_group("build_buttons"):
 		i.pressed.connect(func(): initiate_build_mode(i.tower_data, i, i.tower))
+		if SaveManager.save_data_run.button_data == {}:
+			pass
 
 func _process(_delta: float) -> void:
 	if build_mode:
@@ -98,46 +100,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("hotkey_button_2"):
 		build_bar.get_node("HBoxContainer/TowerBase2").pressed.emit()
 
-func pause_resume_game() -> void:
-	if build_mode:
-		cancel_build_mode()
-	if get_tree().is_paused():
-		get_tree().paused = false
-	elif GameData.current_wave == 0:
-		start_next_wave(0)
-	else:
-		get_tree().paused = true
-
-func _on_fast_forward_pressed() -> void:
-	if build_mode:
-		cancel_build_mode()
-	if Engine.get_time_scale() == 2.0:
-		Engine.set_time_scale(1.0)
-	else:
-		Engine.set_time_scale(2.0)
-
 ## Wave Functions
-func start_next_wave(_data) -> void:
-	if get_tree().is_paused():
-		pause_resume_game()
-		pause_button.set_pressed_no_signal(true)
-	GameData.current_wave += 1
+func start_next_wave() -> void:
+	print('starting wave')
+	SaveManager.save_data_run.current_wave += 1
 	var wave_data = GameData.get_wave_data()
 	wave_total = wave_data["wave_total"]
 	remaining_spawns = wave_total
 	living_baddies = 0
 	escaped_baddies = 0
-	if GameData.current_wave > 1:
-		ui.update_game_message("Next wave starting", 3.0, 0.5)
-		await get_tree().create_timer(3.0, false).timeout #padding before wave start
 	spawn_baddies(wave_data["wave_baddies"])
 
 func spawn_baddies(wave_data) -> void:
+	print('spawning baddies')
 	var wave_baddies : Array[Dictionary]
 	var spawning := true
 	
 	for i in wave_data: 
-		var baddy_data = load("res://GameData/Baddies/Act" + str(GameData.current_act + 1) + "/" + i)
+		var baddy_data = load("res://GameData/Baddies/Act" + str(SaveManager.save_data_run.current_act + 1) + "/" + i)
 		
 		wave_baddies.append({
 			"data" : baddy_data,
@@ -186,8 +166,6 @@ func on_baddy_death() -> void:
 func wave_cleared() -> void:
 	ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
 	player_cash += wave_reward
-	pause_resume_game()
-	pause_button.set_pressed_no_signal(false)
 	var new_reward = REWARD_UI.instantiate()
 	new_reward.connect_reward_card.connect(reward_signal_connection)
 	ui.clear_baddy_info()
@@ -196,7 +174,6 @@ func wave_cleared() -> void:
 
 func reward_signal_connection(reward_card) -> void:
 	reward_card.reward_selected.connect(inventory_ui.data.update_inventory)
-	reward_card.reward_selected.connect(start_next_wave)
 
 ## Pathfinding Functions
 func baddy_path_update() -> void:

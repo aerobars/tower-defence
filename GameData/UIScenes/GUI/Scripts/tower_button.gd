@@ -7,6 +7,8 @@ signal update_towers(mod_slot_ref: StaticBody2D, slot_data: PrototypeMod, aura_s
 @onready var mod_slot_scene := preload("res://GameData/UIScenes/GUI/mod_slot.tscn")
 @export var build_cost_label : Label
 @export var net_power_display : Label
+
+var button_data : ButtonData
 @export var slot_count : int
 @export var slot_radius : float
 var tower := "tower_base"

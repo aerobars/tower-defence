@@ -13,6 +13,7 @@ var build_data : Dictionary
 var tower_mods : Dictionary
 var build_keys : Array
 var init_power_buffs : Dictionary
+var tower_id : String
 
 ## Gameplay
 const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/tower_mod.tscn")
