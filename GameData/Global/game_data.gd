@@ -29,7 +29,7 @@ func get_act_data(filepath: String) -> void:
 	for i in TOTAL_ACTS:
 		var dir := ResourceLoader.list_directory(filepath + str(i+1))
 		if dir == null:
-			print("DIR FAILED TO OPEN")
+			print("BADDY DIRETORY FAILED TO OPEN")
 		var boss_dir := ResourceLoader.list_directory(filepath + str(i+1) + "Bosses/")
 		act_baddies[i] =[]
 		for file in dir:
@@ -41,19 +41,18 @@ func get_act_data(filepath: String) -> void:
 				act_bosses[i].append(file)
 
 func get_mod_data(filepath: String, dir_name) -> void:
-	var dir := DirAccess.open(filepath)
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if dir.current_is_dir():
-				character_mods[file_name] = []
-				get_mod_data(filepath + "/" + file_name, file_name)
-			else:
-				character_mods[dir_name].append(file_name)
-			file_name = dir.get_next()
-	else:
-		print("An error occurred when trying to access the path.")
+	var dir := ResourceLoader.list_directory(filepath)
+	if dir == null:
+		print("MOD DIRECTORY FAILED TO OPEN")
+	for file in dir:
+		if file.ends_with("/"):
+			var subdir = file.left(-1)
+			character_mods[subdir] = []
+			get_mod_data(filepath + "/" + subdir, subdir)
+		elif file.ends_with(".tres"):
+			character_mods[dir_name].append(file)
+		else:
+			print("Invalid filetype found in CharacterMods")
 
 func get_wave_data() -> Dictionary:
 	var wave_data : Dictionary = {"wave_baddies" : [], "wave_total" : 0}

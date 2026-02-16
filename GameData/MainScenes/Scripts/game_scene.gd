@@ -102,7 +102,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Wave Functions
 func start_next_wave() -> void:
-	print('starting wave')
 	SaveManager.save_data_run.current_wave += 1
 	var wave_data = GameData.get_wave_data()
 	wave_total = wave_data["wave_total"]
@@ -112,7 +111,6 @@ func start_next_wave() -> void:
 	spawn_baddies(wave_data["wave_baddies"])
 
 func spawn_baddies(wave_data) -> void:
-	print('spawning baddies')
 	var wave_baddies : Array[Dictionary]
 	var spawning := true
 	
