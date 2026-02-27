@@ -8,8 +8,8 @@ var data : PrototypeMod
 
 var draggable := false
 var inside_droppable := false
-var mod_slot_ref : ButtonModSlot
-var prev_slot_ref : ButtonModSlot
+var mod_slot_ref : TowerButtonModSlot
+var prev_slot_ref : TowerButtonModSlot
 
 var offset : Vector2
 var initial_pos :  Vector2
@@ -17,13 +17,14 @@ var inventory_pos : Vector2
 var in_inventory : bool = true
 
 @onready var hover_timer := $Timer
+@onready var texture := $Sprite2D
 const HOVER_DELAY : float = 0.5
 
 
 func _ready() -> void:
 	hover_timer.wait_time = HOVER_DELAY
 	hover_timer.one_shot = true
-	scale = Vector2(0.6, 0.6)
+	texture.texture = data.texture
 
 func _process(_delta: float) -> void:
 	if draggable:
@@ -33,6 +34,7 @@ func _process(_delta: float) -> void:
 			GameData.is_dragging = true
 			prev_slot_ref = mod_slot_ref #for moving mods from one button slot to another
 		if Input.is_action_pressed("ui_accept"):
+			scale = Vector2(0.6, 0.6)
 			global_position = get_global_mouse_position() - offset
 		elif Input.is_action_just_released("ui_accept"):
 			GameData.is_dragging = false
@@ -46,7 +48,7 @@ func droppable_check() -> void:
 		if mod_slot_ref.occupied and mod_slot_ref.occupying_mod != self: #check if mod slot is occupied with different mod
 			mod_slot_ref.occupying_mod.mod_dropped.emit(mod_slot_ref.occupying_mod.data, 1) #returns old mod back to inventory
 			_run_tween_async(tween, mod_slot_ref.occupying_mod, "global_position", mod_slot_ref.occupying_mod.inventory_pos, 0.2) 
-			mod_dropped.emit(data, -1) #mod_updated connected to inventory_ui
+			mod_dropped.emit(data, -1) #connected to inventory_ui
 		elif not mod_slot_ref.occupied:#unwritten else: stops inventory from subtracting if occupying mod is returned to same slot
 			mod_dropped.emit(data, -1)
 		tween.tween_property(self, "global_position", mod_slot_ref.global_position, 0.2).set_ease(Tween.EASE_OUT)
@@ -54,7 +56,7 @@ func droppable_check() -> void:
 		mod_slot_ref.update(data, true, self)
 		#mod_slot_ref.get_parent().data
 	elif in_inventory: #if mod slot started in inventory and wasn't added to mod slot
-		tween.tween_property(self, "global_position", initial_pos, 0.2).set_ease(Tween.EASE_OUT)
+		tween.tween_property(self, "global_position", inventory_pos, 0.2).set_ease(Tween.EASE_OUT)
 		await tween.finished
 		queue_free()
 	else: #if mod started in mod slot and removed back to inventory
@@ -88,11 +90,11 @@ func _on_timer_timeout() -> void:
 		#hovered.emit(data)
 	pass
 
-func _on_area_2d_body_entered(body: ButtonModSlot) -> void: #react to player dragging over mod slot
+func _on_area_2d_body_entered(body: TowerButtonModSlot) -> void: #react to player dragging over mod slot
 	inside_droppable = true
 	body.modulate = Color(Color.BISQUE, 1)
 	mod_slot_ref = body
 
-func _on_area_2d_body_exited(body: ButtonModSlot) -> void:
+func _on_area_2d_body_exited(body: TowerButtonModSlot) -> void:
 	inside_droppable = false
 	body.modulate = Color(Color.AZURE, 0.7)

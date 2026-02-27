@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://b7d7kfemno1ex"]
+[gd_scene load_steps=21 format=3 uid="uid://b7d7kfemno1ex"]
 
 [ext_resource type="PackedScene" uid="uid://egfxblymqfqd" path="res://GameData/Maps/map.tscn" id="1_akvmk"]
 [ext_resource type="Script" uid="uid://djsr0kjgwaton" path="res://GameData/MainScenes/Scripts/game_scene.gd" id="1_g2kuy"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="7_674w2"]
 [ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="8_a0jnf"]
 [ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="9_clpeu"]
+[ext_resource type="Script" uid="uid://dnh1c1wnnaxrm" path="res://GameData/UIScenes/GUI/Scripts/tower_button_data.gd" id="9_s26dc"]
 [ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://Resources/Fonts/kfn_50_o1.tres" id="10_0h1f8"]
 [ext_resource type="PackedScene" uid="uid://iq7vcv16hyni" path="res://GameData/UIScenes/GUI/tower_button.tscn" id="11_s26dc"]
 [ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://Resources/Fonts/kfn_30_o1.tres" id="11_sl8sw"]
@@ -16,15 +17,24 @@
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="13_541wh"]
 [ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/UIScenes/GUI/Scripts/baddy_info.gd" id="15_dts4o"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
-[ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/game_start_info.tscn" id="17_nh22g"]
+[ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/tutorial.tscn" id="17_nh22g"]
 
-[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "game_bookend_popup", "map_node", "path_debug")]
+[sub_resource type="Resource" id="Resource_qcle3"]
+script = ExtResource("9_s26dc")
+slot_count = 3
+metadata/_custom_type_script = "uid://dnh1c1wnnaxrm"
+
+[sub_resource type="Resource" id="Resource_sajd8"]
+script = ExtResource("9_s26dc")
+slot_count = 4
+metadata/_custom_type_script = "uid://dnh1c1wnnaxrm"
+
+[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "map_node", "path_debug")]
 script = ExtResource("1_g2kuy")
 ui = NodePath("UI")
 build_bar = NodePath("UI/HUD/BuildBar")
 inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryGrid")
 baddy_info_foldable = NodePath("UI/HUD/BaddyInfo")
-game_bookend_popup = NodePath("UI/HUD/GameBookendInfo")
 map_node = NodePath("Map")
 path_debug = NodePath("PathDebug")
 player_cash = 30
@@ -118,14 +128,14 @@ alignment = 1
 show_behind_parent = true
 z_index = -1
 layout_mode = 2
-slot_count = 3
+button_data = SubResource("Resource_qcle3")
 slot_radius = 64.0
 
 [node name="TowerBase2" parent="UI/HUD/BuildBar/HBoxContainer" instance=ExtResource("11_s26dc")]
 show_behind_parent = true
 z_index = -1
 layout_mode = 2
-slot_count = 4
+button_data = SubResource("Resource_sajd8")
 slot_radius = 64.0
 
 [node name="InfoBar" type="ColorRect" parent="UI/HUD"]
@@ -285,14 +295,6 @@ layout_mode = 2
 [node name="Description" type="Label" parent="UI/HUD/BaddyInfo/VBoxContainer"]
 layout_mode = 2
 
-[node name="GameBookendInfo" parent="UI/HUD" instance=ExtResource("17_nh22g")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-
 [node name="GameMessage" type="Label" parent="UI/HUD"]
 visible = false
 layout_mode = 1
@@ -311,6 +313,8 @@ size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 1, 1, 0.78431374)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 75
+
+[node name="Tutorial" parent="UI" instance=ExtResource("17_nh22g")]
 
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/NextWave" to="UI" method="_on_next_wave_pressed"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="UI" method="_on_pause_play_pressed"]

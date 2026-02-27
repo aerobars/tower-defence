@@ -7,7 +7,7 @@ signal mod_updated(mod: StaticBody2D)
 ## Tower Setup
 var non_aura_radius : float #equal to TowerBase's Marker2D radius
 var data : PrototypeMod
-var button_slot_ref : StaticBody2D
+var button_slot_id : int
 @onready var turret := $Turret
 @onready var range_aoe := $Range/CollisionShape2D
 

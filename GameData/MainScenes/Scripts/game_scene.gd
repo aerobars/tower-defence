@@ -78,10 +78,30 @@ func _ready() -> void:
 	## UI Setup
 	current_player_health = max_player_health
 	ui.update_cash_display(player_cash)
-	for i in get_tree().get_nodes_in_group("build_buttons"):
-		i.pressed.connect(func(): initiate_build_mode(i.tower_data, i, i.tower))
-		if SaveManager.save_data_run.button_data == {}:
-			pass
+	
+	var no_data : bool = SaveManager.save_data_run.button_data == [null]
+	var build_buttons_group : Array = get_tree().get_nodes_in_group("build_buttons")
+	if no_data:
+		pass
+	elif build_buttons_group.size() > SaveManager.save_data_run.button_data.size():
+		#remove button
+		#while sizes are different, remove buttons until sizes are the same
+		pass
+	elif build_buttons_group.size() < SaveManager.save_data_run.button_data.size():
+		#add button
+		#while sizes are different, add buttons until sizes are the same
+		pass
+	for i in build_buttons_group.size():
+		#include tower type as 3rd parameter once implemented
+		build_buttons_group[i].pressed.connect(func(): initiate_build_mode(build_buttons_group[i].tower_data, build_buttons_group[i]))
+		build_buttons_group[i].create_draggable.connect(create_draggable)
+		build_buttons_group[i].button_data.button_id = i + 1
+		print(build_buttons_group[i].button_data.button_id)
+		if no_data:
+			SaveManager.save_data_run.button_data.append(build_buttons_group[i].button_data)
+		else:
+			build_buttons_group[i].button_data = SaveManager.save_data_run.button_data[i]
+
 
 func _process(_delta: float) -> void:
 	if build_mode:
@@ -239,22 +259,27 @@ func cancel_build_mode() -> void:
 
 func verify_and_build() -> void:
 	if build_valid:
-		var new_tower = load("res://GameData/Towers/" + build_type + ".tscn").instantiate()
-		new_tower.position = build_location
-		new_tower.is_built = true
-		new_tower.tower_mods = build_data["mods"]
-		new_tower.aura_tower = build_data["aura_tower"]
-		new_tower.init_power_buffs = build_data["power_buffs"]
-		new_tower.mod_slot_count = build_data["mods"].size()
-		new_tower.show_upgrade_panel.connect(create_popup)
-		build_btn_ref.update_towers.connect(new_tower.tower_update)
-		
+		var new_tower = create_tower()
 		map_node.tower_container.add_child(new_tower, true) #TowerContainer is in Map Scene
 		map_node.exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
 		astar.set_point_solid(build_tile, true)
 		baddy_path_update()
 		player_cash -= build_btn_ref.build_cost
 		ui.update_cash_display(player_cash)
+
+func create_tower() -> Node2D:
+	var new_tower = load("res://GameData/Towers/tower_base.tscn").instantiate()
+	new_tower.position = build_location
+	new_tower.is_built = true
+	#new_tower.build_data = build_data
+	#less complicated to set build_data here... don't try it again
+	new_tower.tower_mods = build_data["mods"]
+	new_tower.aura_tower = build_data["aura_tower"]
+	new_tower.init_power_buffs = build_data["power_buffs"]
+	new_tower.mod_slot_count = build_data["mods"].size()
+	new_tower.show_upgrade_panel.connect(create_popup)
+	build_btn_ref.update_towers.connect(new_tower.tower_update)
+	return new_tower
 
 func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) -> void:
 	if player_cash < upgrade_cost:
@@ -277,20 +302,21 @@ func sell_tower(sell_value : int, tower : TowerBase) -> void:
 
 ## UI Functions
 func connect_inv_button_signal(inventory_slot) -> void: #connects new inventory slot signal
-	inventory_slot.button_down.connect(on_inv_button_down.bind(inventory_slot, inventory_slot.slot_data.inventory_mod))
+	inventory_slot.button_down.connect(create_draggable.bind(inventory_slot.slot_data.inventory_mod))
 	inventory_slot.hovered.connect(create_popup)
 	inventory_slot.clear_popup.connect(clear_popup)
 
-func on_inv_button_down(_inventory_slot, tower_mod) -> void: #button down for inventory slot
+func create_draggable(tower_mod: PrototypeMod, initial_pos : Vector2 = get_global_mouse_position(), slot_occupied : TowerButtonModSlot = null) -> void: #button down for inventory slot
 	var new_draggable = DRAGGABLE_MOD.instantiate()
 	GameData.is_dragging = true
 	new_draggable.draggable = true
 	new_draggable.data = tower_mod.duplicate()
-	new_draggable.get_child(0).texture = tower_mod.texture
 	new_draggable.mod_dropped.connect(inventory_ui.data.update_inventory)
 	build_bar.add_child(new_draggable)
 	new_draggable.inventory_pos = Vector2((inventory_ui.global_position.x + inventory_ui.size.x/2), (inventory_ui.global_position.y + inventory_ui.size.y/2))
-	new_draggable.initial_pos = get_global_mouse_position()
+	new_draggable.initial_pos = initial_pos
+	if slot_occupied != null:
+		slot_occupied.occupying_mod = new_draggable
 
 func create_popup(popup_type: String , data, popup_owner : TowerBase = null) -> void:
 	clear_popup()

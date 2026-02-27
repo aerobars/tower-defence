@@ -8,12 +8,10 @@ signal update_mods(net_power : int)
 const MAX_LEVEL = 4
 var mod_slot_count : int = 0 #set during verify and build Game Scene function
 var all_marker_pos : Dictionary[Marker2D,Vector2]
-var marker_keys : Array
 var build_data : Dictionary
 var tower_mods : Dictionary
-var build_keys : Array
 var init_power_buffs : Dictionary
-var tower_id : String
+var tower_data : TowerBaseData
 
 ## Gameplay
 const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/tower_mod.tscn")
@@ -34,11 +32,14 @@ var tower_children : Array :
 ## Setup
 func _ready() -> void:
 	marker_setup() #use markers instead of directly setting TowerMod scene so that this can show mod textures during build mode
-	#tower_mods = build_data["mods"]
-	#aura_tower = build_data["aura_tower"]
-	#init_power_buffs = build_data["power_buffs"]
-	#mod_slot_count = build_data["mods"].size()
+	#if build_data.size() > 0:
+	#	tower_mods = build_data["mods"]
+	#	aura_tower = build_data["aura_tower"]
+	#	init_power_buffs = build_data["power_buffs"]
+	#	mod_slot_count = build_data["mods"].size()
 	if tower_mods.size() > 0:
+		var marker_keys : Array
+		var build_keys : Array
 		for i in range(tower_mods.size()):
 			marker_keys = all_marker_pos.keys()
 			build_keys = tower_mods.keys()
@@ -51,11 +52,10 @@ func _ready() -> void:
 			if is_built:
 				if tower_mods[build_key] != null:
 					tower_mod.data = tower_mods[build_key].duplicate(true)
-				tower_mod.button_slot_ref = build_key
+				tower_mod.button_slot_id = build_key
 				update_mods.connect(tower_mod.update_mod)
 				tower_mod.non_aura_radius = marker_pos_radius
 			#else:
-				#print(tower_mod.get_child(0))
 				#tower_mod.get_child(0).texture = build_btn_mods[build_key].texture
 			add_child(tower_mod)
 	tower_update(aura_tower, init_power_buffs)
@@ -86,11 +86,11 @@ func update_markers() -> void: #called if # of markers gets updated
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if clickable:
 		if event.is_action("ui_accept"):
-			var tower_data : Array
+			var mod_data : Array
 			for child in get_children():
 				if child is TowerMod and child.data != null:
-					tower_data.append(child.data)
-			show_upgrade_panel.emit(POPUP_TYPE, tower_data, self)
+					mod_data.append(child.data)
+			show_upgrade_panel.emit(POPUP_TYPE, mod_data, self)
 
 func level_up() -> void:
 	level = min(level + 1, MAX_LEVEL)
@@ -101,13 +101,15 @@ func level_up() -> void:
 func tower_update(
 	aura_status: bool, 
 	power_surplus_buffs : Dictionary,
-	button_slot_ref: StaticBody2D = null, 
+	button_slot_id: int = 0, 
 	button_mod_data: PrototypeMod = null, 
 	) -> void:
+	
 	aura_tower = aura_status
 	net_power = 0
+	
 	for child in tower_children: 
-		if button_slot_ref != null and button_slot_ref == child.button_slot_ref:
+		if button_slot_id == child.button_slot_id:
 			if child.data != null and child.data.mod_class == child.data.ModClass.AURA: 
 				for body in child.aura_targets: #clears aura effects of old aura before updating
 					child.clear_buffs(body)

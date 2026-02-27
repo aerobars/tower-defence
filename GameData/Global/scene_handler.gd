@@ -18,6 +18,7 @@ func _ready() -> void:
 	else:
 		continue_button.visible = false
 
+
 func load_main_menu() -> void:
 	continue_button.pressed.connect(on_continue_pressed)
 	new_game.pressed.connect(on_new_game_pressed)

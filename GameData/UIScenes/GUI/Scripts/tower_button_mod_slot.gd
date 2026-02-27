@@ -1,11 +1,11 @@
-class_name ButtonModSlot extends Node2D
+class_name TowerButtonModSlot extends Node2D
 
 signal mod_updated(StaticBody2D, PrototypeMod) #connected to build buttons
 
-var data : PrototypeMod
+var slot_id : int
 var occupied := false
 var occupying_mod : ModDraggable
-
+var data : PrototypeMod
 
 func _ready() -> void:
 	modulate = Color(Color.AZURE, 0.7)
@@ -21,4 +21,4 @@ func update(_data : PrototypeMod, _occupied : bool = occupied, _occupying_mod : 
 	occupied = _occupied
 	data = _data
 	occupying_mod = _occupying_mod
-	mod_updated.emit(self, data)
+	mod_updated.emit(slot_id, _data)

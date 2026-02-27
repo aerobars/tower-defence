@@ -1,0 +1,360 @@
+[gd_scene load_steps=4 format=3 uid="uid://bfclp7iyn1iv8"]
+
+[ext_resource type="Script" uid="uid://jaabtxw7chgp" path="res://GameData/UIScenes/GUI/Scripts/game_start_info.gd" id="1_73r4p"]
+[ext_resource type="Texture2D" uid="uid://d0c26ox538jjk" path="res://Assets/UI/Buttons/button_rectangle_gradient.png" id="2_dg6u1"]
+[ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="3_snetv"]
+
+[node name="Tutorial" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_73r4p")
+
+[node name="Intro" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -108.0
+offset_right = 256.0
+offset_bottom = 108.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_dg6u1")
+
+[node name="Label" type="Label" parent="Intro"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -92.0
+offset_right = 240.0
+offset_bottom = 145.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_snetv")
+text = "Hello and welcome to Happiness Comes In Waves!
+
+If this is your first time playing or it's been a while, I'd recommend that you Continue through this brief and thrilling tutorial.
+
+If you'd like to learn on your own or have already gone through the tutorial, then Skip Tutorial.
+
+
+
+
+"
+autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Intro"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -78.0
+offset_top = -51.0
+offset_right = 78.0
+offset_bottom = -11.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 13
+alignment = 1
+
+[node name="Skip Tutorial" type="Button" parent="Intro/HBoxContainer"]
+layout_mode = 2
+text = "Skip Tutorial"
+
+[node name="IntroButton" type="Button" parent="Intro/HBoxContainer"]
+layout_mode = 2
+text = "Continue"
+
+[node name="GameObj" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 144.0
+offset_top = -224.0
+offset_right = 624.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_dg6u1")
+
+[node name="ObjButton" type="Button" parent="GameObj"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -40.0
+offset_right = 20.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Yawn..."
+
+[node name="Label" type="Label" parent="GameObj"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -208.0
+offset_top = -64.0
+offset_right = 208.0
+offset_bottom = 93.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_snetv")
+text = "The goal of the game is to prevent the baddies that spawn to the left from reaching the circle. Every baddy that enters the circle will cause you to lose health equal to their damage. 
+
+Once your health reaches zero, or you're unable to kill a single baddy in a wave, it's game over!
+
+"
+autowrap_mode = 3
+
+[node name="TowerBuilding" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -96.0
+offset_right = 256.0
+offset_bottom = 216.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_dg6u1")
+
+[node name="TowerBuildingButton" type="Button" parent="TowerBuilding"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -40.0
+offset_right = 20.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Tower Mods?!"
+
+[node name="Label" type="Label" parent="TowerBuilding"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -132.0
+offset_right = 240.0
+offset_bottom = 116.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_snetv")
+text = "To stop the baddies from reaching their destination you can build towers using the buttons below.
+
+You can place towers on any dirt space as long as it doesn't block the baddys from being able to reach the circle. 
+
+Making a maze so that the baddies will take longer to reach their goal can be help ful, or you can Upgrade one tower to make it take on the whole wave.
+
+Regardless of your strategy, as long as you kill at least one baddy in the wave and have life to spare, you'll complete the level.
+
+The towers won't do anything on their own though. You'll need to build them up with tower mods."
+autowrap_mode = 2
+
+[node name="ModsIntro" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -592.0
+offset_top = -224.0
+offset_right = 8.0
+offset_bottom = 216.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_dg6u1")
+
+[node name="ModsIntroButton" type="Button" parent="ModsIntro"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -40.0
+offset_right = 20.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Tell me more!"
+
+[node name="Label" type="Label" parent="ModsIntro"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -276.0
+offset_top = -188.0
+offset_right = 284.0
+offset_bottom = 209.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_snetv")
+text = "That's right, Tower Mods! They're what you use to have your towers be more than a wall, and how you use them is up to you!
+
+All mods come in three classes; Weapon, Power, or Aura. 
+
+Weapon Mods shoot the baddies, pretty straight forward.
+
+Power Mods supply power to the tower, more on them later.
+
+Aura Mods provide passive buffs or debuffs, and their function depends on the tower it's a part of.
+
+If an Aura Mod's tower has no weapon mods, then it will apply the buff/debuff to towers/baddies in it's range.
+
+If a Weapon Mod is present in the tower, then instead the aura will only affect the mods of it's tower. In the case of debuffs these will be added to the weapon mod as an on hit effect.
+
+"
+autowrap_mode = 2
+
+[node name="PoweringMods" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -148.0
+offset_right = 256.0
+offset_bottom = 148.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_dg6u1")
+
+[node name="PoweringModsButton" type="Button" parent="PoweringMods"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -40.0
+offset_right = 20.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Comes great responsibility..."
+
+[node name="Label" type="Label" parent="PoweringMods"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -124.0
+offset_right = 240.0
+offset_bottom = 101.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_snetv")
+text = "If you insist!
+
+All mods either have a power cost (Weapons and Auras) or power supply (Power) value. 
+
+The only requirement for a tower to function is that their net power (the number in the button's centre) needs to be 0 or greater. Every point of power above 0 will increase that damage of weapon mods in that tower by 10%.
+
+As a great man once said, with great power..."
+autowrap_mode = 2
+
+[node name="End" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -256.0
+offset_top = 120.0
+offset_right = 256.0
+offset_bottom = 288.0
+grow_horizontal = 2
+texture = ExtResource("2_dg6u1")
+
+[node name="EndButton" type="Button" parent="End"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -28.0
+offset_top = -40.0
+offset_right = 20.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Let's do this!"
+
+[node name="Label" type="Label" parent="End"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -68.0
+offset_right = 240.0
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_snetv")
+text = "You got it Tiger!
+
+Place your first towers, slap some mods on those puppies, and when you're ready to start click the Next Wave button at the top.
+
+Good luck!"
+autowrap_mode = 2
+
+[connection signal="button_up" from="Intro/HBoxContainer/Skip Tutorial" to="." method="_on_skip_tutorial_button_up"]
+[connection signal="button_up" from="Intro/HBoxContainer/IntroButton" to="." method="_on_intro_button_button_up"]
+[connection signal="button_up" from="GameObj/ObjButton" to="." method="_on_obj_button_button_up"]
+[connection signal="button_up" from="TowerBuilding/TowerBuildingButton" to="." method="_on_tower_building_button_button_up"]
+[connection signal="button_up" from="ModsIntro/ModsIntroButton" to="." method="_on_mods_intro_button_button_up"]
+[connection signal="button_up" from="PoweringMods/PoweringModsButton" to="." method="_on_powering_mods_button_button_up"]
+[connection signal="button_up" from="End/EndButton" to="." method="_on_end_button_button_up"]
