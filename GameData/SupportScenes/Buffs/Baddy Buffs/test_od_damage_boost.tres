@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_nr1oa")
-stat = 3
+stat = 8
 buff_amount = 1.0
 name = "Damage Boost"
 buff_duration = -1.0

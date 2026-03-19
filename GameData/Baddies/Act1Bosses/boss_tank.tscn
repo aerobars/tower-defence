@@ -13,8 +13,6 @@ script = ExtResource("4_rb4bj")
 base_max_health = 1000.0
 base_damage = 21.0
 base_defence = 10.0
-base_move_speed = 150.0
-defence_tag = 3
 metadata/_custom_type_script = "uid://citwba61de3ku"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7b3mk"]

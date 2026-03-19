@@ -36,7 +36,7 @@ func update_mod(net_power : int = 0) -> void:
 	if data == null:
 		range_aoe.get_shape().radius = 0.0
 		turret.texture = null
-		remove_from_group("turret")
+		remove_from_group("towers")
 		return
 	data.net_power = net_power
 	data.setup_stats(get_parent().level)
@@ -46,13 +46,13 @@ func update_mod(net_power : int = 0) -> void:
 				$Range/CollisionShape2D.get_shape().radius = data.current_range
 			else:
 				$Range/CollisionShape2D.get_shape().radius = non_aura_radius
-			add_to_group("turret")
+			add_to_group("towers")
 		1: #Power
 			$Range/CollisionShape2D.get_shape().radius = non_aura_radius
-			remove_from_group("turret")
+			remove_from_group("towers")
 		2: #Weapon
 			$Range/CollisionShape2D.get_shape().radius = data.current_range
-			add_to_group("turret")
+			add_to_group("towers")
 	turret.texture = data.texture
 	mod_updated.emit(self)
 
@@ -96,7 +96,7 @@ func _on_range_body_entered(body) -> void:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body.get_parent())
-	elif data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
+	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		if data.buff_data.buff_targets == GlobalEnums.AuraTargets.BADDIES and get_parent().aura_tower:
 			return #nothing gets added for offensive auras in aura mode
 		else:
@@ -107,7 +107,7 @@ func _on_range_body_exited(body) -> void:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body.get_parent())
-	elif data.mod_class == data.ModClass.AURA and body.is_in_group("turret"):
+	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		#aura_targets.erase(body)
 		remove_buff(body)
 

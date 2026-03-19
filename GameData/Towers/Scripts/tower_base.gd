@@ -9,8 +9,6 @@ const MAX_LEVEL = 4
 var mod_slot_count : int = 0 #set during verify and build Game Scene function
 var all_marker_pos : Dictionary[Marker2D,Vector2]
 var build_data : Dictionary
-var tower_mods : Dictionary
-var init_power_buffs : Dictionary
 var tower_data : TowerBaseData
 
 ## Gameplay
@@ -31,16 +29,17 @@ var tower_children : Array :
 
 ## Setup
 func _ready() -> void:
+	if not is_built:
+		return
+	var tower_mods : Dictionary = build_data["mods"]
+	var init_power_buffs : Dictionary = build_data["power_buffs"]
+	aura_tower = build_data["aura_tower"]
+	mod_slot_count = tower_mods.size()
 	marker_setup() #use markers instead of directly setting TowerMod scene so that this can show mod textures during build mode
-	#if build_data.size() > 0:
-	#	tower_mods = build_data["mods"]
-	#	aura_tower = build_data["aura_tower"]
-	#	init_power_buffs = build_data["power_buffs"]
-	#	mod_slot_count = build_data["mods"].size()
-	if tower_mods.size() > 0:
+	if mod_slot_count > 0:
 		var marker_keys : Array
 		var build_keys : Array
-		for i in range(tower_mods.size()):
+		for i in range(mod_slot_count):
 			marker_keys = all_marker_pos.keys()
 			build_keys = tower_mods.keys()
 			var marker_key = marker_keys[i]
@@ -49,12 +48,14 @@ func _ready() -> void:
 			tower_mod.position = all_marker_pos[marker_key]
 			#set mod textures on tower preview, or full mod data if built
 			#does not do former for now
-			if is_built:
-				if tower_mods[build_key] != null:
-					tower_mod.data = tower_mods[build_key].duplicate(true)
-				tower_mod.button_slot_id = build_key
-				update_mods.connect(tower_mod.update_mod)
-				tower_mod.non_aura_radius = marker_pos_radius
+			if tower_mods[build_key] != null:
+				tower_mod.data = tower_mods[build_key].duplicate(true)
+				if level > 0:
+					tower_mod.data.setup_stats(level)
+			tower_mod.button_slot_id = build_key
+			update_mods.connect(tower_mod.update_mod)
+			tower_mod.non_aura_radius = marker_pos_radius
+				
 			#else:
 				#tower_mod.get_child(0).texture = build_btn_mods[build_key].texture
 			add_child(tower_mod)
@@ -113,14 +114,21 @@ func tower_update(
 			if child.data != null and child.data.mod_class == child.data.ModClass.AURA: 
 				for body in child.aura_targets: #clears aura effects of old aura before updating
 					child.clear_buffs(body)
-			if button_mod_data != null:
+			if button_mod_data != null: #set tower mod's data
 				child.data = button_mod_data.duplicate(true)
+				child.data.buff_owner = child
+				if child.data.swapper:
+					if child.data.swap_buff == null or child.data.swap_buff_duration == 0.0:
+						print("Swapper enabled with incomplete swap data for ", child.data.name)
+					else:
+						child.data.add_buff(child.data.swap_buff)
 			else:
 				child.data = null
 		if child.data != null:
 			child.data.setup_stats(level)
 			net_power += child.data.current_power
 			child.data.power_surplus_buffs = power_surplus_buffs
+
 	
 	update_mods.emit(net_power)
 	#if low power, set low power display

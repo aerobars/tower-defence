@@ -1,6 +1,6 @@
 class_name RewardCard extends Control
 
-signal reward_selected(towermod: TowerMod)
+signal reward_selected(towermod: TowerMod) #connected to InventoryUI data (InventoryData)
 
 var data : PrototypeMod
 @onready var container : VBoxContainer = $Background/VBoxContainer
@@ -49,6 +49,7 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			reward_selected.emit(data)
+			SaveManager.save_run()
 
 func _on_background_mouse_entered() -> void:
 	scale = Vector2(1.03, 1.03)

@@ -11,10 +11,8 @@ name = "Red Tank"
 description = "Gives nearby baddies additional damage on death"
 texture = ExtResource("3_m6ybo")
 spawn_per_wave = 10
-base_max_health = 30.0
+base_max_health = 50.0
 base_move_speed = 200.0
 aura_aoe = 200.0
-on_death_buffs = Dictionary[ExtResource("1_m6ybo"), int]({
-ExtResource("2_cu7e3"): 2
-})
+on_death_buffs = Array[ExtResource("1_m6ybo")]([ExtResource("2_cu7e3")])
 metadata/_custom_type_script = "uid://citwba61de3ku"

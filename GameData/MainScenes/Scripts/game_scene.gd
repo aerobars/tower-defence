@@ -7,6 +7,7 @@ signal game_finished(result)
 @export_subgroup("UI")
 const BADDY_SCENE := preload("res://GameData/Baddies/ScriptsAndProtos/baddy.tscn")
 const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
+const TOWER_BUTTON := preload("res://GameData/UIScenes/GUI/tower_button.tscn")
 const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
 const POPUPS : Dictionary = {
 	"mod" : preload("res://GameData/UIScenes/GUI/mod_popup.tscn"),
@@ -16,8 +17,9 @@ const POPUPS : Dictionary = {
 @export var build_bar : ColorRect
 @export var inventory_ui : GridContainer
 @export var baddy_info_foldable : FoldableContainer
-#@export var pause_button : TextureButton
+@export var tower_buttons : HBoxContainer
 @export var game_bookend_popup : Control
+@export var tutorial : Control
 @onready var new_slot := inventory_ui.connect("slot_created", connect_inv_button_signal)
 var cur_popup : Node2D
 
@@ -35,24 +37,31 @@ const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
 var previous_tile := Vector2i(0, 0)
 
 ## Gameplay 
+var new_game : bool
 @export_group("Gameplay")
 var remaining_spawns := 0 
 var wave_total := 0
 var living_baddies := 0
 var escaped_baddies := 0
 @export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
-var current_player_health : int
-var character : String = "Tester"
-@export_range(0, 1000, 1.0, "suffix: coins") var player_cash : int :
+var player_health : int :
 	set(value):
-		player_cash = value
+		SaveManager.save_data_run.current_player_health = value
 		if ui:
-			ui.update_cash_display(player_cash)
+			ui.update_health_bar(SaveManager.save_data_run.current_player_health, max_player_health)
+	get:
+		return SaveManager.save_data_run.current_player_health
+#var character : String = "Tester"
+var player_cash : int :
+	set(value):
+		SaveManager.save_data_run.current_cash = value
+		if ui:
+			ui.update_cash_display(SaveManager.save_data_run.current_cash)
+	get:
+		return SaveManager.save_data_run.current_cash
 var wave_reward : int :
 	get:
-		return randi_range(20, 40) # (1 + float(SaveManager.save_data_run.current_wave)/10)
-
-
+		return randi_range(50, 50) # (1 + float(SaveManager.save_data_run.current_wave)/10)
 
 ## Build Mode
 var build_btn_ref
@@ -76,32 +85,38 @@ func _ready() -> void:
 	baddy_path_update()
 	
 	## UI Setup
-	current_player_health = max_player_health
+	ui.update_health_bar(player_health, max_player_health)
 	ui.update_cash_display(player_cash)
 	
-	var no_data : bool = SaveManager.save_data_run.button_data == [null]
-	var build_buttons_group : Array = get_tree().get_nodes_in_group("build_buttons")
-	if no_data:
-		pass
-	elif build_buttons_group.size() > SaveManager.save_data_run.button_data.size():
-		#remove button
-		#while sizes are different, remove buttons until sizes are the same
-		pass
-	elif build_buttons_group.size() < SaveManager.save_data_run.button_data.size():
-		#add button
-		#while sizes are different, add buttons until sizes are the same
-		pass
-	for i in build_buttons_group.size():
-		#include tower type as 3rd parameter once implemented
-		build_buttons_group[i].pressed.connect(func(): initiate_build_mode(build_buttons_group[i].tower_data, build_buttons_group[i]))
-		build_buttons_group[i].create_draggable.connect(create_draggable)
-		build_buttons_group[i].button_data.button_id = i + 1
-		print(build_buttons_group[i].button_data.button_id)
-		if no_data:
-			SaveManager.save_data_run.button_data.append(build_buttons_group[i].button_data)
-		else:
-			build_buttons_group[i].button_data = SaveManager.save_data_run.button_data[i]
-
+	## Button Setup
+	var build_buttons_count : int
+	if SaveManager.save_data_run.new_game:
+		build_buttons_count = SaveManager.save_data_run.init_btn_count
+	else:
+		build_buttons_count = SaveManager.save_data_run.button_data.size() #input some other value once it's time
+	for i in build_buttons_count:
+		create_tower_button(i)
+	
+	##Saved Run Setup
+	if SaveManager.save_data_run.new_game : #rest of func only needs to run to load saved towers
+		return
+	for tower in SaveManager.save_data_run.tower_data:
+		for button in get_tree().get_nodes_in_group("build_buttons"):
+			if button.button_data.button_id == tower.connected_button_id:
+				create_tower(tower.position, button.tower_data, button, tower.level, true)
+	
+	##Saved Draggable Mod Position Set
+	await get_tree().process_frame
+	for mod in get_tree().get_nodes_in_group("droppable"):
+		if mod is ModDraggable:
+			mod.global_position = mod.mod_slot_ref.global_position
+	
+	#for each tower in saved tower data
+	#create a new tower at the saved position
+	#add saved mods to tower
+	#set tower level to saved level
+	#connect linked button signals
+	
 
 func _process(_delta: float) -> void:
 	if build_mode:
@@ -116,9 +131,15 @@ func _unhandled_input(event: InputEvent) -> void:
 			verify_and_build()
 			cancel_build_mode()
 	if event.is_action_pressed("hotkey_button_1"):
-		build_bar.get_node("HBoxContainer/TowerBase").pressed.emit()
+		tower_buttons.get_child(0).pressed.emit()
 	if event.is_action_pressed("hotkey_button_2"):
-		build_bar.get_node("HBoxContainer/TowerBase2").pressed.emit()
+		tower_buttons.get_child(1).pressed.emit()
+	if event.is_action_pressed("hotkey_button_3"):
+		tower_buttons.get_child(2).pressed.emit()
+	if event.is_action_pressed("hotkey_button_4"):
+		tower_buttons.get_child(3).pressed.emit()
+	if event.is_action_pressed("hotkey_button_5"):
+		tower_buttons.get_child(4).pressed.emit()
 
 ## Wave Functions
 func start_next_wave() -> void:
@@ -163,10 +184,9 @@ func spawn_baddies(wave_data) -> void:
 				await(get_tree().create_timer(baddy.spawn_interval, false)).timeout
 
 func on_base_damage(damage) -> void:
-	current_player_health -= damage
-	ui.update_health_bar(current_player_health, max_player_health)
+	player_health -= damage
 	escaped_baddies += 1
-	if (current_player_health <= 0 or escaped_baddies == wave_total) and not game_bookend_popup.game_over:
+	if (player_health <= 0 or escaped_baddies == wave_total) and not game_bookend_popup.game_over:
 		game_bookend_popup.game_over = true
 		ui.update_game_message("Game Over!", 2.0, 0.0, 75)
 		game_bookend_popup.get_node("TextureRect/Label").text = "Thank you for playing! 
@@ -184,10 +204,12 @@ func on_baddy_death() -> void:
 func wave_cleared() -> void:
 	ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
 	player_cash += wave_reward
-	var new_reward = REWARD_UI.instantiate()
-	new_reward.connect_reward_card.connect(reward_signal_connection)
+	var new_reward_ui = REWARD_UI.instantiate()
+	new_reward_ui.total_rewards = SaveManager.save_data_run.wave_reward_total
+	new_reward_ui.connect_reward_card.connect(reward_signal_connection)
 	ui.clear_baddy_info()
-	ui.add_child(new_reward)
+	ui.add_child(new_reward_ui)
+	ui.update_wave_button()
 	#load next level/wave selection
 
 func reward_signal_connection(reward_card) -> void:
@@ -259,27 +281,41 @@ func cancel_build_mode() -> void:
 
 func verify_and_build() -> void:
 	if build_valid:
-		var new_tower = create_tower()
-		map_node.tower_container.add_child(new_tower, true) #TowerContainer is in Map Scene
-		map_node.exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
-		astar.set_point_solid(build_tile, true)
-		baddy_path_update()
+		create_tower()
 		player_cash -= build_btn_ref.build_cost
-		ui.update_cash_display(player_cash)
 
-func create_tower() -> Node2D:
+func create_tower(
+	_build_location: Vector2 = build_location, 
+	_build_data: Dictionary = build_data, 
+	connected_btn: BuildTowerButton = build_btn_ref, 
+	level: int = 0,
+	saved_tower: bool = false,
+	) -> void:
+	
 	var new_tower = load("res://GameData/Towers/tower_base.tscn").instantiate()
-	new_tower.position = build_location
+	new_tower.tower_data = TowerBaseData.new()
+	new_tower.tower_data.connected_button_id = connected_btn.button_data.button_id
+	new_tower.tower_data.level = level
+	new_tower.tower_data.position = _build_location
+	new_tower.position = new_tower.tower_data.position
 	new_tower.is_built = true
-	#new_tower.build_data = build_data
+	new_tower.build_data = _build_data
 	#less complicated to set build_data here... don't try it again
-	new_tower.tower_mods = build_data["mods"]
-	new_tower.aura_tower = build_data["aura_tower"]
-	new_tower.init_power_buffs = build_data["power_buffs"]
-	new_tower.mod_slot_count = build_data["mods"].size()
+	#yeah but what do I know 
+	#new_tower.tower_mods = _build_data["mods"]
+	#new_tower.aura_tower = _build_data["aura_tower"]
+	#new_tower.init_power_buffs = _build_data["power_buffs"]
+	#new_tower.mod_slot_count = _build_data["mods"].size()
 	new_tower.show_upgrade_panel.connect(create_popup)
-	build_btn_ref.update_towers.connect(new_tower.tower_update)
-	return new_tower
+	connected_btn.update_towers.connect(new_tower.tower_update)
+	if not saved_tower:
+		SaveManager.save_data_run.tower_data.append(new_tower.tower_data)
+	else:
+		build_tile = map_node.exclusion_layer.local_to_map(new_tower.position)
+	map_node.tower_container.add_child(new_tower, true) #TowerContainer is in Map Scene
+	map_node.exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
+	astar.set_point_solid(build_tile, true)
+	baddy_path_update()
 
 func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) -> void:
 	if player_cash < upgrade_cost:
@@ -302,14 +338,20 @@ func sell_tower(sell_value : int, tower : TowerBase) -> void:
 
 ## UI Functions
 func connect_inv_button_signal(inventory_slot) -> void: #connects new inventory slot signal
-	inventory_slot.button_down.connect(create_draggable.bind(inventory_slot.slot_data.inventory_mod))
+	inventory_slot.button_down.connect(func(): create_draggable(inventory_slot.slot_data.inventory_mod))
 	inventory_slot.hovered.connect(create_popup)
 	inventory_slot.clear_popup.connect(clear_popup)
 
-func create_draggable(tower_mod: PrototypeMod, initial_pos : Vector2 = get_global_mouse_position(), slot_occupied : TowerButtonModSlot = null) -> void: #button down for inventory slot
+func create_draggable(
+	tower_mod: PrototypeMod, 
+	initial_pos : Vector2 = get_global_mouse_position(), 
+	slot_occupied : TowerButtonModSlot = null, 
+	_is_dragging = true
+	) -> void: #button down for inventory slot
+	
 	var new_draggable = DRAGGABLE_MOD.instantiate()
-	GameData.is_dragging = true
-	new_draggable.draggable = true
+	GameData.is_dragging = _is_dragging
+	new_draggable.draggable = _is_dragging
 	new_draggable.data = tower_mod.duplicate()
 	new_draggable.mod_dropped.connect(inventory_ui.data.update_inventory)
 	build_bar.add_child(new_draggable)
@@ -317,6 +359,9 @@ func create_draggable(tower_mod: PrototypeMod, initial_pos : Vector2 = get_globa
 	new_draggable.initial_pos = initial_pos
 	if slot_occupied != null:
 		slot_occupied.occupying_mod = new_draggable
+		new_draggable.mod_slot_ref = slot_occupied
+		#new_draggable.global_position = initial_pos
+		new_draggable.in_inventory = false
 
 func create_popup(popup_type: String , data, popup_owner : TowerBase = null) -> void:
 	clear_popup()
@@ -334,3 +379,20 @@ func create_popup(popup_type: String , data, popup_owner : TowerBase = null) -> 
 func clear_popup() -> void:
 	if cur_popup != null:
 		cur_popup.queue_free()
+
+func create_tower_button(num: int) -> void:
+	var new_button = TOWER_BUTTON.instantiate()
+	new_button.button_data = TowerButtonData.new()
+	if SaveManager.save_data_run.new_game:
+		new_button.button_data.button_id = num + 1
+		new_button.button_data.slot_count = num + 3
+		SaveManager.save_data_run.button_data.append(new_button.button_data)
+	else:
+		new_button.button_data = SaveManager.save_data_run.button_data[num]
+	new_button.create_draggable.connect(create_draggable)
+	new_button.pressed.connect(func(): initiate_build_mode(new_button.tower_data, new_button))
+	tower_buttons.add_child(new_button)
+
+##Save/Load Testing
+func _on_save_button_up() -> void:
+	game_finished.emit(false)

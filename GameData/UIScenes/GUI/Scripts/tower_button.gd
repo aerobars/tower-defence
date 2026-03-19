@@ -7,15 +7,21 @@ signal update_towers(
 	mod_slot_ref: StaticBody2D, 
 	slot_data: PrototypeMod,
 	) 
-signal create_draggable()
+signal create_draggable(
+	tower_mod: PrototypeMod, 
+	initial_pos : Vector2, 
+	slot_occupied : TowerButtonModSlot,
+	is_dragging : bool,
+	)
 
 ## Setup
 @onready var mod_slot_scene := preload("res://GameData/UIScenes/GUI/tower_button_mod_slot.tscn")
+@onready var mod_draggable_scene := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
 @export var build_cost_label : Label
 @export var net_power_display : Label
 
 @export var button_data : TowerButtonData #contains mod slot data, slot count, and id
-@export var slot_radius : float
+@export var slot_radius : float = 64
 var slot_data_ref : Dictionary
 var button_slots : Array :
 	get:
@@ -36,38 +42,39 @@ var tower_data : Dictionary : get = get_tower_mods
 func _ready() -> void:
 	for i in button_data.slot_count:
 		new_mod_slot(i)
+		on_mod_update(get_slot_id(i))
+	build_cost = button_data.slot_count
 	$PowerIcon.modulate.a = 0.5
 
 func new_mod_slot(slot_num: int) -> void:
 	var new_slot = mod_slot_scene.instantiate()
-	new_slot.slot_id = button_data.button_id * 10 + slot_num
 	add_child(new_slot)
 	new_slot.mod_updated.connect(on_mod_update)
+	set_slot_position(new_slot, slot_num)
+	new_slot.slot_id = get_slot_id(slot_num)
+	if button_data.mod_data.has(new_slot.slot_id) and button_data.mod_data[new_slot.slot_id] != null:
+		new_slot.occupied = true
+		create_draggable.emit(button_data.mod_data[new_slot.slot_id], new_slot.global_position, new_slot, false)
+
+
+func get_slot_id(slot_num: int) -> int:
+	return button_data.button_id * 10 + slot_num
+
+func update_mod_slots() -> void:
+	var slot_num := 0
+	for slot in button_slots:
+		set_slot_position(slot, slot_num)
+		slot_num += 1
+	build_cost = button_data.slot_count
+
+func set_slot_position(slot: TowerButtonModSlot, slot_num: int) -> void:
 	var angle : float
 	if button_data.slot_count > 4:
 		angle = -PI/2 + slot_num * (TAU / (button_data.slot_count))
 	else:
 		angle = -(slot_num * (PI / (button_data.slot_count-1)))
-	new_slot.position.x = slot_radius * cos(angle) + size.x/2
-	new_slot.position.y = slot_radius * sin(angle) + size.y/2
-	if button_data.mod_data == null:
-		return
-	if button_data.mod_data.size() >=1 and button_data.mod_data[slot_num] != null:
-		var data = button_data.mod_data[slot_num]
-		create_draggable.emit(data, new_slot.global_position, new_slot)
-
-func update_mod_slots() -> void:
-	var slot_num := 0
-	for slot in button_slots:
-		var angle = 0
-		if button_data.slot_count > 4:
-			angle = -PI/2 + slot_num * (TAU / (button_data.slot_count))
-		else:
-			angle = -(slot_num * (PI / (button_data.slot_count-1)))
-		slot.position.x = slot_radius * cos(angle) + size.x/2
-		slot.position.y = slot_radius * sin(angle) + size.y/2
-		slot_num += 1
-	build_cost = button_data.slot_count
+	slot.position.x = slot_radius * cos(angle) + size.x/2
+	slot.position.y = slot_radius * sin(angle) + size.y/2
 
 ## In-Game
 func slot_added() -> void:
@@ -80,22 +87,21 @@ func slot_removed() -> void:
 	update_mod_slots()
 
 func get_tower_mods() -> Dictionary:
-	var mod_dict : Dictionary
 	var power_surplus_buffs : Dictionary
 	var has_wep := false
 	var has_aura := false
 	
 	for child in button_slots: #adds mods to data Dictionary and checks if it is an aura tower
-		mod_dict[child.slot_id] = child.data
-		if not has_wep and mod_dict[child.slot_id] != null:
-			if child.data.mod_class == child.data.ModClass.WEAPON:
+		var child_data = button_data.mod_data[child.slot_id]
+		if not has_wep and child_data != null:
+			if child_data.mod_class == child_data.ModClass.WEAPON:
 				has_wep = true
-			elif child.data.mod_class == child.data.ModClass.AURA:
+			elif child_data.mod_class == child_data.ModClass.AURA:
 				has_aura = true
-		if child.data is PowerMod:
+		if child_data is PowerMod:
 			var stat_name : String = ""
 			for stat in GlobalEnums.BuffableStats.keys():
-				for i in child.data.power_surplus_buffable_stats:
+				for i in child_data.power_surplus_buffable_stats:
 					if i & GlobalEnums.BuffableStats[stat]:
 						stat_name = stat.to_lower()
 						if not power_surplus_buffs.has(stat_name):
@@ -104,23 +110,29 @@ func get_tower_mods() -> Dictionary:
 	
 	return {
 		"aura_tower": has_aura and not has_wep,
-		"mods": mod_dict,
+		"mods": button_data.mod_data,
 		"power_buffs": power_surplus_buffs,
 		}
 
-func on_mod_update(slot_id : int, data : PrototypeMod) -> void:
+func on_mod_update(slot_id : int, data : PrototypeMod = null) -> void:
 	var net_power := 0
 	var power_surplus_buffs : Dictionary = {}
 	var has_wep := false
 	var has_aura := false
 	
+	if data == null and button_data.mod_data.has(slot_id): #prevents overwriting saved data
+		data = button_data.mod_data[slot_id]
+	
+	button_data.mod_data[slot_id] = data
+	
 	for child in button_slots:
-		if child.data != null:
-			net_power += child.data.base_power_levels[0]
-			if child.data is PowerMod: #power updates
+		var child_data = button_data.mod_data[child.slot_id]
+		if child_data != null:
+			net_power += child_data.base_power_levels[0]
+			if child_data is PowerMod: #power updates
 				var stat_name : String = ""
 				for stat in GlobalEnums.BuffableStats.keys():
-					for i in child.data.power_surplus_buffable_stats:
+					for i in child_data.power_surplus_buffable_stats:
 						if i & GlobalEnums.BuffableStats[stat]:
 							stat_name = stat.to_lower()
 							if not power_surplus_buffs.has(stat_name):
@@ -128,9 +140,9 @@ func on_mod_update(slot_id : int, data : PrototypeMod) -> void:
 							power_surplus_buffs[stat_name] += 1
 			else: #aura updates
 				if not has_wep:
-					if child.data.mod_class == child.data.ModClass.WEAPON:
+					if child_data.mod_class == child_data.ModClass.WEAPON:
 						has_wep = true
-					elif child.data.mod_class == child.data.ModClass.AURA:
+					elif child_data.mod_class == child_data.ModClass.AURA:
 						has_aura = true
 	update_towers.emit(has_aura and not has_wep, power_surplus_buffs, slot_id, data)
 	

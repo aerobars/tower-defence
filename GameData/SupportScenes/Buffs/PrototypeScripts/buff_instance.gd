@@ -1,7 +1,7 @@
 class_name BuffInstance extends Resource
 
 const BURST_SPEED = preload("res://GameData/SupportScenes/Buffs/Baddy Buffs/burst_speed.tres")
-var poison_stat = preload("res://GameData/SupportScenes/Buffs/Tower Buffs/test_poison_sb.tres")
+#var poison_stat = preload("res://GameData/SupportScenes/Buffs/Tower Buffs/test_poison_sb.tres")
 
 var buff : Buff
 var buff_owner : Node2D 
@@ -33,7 +33,7 @@ func update(delta: float, progress: float = 0.0) -> void:
 		buff_owner.data.remove_buff(buff)
 
 func setup_aoe(_aoe_radius : float = 100.0) -> Array[Node2D]:
-	var baddies : Array[Node2D] = []
+	var targets : Array[Node2D] = []
 	var aoe = Area2D.new()
 	var aoe_radius = CollisionShape2D.new()
 	aoe_radius.shape = CircleShape2D.new()
@@ -44,10 +44,10 @@ func setup_aoe(_aoe_radius : float = 100.0) -> Array[Node2D]:
 	await buff_owner.get_tree().process_frame #commented out to see if await physics frame is enough
 	await buff_owner.get_tree().physics_frame
 	for body in aoe.get_overlapping_bodies():
-		if body.is_in_group("baddies"):
-			baddies.append(body.get_parent())
+		if body.is_in_group(GlobalEnums.AuraTargets.keys()[buff.buff_targets].to_lower()):
+			targets.append(body.get_parent())
 	aoe.queue_free()
-	return baddies
+	return targets
 
 ##Function names = buff names, if updating buff names, update func names too!!
 
@@ -77,11 +77,11 @@ func poison(damage_tags : int, pending_buffs) -> void:
 		return
 	buff_owner.calculate_damage([buff.effect_amount * stacks, buff.damage_tag, false])
 
-	return #below code for stat modification if I choose to go that route
-	for enum_stat in GlobalEnums.BuffableStats.keys():
-		if OnHitBuff.AffectedStat.has(enum_stat) and buff.affected_stats.has(OnHitBuff.AffectedStat[enum_stat]):
-			poison_stat.stat |= GlobalEnums.BuffableStats[enum_stat]
-			pending_buffs.append(poison_stat)
+	#below code for stat modification if I choose to go that route
+	#for enum_stat in GlobalEnums.BuffableStats.keys():
+	#	if OnHitBuff.AffectedStat.has(enum_stat) and buff.affected_stats.has(OnHitBuff.AffectedStat[enum_stat]):
+	#		poison_stat.stat |= GlobalEnums.BuffableStats[enum_stat]
+	#		pending_buffs.append(poison_stat)
 
 func shock(_damage_tags, _pending_buffs) -> void:
 	var baddies = await setup_aoe(buff.effect_aoe)
@@ -93,7 +93,7 @@ func stun() -> void:
 	var stat_ref
 	if buff_owner.is_in_group("baddies"):
 		stat_ref = GlobalEnums.BuffableStats.MOVE_SPEED
-	elif buff_owner.is_in_group("turret"):
+	elif buff_owner.is_in_group("towers"):
 		stat_ref = GlobalEnums.BuffableStats.ATTACK_SPEED
 	buff_owner.data.add_buff(AbsoluteBuff.new(
 		stat_ref, 

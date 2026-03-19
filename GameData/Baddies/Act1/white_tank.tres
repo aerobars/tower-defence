@@ -9,4 +9,5 @@ script = ExtResource("3_sv8df")
 name = "White Tank"
 texture = ExtResource("3_fsosn")
 spawn_per_wave = 10
+on_death_buffs = Array[ExtResource("1_fsosn")]([null])
 metadata/_custom_type_script = "uid://citwba61de3ku"

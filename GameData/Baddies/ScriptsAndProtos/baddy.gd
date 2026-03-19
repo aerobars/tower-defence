@@ -115,7 +115,7 @@ func _on_aura_range_body_entered(body: Node2D) -> void:
 			continue
 		if body.is_in_group("baddies") and buff_targets == GlobalEnums.AuraTargets.BADDIES:
 			add_buff(body.get_parent(), buff)
-		elif body.is_in_group("turret") and buff_targets == GlobalEnums.AuraTargets.TOWERS:
+		elif body.is_in_group("towers") and buff_targets == GlobalEnums.AuraTargets.TOWERS:
 			add_buff(body, buff)
 
 func _on_aura_range_body_exited(body: Node2D) -> void:
@@ -127,7 +127,7 @@ func _on_aura_range_body_exited(body: Node2D) -> void:
 			continue
 		if body.is_in_group("baddies") and buff_targets == GlobalEnums.AuraTargets.BADDIES:
 			remove_buff(body.get_parent(), buff)
-		elif body.is_in_group("turret") and buff_targets == GlobalEnums.AuraTargets.TOWERS:
+		elif body.is_in_group("towers") and buff_targets == GlobalEnums.AuraTargets.TOWERS:
 			remove_buff(body, buff)
 
 func add_buff(body : Node2D, buff : Buff) -> void:

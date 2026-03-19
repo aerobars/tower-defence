@@ -1,43 +1,34 @@
-[gd_scene load_steps=21 format=3 uid="uid://b7d7kfemno1ex"]
+[gd_scene load_steps=18 format=3 uid="uid://b7d7kfemno1ex"]
 
 [ext_resource type="PackedScene" uid="uid://egfxblymqfqd" path="res://GameData/Maps/map.tscn" id="1_akvmk"]
 [ext_resource type="Script" uid="uid://djsr0kjgwaton" path="res://GameData/MainScenes/Scripts/game_scene.gd" id="1_g2kuy"]
 [ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/MainScenes/Scripts/ui.gd" id="3_ibdpl"]
-[ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://Resources/Inventory/inventory_bg.tres" id="4_syms3"]
+[ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://VisualResources/Inventory/inventory_bg.tres" id="4_syms3"]
 [ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="5_waasu"]
-[ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://GameData/UIScenes/Inventory/player_inventory.tres" id="6_nh22g"]
+[ext_resource type="Resource" uid="uid://cin7we6rrg05o" path="res://GameData/UIScenes/Inventory/test_inventory.tres" id="6_nh22g"]
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="7_674w2"]
 [ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="8_a0jnf"]
 [ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="9_clpeu"]
-[ext_resource type="Script" uid="uid://dnh1c1wnnaxrm" path="res://GameData/UIScenes/GUI/Scripts/tower_button_data.gd" id="9_s26dc"]
-[ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://Resources/Fonts/kfn_50_o1.tres" id="10_0h1f8"]
-[ext_resource type="PackedScene" uid="uid://iq7vcv16hyni" path="res://GameData/UIScenes/GUI/tower_button.tscn" id="11_s26dc"]
-[ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://Resources/Fonts/kfn_30_o1.tres" id="11_sl8sw"]
+[ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://VisualResources/Fonts/kfn_50_o1.tres" id="10_0h1f8"]
+[ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://VisualResources/Fonts/kfn_30_o1.tres" id="11_sl8sw"]
 [ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="12_jvyjn"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="13_541wh"]
 [ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/UIScenes/GUI/Scripts/baddy_info.gd" id="15_dts4o"]
-[ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
+[ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://VisualResources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
 [ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/tutorial.tscn" id="17_nh22g"]
+[ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/game_over_message.tscn" id="19_6qu8u"]
 
-[sub_resource type="Resource" id="Resource_qcle3"]
-script = ExtResource("9_s26dc")
-slot_count = 3
-metadata/_custom_type_script = "uid://dnh1c1wnnaxrm"
-
-[sub_resource type="Resource" id="Resource_sajd8"]
-script = ExtResource("9_s26dc")
-slot_count = 4
-metadata/_custom_type_script = "uid://dnh1c1wnnaxrm"
-
-[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "map_node", "path_debug")]
+[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "tower_buttons", "game_bookend_popup", "tutorial", "map_node", "path_debug")]
 script = ExtResource("1_g2kuy")
 ui = NodePath("UI")
 build_bar = NodePath("UI/HUD/BuildBar")
-inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryGrid")
+inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryUI")
 baddy_info_foldable = NodePath("UI/HUD/BaddyInfo")
+tower_buttons = NodePath("UI/HUD/BuildBar/TowerButtonsContainer")
+game_bookend_popup = NodePath("UI/GameOverMessage")
+tutorial = NodePath("UI/Tutorial")
 map_node = NodePath("Map")
 path_debug = NodePath("PathDebug")
-player_cash = 30
 
 [node name="Map" parent="." instance=ExtResource("1_akvmk")]
 
@@ -48,7 +39,7 @@ joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 
-[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display", "game_message", "baddy_info_foldbable", "baddy_info", "pause_button", "ff_button")]
+[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display", "game_message", "baddy_info_foldbable", "baddy_info", "next_wave_button", "pause_button", "ff_button")]
 script = ExtResource("3_ibdpl")
 hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
 hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
@@ -56,6 +47,7 @@ cash_display = NodePath("HUD/InfoBar/InfoContainer/Money")
 game_message = NodePath("HUD/GameMessage")
 baddy_info_foldbable = NodePath("HUD/BaddyInfo")
 baddy_info = NodePath("HUD/BaddyInfo/VBoxContainer")
+next_wave_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/NextWave")
 pause_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/PausePlay")
 ff_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/FastForward")
 
@@ -97,7 +89,7 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = ExtResource("4_syms3")
 
-[node name="InventoryGrid" type="GridContainer" parent="UI/HUD/BuildBar/InventoryContainer" node_paths=PackedStringArray("game_scene")]
+[node name="InventoryUI" type="GridContainer" parent="UI/HUD/BuildBar/InventoryContainer" node_paths=PackedStringArray("game_scene")]
 layout_mode = 2
 mouse_filter = 2
 columns = 3
@@ -105,7 +97,7 @@ script = ExtResource("5_waasu")
 data = ExtResource("6_nh22g")
 game_scene = NodePath("../../../../..")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/HUD/BuildBar"]
+[node name="TowerButtonsContainer" type="HBoxContainer" parent="UI/HUD/BuildBar"]
 process_mode = 3
 layout_mode = 1
 anchors_preset = 7
@@ -124,19 +116,21 @@ size_flags_vertical = 8
 theme_override_constants/separation = 150
 alignment = 1
 
-[node name="TowerBase" parent="UI/HUD/BuildBar/HBoxContainer" instance=ExtResource("11_s26dc")]
-show_behind_parent = true
-z_index = -1
-layout_mode = 2
-button_data = SubResource("Resource_qcle3")
-slot_radius = 64.0
+[node name="SaveButton" type="HBoxContainer" parent="UI/HUD/BuildBar"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
 
-[node name="TowerBase2" parent="UI/HUD/BuildBar/HBoxContainer" instance=ExtResource("11_s26dc")]
-show_behind_parent = true
-z_index = -1
+[node name="Save" type="Button" parent="UI/HUD/BuildBar/SaveButton"]
 layout_mode = 2
-button_data = SubResource("Resource_sajd8")
-slot_radius = 64.0
+text = "Save and Quit"
 
 [node name="InfoBar" type="ColorRect" parent="UI/HUD"]
 self_modulate = Color(0, 0, 0, 0.470588)
@@ -316,6 +310,10 @@ theme_override_font_sizes/font_size = 75
 
 [node name="Tutorial" parent="UI" instance=ExtResource("17_nh22g")]
 
+[node name="GameOverMessage" parent="UI" instance=ExtResource("19_6qu8u")]
+visible = false
+
+[connection signal="button_up" from="UI/HUD/BuildBar/SaveButton/Save" to="." method="_on_save_button_up"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/NextWave" to="UI" method="_on_next_wave_pressed"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="UI" method="_on_pause_play_pressed"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/FastForward" to="UI" method="_on_fast_forward_pressed"]

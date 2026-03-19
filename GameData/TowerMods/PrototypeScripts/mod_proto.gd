@@ -7,10 +7,13 @@ enum ModClass { AURA, POWER, WEAPON }
 @export_group("Mod Stats")
 var level : int #first level will be 0 after setup_stats to line up with arrays
 @export var base_power_levels : Array[int] = [-1, -1, -1, -1, -1]
-@export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] #range is radius of range circle #default is 1/2 turret base
+@export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] #range is radius of range circle #default is 1/2 tower base
 var current_power : int
 var current_range : float
 @export var mod_class : ModClass
+@export var swapper : bool
+@export var swap_buff : Buff
+@export var swap_buff_duration: float
 
 @export_group("Mod Info")
 @export var name : String

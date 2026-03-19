@@ -7,20 +7,12 @@ extends Control
 @onready var powering_mods : TextureRect = $PoweringMods
 @onready var end : TextureRect = $End
 
-var game_over := false
-
-
-func _on_button_button_up() -> void:
-	if not game_over:
-		visible = false
-	else:
-		OS.shell_open("https://forms.gle/1gdVhHvJ8LJ4wVLX9")
-		get_parent().get_parent().get_parent().game_finished.emit(false)
-
-
+func _ready() -> void:
+	if SaveManager.save_data_profile.show_tutorial == false:
+		queue_free()
 
 func _on_skip_tutorial_button_up() -> void:
-	SaveManager.save_data_profile.show_tutorial = true
+	SaveManager.save_data_profile.show_tutorial = false
 	queue_free()
 
 func _on_intro_button_button_up() -> void:

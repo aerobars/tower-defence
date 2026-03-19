@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=6 format=3 uid="uid://b5dugaoy183s0"]
+
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_ktte7"]
+[ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_3yhde"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="3_3yhde"]
+[ext_resource type="Texture2D" uid="uid://fu8tlh1sblwb" path="res://Assets/UI/cursor_h.png" id="4_7p8bm"]
+
+[sub_resource type="Resource" id="Resource_7p8bm"]
+script = ExtResource("3_3yhde")
+stat = 8
+buff_amount = 1.0
+buff_type = 1
+stack_limit = 1
+buff_duration = 5.0
+buff_targets = 1
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
+
+[resource]
+script = ExtResource("2_3yhde")
+base_damage_levels = Array[float]([8.0, 8.0, 8.0, 8.0, 8.0])
+base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
+mod_class = 2
+swapper = true
+swap_buff = SubResource("Resource_7p8bm")
+swap_buff_duration = 2.0
+name = "Swapper Weapon"
+description = "Temporarily gains 200% damage when added to a tower."
+texture = ExtResource("4_7p8bm")
+metadata/_custom_type_script = "uid://djuix1w1w7p4i"

@@ -7,11 +7,15 @@ extends CanvasLayer
 @export var game_message : Label
 @export var baddy_info_foldbable : FoldableContainer
 @export var baddy_info : VBoxContainer
+@export var next_wave_button : Button
 @export var pause_button : TextureButton
 @export var ff_button : TextureButton
 const GAME_MESSAGE_A_VALUE = 0.78
 @onready var texture : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
 @onready var tower : PackedScene = preload("res://GameData/Towers/tower_base.tscn")
+
+func _ready() -> void:
+	update_wave_button()
 
 ## Tower Preview
 func set_tower_preview(_tower_type: String, mouse_pos: Vector2, data: Dictionary) -> void: #runs via GameScenes initiate_build_mod func
@@ -92,6 +96,9 @@ func update_health_bar(cur_health: int, max_health: int) -> void:
 
 func update_cash_display(amount: int) -> void:
 	cash_display.text = str(amount)
+
+func update_wave_button() -> void:
+	next_wave_button.text = "Start Wave " + str(SaveManager.save_data_run.current_wave + 1)
 
 func update_game_message(message : String, display_time : float = 3.0, fade_time : float = 0.0, font_size : int = 25) -> void:
 	game_message.modulate.a = GAME_MESSAGE_A_VALUE

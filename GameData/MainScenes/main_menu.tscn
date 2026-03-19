@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://d01pe6gorm8dp" path="res://Assets/UI/Art/BackGround.png" id="1_nlt5y"]
 [ext_resource type="Texture2D" uid="uid://cdxgqbuixhjhv" path="res://Assets/UI/Buttons/button_rectangle_flat.png" id="2_ctc6w"]
 [ext_resource type="Texture2D" uid="uid://d0c26ox538jjk" path="res://Assets/UI/Buttons/button_rectangle_gradient.png" id="3_ctc6w"]
-[ext_resource type="FontVariation" uid="uid://dij2rd72j6kat" path="res://Resources/Fonts/kfn_40_o1.tres" id="4_iyrik"]
+[ext_resource type="FontVariation" uid="uid://dij2rd72j6kat" path="res://VisualResources/Fonts/kfn_40_o1.tres" id="4_iyrik"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3

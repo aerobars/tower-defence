@@ -15,7 +15,7 @@ var is_dragging = false
 const BADDY_FILEPATH = "res://GameData/Baddies/"
 const CHAR_FILEPATH = "res://GameData/TowerMods/CharacterMods/"
 const TOTAL_ACTS = 1
-const BOSS_WAVES := [5, 10, 15, 20]
+const BOSS_WAVES := [10]
 
 var character_mods : Dictionary = {}
 var act_baddies : Dictionary = {}

@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://bw3b8xsssl4il"]
 
 [ext_resource type="Script" uid="uid://de5qx2tj868nx" path="res://GameData/UIScenes/GUI/Scripts/tower_popup.gd" id="1_0vpvm"]
-[ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://Resources/Inventory/inventory_bg.tres" id="2_yeieo"]
-[ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://Resources/Fonts/infopopup_font_12.tres" id="3_p8hym"]
+[ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://VisualResources/Inventory/inventory_bg.tres" id="2_yeieo"]
+[ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://VisualResources/Fonts/infopopup_font_12.tres" id="3_p8hym"]
 
 [node name="UpgradePanel" type="Node2D" node_paths=PackedStringArray("container", "tower_name", "upgrade_button", "sell_button")]
 modulate = Color(1, 1, 1, 0.8627451)

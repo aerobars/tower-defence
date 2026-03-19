@@ -1,6 +1,6 @@
 class_name InventoryUI extends Control
 
-signal slot_created(new_slot)
+signal slot_created(new_slot) #Connected to game_scene
 
 const INVENTORY_SLOT = preload("res://GameData/UIScenes/Inventory/inventory_slot.tscn")
 
@@ -13,7 +13,7 @@ const INVENTORY_SLOT = preload("res://GameData/UIScenes/Inventory/inventory_slot
 func _ready() -> void:
 	await game_scene.ready
 	data.inventory_ui = self
-	if SaveManager.save_data_run.inventory_data == null:
+	if SaveManager.save_data_run.new_game:
 		SaveManager.save_data_run.inventory_data = data
 	else:
 		data = SaveManager.save_data_run.inventory_data
@@ -31,7 +31,6 @@ func create_slot(slot_data) -> void:
 	var new_slot = INVENTORY_SLOT.instantiate()
 	add_child(new_slot)
 	new_slot.set_slot_data(slot_data)
-	#signal connected to game_scene
 	slot_created.emit(new_slot)
 
 func remove_slot(mod_slot) -> void:

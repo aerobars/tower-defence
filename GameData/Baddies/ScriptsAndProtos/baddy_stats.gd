@@ -22,7 +22,7 @@ const BADDY_BUFFABLE_STATS = [ #values to line up with BuffableStats enum values
 const BASE_LEVEL_XP : float = 100.0
 
 @export_group("Base Stats", "base")
-@export var base_max_health : float = 50
+@export var base_max_health : float = 75
 @export var base_damage : float = 1
 @export var base_defence : float = 5
 @export var base_move_speed : float = 150
