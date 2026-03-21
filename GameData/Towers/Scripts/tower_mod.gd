@@ -5,11 +5,16 @@ class_name TowerMod extends Node2D
 signal mod_updated(mod: StaticBody2D)
 
 ## Tower Setup
+const PROJECTILE_SCENE := preload("res://GameData/Towers/tower_projectile.tscn")
 var non_aura_radius : float #equal to TowerBase's Marker2D radius
 var data : PrototypeMod
 var button_slot_id : int
 @onready var turret := $Turret
-@onready var range_aoe := $Range/CollisionShape2D
+@onready var muzzle := $Turret/Muzzle
+@onready var range := $Range
+@onready var range_aoe := $Range/CollisionShape2
+@onready var animation_player := $AnimationPlayer
+
 
 ## Gametime
 var baddies_in_range : Array
@@ -21,10 +26,10 @@ var attack_tracker : int
 
 ## Initial Setup
 func _ready():
-	$Range.global_position = get_parent().global_position
+	range.global_position = get_parent().global_position
 	if data != null:
 		data.buff_owner = self
-	for body in $Range.get_overlapping_bodies():
+	for body in range.get_overlapping_bodies():
 		_on_range_body_entered(body)
 	
 	mod_updated.connect(GameData.mod_updated)
@@ -43,15 +48,15 @@ func update_mod(net_power : int = 0) -> void:
 	match data.mod_class:
 		0: #Aura
 			if get_parent().aura_tower:
-				$Range/CollisionShape2D.get_shape().radius = data.current_range
+				range_aoe.get_shape().radius = data.current_range
 			else:
-				$Range/CollisionShape2D.get_shape().radius = non_aura_radius
+				range_aoe.get_shape().radius = non_aura_radius
 			add_to_group("towers")
 		1: #Power
-			$Range/CollisionShape2D.get_shape().radius = non_aura_radius
+			range_aoe.get_shape().radius = non_aura_radius
 			remove_from_group("towers")
 		2: #Weapon
-			$Range/CollisionShape2D.get_shape().radius = data.current_range
+			range_aoe.get_shape().radius = data.current_range
 			add_to_group("towers")
 	turret.texture = data.texture
 	mod_updated.emit(self)
@@ -60,7 +65,7 @@ func update_mod(net_power : int = 0) -> void:
 func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData, triggers whenever any mod is updated
 	if updated_mod == self:
 		return
-	if updated_mod in $Range.get_overlapping_bodies():
+	if updated_mod in range.get_overlapping_bodies():
 		_on_range_body_entered(updated_mod)
 
 
@@ -76,7 +81,7 @@ func _process(delta: float) -> void:
 	if baddies_in_range.size() > 0:
 		targets = select_targets()
 		if data.mod_class == data.ModClass.WEAPON:
-			if not $AnimationPlayer.is_playing():
+			if not animation_player.is_playing():
 				turn()
 		if attack_timer >= data.current_attack_speed:
 			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.AuraTargets.BADDIES and get_parent().aura_tower:
@@ -124,26 +129,31 @@ func select_targets() -> Array:
 	return target_progress_array
 
 func turn():
-	$Turret.look_at(targets[0].position)
+	turret.look_at(targets[0].position)
 
 func fire(target):
-	if data.projectile_tag == data.ProjectileTag.INSTANT:
+	if data.projectile_tag == data.ProjectileTag.PROJECTILE:
+		fire_projectile(target)
+	elif data.projectile_tag == data.ProjectileTag.INSTANT:
 		fire_instant()
-	elif data.projectile_tag == data.ProjectileTag.PROJECTILE:
-		fire_projectile()
-	if data.current_aoe > 0:
-		var baddies = await setup_aoe(target.global_position)
-		for baddy in baddies:
-			baddy.on_hit(data.calculate_damage(), data.on_hit_effects)
-	else:
-		target.on_hit(data.calculate_damage(), data.on_hit_effects)
+		if data.current_aoe > 0:
+			var baddies = await setup_aoe(target.global_position)
+			for baddy in baddies:
+				baddy.on_hit(data.calculate_damage(), data.on_hit_effects)
+		else:
+			target.on_hit(data.calculate_damage(), data.on_hit_effects)
 
 
-func fire_projectile() -> void:
-	pass
+func fire_projectile(target) -> void:
+	var new_projectile = PROJECTILE_SCENE.instantiate()
+	new_projectile.pierce_total = data.current_pierce
+	add_child(new_projectile)
+	new_projectile.position = muzzle.position
+	new_projectile.look_at(target.position)
+	
 
 func fire_instant() -> void:
-	$AnimationPlayer.play("fire")
+	animation_player.play("fire")
 
 func setup_aoe(target_pos : Vector2) -> Array:
 	var aoe = Area2D.new()

@@ -20,12 +20,14 @@ enum ProjectileTag { INSTANT, PROJECTILE }
 @export var base_crit_multiplier_levels: Array[float] = [1.5, 1.5, 1.5, 1.5, 1.5]
 @export var base_damage_levels : Array[float] = [10.0, 10.0, 10.0, 10.0, 10.0]
 @export var base_multitarget_levels : Array [int] = [1, 1, 1, 1, 1]
+@export var base_pierce_levels : Array[int] = [1, 1, 1, 1, 1]
 var current_aoe : float
 var current_attack_speed : float
 var current_crit_chance : int
 var current_crit_multiplier: float
 var current_damage : float
 var current_multitarget : int
+var current_pierce : int
 
 func buff_check(buff_stat) -> bool:
 	var stat_name : String = ""
@@ -44,6 +46,7 @@ func set_current_stats() -> void:
 	current_crit_multiplier = base_crit_multiplier_levels[level]
 	current_damage = base_damage_levels[level]
 	current_multitarget = base_multitarget_levels[level]
+	current_pierce = base_pierce_levels[level]
 	current_power = base_power_levels[level]
 	current_range = base_range_levels[level]
 
