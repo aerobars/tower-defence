@@ -11,8 +11,8 @@ var data : PrototypeMod
 var button_slot_id : int
 @onready var turret := $Turret
 @onready var muzzle := $Turret/Muzzle
-@onready var range := $Range
-@onready var range_aoe := $Range/CollisionShape2
+@onready var range_scene_path := $Range
+@onready var range_aoe := $Range/CollisionShape2D
 @onready var animation_player := $AnimationPlayer
 
 
@@ -26,10 +26,10 @@ var attack_tracker : int
 
 ## Initial Setup
 func _ready():
-	range.global_position = get_parent().global_position
+	range_scene_path.global_position = get_parent().global_position
 	if data != null:
 		data.buff_owner = self
-	for body in range.get_overlapping_bodies():
+	for body in range_scene_path.get_overlapping_bodies():
 		_on_range_body_entered(body)
 	
 	mod_updated.connect(GameData.mod_updated)
@@ -65,7 +65,7 @@ func update_mod(net_power : int = 0) -> void:
 func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData, triggers whenever any mod is updated
 	if updated_mod == self:
 		return
-	if updated_mod in range.get_overlapping_bodies():
+	if updated_mod in range_scene_path.get_overlapping_bodies():
 		_on_range_body_entered(updated_mod)
 
 
@@ -84,7 +84,7 @@ func _process(delta: float) -> void:
 			if not animation_player.is_playing():
 				turn()
 		if attack_timer >= data.current_attack_speed:
-			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.AuraTargets.BADDIES and get_parent().aura_tower:
+			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.AOETargets.BADDIES and get_parent().aura_tower:
 				for baddy in baddies_in_range:
 					add_buff(baddy)
 			elif data is WeaponMod:
@@ -102,7 +102,7 @@ func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body.get_parent())
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
-		if data.buff_data.buff_targets == GlobalEnums.AuraTargets.BADDIES and get_parent().aura_tower:
+		if data.buff_data.buff_targets == GlobalEnums.AOETargets.BADDIES and get_parent().aura_tower:
 			return #nothing gets added for offensive auras in aura mode
 		else:
 			add_buff(body)
@@ -132,12 +132,16 @@ func turn():
 	turret.look_at(targets[0].position)
 
 func fire(target):
-	if data.projectile_tag == data.ProjectileTag.PROJECTILE:
+	if data.projectile_speed > 0:
 		fire_projectile(target)
-	elif data.projectile_tag == data.ProjectileTag.INSTANT:
+	else:
 		fire_instant()
 		if data.current_aoe > 0:
-			var baddies = await setup_aoe(target.global_position)
+			var baddies = await AOESetup.setup_aoe(
+				self, 
+				target.global_position, 
+				"baddies", 
+				data.current_aoe)
 			for baddy in baddies:
 				baddy.on_hit(data.calculate_damage(), data.on_hit_effects)
 		else:
@@ -146,11 +150,15 @@ func fire(target):
 
 func fire_projectile(target) -> void:
 	var new_projectile = PROJECTILE_SCENE.instantiate()
+	new_projectile.speed = data.projectile_speed
 	new_projectile.pierce_total = data.current_pierce
+	new_projectile.damage = data.calculate_damage()
+	new_projectile.on_hit_effects = data.on_hit_effects
+	new_projectile.aoe = data.current_aoe
 	add_child(new_projectile)
 	new_projectile.position = muzzle.position
 	new_projectile.look_at(target.position)
-	
+	new_projectile.direction = Vector2.RIGHT.rotated(new_projectile.rotation)
 
 func fire_instant() -> void:
 	animation_player.play("fire")

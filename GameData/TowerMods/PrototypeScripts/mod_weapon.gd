@@ -9,11 +9,14 @@ enum WeaponBuffableStats {
 	POWER
 }
 
-enum ProjectileTag { INSTANT, PROJECTILE }
-@export var projectile_tag: ProjectileTag
+#enum ProjectileTag { INSTANT, PROJECTILE }
+#@export var projectile_tag: ProjectileTag
+##A projectile speed of 0 is an instant attack
+@export var projectile_speed : float = 600
 @export var damage_tags : int = GlobalEnums.DamageTag.PIERCE
 
 ##level based variables
+@export_group("Level Based Variables")
 @export var base_aoe_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 @export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] #cd between attacks in seconds
 @export var base_crit_chance_levels : Array[int] = [0, 0, 0, 0, 0]

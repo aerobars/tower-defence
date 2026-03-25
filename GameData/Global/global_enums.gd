@@ -62,7 +62,7 @@ enum BuffableStats {
 	MOVE_SPEED = 1 << 6,
 }
 
-enum AuraTargets {
+enum AOETargets {
 	NONE,
 	TOWERS,
 	BADDIES,

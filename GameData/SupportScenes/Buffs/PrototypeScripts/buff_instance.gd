@@ -44,7 +44,7 @@ func setup_aoe(_aoe_radius : float = 100.0) -> Array[Node2D]:
 	await buff_owner.get_tree().process_frame #commented out to see if await physics frame is enough
 	await buff_owner.get_tree().physics_frame
 	for body in aoe.get_overlapping_bodies():
-		if body.is_in_group(GlobalEnums.AuraTargets.keys()[buff.buff_targets].to_lower()):
+		if body.is_in_group(GlobalEnums.AOETargets.keys()[buff.buff_targets].to_lower()):
 			targets.append(body.get_parent())
 	aoe.queue_free()
 	return targets
@@ -68,7 +68,11 @@ func burst_speed(_damage_tags, _pending_buffs) -> void:
 	buff_owner.data.add_buff(BURST_SPEED)
 
 func heal(_damage_tags, _pending_buffs) -> void:
-	var baddies = await setup_aoe(buff.damage_aoe)
+	var baddies = await AOESetup.setup_aoe(
+		buff_owner, 
+		buff_owner.global_position,
+		GlobalEnums.AOETargets.keys()[buff.buff_targets].to_lower(), 
+		buff_owner.data.aura_aoe)
 	for baddy in baddies:
 		baddy.data.health += buff.damage_amount
 
@@ -84,7 +88,11 @@ func poison(damage_tags : int, pending_buffs) -> void:
 	#		pending_buffs.append(poison_stat)
 
 func shock(_damage_tags, _pending_buffs) -> void:
-	var baddies = await setup_aoe(buff.effect_aoe)
+	var baddies = await AOESetup.setup_aoe(
+		buff_owner, 
+		buff_owner.global_position,
+		GlobalEnums.AOETargets.keys()[buff.buff_targets].to_lower(), 
+		buff_owner.data.aura_aoe)
 	for baddy in baddies:
 		baddy.calculate_damage([buff.effect_amount, buff.damage_tag, false])
 		stun()
@@ -106,6 +114,10 @@ func on_death_trigger() -> void:
 	await call(buff.name.to_snake_case())
 
 func damage_boost() -> void:
-	var baddies = await setup_aoe(buff_owner.data.aura_aoe)
+	var baddies = await AOESetup.setup_aoe(
+		buff_owner, 
+		buff_owner.global_position,
+		GlobalEnums.AOETargets.keys()[buff.buff_targets].to_lower(), 
+		buff_owner.data.aura_aoe)
 	for baddy in baddies:
 		baddy.data.add_buff(buff, -1.0)

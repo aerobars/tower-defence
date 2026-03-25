@@ -25,7 +25,7 @@ func _init(
 	_effect_amount : float = 1.0,
 	_effect_aoe : float = 1.0,
 	_effect_duration : float = 1.0,
-	_buff_targets: GlobalEnums.AuraTargets = GlobalEnums.AuraTargets.NONE,
+	_buff_targets: GlobalEnums.AOETargets = GlobalEnums.AOETargets.NONE,
 ) -> void:
 	affected_stats = [_affected_stats]
 	success_chance_per_stack = _success_chance_per_stack

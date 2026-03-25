@@ -11,7 +11,7 @@ func _init(
 	_buff_type: StatBuff.BuffType = BuffType.MULTIPLY, 
 	_buff_amount: float = 1.0,
 	_buff_duration: float = 1.0,
-	_buff_targets: GlobalEnums.AuraTargets = GlobalEnums.AuraTargets.NONE,
+	_buff_targets: GlobalEnums.AOETargets = GlobalEnums.AOETargets.NONE,
 	) -> void:
 	stat = _stat
 	buff_targets = _buff_targets

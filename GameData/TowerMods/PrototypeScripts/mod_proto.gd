@@ -40,7 +40,7 @@ func setup_stats(_level : int = 0) -> void:
 	recalculate_stats()
 
 func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) -> void:
-	if buff is StatBuff and buff.buff_targets == GlobalEnums.AuraTargets.TOWERS:
+	if buff is StatBuff and buff.buff_targets == GlobalEnums.AOETargets.TOWERS:
 		for i in amt: #amt allows to apply multiple stacks from a single source
 			if not active_buffs.has(buff):
 				var new_inst = BuffInstance.new(buff, buff_owner, duration)
@@ -53,7 +53,7 @@ func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) 
 		add_on_hit_effect(buff)
 
 func remove_buff(buff : Buff) -> void:
-	if buff is StatBuff and buff.buff_targets == GlobalEnums.AuraTargets.TOWERS:
+	if buff is StatBuff and buff.buff_targets == GlobalEnums.AOETargets.TOWERS:
 		active_buffs.erase(buff)
 		recalculate_stats.call_deferred()
 	else:

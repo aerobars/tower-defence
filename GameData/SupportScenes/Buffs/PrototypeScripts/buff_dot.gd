@@ -10,7 +10,7 @@ func _init(
 	_damage_amount: float = 1.0,
 	_dot_interval: float = 1.0,
 	_dot_duration: float = 1.0,
-	_buff_targets: GlobalEnums.AuraTargets = GlobalEnums.AuraTargets.BADDIES,
+	_buff_targets: GlobalEnums.AOETargets = GlobalEnums.AOETargets.BADDIES,
 	) -> void:
 	damage_tag = _damage_tag
 	damage_amount = _damage_amount
