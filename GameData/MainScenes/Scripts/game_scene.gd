@@ -181,7 +181,7 @@ func spawn_baddies(wave_data) -> void:
 				baddy.spawn_count += 1
 				living_baddies += 1
 				remaining_spawns -= 1
-				await(get_tree().create_timer(baddy.spawn_interval, false)).timeout
+				await get_tree().create_timer(baddy.spawn_interval, false).timeout
 
 func on_base_damage(damage) -> void:
 	player_health -= damage

@@ -27,8 +27,8 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		if aoe > 0:
 			var baddies = await AOESetup.setup_aoe(self, body.global_position, "baddies", aoe)
 			for baddy in baddies:
-				baddy.on_hit(damage, on_hit_effects)
+				baddy.on_hit(damage.duplicate(), on_hit_effects)
 		else:
-			body.get_parent().on_hit(damage, on_hit_effects)
+			body.get_parent().on_hit(damage.duplicate(), on_hit_effects)
 		if pierce_count == pierce_total:
 			queue_free()

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="OnHitBuff" load_steps=2 format=3 uid="uid://d28awyyh0t1la"]
+
+[ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_on_hit.gd" id="1_e8uqj"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_e8uqj")
+success_chance_per_stack = 0.1
+damage_tag = 64
+effect_aoe = 150.0
+effect_duration = 0.25
+stat = null
+effect_amount = 1.0
+buff_type = 2
+name = "Shock"
+stack_limit = null
+buff_duration = null
+targets = 2
+aura_effect = null
+metadata/_custom_type_script = "uid://cxkis28w2jd6p"

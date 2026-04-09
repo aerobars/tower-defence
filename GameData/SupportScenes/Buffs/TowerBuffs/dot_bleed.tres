@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="DotBuff" load_steps=2 format=3 uid="uid://bruos432h6js"]
+[gd_resource type="Resource" script_class="DotBuff" load_steps=2 format=3 uid="uid://bknnisvsdw5ra"]
 
 [ext_resource type="Script" uid="uid://2ja3gh17qp02" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_dot.gd" id="1_ojdmr"]
 
@@ -6,9 +6,10 @@
 script = ExtResource("1_ojdmr")
 damage_tag = 1
 damage_amount = 1.0
-dot_interval = 10.0
+dot_interval = 100.0
 name = "Bleed"
-stack_limit = 1
-buff_duration = 1.0
-buff_targets = 2
+stack_limit = null
+buff_duration = null
+targets = 2
+aura_effect = null
 metadata/_custom_type_script = "uid://2ja3gh17qp02"

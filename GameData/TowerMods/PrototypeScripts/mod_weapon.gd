@@ -13,12 +13,14 @@ enum WeaponBuffableStats {
 #@export var projectile_tag: ProjectileTag
 ##A projectile speed of 0 is an instant attack
 @export var projectile_speed : float = 600
+##BLEED = 1, BLUNT = 2, BURN = 4, HEAL = 8, PIERCE = 16, POISON = 32, SHOCK = 64
 @export var damage_tags : int = GlobalEnums.DamageTag.PIERCE
 
-##level based variables
-@export_group("Level Based Variables")
+##Level based variables
+@export_group("Level Based Stats", "base_")
 @export var base_aoe_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
-@export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] #cd between attacks in seconds
+##CD between attacks in seconds
+@export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] 
 @export var base_crit_chance_levels : Array[int] = [0, 0, 0, 0, 0]
 @export var base_crit_multiplier_levels: Array[float] = [1.5, 1.5, 1.5, 1.5, 1.5]
 @export var base_damage_levels : Array[float] = [10.0, 10.0, 10.0, 10.0, 10.0]

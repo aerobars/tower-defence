@@ -3,25 +3,29 @@ class_name PrototypeMod extends Resource
 
 enum ModClass { AURA, POWER, WEAPON }
 
+@export_group("Mod Info", "info_")
+@export var info_name : String
+@export_multiline var info_description : String
+@export var info_texture : Texture2D
+var class_string : String: 
+	get: 
+		return ModClass.keys()[ModClass.values().find(mod_class)]
+
 ##stats for all mod types
-@export_group("Mod Stats")
+@export_group("Universal Mod Stats", "base_")
 var level : int #first level will be 0 after setup_stats to line up with arrays
 @export var base_power_levels : Array[int] = [-1, -1, -1, -1, -1]
-@export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] #range is radius of range circle #default is 1/2 tower base
+##range is radius of range circle, default (26) is 1/2 tower base
+@export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] 
 var current_power : int
 var current_range : float
 @export var mod_class : ModClass
+@export_group("Swapper Data")
 @export var swapper : bool
 @export var swap_buff : Buff
 @export var swap_buff_duration: float
 
-@export_group("Mod Info")
-@export var name : String
-@export_multiline var description : String
-@export var texture : Texture2D
-var class_string : String: 
-	get: 
-		return ModClass.keys()[ModClass.values().find(mod_class)]
+
 
 var buff_owner : Node2D
 var active_buffs: Dictionary[Buff, BuffInstance] = {}
@@ -39,8 +43,8 @@ func setup_stats(_level : int = 0) -> void:
 	level = _level
 	recalculate_stats()
 
-func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) -> void:
-	if buff is StatBuff and buff.buff_targets == GlobalEnums.AOETargets.TOWERS:
+func add_buff(buff: Buff, duration : Array[float] = buff.buff_duration, amt : int = 1) -> void:
+	if buff is StatBuff and buff.buff_targets == GlobalEnums.Targets.TOWERS:
 		for i in amt: #amt allows to apply multiple stacks from a single source
 			if not active_buffs.has(buff):
 				var new_inst = BuffInstance.new(buff, buff_owner, duration)
@@ -53,7 +57,7 @@ func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) 
 		add_on_hit_effect(buff)
 
 func remove_buff(buff : Buff) -> void:
-	if buff is StatBuff and buff.buff_targets == GlobalEnums.AOETargets.TOWERS:
+	if buff is StatBuff and buff.buff_targets == GlobalEnums.Targets.TOWERS:
 		active_buffs.erase(buff)
 		recalculate_stats.call_deferred()
 	else:

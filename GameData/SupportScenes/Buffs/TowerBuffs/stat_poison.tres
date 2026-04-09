@@ -5,10 +5,8 @@
 [resource]
 script = ExtResource("1_qgkxy")
 stat = 64
-buff_amount = -0.1
+effect_amount = 0.01
 buff_type = 1
 name = "Poison"
-stack_limit = 50
-buff_duration = 1.0
-buff_targets = 2
+targets = 2
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

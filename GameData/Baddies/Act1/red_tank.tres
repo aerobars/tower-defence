@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="BaddyStats" load_steps=5 format=3 uid="uid://b68yf61toxk62"]
+[gd_resource type="Resource" script_class="BaddyStats" load_steps=6 format=3 uid="uid://b68yf61toxk62"]
 
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_m6ybo"]
-[ext_resource type="Resource" uid="uid://c86gipawtfpeh" path="res://GameData/SupportScenes/Buffs/Baddy Buffs/test_od_damage_boost.tres" id="2_cu7e3"]
+[ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/last_laugh.gd" id="2_hy6ss"]
+[ext_resource type="Resource" uid="uid://cajpros577xod" path="res://GameData/SupportScenes/Buffs/BaddyBuffs/lastlaugh_damage_boost.tres" id="3_acbwq"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="3_hy6ss"]
 [ext_resource type="Texture2D" uid="uid://h5rkew62e1t4" path="res://Assets/Baddies/tank_red.png" id="3_m6ybo"]
 
@@ -14,5 +15,5 @@ spawn_per_wave = 10
 base_max_health = 50.0
 base_move_speed = 200.0
 aura_aoe = 200.0
-on_death_buffs = Array[ExtResource("1_m6ybo")]([ExtResource("2_cu7e3")])
+last_laugh_effects = Array[ExtResource("2_hy6ss")]([ExtResource("3_acbwq")])
 metadata/_custom_type_script = "uid://citwba61de3ku"

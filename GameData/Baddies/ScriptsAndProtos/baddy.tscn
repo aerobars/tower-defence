@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://cjn6jcx1rl4js"]
+[gd_scene load_steps=15 format=3 uid="uid://cjn6jcx1rl4js"]
 
 [ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/ScriptsAndProtos/baddy.gd" id="1_21g7o"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_ki846"]
+[ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/last_laugh.gd" id="3_ptvfa"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="4_soyye"]
 [ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/ScriptsAndProtos/hit_flash.tres" id="5_dic3x"]
 [ext_resource type="Texture2D" uid="uid://5pqxlre1amih" path="res://Assets/Baddies/tank_dark.png" id="6_c006g"]

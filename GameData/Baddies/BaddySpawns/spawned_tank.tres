@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BaddyStats" load_steps=5 format=3 uid="uid://o80v04aaw5ot"]
+
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_8tgq7"]
+[ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/last_laugh.gd" id="2_npghj"]
+[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="3_lpd66"]
+[ext_resource type="Texture2D" uid="uid://5pqxlre1amih" path="res://Assets/Baddies/tank_dark.png" id="4_npghj"]
+
+[resource]
+script = ExtResource("3_lpd66")
+name = "Spawn"
+description = "Not like the comics"
+texture = ExtResource("4_npghj")
+base_max_health = 15.0
+base_move_speed = 300.0
+metadata/_custom_type_script = "uid://citwba61de3ku"

@@ -4,11 +4,12 @@
 
 [resource]
 script = ExtResource("1_i6p2u")
-stat = 6
-buff_amount = 0.25
+stat = 64
+effect_amount = 0.3
 buff_type = 1
 name = "Move Speed"
 stack_limit = 1
-buff_duration = -1.0
-buff_targets = 2
+buff_duration = null
+targets = 2
+aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

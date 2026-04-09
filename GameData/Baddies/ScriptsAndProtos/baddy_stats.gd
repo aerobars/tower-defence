@@ -28,13 +28,14 @@ const BASE_LEVEL_XP : float = 100.0
 @export var base_move_speed : float = 150
 @export var base_defence_tag : GlobalEnums.BaddyArmorTags = GlobalEnums.BaddyArmorTags.UNARMORED
 
+##currently unused
 @export var experience : int = 0: set = _on_experience_set
-var level_ratio : float :
-	get:
-		return 1 + (SaveManager.save_data_run.current_wave - 1)/10.0
-var level : int:
+var level : int :
 	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
 
+var wave_ratio : float :
+	get:
+		return 1 + (SaveManager.save_data_run.current_wave - 1)/10.0
 var current_max_health : float
 var current_damage : float :
 	set(value):
@@ -47,8 +48,10 @@ var health : float = 0 : set = _on_health_set
 ##Buffs and Auras
 @export_group("Buffs and Auras")
 @export var aura_aoe : float = 0.0
+##bu
 @export var initial_buffs : Array[Buff] = []
-@export var on_death_buffs : Array[Buff] = []
+##buffs that trigger when the baddy dies
+@export var last_laugh_effects : Array[LastLaugh] = []
 var active_buffs: Dictionary[Buff, BuffInstance]
 var buff_owner : Node2D
 
@@ -61,7 +64,7 @@ func setup_stats() -> void:
 	health = current_max_health
 
 ##Runtime
-func add_buff(buff: Buff, duration : float = buff.buff_duration, amt : int = 1) -> void:
+func add_buff(buff: Buff, duration : Array[float] = buff.buff_duration, amt : int = 1) -> void:
 #	var buff_names : Array
 #	for _buff in active_buffs:
 #		buff_names.append(_buff.name)
@@ -100,10 +103,10 @@ func recalculate_stats() -> void:
 							stat_multipliers[stat_name] = max(stat_multipliers[stat_name], 0)
 	
 	#var stat_sample_pos: float = level
-	current_max_health = base_max_health * level_ratio
+	current_max_health = base_max_health * wave_ratio
 	current_damage = base_damage #don't scale base damage
-	current_defence = base_defence * level_ratio
-	current_move_speed = base_move_speed * level_ratio
+	current_defence = base_defence * wave_ratio
+	current_move_speed = base_move_speed * wave_ratio
 	
 	#addends first so it benefits from multipliers
 	for stat_name in stat_addends:
@@ -116,7 +119,7 @@ func recalculate_stats() -> void:
 	current_move_speed = clamp(current_move_speed, 75, 500) #don't use setter for this for stun MS
 	
 	for buff in active_buffs.keys():
-		if buff is AbsoluteBuff:
+		if buff.buff_type == StatBuff.BuffType.ABS:
 			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			var cur_property_name: String = str("current_" + stat_name)
 			set(cur_property_name, buff.buff_amount)

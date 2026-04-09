@@ -17,6 +17,7 @@ signal base_damage(damage)
 const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/projectile_impact.tscn")
 @export var data : BaddyStats
 var destroyed := false
+var level : int = 0
 
 ##Setup
 func _ready() -> void:
@@ -33,7 +34,7 @@ func _ready() -> void:
 	data.health_depleted.connect(destroy)
 	
 	for buff in data.initial_buffs:
-		data.add_buff(buff, buff.buff_duration)
+		data.add_buff(buff, buff.buff_duration[level])
 
 ##Runtime
 func _process(delta: float) -> void:
@@ -98,9 +99,8 @@ func destroy() -> void:
 	destroyed = true
 	data.health_depleted.disconnect(destroy)
 	$CharacterBody2D.free()
-	for buff in data.on_death_buffs:
-		var trigger = BuffInstance.new(buff, self)
-		await trigger.on_death_trigger()#access buff instance without settin up buff in active buffs?
+	for effect in data.last_laugh_effects:
+		await effect.last_laugh(self)
 	await (get_tree().create_timer(0.2).timeout)
 	queue_free()
 	baddy_death.emit()
@@ -111,11 +111,11 @@ func _on_aura_range_body_entered(body: Node2D) -> void:
 		return
 	for buff in data.initial_buffs:
 		var buff_targets = buff.data.buff_targets
-		if buff_targets == GlobalEnums.AOETargets.NONE:
+		if buff_targets == GlobalEnums.Targets.NONE:
 			continue
-		if body.is_in_group("baddies") and buff_targets == GlobalEnums.AOETargets.BADDIES:
+		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
 			add_buff(body.get_parent(), buff)
-		elif body.is_in_group("towers") and buff_targets == GlobalEnums.AOETargets.TOWERS:
+		elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
 			add_buff(body, buff)
 
 func _on_aura_range_body_exited(body: Node2D) -> void:
@@ -123,11 +123,11 @@ func _on_aura_range_body_exited(body: Node2D) -> void:
 		return
 	for buff in data.initial_buffs:
 		var buff_targets = buff.data.buff_targets
-		if buff_targets == GlobalEnums.AOETargets.NONE:
+		if buff_targets == GlobalEnums.Targets.NONE:
 			continue
-		if body.is_in_group("baddies") and buff_targets == GlobalEnums.AOETargets.BADDIES:
+		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
 			remove_buff(body.get_parent(), buff)
-		elif body.is_in_group("towers") and buff_targets == GlobalEnums.AOETargets.TOWERS:
+		elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
 			remove_buff(body, buff)
 
 func add_buff(body : Node2D, buff : Buff) -> void:

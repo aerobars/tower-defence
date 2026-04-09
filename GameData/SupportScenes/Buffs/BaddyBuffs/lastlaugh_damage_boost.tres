@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="LastLaughBuff" load_steps=4 format=3 uid="uid://cajpros577xod"]
+
+[ext_resource type="Script" uid="uid://c2fnaumhlmx6o" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/ll_buff.gd" id="1_k5xnd"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_yps1x"]
+
+[sub_resource type="Resource" id="Resource_t7b13"]
+script = ExtResource("1_yps1x")
+stat = 8
+buff_amount = 1.0
+name = "Damage Boost"
+buff_targets = 2
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
+
+[resource]
+script = ExtResource("1_k5xnd")
+buff = SubResource("Resource_t7b13")
+metadata/_custom_type_script = "uid://c2fnaumhlmx6o"

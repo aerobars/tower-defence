@@ -4,9 +4,12 @@
 
 [resource]
 script = ExtResource("1_x4l2g")
-stat = 3
-buff_amount = 1.0
+stat = 8
+effect_amount = 1.0
+buff_type = null
 name = "Damage Buff"
-buff_duration = -1.0
-buff_targets = 1
+stack_limit = null
+buff_duration = null
+targets = 1
+aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
