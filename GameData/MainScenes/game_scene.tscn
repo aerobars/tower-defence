@@ -15,8 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="13_541wh"]
 [ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/UIScenes/GUI/Scripts/baddy_info.gd" id="15_dts4o"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://VisualResources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
-[ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/tutorial.tscn" id="17_nh22g"]
-[ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/game_over_message.tscn" id="19_6qu8u"]
+[ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/Scenes/tutorial.tscn" id="17_nh22g"]
+[ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/Scenes/game_over_message.tscn" id="19_6qu8u"]
 
 [node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "tower_buttons", "game_bookend_popup", "tutorial", "map_node", "path_debug")]
 script = ExtResource("1_g2kuy")

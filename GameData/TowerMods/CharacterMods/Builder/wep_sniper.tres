@@ -1,8 +1,12 @@
-[gd_resource type="Resource" script_class="WeaponMod" load_steps=4 format=3 uid="uid://bom6sbxgavdq8"]
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=5 format=3 uid="uid://bom6sbxgavdq8"]
 
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_r7mg6"]
 [ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_qbblq"]
 [ext_resource type="Texture2D" uid="uid://ctr4gkegia16c" path="res://Assets/Towers/towerDefense_tile249.png" id="3_38wf7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r7mg6"]
+atlas = ExtResource("3_38wf7")
+region = Rect2(32, 16, 32, 32)
 
 [resource]
 script = ExtResource("2_qbblq")
@@ -10,10 +14,10 @@ projectile_speed = 1500.0
 base_attack_speed_levels = Array[float]([3.0, 2.75, 2.5, 2.25, 2.0])
 base_crit_chance_levels = Array[int]([10, 10, 10, 10, 10])
 base_crit_multiplier_levels = Array[float]([2.0, 2.0, 2.0, 2.0, 2.0])
+info_name = "Sniper"
+info_description = "Big range, big damage"
+info_texture = SubResource("AtlasTexture_r7mg6")
 base_power_levels = Array[int]([-2, -2, -2, -2, -2])
 base_range_levels = Array[float]([1000.0, 1000.0, 1000.0, 1000.0, 1000.0])
 mod_class = 2
-name = "Sniper"
-description = "Big Damage, Big Range, Big Cooldown"
-texture = ExtResource("3_38wf7")
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

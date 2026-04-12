@@ -73,7 +73,7 @@ func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:
 			var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
 			active_buffs[buff] = new_inst
 		var inst = active_buffs[buff]
-		inst.stacks = min(inst.stacks + amt, buff.stack_limit)
+		inst.stacks = min(inst.stacks + amt, buff.stack_limit[buff_level])
 		inst.time_remaining = buff.buff_duration[buff_level]
 		recalculate_stats()
 
@@ -119,7 +119,7 @@ func recalculate_stats() -> void:
 	current_move_speed = clamp(current_move_speed, 75, 500) #don't use setter for this for stun MS
 	
 	for buff in active_buffs.keys():
-		if buff.buff_type == StatBuff.BuffType.ABS:
+		if buff is StatBuff and buff.buff_type == StatBuff.BuffType.ABS:
 			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			var cur_property_name: String = str("current_" + stat_name)
 			set(cur_property_name, buff.buff_amount)

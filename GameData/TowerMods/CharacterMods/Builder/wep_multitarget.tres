@@ -4,15 +4,16 @@
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_jv5fv"]
 [ext_resource type="Texture2D" uid="uid://dbxyrgxdvkwxj" path="res://Assets/Towers/towerDefense_tile250.png" id="2_jtafa"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_jv5fv"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_f158n"]
 atlas = ExtResource("2_jtafa")
 region = Rect2(32, 16, 32, 32)
 
 [resource]
 script = ExtResource("1_jtafa")
 base_multitarget_levels = Array[int]([3, 4, 5, 6, 7])
+info_name = "Multishot"
+info_description = "Hits multiple enemies with each attack"
+info_texture = SubResource("AtlasTexture_f158n")
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 mod_class = 2
-name = "Multitarget"
-texture = SubResource("AtlasTexture_jv5fv")
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

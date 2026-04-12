@@ -17,7 +17,7 @@ enum WeaponBuffableStats {
 @export var damage_tags : int = GlobalEnums.DamageTag.PIERCE
 
 ##Level based variables
-@export_group("Level Based Stats", "base_")
+@export_group("Weapon Stats", "base_")
 @export var base_aoe_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 ##CD between attacks in seconds
 @export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] 

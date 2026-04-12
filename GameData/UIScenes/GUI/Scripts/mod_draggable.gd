@@ -24,7 +24,7 @@ const HOVER_DELAY : float = 0.5
 func _ready() -> void:
 	hover_timer.wait_time = HOVER_DELAY
 	hover_timer.one_shot = true
-	texture.texture = data.texture
+	texture.texture = data.info_texture
 
 func _process(_delta: float) -> void:
 	if draggable:

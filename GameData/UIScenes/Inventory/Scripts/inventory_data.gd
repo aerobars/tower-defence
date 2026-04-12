@@ -7,7 +7,7 @@ var inventory_ui : InventoryUI
 
 func update_inventory(mod: PrototypeMod, value: int = 1) -> void:
 	for i in slots: #check if mod exists in inventory and increment
-		if i.inventory_mod.name == mod.name:
+		if i.inventory_mod.info_name == mod.info_name:
 			i.quantity += value
 			inventory_ui.update_slot(i)
 			slots = slots.filter(func(slot): return slot.quantity > 0)

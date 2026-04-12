@@ -1,7 +1,12 @@
-[gd_resource type="Resource" script_class="WeaponMod" load_steps=3 format=3 uid="uid://csfw8j2u8n72r"]
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=5 format=3 uid="uid://csfw8j2u8n72r"]
 
 [ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="1_qilkd"]
 [ext_resource type="Texture2D" uid="uid://dnnp51npc2k72" path="res://Assets/Towers/towerDefense_tile228.png" id="1_v862v"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_o22lj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o22lj"]
+atlas = ExtResource("1_v862v")
+region = Rect2(32, 16, 32, 32)
 
 [resource]
 resource_local_to_scene = true
@@ -9,7 +14,7 @@ script = ExtResource("1_qilkd")
 base_damage_levels = Array[float]([15.0, 20.0, 25.0, 30.0, 35.0])
 info_name = "Test Wep"
 info_description = "Test Weapon for testing"
-info_texture = ExtResource("1_v862v")
+info_texture = SubResource("AtlasTexture_o22lj")
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 mod_class = 2
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

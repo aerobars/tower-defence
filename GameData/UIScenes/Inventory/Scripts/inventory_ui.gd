@@ -22,7 +22,7 @@ func _ready() -> void:
 
 func update_slot(slot_data) -> void:
 	for child in get_children():
-		if slot_data.inventory_mod.name == child.slot_data.inventory_mod.name:
+		if slot_data.inventory_mod.info_name == child.slot_data.inventory_mod.info_name:
 			child.set_slot_data(slot_data)
 			if slot_data.quantity <= 0:
 				remove_slot(child)

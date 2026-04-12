@@ -44,7 +44,7 @@ func update_mod(net_power : int = 0) -> void:
 		remove_from_group("towers")
 		return
 	data.net_power = net_power
-	data.setup_stats(get_parent().level)
+	data.setup_stats(get_parent().tower_data.level)
 	match data.mod_class:
 		0: #Aura
 			if get_parent().aura_tower:
@@ -58,7 +58,7 @@ func update_mod(net_power : int = 0) -> void:
 		2: #Weapon
 			range_aoe.get_shape().radius = data.current_range
 			add_to_group("towers")
-	turret.texture = data.texture
+	turret.texture = data.info_texture
 	mod_updated.emit(self)
 
 
@@ -84,7 +84,7 @@ func _process(delta: float) -> void:
 			if not animation_player.is_playing():
 				turn()
 		if attack_timer >= data.current_attack_speed:
-			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
+			if data is AuraMod and data.buff_data.targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
 				for baddy in baddies_in_range:
 					add_buff(baddy)
 			elif data is WeaponMod:
@@ -102,7 +102,7 @@ func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body.get_parent())
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
-		if data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
+		if data.buff_data.targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
 			return #nothing gets added for offensive auras in aura mode
 		else:
 			add_buff(body)

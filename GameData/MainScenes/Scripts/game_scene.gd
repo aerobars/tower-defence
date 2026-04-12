@@ -6,12 +6,12 @@ signal game_finished(result)
 @export_group("Scene Paths")
 @export_subgroup("UI")
 const BADDY_SCENE := preload("res://GameData/Baddies/ScriptsAndProtos/baddy.tscn")
-const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
-const TOWER_BUTTON := preload("res://GameData/UIScenes/GUI/tower_button.tscn")
+const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/Scenes/mod_draggable.tscn")
+const TOWER_BUTTON := preload("res://GameData/UIScenes/GUI/Scenes/tower_button.tscn")
 const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
 const POPUPS : Dictionary = {
-	"mod" : preload("res://GameData/UIScenes/GUI/mod_popup.tscn"),
-	"tower" : preload("res://GameData/UIScenes/GUI/tower_popup.tscn")
+	"mod" : preload("res://GameData/UIScenes/GUI/Scenes/mod_popup.tscn"),
+	"tower" : preload("res://GameData/UIScenes/GUI/Scenes/tower_popup.tscn")
 }
 @export var ui : CanvasLayer
 @export var build_bar : ColorRect

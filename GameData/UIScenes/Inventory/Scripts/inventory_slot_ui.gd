@@ -24,7 +24,7 @@ func set_slot_data(value: InventorySlotData):
 	#if statement only needed if I want empty inventory slots; I don't
 	#if slot_data == null:
 	#	return
-	image.texture = value.inventory_mod.texture
+	image.texture = value.inventory_mod.info_texture
 	amount.text = str(value.quantity)
 
 func _on_mouse_entered() -> void:

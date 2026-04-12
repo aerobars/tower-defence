@@ -9,10 +9,10 @@ var data : PrototypeMod
 var level = 0
 
 func _ready() -> void:
-	mod_name.text = data.name
+	mod_name.text = data.info_name
 	mod_class.text = data.class_string.to_pascal_case() + " class"
 	setup_stats()
-	description.text = data.description
+	description.text = data.info_description
 
 func setup_stats() -> void:
 	match data.mod_class:

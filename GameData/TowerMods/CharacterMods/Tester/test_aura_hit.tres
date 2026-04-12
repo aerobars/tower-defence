@@ -1,15 +1,19 @@
-[gd_resource type="Resource" script_class="AuraMod" load_steps=5 format=3 uid="uid://bersox0rcaonk"]
+[gd_resource type="Resource" script_class="AuraMod" load_steps=6 format=3 uid="uid://bersox0rcaonk"]
 
 [ext_resource type="Resource" uid="uid://d28awyyh0t1la" path="res://GameData/SupportScenes/Buffs/TowerBuffs/onhit_shock.tres" id="1_xuelf"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_a4ux6"]
+[ext_resource type="Texture2D" uid="uid://cqvhg7gv2q32f" path="res://Assets/Effects/explosionSmoke1.png" id="2_xuelf"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="3_2rp7h"]
-[ext_resource type="Texture2D" uid="uid://lqnf6vvd76vi" path="res://Assets/Effects/explosion1.png" id="4_vr0jp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a4ux6"]
+atlas = ExtResource("2_xuelf")
+region = Rect2(16, 16, 32, 32)
 
 [resource]
 script = ExtResource("3_2rp7h")
 buff_data = ExtResource("1_xuelf")
 info_name = "Test On Hit Aura"
 info_description = "Test On Hit Aura for testing"
-info_texture = ExtResource("4_vr0jp")
+info_texture = SubResource("AtlasTexture_a4ux6")
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 metadata/_custom_type_script = "uid://bshp47gjxu8sm"

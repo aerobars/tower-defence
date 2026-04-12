@@ -5,11 +5,7 @@
 [resource]
 script = ExtResource("1_imnq3")
 damage_tag = 4
-damage_amount = 1.0
-dot_interval = 1.0
 name = "Burn"
-stack_limit = null
-buff_duration = null
 targets = 2
 aura_effect = null
 metadata/_custom_type_script = "uid://2ja3gh17qp02"

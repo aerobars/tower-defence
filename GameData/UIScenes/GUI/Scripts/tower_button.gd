@@ -15,8 +15,8 @@ signal create_draggable(
 	)
 
 ## Setup
-@onready var mod_slot_scene := preload("res://GameData/UIScenes/GUI/tower_button_mod_slot.tscn")
-@onready var mod_draggable_scene := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
+@onready var mod_slot_scene := preload("res://GameData/UIScenes/GUI/Scenes/tower_button_mod_slot.tscn")
+@onready var mod_draggable_scene := preload("res://GameData/UIScenes/GUI/Scenes/mod_draggable.tscn")
 @export var build_cost_label : Label
 @export var net_power_display : Label
 @export var button_data : TowerButtonData #contains mod slot data, slot count, and id

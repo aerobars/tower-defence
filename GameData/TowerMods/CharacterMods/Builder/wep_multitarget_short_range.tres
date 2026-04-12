@@ -1,20 +1,24 @@
-[gd_resource type="Resource" script_class="WeaponMod" load_steps=4 format=3 uid="uid://dm6pf3cb2hw43"]
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=5 format=3 uid="uid://dm6pf3cb2hw43"]
 
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_8uky7"]
+[ext_resource type="Texture2D" uid="uid://bgyk41e0l65wp" path="res://Assets/Effects/explosionSmoke2.png" id="1_ps7vf"]
 [ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_ps7vf"]
-[ext_resource type="Texture2D" uid="uid://400d4al7r0xs" path="res://Assets/Effects/explosionSmoke4.png" id="3_ps7vf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2jul"]
+atlas = ExtResource("1_ps7vf")
+region = Rect2(16, 16, 32, 32)
 
 [resource]
 script = ExtResource("2_ps7vf")
 projectile_speed = 0.0
 damage_tags = 2
 base_attack_speed_levels = Array[float]([2.0, 2.0, 2.0, 2.0, 2.0])
-base_damage_levels = Array[float]([20.0, 20.0, 20.0, 20.0, 20.0])
+base_damage_levels = Array[float]([20.0, 40.0, 60.0, 80.0, 100.0])
 base_multitarget_levels = Array[int]([99, 99, 99, 99, 99])
+info_name = "Big Stompa"
+info_description = "Hits all enemies in range for big stomping dmg"
+info_texture = SubResource("AtlasTexture_g2jul")
 base_power_levels = Array[int]([-2, -2, -2, -2, -2])
 base_range_levels = Array[float]([75.0, 75.0, 75.0, 75.0, 75.0])
 mod_class = 2
-name = "Big Stompa"
-description = "Hits all baddies within range"
-texture = ExtResource("3_ps7vf")
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

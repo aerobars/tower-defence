@@ -6,6 +6,7 @@ enum AuraBuffableStats{
 	ATTACK_SPEED
 }
 
+@export_group("Aura Stats")
 @export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] #cd between attacks in seconds
 @export var buff_data : Buff 
 var current_attack_speed : float
