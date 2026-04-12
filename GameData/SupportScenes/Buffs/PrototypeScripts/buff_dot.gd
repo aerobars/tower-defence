@@ -1,7 +1,7 @@
 class_name DotBuff extends Buff
 
 
-@export var damage_tag : GlobalEnums.DamageTag = 0
+@export var damage_tag : GlobalEnums.DamageTag
 @export var damage_amount : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0]
 @export var dot_interval : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0]
 

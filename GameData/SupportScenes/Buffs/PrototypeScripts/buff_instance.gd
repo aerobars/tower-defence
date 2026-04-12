@@ -10,21 +10,21 @@ var dot_timer : float
 var time_remaining : float
 var last_progress: float = 0.0
 var stat_buff : StatBuff
-var level : int
+var level : int = 0
 #var affected_stats : Array[GlobalEnums.BuffableStats]
 
 ##Setup and Updates
-func _init(_buff: Buff, _owner, _buff_duration : Array[float] = _buff.buff_duration) -> void:
+func _init(_buff: Buff, _buff_owner, _buff_level : int = 0) -> void:
 	buff = _buff
-	buff_owner = _owner
-	level = buff_owner.level
-	time_remaining = _buff_duration[level]
+	buff_owner = _buff_owner
+	level = _buff_level
+	time_remaining = buff.buff_duration[level]
 	
 
 func update(delta: float, progress: float = 0.0) -> void:
 	if buff is DotBuff:
 		call(buff.name.to_snake_case(), delta, progress)
-		if dot_timer >= buff.dot_interval:
+		if dot_timer >= buff.dot_interval[level]:
 			buff_owner.calculate_damage([buff.damage_amount[level] * stacks, buff.damage_tag, false])
 			dot_timer = 0.0
 	if buff.aura_effect: #prevents aura buffs from expiring while active 
@@ -45,7 +45,7 @@ func burn(delta : float, _progress : float) -> void:
 
 ##On Hit
 func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
-	if randf() <= float(buff.success_chance_per_stack * stacks):
+	if randf() <= float(buff.success_chance_per_stack[level] * stacks):
 		var targets
 		if buff_owner.data.aura_aoe > 1:
 			targets = await AOESetup.setup_aoe(
@@ -58,16 +58,16 @@ func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 		if buff.damage_tag > 0:
 			for target in targets:
 				if buff.damage_tag != GlobalEnums.DamageTag.HEAL:
-					buff_owner.calculate_damage([buff.effect_amount * stacks, buff.damage_tag, false])
+					buff_owner.calculate_damage([buff.effect_amount[level] * stacks, buff.damage_tag, false])
 				else:
-					target.data.health += buff.effect_amount
-		if buff.buff_type > 0:
+					target.data.health += buff.effect_amount[level]
+		if buff.buff_to_apply != null:
 			if buff.buff_type == StatBuff.BuffType.ABS:
 				for target in targets:
 					stun()
 			else:
 				for target in targets:
-					target.data.add_buff(stat_buff)
+					target.data.add_buff(buff.buff_to_apply)
 	print('on hit triggered')
 		#call(buff.name.to_snake_case(), damage_tags, pending_buffs)
 
@@ -81,12 +81,12 @@ func heal(_damage_tags, _pending_buffs) -> void:
 		GlobalEnums.Targets.keys()[buff.buff_targets].to_lower(), 
 		buff_owner.data.aura_aoe)
 	for baddy in baddies:
-		baddy.data.health += buff.damage_amount
+		baddy.data.health += buff.damage_amount[level]
 
 func poison(damage_tags : int, pending_buffs) -> void:
 	if not damage_tags & GlobalEnums.DamageTag.POISON:
 		return
-	buff_owner.calculate_damage([buff.effect_amount * stacks, buff.damage_tag, false])
+	buff_owner.calculate_damage([buff.effect_amount[level] * stacks, buff.damage_tag, false])
 
 	#below code for stat modification if I choose to go that route
 	#for enum_stat in GlobalEnums.BuffableStats.keys():
@@ -101,7 +101,7 @@ func shock(_damage_tags, _pending_buffs) -> void:
 		GlobalEnums.Targets.keys()[buff.buff_targets].to_lower(), 
 		buff_owner.data.aura_aoe)
 	for baddy in baddies:
-		baddy.calculate_damage([buff.effect_amount, buff.damage_tag, false])
+		baddy.calculate_damage([buff.effect_amount[level], buff.damage_tag, false])
 		stun()
 
 func stun() -> void:

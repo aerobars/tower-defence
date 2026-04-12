@@ -17,7 +17,6 @@ const POPUP_TYPE : String = "tower"
 var aura_tower : bool
 var is_built := false
 var net_power : int = 0
-var level : int = 0 #level 0 to line up with arrays
 var clickable := false
 var tower_children : Array :
 	get:
@@ -50,8 +49,8 @@ func _ready() -> void:
 			#does not do former for now
 			if tower_mods[build_key] != null:
 				tower_mod.data = tower_mods[build_key].duplicate(true)
-				if level > 0:
-					tower_mod.data.setup_stats(level)
+				if tower_data.level > 0:
+					tower_mod.data.setup_stats(tower_data.level)
 			tower_mod.button_slot_id = build_key
 			update_mods.connect(tower_mod.update_mod)
 			tower_mod.non_aura_radius = marker_pos_radius
@@ -94,10 +93,10 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> voi
 			show_upgrade_panel.emit(POPUP_TYPE, mod_data, self)
 
 func level_up() -> void:
-	level = min(level + 1, MAX_LEVEL)
+	tower_data.level = min(tower_data.level + 1, MAX_LEVEL)
 	for child in tower_children:
 		if child.data != null:
-			child.data.setup_stats(level)
+			child.data.setup_stats(tower_data.level)
 
 func tower_update(
 	aura_status: bool, 
@@ -125,7 +124,7 @@ func tower_update(
 			else:
 				child.data = null
 		if child.data != null:
-			child.data.setup_stats(level)
+			child.data.setup_stats(tower_data.level)
 			net_power += child.data.current_power
 			child.data.power_surplus_buffs = power_surplus_buffs
 

@@ -1,4 +1,4 @@
-class_name OnHitBuff extends StatBuff
+class_name OnHitBuff extends Buff
 
 enum AffectedStat {
 	HEALTH,
@@ -10,6 +10,7 @@ enum AffectedStat {
 }
 
 @export_range(0.0, 1.0, 0.1, "suffix: %") var success_chance_per_stack : Array[float]
+@export var buff_to_apply : Buff
 @warning_ignore("enum_variable_without_default")
 @export var damage_tag : GlobalEnums.DamageTag
 @export var effect_aoe : Array[float] = [0, 0, 0, 0, 0]
@@ -23,7 +24,6 @@ func _init(
 	_damage_tag : GlobalEnums.DamageTag = 0,
 	#_affected_stats : AffectedStat = AffectedStat.DAMAGE,
 	_stat: GlobalEnums.BuffableStats = GlobalEnums.BuffableStats.MAX_HEALTH, 
-	_buff_type: StatBuff.BuffType = BuffType.MULTIPLY, 
 	_buff_duration: Array[float] = [1.0],
 	_buff_amount: Array[float] = [1.0],
 	_effect_amount: Array[float] = [1.0],
@@ -32,13 +32,10 @@ func _init(
 	_effect_aoe : Array[float] = [1.0],
 	_effect_duration : Array[float] = [1.0],
 ) -> void:
-	super(_stat, _buff_type, _effect_amount, _buff_duration, _targets)
 	success_chance_per_stack = _success_chance_per_stack
 	effect_aoe = _effect_aoe
 	effect_duration = _effect_duration
 	damage_tag = _damage_tag
-	if stat_buff == null: #this will always be true if I use OnHitBuff.new()
-		stat_buff = StatBuff.new(_stat, _buff_type, _effect_amount, _effect_duration, _targets)
 
 
 func effect_trigger() -> void:

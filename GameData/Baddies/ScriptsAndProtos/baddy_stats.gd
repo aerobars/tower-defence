@@ -64,17 +64,17 @@ func setup_stats() -> void:
 	health = current_max_health
 
 ##Runtime
-func add_buff(buff: Buff, duration : Array[float] = buff.buff_duration, amt : int = 1) -> void:
+func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:
 #	var buff_names : Array
 #	for _buff in active_buffs:
 #		buff_names.append(_buff.name)
 	for i in amt: #amt allows to apply multiple stacks from a single source
 		if not active_buffs.has(buff):
-			var new_inst = BuffInstance.new(buff, buff_owner, duration)
+			var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
 			active_buffs[buff] = new_inst
 		var inst = active_buffs[buff]
 		inst.stacks = min(inst.stacks + amt, buff.stack_limit)
-		inst.time_remaining = buff.buff_duration
+		inst.time_remaining = buff.buff_duration[buff_level]
 		recalculate_stats()
 
 func remove_buff(buff: Buff, _amt = 1) -> void:

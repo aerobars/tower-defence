@@ -12,3 +12,4 @@ func last_laugh(owner) -> void:
 		owner.add_child(new_scene)
 		new_scene.global_position = owner.global_position
 		await owner.get_tree().create_timer(baddy_data.spawn_interval, false).timeout
+	print("last laugh spawn completed")

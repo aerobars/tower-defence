@@ -117,7 +117,7 @@ func _on_range_body_exited(body) -> void:
 		remove_buff(body)
 
 func add_buff(body) -> void:
-	body.data.add_buff(data.buff_data)
+	body.data.add_buff(data.buff_data, get_parent().tower_data.level)
 
 func remove_buff(body) -> void:
 	body.data.remove_buff(data.buff_data)
@@ -143,9 +143,9 @@ func fire(target):
 				"baddies", 
 				data.current_aoe)
 			for baddy in baddies:
-				baddy.on_hit(data.calculate_damage(), data.on_hit_effects)
+				baddy.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
 		else:
-			target.on_hit(data.calculate_damage(), data.on_hit_effects)
+			target.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
 
 
 func fire_projectile(target) -> void:
@@ -162,20 +162,3 @@ func fire_projectile(target) -> void:
 
 func fire_instant() -> void:
 	animation_player.play("fire")
-
-func setup_aoe(target_pos : Vector2) -> Array:
-	var aoe = Area2D.new()
-	var aoe_range = CollisionShape2D.new()
-	var baddies : Array = []
-	aoe_range.shape = CircleShape2D.new()
-	aoe_range.get_shape().radius = data.current_aoe
-	aoe.add_child(aoe_range)
-	add_child(aoe)
-	aoe.global_position = target_pos
-	await get_tree().process_frame
-	await get_tree().physics_frame
-	for body in aoe.get_overlapping_bodies():
-		if body.is_in_group("baddies"):
-			baddies.append(body.get_parent())
-	aoe.queue_free()
-	return baddies

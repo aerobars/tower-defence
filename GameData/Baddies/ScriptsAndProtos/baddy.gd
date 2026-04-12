@@ -13,7 +13,7 @@ signal base_damage(damage)
 @export var path_aura : CollisionShape2D
 @export var path_sprite : Sprite2D
 
-##Runtime
+##Runtime Variables
 const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/projectile_impact.tscn")
 @export var data : BaddyStats
 var destroyed := false
@@ -34,9 +34,9 @@ func _ready() -> void:
 	data.health_depleted.connect(destroy)
 	
 	for buff in data.initial_buffs:
-		data.add_buff(buff, buff.buff_duration[level])
+		data.add_buff(buff)
 
-##Runtime
+##Runtime Functions
 func _process(delta: float) -> void:
 	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
 		data.active_buffs[buff].update(delta, progress)
@@ -55,10 +55,12 @@ func move(delta) -> void:
 	set_progress(get_progress() + data.current_move_speed * delta)
 	path_health_bar.position = position - Vector2(30, 30)
 
-func on_hit(dmg: Array, debuff: Array = []) -> void: #Array contains dmg amt, dmg tags, and crit status
+##dmg Array contains dmg amt, dmg tags, and crit status
+func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void: 
 	calculate_damage(dmg)
 	var pending_buffs : Array[Buff] = []
 	for buff in data.active_buffs.keys():
+		data.active_buffs[buff].level = tower_mod_level
 		if buff is OnHitBuff:
 			data.active_buffs[buff].on_hit_check(dmg[1], pending_buffs)
 	debuff.append_array(pending_buffs)
@@ -131,7 +133,7 @@ func _on_aura_range_body_exited(body: Node2D) -> void:
 			remove_buff(body, buff)
 
 func add_buff(body : Node2D, buff : Buff) -> void:
-	body.data.add_buff(buff, buff.buff_duration)
+	body.data.add_buff(buff, level)
 
 func remove_buff(body : Node2D, buff : Buff) -> void:
 	body.data.remove_buff(buff)

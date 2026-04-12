@@ -19,7 +19,6 @@ signal create_draggable(
 @onready var mod_draggable_scene := preload("res://GameData/UIScenes/GUI/mod_draggable.tscn")
 @export var build_cost_label : Label
 @export var net_power_display : Label
-
 @export var button_data : TowerButtonData #contains mod slot data, slot count, and id
 @export var slot_radius : float = 64
 var slot_data_ref : Dictionary
@@ -37,6 +36,8 @@ var build_cost : int :
 		build_cost = 1 + value * 3 #value should always be slot count
 		build_cost_label.text = "$" + str(build_cost)
 var tower_data : Dictionary : get = get_tower_mods
+
+
 
 ## Setup
 func _ready() -> void:

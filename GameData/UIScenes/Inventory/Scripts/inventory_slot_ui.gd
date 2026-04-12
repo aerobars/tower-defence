@@ -8,7 +8,7 @@ var slot_data : InventorySlotData : set = set_slot_data
 
 @onready var image : TextureRect = $TextureRect
 @onready var amount : Label = $ColorRect/Label
-@onready var hover_timer = $Timer
+@onready var hover_timer : Timer = $Timer
 
 const HOVER_DELAY : float = 0.5
 const POPUP_TYPE : String = "mod"
