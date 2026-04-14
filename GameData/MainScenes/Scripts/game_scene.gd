@@ -292,7 +292,7 @@ func create_tower(
 	saved_tower: bool = false,
 	) -> void:
 	
-	var new_tower = load("res://GameData/Towers/tower_base.tscn").instantiate()
+	var new_tower = load("res://GameData/Towers/Scenes/tower_base.tscn").instantiate()
 	new_tower.tower_data = TowerBaseData.new()
 	new_tower.tower_data.connected_button_id = connected_btn.button_data.button_id
 	new_tower.tower_data.level = level

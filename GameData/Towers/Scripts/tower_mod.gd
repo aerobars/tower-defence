@@ -5,7 +5,7 @@ class_name TowerMod extends Node2D
 signal mod_updated(mod: StaticBody2D)
 
 ## Tower Setup
-const PROJECTILE_SCENE := preload("res://GameData/Towers/tower_projectile.tscn")
+const PROJECTILE_SCENE := preload("res://GameData/Towers/Scenes/tower_projectile.tscn")
 var non_aura_radius : float #equal to TowerBase's Marker2D radius
 var data : PrototypeMod
 var button_slot_id : int

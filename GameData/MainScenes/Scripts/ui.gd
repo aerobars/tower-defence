@@ -12,7 +12,7 @@ extends CanvasLayer
 @export var ff_button : TextureButton
 const GAME_MESSAGE_A_VALUE = 0.78
 @onready var texture : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
-@onready var tower : PackedScene = preload("res://GameData/Towers/tower_base.tscn")
+@onready var tower : PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
 
 func _ready() -> void:
 	update_wave_button()

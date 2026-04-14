@@ -76,7 +76,7 @@ func recalculate_stats() -> void:
 	for buff in active_buffs.keys():
 		if buff_check(buff.stat):
 			var stat_name : String = ""
-			var buff_level : int = active_buffs[buff].level
+			var inst = active_buffs[buff]
 			for stat in GlobalEnums.BuffableStats.keys():
 				if buff.stat & GlobalEnums.BuffableStats[stat]:
 					stat_name = stat.to_lower()
@@ -84,11 +84,11 @@ func recalculate_stats() -> void:
 						StatBuff.BuffType.ADD:
 							if not stat_addends.has(stat_name):
 								stat_addends[stat_name] = 0.0
-							stat_addends[stat_name] += buff.buff_amount[buff_level]
+							stat_addends[stat_name] += buff.buff_amount[inst.level] * inst.stacks
 						StatBuff.BuffType.MULTIPLY:
 							if not stat_multipliers.has(stat_name):
 								stat_multipliers[stat_name] = 1.0
-							stat_multipliers[stat_name] += buff.buff_amount[buff_level]
+							stat_multipliers[stat_name] += buff.buff_amount[inst.level] * inst.stacks
 	
 	set_current_stats()
 	

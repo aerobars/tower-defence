@@ -12,7 +12,7 @@ var build_data : Dictionary
 var tower_data : TowerBaseData
 
 ## Gameplay
-const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/tower_mod.tscn")
+const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/Scenes/tower_mod.tscn")
 const POPUP_TYPE : String = "tower"
 var aura_tower : bool
 var is_built := false

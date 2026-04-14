@@ -62,12 +62,8 @@ func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 				else:
 					target.data.health += buff.effect_amount[level]
 		if buff.buff_to_apply != null:
-			if buff.buff_type == StatBuff.BuffType.ABS:
-				for target in targets:
-					stun()
-			else:
-				for target in targets:
-					target.data.add_buff(buff.buff_to_apply)
+			for target in targets:
+				target.data.add_buff(buff.buff_to_apply)
 	print('on hit triggered')
 		#call(buff.name.to_snake_case(), damage_tags, pending_buffs)
 

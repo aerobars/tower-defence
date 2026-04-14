@@ -95,11 +95,11 @@ func recalculate_stats() -> void:
 						StatBuff.BuffType.ADD:
 							if not stat_addends.has(stat_name):
 								stat_addends[stat_name] = 0.0
-							stat_addends[stat_name] += buff.buff_amount * inst.stacks
+							stat_addends[stat_name] += buff.buff_amount[inst.level] * inst.stacks
 						StatBuff.BuffType.MULTIPLY:
 							if not stat_multipliers.has(stat_name):
 								stat_multipliers[stat_name] = 1.0
-							stat_multipliers[stat_name] += buff.buff_amount * inst.stacks
+							stat_multipliers[stat_name] += buff.buff_amount[inst.level] * inst.stacks
 							stat_multipliers[stat_name] = max(stat_multipliers[stat_name], 0)
 	
 	#var stat_sample_pos: float = level

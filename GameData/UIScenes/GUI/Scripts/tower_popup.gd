@@ -15,14 +15,14 @@ var popup_owner : TowerBase
 var level_names := ["Basic", "Advanced", "Expert", "Master", "Grandmaster"]
 var current_level_name : String: 
 	get:
-		return level_names[popup_owner.level]
+		return level_names[popup_owner.tower_data.level]
 var upgrade_cost : int = 0: 
 	set(value): #value should always be total mod slots of associated tower
-		upgrade_cost = (1 + value * 3) * 2 ** (popup_owner.level + 1)
+		upgrade_cost = (1 + value * 3) * 2 ** (popup_owner.tower_data.level + 1)
 		upgrade_button.text = "-$" + str(upgrade_cost) + ": Upgrade"
 var sell_value : int = 0: 
 	set(value): #value should always be total mod slots of associated tower
-		sell_value = roundi(((1 + float(value) * 3) * 2 ** float(popup_owner.level))/2)
+		sell_value = roundi(((1 + float(value) * 3) * 2 ** float(popup_owner.tower_data.level))/2)
 		sell_button.text = "Sell: +$" + str(sell_value)
 
 func _ready() -> void:

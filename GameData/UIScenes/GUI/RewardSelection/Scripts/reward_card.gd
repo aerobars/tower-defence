@@ -12,11 +12,11 @@ var data : PrototypeMod
 var level = 0
 
 func _ready() -> void:
-	mod_name.text = data.name
-	icon.texture = data.texture
+	mod_name.text = data.info_name
+	icon.texture = data.info_texture
 	mod_class.text = data.class_string.to_pascal_case() + " class"
 	stats_setup()
-	description.text = data.description
+	description.text = data.info_description
 
 func stats_setup() -> void:
 	match data.mod_class:

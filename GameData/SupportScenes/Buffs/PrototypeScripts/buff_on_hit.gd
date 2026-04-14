@@ -15,8 +15,6 @@ enum AffectedStat {
 @export var damage_tag : GlobalEnums.DamageTag
 @export var effect_aoe : Array[float] = [0, 0, 0, 0, 0]
 @export var effect_amount : Array[float] = [1, 1, 1, 1, 1]
-##Refers to duration of effects produced by on hit success (ex. Burst speed MS buff or stun duration)
-@export var effect_duration : Array[float] = [1, 1, 1, 1, 1]
 var stat_buff
 
 
@@ -30,12 +28,12 @@ func _init(
 	_targets: GlobalEnums.Targets = GlobalEnums.Targets.NONE,
 	_success_chance_per_stack : Array[float] = [0.1],
 	_effect_aoe : Array[float] = [1.0],
-	_effect_duration : Array[float] = [1.0],
+	#_effect_duration : Array[float] = [1.0],
 ) -> void:
 	success_chance_per_stack = _success_chance_per_stack
 	effect_aoe = _effect_aoe
-	effect_duration = _effect_duration
 	damage_tag = _damage_tag
+	#effect_duration = _effect_duration
 
 
 func effect_trigger() -> void:
