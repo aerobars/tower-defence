@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AuraMod" load_steps=6 format=3 uid="uid://dqdq5txvks6r4"]
+
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_lasin"]
+[ext_resource type="Resource" uid="uid://b755ypu34xreh" path="res://GameData/SupportScenes/Buffs/TowerBuffs/aura_slow.tres" id="1_lqh3p"]
+[ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="2_0uy1i"]
+[ext_resource type="Texture2D" uid="uid://lqnf6vvd76vi" path="res://Assets/Effects/explosion1.png" id="2_eh7fl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lwfwe"]
+atlas = ExtResource("2_eh7fl")
+region = Rect2(16, 16, 32, 32)
+
+[resource]
+script = ExtResource("2_0uy1i")
+buff_data = ExtResource("1_lqh3p")
+info_name = "Slow Aura"
+info_description = "Slows enemies in the area. Doesn't stack"
+info_texture = SubResource("AtlasTexture_lwfwe")
+base_range_levels = Array[float]([250.0, 250.0, 250.0, 250.0, 250.0])
+metadata/_custom_type_script = "uid://bshp47gjxu8sm"

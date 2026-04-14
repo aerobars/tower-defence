@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="StatBuff" load_steps=2 format=3 uid="uid://b755ypu34xreh"]
+
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_befca"]
+
+[resource]
+script = ExtResource("1_befca")
+stat = 64
+buff_amount = Array[float]([0.25, 0.25, 0.25, 0.25, 0.25])
+buff_type = 2
+name = "Slaura"
+stack_limit = Array[int]([1, 1, 1, 1, 1])
+buff_duration = Array[float]([5.0, 5.0, 5.0, 5.0, 5.0])
+targets = 2
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
