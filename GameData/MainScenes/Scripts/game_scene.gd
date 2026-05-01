@@ -250,6 +250,7 @@ func initiate_build_mode(data: Dictionary, btn_ref) -> void: #connected to build
 	build_mode = true
 	previous_tiles = [Vector2i(-100,-100)]
 	build_valid = false
+	#move tower instatiation to hear as a variable, to allow for rotation during update_tower_preview
 	ui.set_tower_preview(get_global_mouse_position(), build_data)
 
 func update_tower_preview() -> void:
