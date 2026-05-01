@@ -26,7 +26,7 @@ var attack_tracker : int
 
 ## Initial Setup
 func _ready():
-	range_scene_path.global_position = get_parent().global_position
+	range_scene_path.global_position = get_parent().global_position #not needed once converted to shapes
 	if data != null:
 		data.buff_owner = self
 	for body in range_scene_path.get_overlapping_bodies():

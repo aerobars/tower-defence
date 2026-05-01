@@ -18,23 +18,25 @@ func _ready() -> void:
 	update_wave_button()
 
 ## Tower Preview
-func set_tower_preview(_tower_type: String, mouse_pos: Vector2, data: Dictionary) -> void: #runs via GameScenes initiate_build_mod func
+func set_tower_preview(mouse_pos: Vector2, data: Dictionary) -> void: #runs via GameScenes initiate_build_mod func
 	var drag_tower = tower.instantiate()
 	drag_tower.set_name("DragTower")
 	drag_tower.modulate = Color("GREEN")
+	drag_tower.build_data = data
 	
 	var control := Control.new()
 	var range_texture : Sprite2D
 
 	for key in data["mods"]: #adds range indictator to auras and weapons
-		if data["mods"][key] == null:
+		if key == null or data["mods"][key] == null:
 			continue
-		if (data["mods"][key].mod_class == data["mods"][key].ModClass.AURA) or data["mods"][key].mod_class == data["mods"][key].ModClass.WEAPON:
+		var mod = data["mods"][key]
+		if (mod.mod_class == key.ModClass.AURA) or key.mod_class == key.ModClass.WEAPON:
 			range_texture = Sprite2D.new()
 			#range_texture.position = Vector2(32,32) #position needed if range is offest from tower
-			var scaling : float = data["mods"][key].current_range / 300.0
+			var scaling : float = key.current_range / 300.0
 			range_texture.texture = texture
-			if data["mods"][key].mod_class == data["mods"][key].ModClass.WEAPON:
+			if key.mod_class == key.ModClass.WEAPON:
 				range_texture.modulate = Color("CRIMSON")
 			elif data["aura_tower"]:
 				range_texture.modulate = Color("BLUE")

@@ -33,8 +33,12 @@ const WALL_TILE_COORD := Vector2i(0,0)
 const FLOOR_TILE_COORD := Vector2i(0,0)
 const CELL_SIZE : int = 64
 const CELL := Vector2(CELL_SIZE, CELL_SIZE)
+@warning_ignore("integer_division")
 const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
-var previous_tile := Vector2i(0, 0)
+var tower_grid_size : int :
+	get():
+		return CELL_SIZE * 3 #CELL_SIZE * number of columns in tower grid(3)
+var previous_tiles := [Vector2i(0, 0)]
 
 ## Gameplay 
 var new_game : bool
@@ -69,7 +73,6 @@ var build_data : Dictionary
 var build_location
 var build_mode : bool = false
 var build_tile
-var build_type : String
 var build_valid : bool = false
 
 
@@ -236,7 +239,7 @@ func pathfinding_update() -> void:
 		path_debug.add_point(cell + CELL_CENTRE)
 
 ## Building Functions
-func initiate_build_mode(data: Dictionary, btn_ref, tower_type: String = "tower_base") -> void: #connected to build buttons' pressed signal, data contains tower mods and aura tower status
+func initiate_build_mode(data: Dictionary, btn_ref) -> void: #connected to build buttons' pressed signal, data contains tower mods and aura tower status
 	if build_mode:
 		cancel_build_mode()
 	if player_cash < btn_ref.build_cost:
@@ -245,33 +248,46 @@ func initiate_build_mode(data: Dictionary, btn_ref, tower_type: String = "tower_
 	build_btn_ref = btn_ref
 	build_data = data
 	build_mode = true
-	build_type = tower_type
-	previous_tile = Vector2i(-100,-100)
-	ui.set_tower_preview(build_type, get_global_mouse_position(), build_data)
+	previous_tiles = [Vector2i(-100,-100)]
+	build_valid = false
+	ui.set_tower_preview(get_global_mouse_position(), build_data)
 
 func update_tower_preview() -> void:
-	var mouse_pos: Vector2 = get_global_mouse_position()
-	var current_tile: Vector2i = map_node.exclusion_layer.local_to_map(mouse_pos)
-	var tile_pos: Vector2 = map_node.exclusion_layer.map_to_local(current_tile)
+	var mouse_pos : Vector2 = get_global_mouse_position()
+	var centre_tile : Vector2i = map_node.exclusion_layer.local_to_map(mouse_pos)
+	var centre_tile_pos : Vector2 = map_node.exclusion_layer.map_to_local(centre_tile)
+	var colour : String
+	var all_cells : Array[Vector2i] = [] #not sure if this is needed
 	
-	map_node.pathfinding_layer.set_cell(current_tile, 0, Vector2i(0,0), 0)
-	astar.set_point_solid(current_tile, true)
-	if previous_tile != current_tile:
-		if map_node.exclusion_layer.get_cell_source_id(previous_tile) == -1:
-			astar.set_point_solid(previous_tile, false)
+	#for each cell in tower shape, do below code
+	build_valid = true
+	for cell in build_data["shape"]:
+		var current_cell : Vector2i = cell + centre_tile
+		var current_cell_pos = Vector2(current_cell.x * CELL_SIZE, current_cell.y * CELL_SIZE)
+		all_cells.append(current_cell)
+	#currnt_tile changed to current cell in tower shape
+		map_node.pathfinding_layer.set_cell(current_cell, 0, Vector2i(0,0), 0)
+		astar.set_point_solid(current_cell, true)
+		if map_node.exclusion_layer.get_cell_source_id(current_cell) != -1 or path.is_empty():
+			build_valid = false
+	if build_valid:
+		colour = "GREEN"
+		build_location = centre_tile_pos
+		build_tile = centre_tile
+	else:
+		colour = "CRIMSON"
+	ui.update_tower_preview(centre_tile_pos, colour)
+		
+	for tile in previous_tiles:
+		if all_cells.has(tile):
+			continue
+		if map_node.exclusion_layer.get_cell_source_id(tile) == -1:
+			astar.set_point_solid(tile, false)
 		map_node.pathfinding_layer.clear()
-		previous_tile = current_tile
+	previous_tiles = all_cells
 	
 	pathfinding_update()
 	
-	if map_node.exclusion_layer.get_cell_source_id(current_tile) == -1 and not path.is_empty():
-		ui.update_tower_preview(tile_pos, "GREEN")
-		build_valid = true
-		build_location = tile_pos
-		build_tile = current_tile
-	else:
-		ui.update_tower_preview(tile_pos, "CRIMSON")
-		build_valid = false
 
 func cancel_build_mode() -> void:
 	build_mode = false
@@ -283,6 +299,7 @@ func verify_and_build() -> void:
 	if build_valid:
 		create_tower()
 		player_cash -= build_btn_ref.build_cost
+		baddy_path_update()
 
 func create_tower(
 	_build_location: Vector2 = build_location, 
@@ -315,7 +332,6 @@ func create_tower(
 	map_node.tower_container.add_child(new_tower, true) #TowerContainer is in Map Scene
 	map_node.exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
 	astar.set_point_solid(build_tile, true)
-	baddy_path_update()
 
 func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) -> void:
 	if player_cash < upgrade_cost:

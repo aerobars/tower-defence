@@ -1,6 +1,9 @@
 class_name TowerButtonData extends Resource
 
-@export var slot_count : int
+@export var slot_count : int : 
+	get():
+		return tower_shape.size()
 var button_id : int #used as tower name for now
-var mod_data : Dictionary[int, PrototypeMod] = {} #button data taken from SaveManager
+var mod_data : Dictionary[int, PrototypeMod] = {} #slot id: mod data, button data taken from SaveManager
+@export var tower_shape : Array[Vector2i] = [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1)]
 #include variables for tower shape and/or name once different tower types are implemented

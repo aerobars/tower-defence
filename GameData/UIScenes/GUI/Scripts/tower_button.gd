@@ -113,6 +113,7 @@ func get_tower_mods() -> Dictionary:
 		"aura_tower": has_aura and not has_wep,
 		"mods": button_data.mod_data,
 		"power_buffs": power_surplus_buffs,
+		"shape": button_data.tower_shape
 		}
 
 func on_mod_update(slot_id : int, data : PrototypeMod = null) -> void:

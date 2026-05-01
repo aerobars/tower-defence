@@ -79,7 +79,7 @@ func heal(_damage_tags, _pending_buffs) -> void:
 	for baddy in baddies:
 		baddy.data.health += buff.damage_amount[level]
 
-func poison(damage_tags : int, pending_buffs) -> void:
+func poison(damage_tags : int, _pending_buffs) -> void:
 	if not damage_tags & GlobalEnums.DamageTag.POISON:
 		return
 	buff_owner.calculate_damage([buff.effect_amount[level] * stacks, buff.damage_tag, false])
