@@ -70,10 +70,13 @@ var wave_reward : int :
 ## Build Mode
 var build_btn_ref
 var build_data : Dictionary
-var build_location
+var build_location : Vector2 = Vector2(0, 0)
+var build_rotation : float = 0.0
 var build_mode : bool = false
-var build_tile
+var build_tiles : Array[Vector2i]
 var build_valid : bool = false
+@onready var tower_base_scene : PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
+var build_mode_tower : Node2D
 
 
 func _ready() -> void:
@@ -106,7 +109,7 @@ func _ready() -> void:
 	for tower in SaveManager.save_data_run.tower_data:
 		for button in get_tree().get_nodes_in_group("build_buttons"):
 			if button.button_data.button_id == tower.connected_button_id:
-				create_tower(tower.position, button.tower_data, button, tower.level, true)
+				create_tower(tower.rotation, tower.position, button.tower_data, button, tower.level, true)
 	
 	##Saved Draggable Mod Position Set
 	await get_tree().process_frame
@@ -119,7 +122,6 @@ func _ready() -> void:
 	#add saved mods to tower
 	#set tower level to saved level
 	#connect linked button signals
-	
 
 func _process(_delta: float) -> void:
 	if build_mode:
@@ -132,17 +134,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		clear_popup()
 		if build_mode:
 			verify_and_build()
-			cancel_build_mode()
 	if event.is_action_pressed("hotkey_button_1"):
 		tower_buttons.get_child(0).pressed.emit()
 	if event.is_action_pressed("hotkey_button_2"):
 		tower_buttons.get_child(1).pressed.emit()
-	if event.is_action_pressed("hotkey_button_3"):
-		tower_buttons.get_child(2).pressed.emit()
-	if event.is_action_pressed("hotkey_button_4"):
-		tower_buttons.get_child(3).pressed.emit()
-	if event.is_action_pressed("hotkey_button_5"):
-		tower_buttons.get_child(4).pressed.emit()
+	#if event.is_action_pressed("hotkey_button_3"):
+		#tower_buttons.get_child(2).pressed.emit()
+	#if event.is_action_pressed("hotkey_button_4"):
+		#tower_buttons.get_child(3).pressed.emit()
+	#if event.is_action_pressed("hotkey_button_5"):
+		#tower_buttons.get_child(4).pressed.emit()
 
 ## Wave Functions
 func start_next_wave() -> void:
@@ -251,7 +252,8 @@ func initiate_build_mode(data: Dictionary, btn_ref) -> void: #connected to build
 	previous_tiles = [Vector2i(-100,-100)]
 	build_valid = false
 	#move tower instatiation to hear as a variable, to allow for rotation during update_tower_preview
-	ui.set_tower_preview(get_global_mouse_position(), build_data)
+	build_mode_tower = create_tower()
+	ui.set_tower_preview(get_global_mouse_position(), build_data, build_mode_tower)
 
 func update_tower_preview() -> void:
 	var mouse_pos : Vector2 = get_global_mouse_position()
@@ -262,9 +264,8 @@ func update_tower_preview() -> void:
 	
 	#for each cell in tower shape, do below code
 	build_valid = true
-	for cell in build_data["shape"]:
-		var current_cell : Vector2i = cell + centre_tile
-		var current_cell_pos = Vector2(current_cell.x * CELL_SIZE, current_cell.y * CELL_SIZE)
+	for child in build_mode_tower.tower_children:
+		var current_cell : Vector2i = map_node.exclusion_layer.local_to_map(child.global_position)
 		all_cells.append(current_cell)
 	#currnt_tile changed to current cell in tower shape
 		map_node.pathfinding_layer.set_cell(current_cell, 0, Vector2i(0,0), 0)
@@ -274,7 +275,8 @@ func update_tower_preview() -> void:
 	if build_valid:
 		colour = "GREEN"
 		build_location = centre_tile_pos
-		build_tile = centre_tile
+		build_tiles = all_cells
+		build_rotation = build_mode_tower.rotation
 	else:
 		colour = "CRIMSON"
 	ui.update_tower_preview(centre_tile_pos, colour)
@@ -298,26 +300,31 @@ func cancel_build_mode() -> void:
 
 func verify_and_build() -> void:
 	if build_valid:
-		create_tower()
+		var tower_rotation = build_mode_tower.rotation
+		cancel_build_mode()
+		create_tower(tower_rotation)
 		player_cash -= build_btn_ref.build_cost
 		baddy_path_update()
 
 func create_tower(
-	_build_location: Vector2 = build_location, 
+	_build_rotation: float = 0.0, 
+	_build_location: Vector2 = build_location,
 	_build_data: Dictionary = build_data, 
 	connected_btn: BuildTowerButton = build_btn_ref, 
 	level: int = 0,
 	saved_tower: bool = false,
-	) -> void:
+	):
 	
-	var new_tower = load("res://GameData/Towers/Scenes/tower_base.tscn").instantiate()
+	var new_tower = tower_base_scene.instantiate()
+	new_tower.build_data = _build_data
 	new_tower.tower_data = TowerBaseData.new()
+	if build_mode:
+		return new_tower
 	new_tower.tower_data.connected_button_id = connected_btn.button_data.button_id
 	new_tower.tower_data.level = level
 	new_tower.tower_data.position = _build_location
 	new_tower.position = new_tower.tower_data.position
 	new_tower.is_built = true
-	new_tower.build_data = _build_data
 	#less complicated to set build_data here... don't try it again
 	#yeah but what do I know 
 	#new_tower.tower_mods = _build_data["mods"]
@@ -328,11 +335,14 @@ func create_tower(
 	connected_btn.update_towers.connect(new_tower.tower_update)
 	if not saved_tower:
 		SaveManager.save_data_run.tower_data.append(new_tower.tower_data)
+		new_tower.rotation = _build_rotation
 	else:
-		build_tile = map_node.exclusion_layer.local_to_map(new_tower.position)
+		new_tower.rotation = new_tower.tower_data.rotation
 	map_node.tower_container.add_child(new_tower, true) #TowerContainer is in Map Scene
-	map_node.exclusion_layer.set_cell(build_tile, 5, Vector2i(1,0), 0)
-	astar.set_point_solid(build_tile, true)
+	for child in new_tower.tower_children:
+		var child_tile = map_node.exclusion_layer.local_to_map(child.global_position)
+		map_node.exclusion_layer.set_cell(child_tile, 5, Vector2i(1,0), 0)
+		astar.set_point_solid(child_tile, true)
 
 func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) -> void:
 	if player_cash < upgrade_cost:
@@ -344,12 +354,12 @@ func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) ->
 		ui.update_cash_display(player_cash)
 
 func sell_tower(sell_value : int, tower : TowerBase) -> void:
-	var tile_pos: Vector2i = map_node.exclusion_layer.local_to_map(tower.global_position)
-	map_node.exclusion_layer.set_cell(tile_pos)
-	astar.set_point_solid(tile_pos, false)
+	for child in tower.tower_children:
+		var tile_pos: Vector2i = map_node.exclusion_layer.local_to_map(child.global_position)
+		map_node.exclusion_layer.set_cell(tile_pos)
+		astar.set_point_solid(tile_pos, false)
 	baddy_path_update()
 	tower.queue_free()
-	
 	player_cash += sell_value
 	ui.update_cash_display(player_cash)
 
@@ -402,7 +412,6 @@ func create_tower_button(num: int) -> void:
 	new_button.button_data = TowerButtonData.new()
 	if SaveManager.save_data_run.new_game:
 		new_button.button_data.button_id = num + 1
-		new_button.button_data.slot_count = num + 3
 		SaveManager.save_data_run.button_data.append(new_button.button_data)
 	else:
 		new_button.button_data = SaveManager.save_data_run.button_data[num]

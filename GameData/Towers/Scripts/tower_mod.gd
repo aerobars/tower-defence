@@ -26,7 +26,7 @@ var attack_tracker : int
 
 ## Initial Setup
 func _ready():
-	range_scene_path.global_position = get_parent().global_position #not needed once converted to shapes
+	#range_scene_path.global_position = get_parent().global_position #not needed once converted to shapes
 	if data != null:
 		data.buff_owner = self
 	for body in range_scene_path.get_overlapping_bodies():
@@ -73,7 +73,7 @@ func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData,
 func _process(delta: float) -> void:
 	if data == null or data is PowerMod: 
 		return
-	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
+	for buff in data.active_buffs:
 		data.active_buffs[buff].update(delta)
 	if get_parent().net_power < 0:
 		return

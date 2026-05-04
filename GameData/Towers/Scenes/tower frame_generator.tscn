@@ -39,8 +39,10 @@ visible = false
 position = Vector2(-64, 0)
 
 [node name="FrameCell5" parent="." instance=ExtResource("2_irpsu")]
+visible = false
 
 [node name="FrameCell6" parent="." instance=ExtResource("2_irpsu")]
+visible = false
 position = Vector2(64, 0)
 
 [node name="FrameCell7" parent="." instance=ExtResource("2_irpsu")]
@@ -48,6 +50,7 @@ visible = false
 position = Vector2(-64, 64)
 
 [node name="FrameCell8" parent="." instance=ExtResource("2_irpsu")]
+visible = false
 position = Vector2(0, 64)
 
 [node name="FrameCell9" parent="." instance=ExtResource("2_irpsu")]

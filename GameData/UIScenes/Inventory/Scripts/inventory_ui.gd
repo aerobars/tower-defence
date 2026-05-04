@@ -14,6 +14,7 @@ func _ready() -> void:
 	await game_scene.ready
 	data.inventory_ui = self
 	if SaveManager.save_data_run.new_game:
+		SaveManager.save_data_run.new_game = false
 		SaveManager.save_data_run.inventory_data = data
 	else:
 		data = SaveManager.save_data_run.inventory_data

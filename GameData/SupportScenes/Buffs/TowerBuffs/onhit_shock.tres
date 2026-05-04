@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="OnHitBuff" load_steps=4 format=3 uid="uid://d28awyyh0t1la"]
 
-[ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_on_hit.gd" id="1_e8uqj"]
 [ext_resource type="Script" uid="uid://exytku8lt0ik" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_abs.gd" id="1_vmcgx"]
+[ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_onhit.gd" id="2_vmcgx"]
 
 [sub_resource type="Resource" id="Resource_2ckeo"]
 script = ExtResource("1_vmcgx")
@@ -16,8 +16,7 @@ metadata/_custom_type_script = "uid://exytku8lt0ik"
 
 [resource]
 resource_local_to_scene = true
-script = ExtResource("1_e8uqj")
-success_chance_per_stack = Array[float]([0.1, 0.1, 0.1, 0.1, 0.1])
+script = ExtResource("2_vmcgx")
 buff_to_apply = SubResource("Resource_2ckeo")
 damage_tag = 64
 effect_aoe = Array[float]([150.0, 150.0, 150.0, 150.0, 150.0])

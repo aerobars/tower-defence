@@ -6,9 +6,11 @@
 [sub_resource type="Resource" id="Resource_t7b13"]
 script = ExtResource("1_yps1x")
 stat = 8
-buff_amount = 1.0
+buff_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+buff_type = 1
 name = "Damage Boost"
-buff_targets = 2
+targets = 2
+aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [resource]

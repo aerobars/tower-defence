@@ -22,13 +22,7 @@ signal create_draggable(
 @export var button_data : TowerButtonData #contains mod slot data, slot count, and id
 @export var slot_radius : float = 64
 var slot_data_ref : Dictionary
-var button_slots : Array :
-	get:
-		var children : Array = []
-		for slot in get_children():
-			if slot is TowerButtonModSlot:
-				children.append(slot)
-		return children
+var button_slots : Array =[]
 
 ## Gametime
 var build_cost : int : 
@@ -38,21 +32,23 @@ var build_cost : int :
 var tower_data : Dictionary : get = get_tower_mods
 
 
-
 ## Setup
 func _ready() -> void:
 	for i in button_data.slot_count:
 		new_mod_slot(i)
+		if SaveManager.save_data_run.new_game:
+			button_data.mod_data[get_slot_id(i)] = null
 		on_mod_update(get_slot_id(i))
-	build_cost = button_data.slot_count
+	build_cost = button_data.tower_shape.size()
 	$PowerIcon.modulate.a = 0.5
 
 func new_mod_slot(slot_num: int) -> void:
 	var new_slot = mod_slot_scene.instantiate()
-	add_child(new_slot)
 	new_slot.mod_updated.connect(on_mod_update)
-	set_slot_position(new_slot, slot_num)
 	new_slot.slot_id = get_slot_id(slot_num)
+	button_slots.append(new_slot)
+	add_child(new_slot)
+	set_slot_position(new_slot, slot_num)
 	if button_data.mod_data.has(new_slot.slot_id) and button_data.mod_data[new_slot.slot_id] != null:
 		new_slot.occupied = true
 		create_draggable.emit(button_data.mod_data[new_slot.slot_id], new_slot.global_position, new_slot, false)
@@ -60,13 +56,6 @@ func new_mod_slot(slot_num: int) -> void:
 
 func get_slot_id(slot_num: int) -> int:
 	return button_data.button_id * 10 + slot_num
-
-func update_mod_slots() -> void:
-	var slot_num := 0
-	for slot in button_slots:
-		set_slot_position(slot, slot_num)
-		slot_num += 1
-	build_cost = button_data.slot_count
 
 func set_slot_position(slot: TowerButtonModSlot, slot_num: int) -> void:
 	var angle : float
@@ -78,15 +67,6 @@ func set_slot_position(slot: TowerButtonModSlot, slot_num: int) -> void:
 	slot.position.y = slot_radius * sin(angle) + size.y/2
 
 ## In-Game
-func slot_added() -> void:
-	button_data.slot_count += 1
-	new_mod_slot(button_data.slot_count)
-	update_mod_slots()
-
-func slot_removed() -> void:
-	button_data.slot_count -= 1
-	update_mod_slots()
-
 func get_tower_mods() -> Dictionary:
 	var power_surplus_buffs : Dictionary
 	var has_wep := false
@@ -116,14 +96,11 @@ func get_tower_mods() -> Dictionary:
 		"shape": button_data.tower_shape
 		}
 
-func on_mod_update(slot_id : int, data : PrototypeMod = null) -> void:
+func on_mod_update(slot_id : int, data : PrototypeMod = button_data.mod_data[slot_id]) -> void:
 	var net_power := 0
 	var power_surplus_buffs : Dictionary = {}
 	var has_wep := false
 	var has_aura := false
-	
-	if data == null and button_data.mod_data.has(slot_id): #prevents overwriting saved data
-		data = button_data.mod_data[slot_id]
 	
 	button_data.mod_data[slot_id] = data
 	

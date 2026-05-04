@@ -9,7 +9,7 @@ var grid_size : int :
 	get():
 		return CELL_SIZE * COLUMNS
 
-var frame_coords : Array = [Vector2i(1, 1), Vector2i(2, 1), Vector2i(1, 2)]
+var frame_coords : Array
 
 const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/Scenes/frame_cell.tscn")
 

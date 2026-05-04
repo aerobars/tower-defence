@@ -8,11 +8,12 @@ enum AffectedStat {
 	ATTACK_SPEED,
 	DEFENCE,
 }
-
-@export_range(0.0, 1.0, 0.1, "suffix: %") var success_chance_per_stack : Array[float]
+##Chance to successfully trigger onhit effect, 1.0 = 100%
+@export_range(0.0, 1.0, 0.1) var success_chance_per_stack : Array[float] = [0.1, 0.1, 0.1, 0.1, 0.1]
 @export var buff_to_apply : Buff
 @warning_ignore("enum_variable_without_default")
-@export var damage_tag : GlobalEnums.DamageTag
+##Damage Tag = 0 means no damage effect
+@export var damage_tag : GlobalEnums.DamageTag = 0
 @export var effect_aoe : Array[float] = [0, 0, 0, 0, 0]
 @export var effect_amount : Array[float] = [1, 1, 1, 1, 1]
 var stat_buff

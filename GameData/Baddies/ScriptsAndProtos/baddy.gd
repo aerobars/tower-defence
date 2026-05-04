@@ -26,7 +26,7 @@ func _ready() -> void:
 	path_aura.get_shape().radius = data.aura_aoe
 	
 	#healthbar setup
-	healthbar_update(data.health, data.health)
+	healthbar_update(data.health, data.current_max_health)
 	path_health_bar.set_as_top_level(true)
 	
 	#signal connections
@@ -38,7 +38,7 @@ func _ready() -> void:
 
 ##Runtime Functions
 func _process(delta: float) -> void:
-	for buff in data.active_buffs.keys(): #.keys for clarity, does the same as data.active_buffs
+	for buff in data.active_buffs:
 		data.active_buffs[buff].update(delta, progress)
 
 func _physics_process(delta: float) -> void:
@@ -59,7 +59,7 @@ func move(delta) -> void:
 func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void: 
 	calculate_damage(dmg)
 	var pending_buffs : Array[Buff] = []
-	for buff in data.active_buffs.keys():
+	for buff in data.active_buffs:
 		data.active_buffs[buff].level = tower_mod_level
 		if buff is OnHitBuff:
 			data.active_buffs[buff].on_hit_check(dmg[1], pending_buffs)
@@ -112,7 +112,7 @@ func _on_aura_range_body_entered(body: Node2D) -> void:
 	if path_aura.get_shape().radius < 1 or data.initial_buffs.size() == 0: #min radius is 0.01, instead of making separate boolean variable
 		return
 	for buff in data.initial_buffs:
-		var buff_targets = buff.data.buff_targets
+		var buff_targets = buff.targets
 		if buff_targets == GlobalEnums.Targets.NONE:
 			continue
 		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
@@ -124,7 +124,7 @@ func _on_aura_range_body_exited(body: Node2D) -> void:
 	if path_aura.get_shape().radius < 1: #min radius is 0.01, instead of making separate boolean variable
 		return
 	for buff in data.initial_buffs:
-		var buff_targets = buff.data.buff_targets
+		var buff_targets = buff.targets
 		if buff_targets == GlobalEnums.Targets.NONE:
 			continue
 		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:

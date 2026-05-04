@@ -4,7 +4,7 @@ signal show_upgrade_panel(popup_type : String, tower_data, tower_id : TowerBase)
 signal update_mods(net_power : int)
 
 ## Setup
-@export var marker_pos_radius : float = 10
+@export var non_aura_radius : float = 10
 const COLUMNS : int = 3
 const ROWS : int = 3
 const CELL_SIZE : int = 64
@@ -23,85 +23,45 @@ var tower_data : TowerBaseData
 const TOWER_MOD_PROTO : PackedScene = preload("res://GameData/Towers/Scenes/tower_mod.tscn")
 const POPUP_TYPE : String = "tower"
 var aura_tower : bool
-var frame_coords : Array[Vector2i]
 var is_built := false
 var net_power : int = 0
 var clickable := false
-var tower_children : Array :
-	get:
-		var children := []
-		for child in get_children():
-			if child is TowerMod:
-				children.append(child)
-		return children
+var tower_children : Array = []
 
-var yet : bool = true
+
 ## Setup
 func _ready() -> void:
-	frame_coords = build_data["shape"]
-	if not yet:
-		#get_nodes_from_vectors()
-		pass
-	if not is_built:
-		return
 	var tower_mods : Dictionary = build_data["mods"]
 	var init_power_buffs : Dictionary = build_data["power_buffs"]
+	tower_data.tower_shape = build_data["shape"]
 	aura_tower = build_data["aura_tower"]
-	mod_slot_count = tower_mods.size() #switch to frame_coords.size() when ready to change
-	marker_setup() #use markers instead of directly setting TowerMod scene so that this can show mod textures during build mode
-	if mod_slot_count > 0:
-		var marker_keys : Array
-		var build_keys : Array
-		for i in range(mod_slot_count):
-			marker_keys = all_marker_pos.keys()
-			build_keys = tower_mods.keys()
-			var marker_key = marker_keys[i]
-			var build_key = build_keys[i]
-			var tower_mod = TOWER_MOD_PROTO.instantiate()
-			tower_mod.position = all_marker_pos[marker_key]
-			#set mod textures on tower preview, or full mod data if built
-			#does not do former for now
-			if tower_mods[build_key] != null:
-				tower_mod.data = tower_mods[build_key].duplicate(true)
-				if tower_data.level > 0:
-					tower_mod.data.setup_stats(tower_data.level)
-			tower_mod.button_slot_id = build_key
-			update_mods.connect(tower_mod.update_mod)
-			tower_mod.non_aura_radius = marker_pos_radius
-				
-			#else:
-				#tower_mod.get_child(0).texture = build_btn_mods[build_key].texture
-			add_child(tower_mod)
+	mod_slot_count = tower_data.tower_shape.size() 
+	
+	var mod_list = tower_mods.keys()
+	for i in mod_slot_count:
+		var new_mod = TOWER_MOD_PROTO.instantiate()
+		new_mod.position = get_coords_from_vectors(tower_data.tower_shape[i])
+		if is_built and tower_mods[mod_list[i]] != null:
+			new_mod.data = tower_mods[mod_list[i]].duplicate(true)
+			if tower_data.level > 0:
+				new_mod.data.setup_stats(tower_data.level)
+		new_mod.button_slot_id = mod_list[i]
+		update_mods.connect(new_mod.update_mod)
+		new_mod.non_aura_radius = non_aura_radius
+		tower_children.append(new_mod)
+		add_child(new_mod)
 	tower_update(aura_tower, init_power_buffs)
 	await get_tree().create_timer(0.25).timeout
 	clickable = true
 
-## Marker Functions
-func marker_setup() -> void:
-	for i in mod_slot_count:
-		var marker = Marker2D.new()
-		set_marker_pos(marker, i)
-		add_child(marker)
+func get_coords_from_mod_data(button_id: int) -> Vector2:
+	@warning_ignore("integer_division")
+	return Vector2i(button_id / 10 * CELL_SIZE, button_id % 10 * CELL_SIZE)
 
-func set_marker_pos(marker, count) -> void:
-	var angle = (TAU * count) / mod_slot_count
-	marker.position.x = marker_pos_radius * cos(angle)
-	marker.position.y = marker_pos_radius * sin(angle)
-	all_marker_pos[marker] = marker.position
+func get_coords_from_vectors(cell: Vector2i) -> Vector2:
+	@warning_ignore("integer_division")
+	return Vector2(cell.x * CELL_SIZE, cell.y * CELL_SIZE)
 
-func update_markers() -> void: #called if # of markers gets updated
-	var count = 0
-	for child in get_children():
-		if child is Marker2D:
-			set_marker_pos(child, count)
-			count +=1
-
-func get_nodes_from_vectors() -> void:
-	for cell in frame_coords:
-		var new_tower = TOWER_MOD_PROTO.instantiate()
-		@warning_ignore("integer_division")
-		new_tower.position = Vector2(cell.x * CELL_SIZE - grid_size/2, cell.y * CELL_SIZE - grid_size/2)
-		add_child(new_tower)
 
 ## Gameplay
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
@@ -119,11 +79,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if event.is_action_pressed("rotate_counterclockwise"):
 		var tween = get_tree().create_tween()
 		tween.tween_property(self, "rotation", rotation - PI/2, 0.1)
+		tower_data.rotation = rotation
 		#counter rotate mod image
 		return
 	if event.is_action_pressed("rotate_clockwise"):
 		var tween = get_tree().create_tween()
 		tween.tween_property(self, "rotation", rotation + PI/2, 0.1)
+		tower_data.rotation = rotation
 		#counter rotate mod image
 		return
 

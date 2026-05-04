@@ -29,6 +29,7 @@ game_bookend_popup = NodePath("UI/GameOverMessage")
 tutorial = NodePath("UI/Tutorial")
 map_node = NodePath("Map")
 path_debug = NodePath("PathDebug")
+max_player_health = null
 
 [node name="Map" parent="." instance=ExtResource("1_akvmk")]
 
