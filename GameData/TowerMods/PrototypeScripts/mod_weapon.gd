@@ -9,10 +9,8 @@ enum WeaponBuffableStats {
 	POWER
 }
 
-#enum ProjectileTag { INSTANT, PROJECTILE }
-#@export var projectile_tag: ProjectileTag
 ##A projectile speed of 0 is an instant attack
-@export var projectile_speed : float = 600
+@export var projectile_speed : float = 750
 ##BLEED = 1, BLUNT = 2, BURN = 4, HEAL = 8, PIERCE = 16, POISON = 32, SHOCK = 64
 @export var damage_tags : int = GlobalEnums.DamageTag.PIERCE
 
@@ -21,14 +19,14 @@ enum WeaponBuffableStats {
 @export var base_aoe_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 ##CD between attacks in seconds
 @export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] 
-@export var base_crit_chance_levels : Array[int] = [0, 0, 0, 0, 0]
+@export_range(0.0, 1.0, 0.01,) var base_crit_chance_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 @export var base_crit_multiplier_levels: Array[float] = [1.5, 1.5, 1.5, 1.5, 1.5]
 @export var base_damage_levels : Array[float] = [10.0, 10.0, 10.0, 10.0, 10.0]
 @export var base_multitarget_levels : Array [int] = [1, 1, 1, 1, 1]
 @export var base_pierce_levels : Array[int] = [1, 1, 1, 1, 1]
 var current_aoe : float
 var current_attack_speed : float
-var current_crit_chance : int
+var current_crit_chance : float
 var current_crit_multiplier: float
 var current_damage : float
 var current_multitarget : int
@@ -56,7 +54,7 @@ func set_current_stats() -> void:
 	current_range = base_range_levels[level]
 
 func calculate_damage() -> Array: #returns [total attack damage, damage tags, did the attack crit]
-	if current_crit_chance > randi() % 100:
+	if current_crit_chance > randf():
 		return [current_damage * current_crit_multiplier, damage_tags, true]
 	else:
 		return [current_damage, damage_tags, false]

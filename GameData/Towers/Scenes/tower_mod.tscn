@@ -50,6 +50,7 @@ _data = {
 }
 
 [node name="TowerModPrototype" type="StaticBody2D"]
+input_pickable = true
 script = ExtResource("1_uu2uq")
 
 [node name="TowerBase" type="Sprite2D" parent="."]
@@ -83,5 +84,6 @@ libraries = {
 &"": SubResource("AnimationLibrary_260rg")
 }
 
+[connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="body_entered" from="Range" to="." method="_on_range_body_entered"]
 [connection signal="body_exited" from="Range" to="." method="_on_range_body_exited"]

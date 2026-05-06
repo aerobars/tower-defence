@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_qgkxy")
 stat = 64
-buff_amount = Array[float]([0.1, 0.1, 0.1, 0.1, 0.1])
+buff_amount = Array[float]([-0.1, -0.1, -0.1, -0.1, -0.1])
 buff_type = 2
 name = "Poison"
 stack_limit = Array[int]([10, 20, 30, 40, 50])

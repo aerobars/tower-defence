@@ -27,8 +27,8 @@ shapes/collision/shape_color=Color(0, 0.6, 0.69803923, 0.07058824)
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=1600
+window/size/viewport_height=900
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image="uid://fu8tlh1sblwb"
 

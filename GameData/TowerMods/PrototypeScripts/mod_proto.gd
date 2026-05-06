@@ -1,6 +1,7 @@
 @abstract
 class_name PrototypeMod extends Resource
 
+##test3
 enum ModClass { AURA, POWER, WEAPON }
 
 @export_group("Mod Info", "info_")
@@ -20,14 +21,17 @@ var level : int #first level will be 0 after setup_stats to line up with arrays
 var current_power : int
 var current_range : float
 @export var mod_class : ModClass
-@export_group("Swapper Data")
-@export var swapper : bool
+
+@export_group("Swapper Data", "swap_")
+@export var swap_enabled : bool
+##Create buff in inspector, don't used saved resource
 @export var swap_buff : Buff
 @export var swap_buff_duration: float
 
 
 var buff_owner : Node2D
 var active_buffs: Dictionary[Buff, BuffInstance] = {}
+##Can add onhit buffs that tower starts with
 @export var on_hit_effects : Array[Buff] = []
 var net_power : int = 0
 var power_surplus_buffs : Dictionary = {}
@@ -44,7 +48,9 @@ func setup_stats(_level : int = 0) -> void:
 	recalculate_stats()
 
 func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:
-	if buff is StatBuff and buff.targets == GlobalEnums.Targets.TOWERS:
+	if buff.targets != GlobalEnums.Targets.TOWERS:
+		return
+	if buff is StatBuff:
 		for i in amt: #amt allows to apply multiple stacks from a single source
 			if not active_buffs.has(buff):
 				var new_inst = BuffInstance.new(buff, buff_owner, buff_level)

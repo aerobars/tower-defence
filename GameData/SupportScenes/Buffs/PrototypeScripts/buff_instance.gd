@@ -46,7 +46,7 @@ func burn(delta : float, _progress : float) -> void:
 ##On Hit
 func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 	if randf() <= float(buff.success_chance_per_stack[level] * stacks):
-		var targets
+		var targets : Array
 		if buff_owner.data.aura_aoe > 1:
 			targets = await AOESetup.setup_aoe(
 				buff_owner, 
@@ -54,13 +54,14 @@ func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 				GlobalEnums.Targets.keys()[buff.targets].to_lower(), 
 				buff_owner.data.aura_aoe)
 		else:
-			targets = buff_owner
+			targets = [buff_owner]
 		if buff.damage_tag > 0:
 			for target in targets:
 				if buff.damage_tag != GlobalEnums.DamageTag.HEAL:
 					buff_owner.calculate_damage([buff.effect_amount[level] * stacks, buff.damage_tag, false])
 				else:
 					target.data.health += buff.effect_amount[level]
+					DamageNumbers.display_number(buff.effect_amount[level], target.global_position, GlobalEnums.DamageTag.HEAL, false)
 		if buff.buff_to_apply != null:
 			for target in targets:
 				target.data.add_buff(buff.buff_to_apply)

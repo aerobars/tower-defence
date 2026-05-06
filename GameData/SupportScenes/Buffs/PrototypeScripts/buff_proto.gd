@@ -5,6 +5,7 @@ class_name Buff extends Resource
 @export var stack_limit: Array[int] = [99, 99, 99, 99, 99]
 ##For OnHit Buffs, this refers to the buff applied (ex. shock: buff duration is for the shock buff, effect duration is for the stun)
 @export var buff_duration : Array[float] = [1, 1, 1, 1, 1]
+## No Target = 0, Towers = 1, Baddies = 2, Self = 3
 @export var targets : GlobalEnums.Targets
 @export var aura_effect : bool = false
 

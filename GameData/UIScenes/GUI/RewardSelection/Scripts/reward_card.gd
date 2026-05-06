@@ -31,7 +31,7 @@ func stats_setup() -> void:
 		2: #Weapon
 			var mod_range = Label.new()
 			var dps = Label.new()
-			dps.text = str(data.base_damage_levels[level]) + " dmg per " + str(data.base_attack_speed_levels[level]) + "s (" + str(data.base_damage_levels[level]/data.base_attack_speed_levels[level]) + " dps)"
+			dps.text = str(data.base_damage_levels[level]) + " dmg per " + str(data.base_attack_speed_levels[level]) + "s (" + String.num(data.base_damage_levels[level]/data.base_attack_speed_levels[level], 2) + " dps)"
 			mod_range.text = "Range: " + str(data.base_range_levels[level]) + " units"
 			container.add_child(dps)
 			container.move_child(dps, 2)

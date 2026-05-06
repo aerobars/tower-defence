@@ -260,14 +260,13 @@ func update_tower_preview() -> void:
 	var centre_tile : Vector2i = map_node.exclusion_layer.local_to_map(mouse_pos)
 	var centre_tile_pos : Vector2 = map_node.exclusion_layer.map_to_local(centre_tile)
 	var colour : String
-	var all_cells : Array[Vector2i] = [] #not sure if this is needed
+	var all_cells : Array[Vector2i] = []
 	
 	#for each cell in tower shape, do below code
 	build_valid = true
 	for child in build_mode_tower.tower_children:
 		var current_cell : Vector2i = map_node.exclusion_layer.local_to_map(child.global_position)
 		all_cells.append(current_cell)
-	#currnt_tile changed to current cell in tower shape
 		map_node.pathfinding_layer.set_cell(current_cell, 0, Vector2i(0,0), 0)
 		astar.set_point_solid(current_cell, true)
 		if map_node.exclusion_layer.get_cell_source_id(current_cell) != -1 or path.is_empty():
@@ -412,6 +411,7 @@ func create_tower_button(num: int) -> void:
 	new_button.button_data = TowerButtonData.new()
 	if SaveManager.save_data_run.new_game:
 		new_button.button_data.button_id = num + 1
+		new_button.button_data.tower_shape = SaveManager.save_data_run.init_tower_shapes[num]
 		SaveManager.save_data_run.button_data.append(new_button.button_data)
 	else:
 		new_button.button_data = SaveManager.save_data_run.button_data[num]

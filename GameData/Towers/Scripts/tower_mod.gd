@@ -1,7 +1,9 @@
 class_name TowerMod extends Node2D
+##Handles gametime tower functions (shooting, etc.) and last step of mod updates (update to mod class and net power)
+
 
 ## Signals
-#signal power_check
+signal tower_clicked
 signal mod_updated(mod: StaticBody2D)
 
 ## Tower Setup
@@ -26,7 +28,6 @@ var attack_tracker : int
 
 ## Initial Setup
 func _ready():
-	#range_scene_path.global_position = get_parent().global_position #not needed once converted to shapes
 	if data != null:
 		data.buff_owner = self
 	for body in range_scene_path.get_overlapping_bodies():
@@ -61,13 +62,11 @@ func update_mod(net_power : int = 0) -> void:
 	turret.texture = data.info_texture
 	mod_updated.emit(self)
 
-
 func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData, triggers whenever any mod is updated
 	if updated_mod == self:
 		return
 	if updated_mod in range_scene_path.get_overlapping_bodies():
 		_on_range_body_entered(updated_mod)
-
 
 ## In-Game Function
 func _process(delta: float) -> void:
@@ -122,6 +121,10 @@ func add_buff(body) -> void:
 func remove_buff(body) -> void:
 	body.data.remove_buff(data.buff_data)
 
+func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if event.is_action_released("ui_accept"):
+		tower_clicked.emit()
+
 ## Weapon Function
 func select_targets() -> Array:
 	var target_progress_array := baddies_in_range
@@ -146,7 +149,6 @@ func fire(target):
 				baddy.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
 		else:
 			target.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
-
 
 func fire_projectile(target) -> void:
 	var new_projectile = PROJECTILE_SCENE.instantiate()

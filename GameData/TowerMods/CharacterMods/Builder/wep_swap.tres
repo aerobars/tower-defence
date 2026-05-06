@@ -23,7 +23,6 @@ info_description = "Gains increased damage for 4 seconds after this mod is swapp
 info_texture = SubResource("AtlasTexture_s3nbj")
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 mod_class = 2
-swapper = true
 swap_buff = SubResource("Resource_7p8bm")
 swap_buff_duration = 2.0
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

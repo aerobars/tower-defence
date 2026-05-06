@@ -2,8 +2,10 @@ class_name StatBuff extends Buff
 
 enum BuffType {NONE, ADD, MULTIPLY, ABS}
 
+##AOE = 1, ATTACK_SPEED = 2, CRIT_CHANCE = 4, DAMAGE = 8, DEFENCE = 16, MAX_HEALTH = 32, MOVE_SPEED = 64
 @export var stat: GlobalEnums.BuffableStats
 @export var buff_amount: Array[float]
+##None = 0, Add = 1, Multiply = 2, Absolute = 3
 @export var buff_type: BuffType
 
 func _init(

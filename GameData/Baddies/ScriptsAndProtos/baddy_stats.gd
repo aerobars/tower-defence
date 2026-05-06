@@ -28,11 +28,6 @@ const BASE_LEVEL_XP : float = 100.0
 @export var base_move_speed : float = 150
 @export var base_defence_tag : GlobalEnums.BaddyArmorTags = GlobalEnums.BaddyArmorTags.UNARMORED
 
-##currently unused
-@export var experience : int = 0: set = _on_experience_set
-var level : int :
-	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
-
 var wave_ratio : float :
 	get:
 		return 1 + (SaveManager.save_data_run.current_wave - 1)/10.0
@@ -48,12 +43,17 @@ var health : float = 0 : set = _on_health_set
 ##Buffs and Auras
 @export_group("Buffs and Auras")
 @export var aura_aoe : float = 0.0
-##bu
+##buffs such as auras
 @export var initial_buffs : Array[Buff] = []
 ##buffs that trigger when the baddy dies
 @export var last_laugh_effects : Array[LastLaugh] = []
 var active_buffs: Dictionary[Buff, BuffInstance]
 var buff_owner : Node2D
+
+##currently unused
+@export var experience : int = 0: set = _on_experience_set
+var level : int :
+	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
 
 ##Stats Setup and Adjustment
 func _init() -> void:

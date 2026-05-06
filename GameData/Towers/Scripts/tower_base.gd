@@ -1,4 +1,5 @@
-class_name TowerBase extends StaticBody2D
+class_name TowerBase extends Node2D
+##Handles tower setup and updates to tower mods
 
 signal show_upgrade_panel(popup_type : String, tower_data, tower_id : TowerBase)
 signal update_mods(net_power : int)
@@ -47,6 +48,7 @@ func _ready() -> void:
 				new_mod.data.setup_stats(tower_data.level)
 		new_mod.button_slot_id = mod_list[i]
 		update_mods.connect(new_mod.update_mod)
+		new_mod.tower_clicked.connect(tower_clicked)
 		new_mod.non_aura_radius = non_aura_radius
 		tower_children.append(new_mod)
 		add_child(new_mod)
@@ -64,14 +66,13 @@ func get_coords_from_vectors(cell: Vector2i) -> Vector2:
 
 
 ## Gameplay
-func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+func tower_clicked() -> void:
 	if clickable:
-		if event.is_action("ui_accept"):
-			var mod_data : Array
-			for child in get_children():
-				if child is TowerMod and child.data != null:
-					mod_data.append(child.data)
-			show_upgrade_panel.emit(POPUP_TYPE, mod_data, self)
+		var mod_data : Array
+		for child in tower_children:
+			if child.data != null:
+				mod_data.append(child.data)
+		show_upgrade_panel.emit(POPUP_TYPE, mod_data, self)
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if is_built:
