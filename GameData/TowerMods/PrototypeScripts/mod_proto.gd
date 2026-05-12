@@ -1,7 +1,6 @@
 @abstract
 class_name PrototypeMod extends Resource
 
-##test3
 enum ModClass { AURA, POWER, WEAPON }
 
 @export_group("Mod Info", "info_")
@@ -12,7 +11,7 @@ var class_string : String:
 	get: 
 		return ModClass.keys()[ModClass.values().find(mod_class)]
 
-##stats for all mod types
+##Stats for all mod types
 @export_group("Universal Mod Stats", "base_")
 var level : int #first level will be 0 after setup_stats to line up with arrays
 @export var base_power_levels : Array[int] = [-1, -1, -1, -1, -1]

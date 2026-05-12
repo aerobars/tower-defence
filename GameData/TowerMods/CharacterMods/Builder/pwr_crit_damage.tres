@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PowerMod" load_steps=5 format=3 uid="uid://br58lef3la2wo"]
+
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_b2wpx"]
+[ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="1_m2hu1"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_m2hu1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c82bm"]
+atlas = ExtResource("1_m2hu1")
+region = Rect2(33, 32, 32, 32)
+
+[resource]
+script = ExtResource("2_m2hu1")
+power_surplus_buffable_stats = Array[int]([128])
+info_name = "Crit Damage Boost Power"
+info_description = "Provides power and increases Crit Damage of weapon mods by 10% per point of surplus power."
+info_texture = SubResource("AtlasTexture_c82bm")
+base_power_levels = Array[int]([4, 5, 6, 7, 8])
+mod_class = 1
+metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

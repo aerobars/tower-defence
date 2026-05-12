@@ -36,4 +36,5 @@ func _on_powering_mods_button_button_up() -> void:
 	powering_mods.queue_free()
 
 func _on_end_button_button_up() -> void:
-	end.queue_free()
+	SaveManager.save_data_profile.show_tutorial = false
+	queue_free()

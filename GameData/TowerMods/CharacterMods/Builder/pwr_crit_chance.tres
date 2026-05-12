@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PowerMod" load_steps=5 format=3 uid="uid://cxrlbhfn535mr"]
+
+[ext_resource type="Texture2D" uid="uid://lqnf6vvd76vi" path="res://Assets/Effects/explosion1.png" id="1_86nls"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_swqss"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="3_m625h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_do3r7"]
+atlas = ExtResource("1_86nls")
+region = Rect2(30, 30, 32, 32)
+
+[resource]
+script = ExtResource("3_m625h")
+power_surplus_buffable_stats = Array[int]([4])
+info_name = "Crit Chance Boost Power"
+info_description = "Provides power and increases Crit Chance of weapon mods by 10% per point of surplus power."
+info_texture = SubResource("AtlasTexture_do3r7")
+mod_class = 1
+metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

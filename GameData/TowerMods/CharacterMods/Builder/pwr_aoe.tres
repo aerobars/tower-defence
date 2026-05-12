@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PowerMod" load_steps=5 format=3 uid="uid://srxdt53rsw01"]
+
+[ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="1_jqnps"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_l4igc"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_jqnps"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xpblh"]
+atlas = ExtResource("1_jqnps")
+region = Rect2(30, 36, 32, 32)
+
+[resource]
+script = ExtResource("2_jqnps")
+power_surplus_buffable_stats = Array[int]([1])
+info_name = "AoE Boost Power"
+info_description = "Provides power and increases AoE of weapon mods by 10% per point of surplus power"
+info_texture = SubResource("AtlasTexture_xpblh")
+base_power_levels = Array[int]([4, 4, 4, 4, 4])
+mod_class = 1
+metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

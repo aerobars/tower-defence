@@ -56,10 +56,12 @@ enum BuffableStats {
 	AOE = 1 << 0, #1
 	ATTACK_SPEED = 1 << 1, #2
 	CRIT_CHANCE = 1 << 2, #4
+	CRIT_DAMAGE = 1 << 7, #128
 	DAMAGE = 1 << 3, #8
 	DEFENCE = 1 << 4, #16
 	MAX_HEALTH = 1 << 5, #32
 	MOVE_SPEED = 1 << 6, #64
+	RANGE = 1 << 8, #256
 }
 
 enum Targets {

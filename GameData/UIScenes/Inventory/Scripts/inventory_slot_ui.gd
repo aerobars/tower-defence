@@ -25,6 +25,7 @@ func set_slot_data(value: InventorySlotData):
 	#if slot_data == null:
 	#	return
 	image.texture = value.inventory_mod.info_texture
+	#image.modulate = value.inventory_mod.info_modulate
 	amount.text = str(value.quantity)
 
 func _on_mouse_entered() -> void:
