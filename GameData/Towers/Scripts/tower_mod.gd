@@ -11,17 +11,18 @@ const PROJECTILE_SCENE := preload("res://GameData/Towers/Scenes/tower_projectile
 var non_aura_radius : float #equal to TowerBase's Marker2D radius
 var data : PrototypeMod
 var button_slot_id : int
-@onready var turret := $Turret
-@onready var muzzle := $Turret/Muzzle
-@onready var range_scene_path := $Range
-@onready var range_aoe := $Range/CollisionShape2D
-@onready var animation_player := $AnimationPlayer
+@onready var path_turret := $Turret
+@onready var path_muzzle := $Turret/Muzzle
+@onready var path_range_scene := $Range
+@onready var path_range_aoe := $Range/CollisionShape2D
+@onready var path_animation_player := $AnimationPlayer
+@onready var path_buff_display := $BuffDisplayContainer
 
 
 ## Gametime
 var baddies_in_range : Array
-var targets : Array
-#var aura_targets : Array
+var attack_targets : Array = []
+var aura_targets : Array = []
 var attack_timer : float = 0.0
 var attack_tracker : int
 
@@ -30,18 +31,18 @@ var attack_tracker : int
 func _ready():
 	if data != null:
 		data.buff_owner = self
-	for body in range_scene_path.get_overlapping_bodies():
+	for body in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(body)
 	
-	mod_updated.connect(GameData.mod_updated)
-	GameData.mod_update_check.connect(_on_mod_updated)
+	mod_updated.connect(GameData.mod_updated) #for when this mod gets updated
+	GameData.mod_update_check.connect(_on_mod_updated) #for when other mods get updated
 	#above signals allow other mods to be added to auras after they are updated
 
 ## Mod Updates
 func update_mod(net_power : int = 0) -> void:
 	if data == null:
-		range_aoe.get_shape().radius = 0.0
-		turret.texture = null
+		path_range_aoe.get_shape().radius = 0.0
+		path_turret.texture = null
 		remove_from_group("towers")
 		return
 	data.net_power = net_power
@@ -49,23 +50,23 @@ func update_mod(net_power : int = 0) -> void:
 	match data.mod_class:
 		0: #Aura
 			if get_parent().aura_tower:
-				range_aoe.get_shape().radius = data.current_range
+				path_range_aoe.get_shape().radius = data.current_range
 			else:
-				range_aoe.get_shape().radius = non_aura_radius
+				path_range_aoe.get_shape().radius = non_aura_radius
 			add_to_group("towers")
 		1: #Power
-			range_aoe.get_shape().radius = non_aura_radius
+			path_range_aoe.get_shape().radius = non_aura_radius
 			remove_from_group("towers")
 		2: #Weapon
-			range_aoe.get_shape().radius = data.current_range
+			path_range_aoe.get_shape().radius = data.current_range
 			add_to_group("towers")
-	turret.texture = data.info_texture
+	path_turret.texture = data.info_texture
 	mod_updated.emit(self)
 
 func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData, triggers whenever any mod is updated
 	if updated_mod == self:
 		return
-	if updated_mod in range_scene_path.get_overlapping_bodies():
+	if updated_mod in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(updated_mod)
 
 ## In-Game Function
@@ -78,32 +79,35 @@ func _process(delta: float) -> void:
 		return
 	attack_timer = clamp(attack_timer + delta, 0, data.current_attack_speed)
 	if baddies_in_range.size() > 0:
-		targets = select_targets()
+		attack_targets = select_targets()
 		if data.mod_class == data.ModClass.WEAPON:
-			if not animation_player.is_playing():
+			if not path_animation_player.is_playing():
 				turn()
 		if attack_timer >= data.current_attack_speed:
-			if data is AuraMod and data.buff_data.targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
+			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.aura_effect and get_parent().aura_tower:
 				for baddy in baddies_in_range:
 					add_buff(baddy)
 			elif data is WeaponMod:
 				#attack_tracker += 1
 				for i in data.current_multitarget:
-					if i < targets.size():
-						fire(targets[i])
+					if i < attack_targets.size():
+						fire(attack_targets[i])
 			attack_timer = 0.0
 	else:
-		targets = [null]
+		attack_targets = [null]
 
 func _on_range_body_entered(body) -> void:
 	if data == null or body == self:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body.get_parent())
+		if data.mod_class == data.ModClass.AURA and data.buff_data.aura_effect:
+			add_buff(body.get_parent())
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
-		if data.buff_data.targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
+		if data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
 			return #nothing gets added for offensive auras in aura mode
 		else:
+			aura_targets.append(body)
 			add_buff(body)
 
 func _on_range_body_exited(body) -> void:
@@ -111,8 +115,10 @@ func _on_range_body_exited(body) -> void:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body.get_parent())
+		if data.mod_class == data.ModClass.AURA and data.buff_data.aura_effect:
+			remove_buff(body.get_parent())
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
-		#aura_targets.erase(body)
+		aura_targets.erase(body)
 		remove_buff(body)
 
 func add_buff(body) -> void:
@@ -132,7 +138,7 @@ func select_targets() -> Array:
 	return target_progress_array
 
 func turn():
-	turret.look_at(targets[0].position)
+	path_turret.look_at(attack_targets[0].position)
 
 func fire(target):
 	if data.projectile_speed > 0:
@@ -158,9 +164,9 @@ func fire_projectile(target) -> void:
 	new_projectile.on_hit_effects = data.on_hit_effects
 	new_projectile.aoe = data.current_aoe
 	add_child(new_projectile)
-	new_projectile.position = muzzle.position
+	new_projectile.position = path_muzzle.position
 	new_projectile.look_at(target.position)
 	new_projectile.direction = Vector2.RIGHT.rotated(new_projectile.rotation)
 
 func fire_instant() -> void:
-	animation_player.play("fire")
+	path_animation_player.play("fire")

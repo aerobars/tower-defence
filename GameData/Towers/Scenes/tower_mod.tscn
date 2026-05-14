@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bp51akjapuerf"]
+[gd_scene load_steps=10 format=3 uid="uid://bp51akjapuerf"]
 
 [ext_resource type="Script" uid="uid://dvux8hj1euiax" path="res://GameData/Towers/Scripts/tower_mod.gd" id="1_uu2uq"]
 [ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="2_k3vlt"]
 [ext_resource type="Texture2D" uid="uid://c44rk0b010555" path="res://Assets/Effects/towerDefense_tile297.png" id="3_ptglf"]
+[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/SupportScenes/buff_display_container.tscn" id="4_n0uum"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n0uum"]
 size = Vector2(52, 52)
@@ -83,6 +84,17 @@ debug_color = Color(0, 0.6, 0.7, 0.42)
 libraries = {
 &"": SubResource("AnimationLibrary_260rg")
 }
+
+[node name="BuffDisplayContainer" parent="." instance=ExtResource("4_n0uum")]
+custom_minimum_size = Vector2(48, 16)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -24.0
+offset_top = 8.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="body_entered" from="Range" to="." method="_on_range_body_entered"]

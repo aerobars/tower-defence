@@ -1,7 +1,12 @@
-[gd_resource type="Resource" script_class="WeaponMod" load_steps=3 format=3 uid="uid://bxkxbotwtcmy1"]
+[gd_resource type="Resource" script_class="WeaponMod" load_steps=5 format=3 uid="uid://bxkxbotwtcmy1"]
 
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_804d5"]
+[ext_resource type="Texture2D" uid="uid://dbxyrgxdvkwxj" path="res://Assets/Towers/towerDefense_tile250.png" id="1_8648p"]
 [ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_8648p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5fmfk"]
+atlas = ExtResource("1_8648p")
+region = Rect2(32, 16, 32, 32)
 
 [resource]
 script = ExtResource("2_8648p")
@@ -13,8 +18,8 @@ base_damage_levels = Array[float]([5.0, 10.0, 15.0, 30.0, 30.0])
 base_multitarget_levels = Array[int]([1, 1, 1, 1, 2])
 info_name = "Finger Guns"
 info_description = "Pew Pew!"
+info_texture = SubResource("AtlasTexture_5fmfk")
 base_power_levels = Array[int]([-1, -1, -1, -2, -2])
 base_range_levels = Array[float]([150.0, 250.0, 350.0, 350.0, 350.0])
 mod_class = 2
-swapper = true
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

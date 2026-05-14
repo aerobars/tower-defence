@@ -1,11 +1,16 @@
-[gd_resource type="Resource" script_class="DotBuff" load_steps=2 format=3 uid="uid://bi5uxnya2aq4d"]
+[gd_resource type="Resource" script_class="DotBuff" load_steps=4 format=3 uid="uid://bi5uxnya2aq4d"]
 
+[ext_resource type="Texture2D" uid="uid://ddyaqh83bxrgn" path="res://Assets/Effects/towerDefense_tile298.png" id="1_apqjp"]
 [ext_resource type="Script" uid="uid://2ja3gh17qp02" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_dot.gd" id="1_imnq3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kn10b"]
+atlas = ExtResource("1_apqjp")
+region = Rect2(16, 16, 32, 32)
 
 [resource]
 script = ExtResource("1_imnq3")
 damage_tag = 4
-name = "Burn"
-targets = 2
-aura_effect = null
+info_name = "Burn"
+info_display_icon = SubResource("AtlasTexture_kn10b")
+buff_targets = 2
 metadata/_custom_type_script = "uid://2ja3gh17qp02"

@@ -16,5 +16,5 @@ func _init(
 	damage_amount = _damage_amount
 	dot_interval = _dot_interval
 	buff_duration = _dot_duration
-	targets = _targets
+	buff_targets = _targets
 	

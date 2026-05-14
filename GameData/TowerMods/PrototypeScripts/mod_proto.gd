@@ -47,24 +47,23 @@ func setup_stats(_level : int = 0) -> void:
 	recalculate_stats()
 
 func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:
-	if buff.targets != GlobalEnums.Targets.TOWERS:
-		return
 	if buff is StatBuff:
-		for i in amt: #amt allows to apply multiple stacks from a single source
-			if not active_buffs.has(buff):
-				var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
-				active_buffs[buff] = new_inst
-			var inst = active_buffs[buff]
-			inst.level = buff_level
-			inst.stacks = min(inst.stacks + 1, buff.stack_limit[buff_level])
-			inst.time_remaining = buff.buff_duration[buff_level]
-			recalculate_stats.call_deferred()
+		if not active_buffs.has(buff):
+			var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
+			active_buffs[buff] = new_inst
+		var inst = active_buffs[buff]
+		inst.level = buff_level
+		inst.stacks = min(inst.stacks + amt, buff.stack_limit[buff_level])
+		inst.time_remaining = buff.buff_duration[buff_level]
+		buff_owner.path_buff_display.update_display(buff, inst.stacks)
+		recalculate_stats.call_deferred()
 	else:
 		add_on_hit_effect(buff)
 
 func remove_buff(buff : Buff) -> void:
-	if buff is StatBuff and buff.targets == GlobalEnums.Targets.TOWERS:
+	if buff is StatBuff and buff.buff_targets == GlobalEnums.Targets.TOWERS:
 		active_buffs.erase(buff)
+		buff_owner.path_buff_display.remove_buff(buff)
 		recalculate_stats.call_deferred()
 	else:
 		remove_on_hit_effect(buff)

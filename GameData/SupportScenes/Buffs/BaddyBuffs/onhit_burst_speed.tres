@@ -1,25 +1,28 @@
-[gd_resource type="Resource" script_class="OnHitBuff" load_steps=4 format=3 uid="uid://c8jua15k88rrw"]
+[gd_resource type="Resource" script_class="OnHitBuff" load_steps=6 format=3 uid="uid://c8jua15k88rrw"]
 
+[ext_resource type="Texture2D" uid="uid://lqnf6vvd76vi" path="res://Assets/Effects/explosion1.png" id="1_qi2h1"]
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_r42fw"]
 [ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_onhit.gd" id="2_5rwgn"]
+[ext_resource type="Texture2D" uid="uid://b7813pvk1mmp0" path="res://Assets/Environment/Props/crateWood.png" id="3_sxxsd"]
 
 [sub_resource type="Resource" id="Resource_qi2h1"]
 script = ExtResource("1_r42fw")
 stat = 64
 buff_amount = Array[float]([50.0, 50.0, 50.0, 50.0, 50.0])
 buff_type = 2
-name = "Burst Speed"
+info_name = "Burst Move Speed"
+info_display_icon = ExtResource("1_qi2h1")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
-buff_duration = Array[float]([0.5, 0.5, 0.5, 0.5, 0.5])
-targets = 3
+buff_duration = Array[float]([0.25, 0.25, 0.25, 0.25, 0.25])
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [resource]
 script = ExtResource("2_5rwgn")
 success_chance_per_stack = Array[float]([0.6, 0.6, 0.6, 0.6, 0.6])
 buff_to_apply = SubResource("Resource_qi2h1")
-name = "Burst Speed"
+info_name = "Burst Speed"
+info_display_icon = ExtResource("3_sxxsd")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
-targets = 3
+buff_targets = 3
 aura_effect = true
 metadata/_custom_type_script = "uid://cxkis28w2jd6p"

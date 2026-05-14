@@ -6,7 +6,7 @@ signal base_damage(damage)
 
 ##Node Paths
 @export_group("Node Paths", "path")
-@export var path_health_bar : TextureProgressBar
+@export var path_health_bar : Control
 @export var path_impact_area : Marker2D
 @export var path_damage_number_origin : Marker2D
 @export var path_hit_flash : AnimationPlayer
@@ -81,8 +81,8 @@ func calculate_damage(dmg: Array) -> void:#Array contains dmg amt, dmg tag, and 
 	DamageNumbers.display_number(dmg[0], path_damage_number_origin.global_position, dmg[1], dmg[2])
 
 func healthbar_update(health, max_health) -> void:
-	path_health_bar.max_value = max_health
-	path_health_bar.value = health
+	path_health_bar.path_health_bar.max_value = max_health
+	path_health_bar.path_health_bar.value = health
 
 func impact(damage_type: GlobalEnums.DamageTag) -> void:
 	if damage_type == GlobalEnums.DamageTag.BLUNT or damage_type == GlobalEnums.DamageTag.PIERCE:
@@ -112,7 +112,7 @@ func _on_aura_range_body_entered(body: Node2D) -> void:
 	if path_aura.get_shape().radius < 1 or data.initial_buffs.size() == 0: #min radius is 0.01, instead of making separate boolean variable
 		return
 	for buff in data.initial_buffs:
-		var buff_targets = buff.targets
+		var buff_targets = buff.buff_targets
 		if buff_targets == GlobalEnums.Targets.NONE:
 			continue
 		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
@@ -124,7 +124,7 @@ func _on_aura_range_body_exited(body: Node2D) -> void:
 	if path_aura.get_shape().radius < 1: #min radius is 0.01, instead of making separate boolean variable
 		return
 	for buff in data.initial_buffs:
-		var buff_targets = buff.targets
+		var buff_targets = buff.buff_targets
 		if buff_targets == GlobalEnums.Targets.NONE:
 			continue
 		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:

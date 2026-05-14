@@ -23,7 +23,7 @@ func _init(_buff: Buff, _buff_owner, _buff_level : int = 0) -> void:
 
 func update(delta: float, progress: float = 0.0) -> void:
 	if buff is DotBuff:
-		call(buff.name.to_snake_case(), delta, progress)
+		call(buff.info_name.to_snake_case(), delta, progress)
 		if dot_timer >= buff.dot_interval[level]:
 			buff_owner.calculate_damage([buff.damage_amount[level] * stacks, buff.damage_tag, false])
 			dot_timer = 0.0
@@ -46,24 +46,24 @@ func burn(delta : float, _progress : float) -> void:
 ##On Hit
 func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 	if randf() <= float(buff.success_chance_per_stack[level] * stacks):
-		var targets : Array
+		var onhit_targets : Array
 		if buff_owner.data.aura_aoe > 1:
-			targets = await AOESetup.setup_aoe(
+			onhit_targets = await AOESetup.setup_aoe(
 				buff_owner, 
 				buff_owner.global_position,
-				GlobalEnums.Targets.keys()[buff.targets].to_lower(), 
+				GlobalEnums.Targets.keys()[buff.buff_targets].to_lower(), 
 				buff_owner.data.aura_aoe)
 		else:
-			targets = [buff_owner]
+			onhit_targets = [buff_owner]
 		if buff.damage_tag > 0:
-			for target in targets:
+			for target in onhit_targets:
 				if buff.damage_tag != GlobalEnums.DamageTag.HEAL:
 					buff_owner.calculate_damage([buff.effect_amount[level] * stacks, buff.damage_tag, false])
 				else:
 					target.data.health += buff.effect_amount[level]
 					DamageNumbers.display_number(buff.effect_amount[level], target.global_position, GlobalEnums.DamageTag.HEAL, false)
 		if buff.buff_to_apply != null:
-			for target in targets:
+			for target in onhit_targets:
 				target.data.add_buff(buff.buff_to_apply)
 	print('on hit triggered')
 		#call(buff.name.to_snake_case(), damage_tags, pending_buffs)

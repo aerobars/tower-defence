@@ -68,17 +68,18 @@ func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:
 #	var buff_names : Array
 #	for _buff in active_buffs:
 #		buff_names.append(_buff.name)
-	for i in amt: #amt allows to apply multiple stacks from a single source
-		if not active_buffs.has(buff):
-			var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
-			active_buffs[buff] = new_inst
-		var inst = active_buffs[buff]
-		inst.stacks = min(inst.stacks + amt, buff.stack_limit[buff_level])
-		inst.time_remaining = buff.buff_duration[buff_level]
-		recalculate_stats()
+	if not active_buffs.has(buff):
+		var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
+		active_buffs[buff] = new_inst
+	var inst = active_buffs[buff]
+	inst.stacks = min(inst.stacks + amt, buff.stack_limit[buff_level])
+	inst.time_remaining = buff.buff_duration[buff_level]
+	buff_owner.path_health_bar.path_buff_display_container.update_display(buff, inst.stacks)
+	recalculate_stats()
 
 func remove_buff(buff: Buff, _amt = 1) -> void:
 	active_buffs.erase(buff)
+	buff_owner.path_health_bar.path_buff_display_container.remove_buff(buff)
 	recalculate_stats()
 
 func recalculate_stats() -> void:

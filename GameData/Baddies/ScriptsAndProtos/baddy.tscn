@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="4_soyye"]
 [ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/ScriptsAndProtos/hit_flash.tres" id="5_dic3x"]
 [ext_resource type="Texture2D" uid="uid://5pqxlre1amih" path="res://Assets/Baddies/tank_dark.png" id="6_c006g"]
-[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="7_ssnd0"]
+[ext_resource type="PackedScene" uid="uid://dhqdc43v3lx86" path="res://GameData/Baddies/ScriptsAndProtos/baddy_health_bar.tscn" id="7_ptvfa"]
 
 [sub_resource type="Resource" id="Resource_tji8d"]
 resource_local_to_scene = true
@@ -69,7 +69,7 @@ radius = 0.01
 [node name="Baddy" type="PathFollow2D" node_paths=PackedStringArray("path_health_bar", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_aura", "path_sprite")]
 loop = false
 script = ExtResource("1_21g7o")
-path_health_bar = NodePath("HealthBar")
+path_health_bar = NodePath("HealthBarDisplay")
 path_impact_area = NodePath("Impact")
 path_damage_number_origin = NodePath("DamageNumberOrigin")
 path_hit_flash = NodePath("HitFlashAnimation")
@@ -87,17 +87,11 @@ debug_color = Color(0, 0.6, 0.7, 0.42)
 material = SubResource("ShaderMaterial_44shp")
 texture = ExtResource("6_c006g")
 
-[node name="HealthBar" type="TextureProgressBar" parent="."]
+[node name="HealthBarDisplay" parent="." instance=ExtResource("7_ptvfa")]
 offset_left = -30.0
-offset_top = -30.0
+offset_top = 22.0
 offset_right = 30.0
-offset_bottom = -24.0
-value = 50.0
-nine_patch_stretch = true
-texture_under = ExtResource("7_ssnd0")
-texture_progress = ExtResource("7_ssnd0")
-tint_under = Color(0.207843, 0.207843, 0.207843, 1)
-tint_progress = Color(3.60981e-06, 0.629484, 0, 1)
+offset_bottom = 36.0
 
 [node name="Impact" type="Marker2D" parent="."]
 position = Vector2(-15, -15)

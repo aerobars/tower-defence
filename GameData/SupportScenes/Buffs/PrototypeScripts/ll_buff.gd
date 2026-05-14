@@ -4,12 +4,12 @@ class_name LastLaughBuff extends LastLaugh
 
 
 func last_laugh(owner: Node) -> void:
-	var targets = await AOESetup.setup_aoe(
+	var ll_targets = await AOESetup.setup_aoe(
 		owner,
 		owner.global_position,
-		GlobalEnums.Targets.keys()[buff.targets].to_lower(),
+		GlobalEnums.Targets.keys()[buff.buff_targets].to_lower(),
 		owner.data.aura_aoe
 	)
-	for target in targets:
+	for target in ll_targets:
 		target.data.add_buff(buff, -1.0)
 	print("last laugh buff completed")

@@ -1,15 +1,16 @@
-[gd_resource type="Resource" script_class="LastLaughBuff" load_steps=4 format=3 uid="uid://cajpros577xod"]
+[gd_resource type="Resource" script_class="LastLaughBuff" load_steps=5 format=3 uid="uid://cajpros577xod"]
 
 [ext_resource type="Script" uid="uid://c2fnaumhlmx6o" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/ll_buff.gd" id="1_k5xnd"]
+[ext_resource type="Texture2D" uid="uid://bgyk41e0l65wp" path="res://Assets/Effects/explosionSmoke2.png" id="1_t7b13"]
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_yps1x"]
 
 [sub_resource type="Resource" id="Resource_t7b13"]
 script = ExtResource("1_yps1x")
 stat = 8
-buff_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
 buff_type = 1
-name = "Damage Boost"
-targets = 2
+info_name = "LL Damage"
+info_display_icon = ExtResource("1_t7b13")
+buff_targets = 2
 aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 

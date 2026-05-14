@@ -90,7 +90,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		#counter rotate mod image
 		return
 
-
 func level_up() -> void:
 	tower_data.level = min(tower_data.level + 1, MAX_LEVEL)
 	for child in tower_children:
@@ -112,10 +111,11 @@ func tower_update(
 			if child.data != null and child.data.mod_class == child.data.ModClass.AURA: 
 				for body in child.aura_targets: #clears aura effects of old aura before updating
 					child.clear_buffs(body)
+				child.aura_targets = []
 			if button_mod_data != null: #set tower mod's data
 				child.data = button_mod_data.duplicate(true)
 				child.data.buff_owner = child
-				if child.data.swapper:
+				if child.data.swap_enabled:
 					if child.data.swap_buff == null or child.data.swap_buff_duration == 0.0:
 						print("Swapper enabled with incomplete swap data for ", child.data.name)
 					else:
@@ -130,3 +130,10 @@ func tower_update(
 	
 	update_mods.emit(net_power)
 	#if low power, set low power display
+
+func apply_auras(buff: Buff) -> void:
+	#add aura effects to any weapon mods in the same tower
+	for child in tower_children:
+		if child.data.mod_class == child.data.ModClass.WEAPON:
+			child.data.add_buff(buff)
+	pass
