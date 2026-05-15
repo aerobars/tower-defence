@@ -9,7 +9,7 @@ func last_laugh(owner) -> void:
 	for i in baddy_data.spawn_per_wave:
 		var new_scene = BADDY_SCENE.instantiate()
 		new_scene.data = baddy_data.duplicate()
-		owner.get_parent().add_child(new_scene)
+		owner.get_parent().add_child(new_scene).call_deferred()
 		new_scene.global_position = owner.global_position
 		print("spawn starting health:", new_scene.data.health)
 		await owner.get_tree().create_timer(baddy_data.spawn_interval, false).timeout

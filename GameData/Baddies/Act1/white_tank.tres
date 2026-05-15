@@ -15,7 +15,7 @@ metadata/_custom_type_script = "uid://bogutd3kheifh"
 [resource]
 script = ExtResource("3_sv8df")
 name = "White Tank"
-description = "Last Laugh: Spawn a baddy on death"
+description = "Does nothing special"
 texture = ExtResource("3_fsosn")
 spawn_per_wave = 10
 last_laugh_effects = Array[ExtResource("2_q7lch")]([SubResource("Resource_2nqi8")])

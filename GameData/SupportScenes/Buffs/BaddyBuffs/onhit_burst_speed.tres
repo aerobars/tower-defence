@@ -13,7 +13,7 @@ buff_type = 2
 info_name = "Burst Move Speed"
 info_display_icon = ExtResource("1_qi2h1")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
-buff_duration = Array[float]([0.25, 0.25, 0.25, 0.25, 0.25])
+buff_duration = Array[float]([0.5, 0.5, 0.5, 0.5, 0.5])
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [resource]
