@@ -99,8 +99,9 @@ func get_tower_mods() -> Dictionary:
 func on_mod_update(slot_id : int, data : PrototypeMod = button_data.mod_data[slot_id]) -> void:
 	var net_power := 0
 	var power_surplus_buffs : Dictionary = {}
-	var has_wep := false
 	var has_aura := false
+	var has_wep := false
+	
 	
 	button_data.mod_data[slot_id] = data
 	
@@ -108,27 +109,25 @@ func on_mod_update(slot_id : int, data : PrototypeMod = button_data.mod_data[slo
 		var child_data = button_data.mod_data[child.slot_id]
 		if child_data != null:
 			net_power += child_data.base_power_levels[0]
-			if child_data is PowerMod: #power updates
-				var stat_name : String = ""
-				for stat in GlobalEnums.BuffableStats.keys():
-					for i in child_data.power_surplus_buffable_stats:
-						if i & GlobalEnums.BuffableStats[stat]:
-							stat_name = stat.to_lower()
-							if not power_surplus_buffs.has(stat_name):
-								power_surplus_buffs[stat_name] = 0
-							power_surplus_buffs[stat_name] += 1
-			else: #aura updates
-				if not has_wep:
-					if child_data.mod_class == child_data.ModClass.WEAPON:
-						has_wep = true
-					elif child_data.mod_class == child_data.ModClass.AURA:
-						has_aura = true
-	update_towers.emit(has_aura and not has_wep, power_surplus_buffs, slot_id, data)
+			match child_data.mod_class: 
+				0: #Aura
+					has_aura = true
+				1: #Power
+					var stat_name : String = ""
+					for stat in GlobalEnums.BuffableStats.keys():
+						for i in child_data.power_surplus_buffable_stats:
+							if i & GlobalEnums.BuffableStats[stat]:
+								stat_name = stat.to_lower()
+								if not power_surplus_buffs.has(stat_name):
+									power_surplus_buffs[stat_name] = 0
+								power_surplus_buffs[stat_name] += 1
+				2: #Weapon
+					has_wep = true
 	
-	if net_power > 0: #set color for power states
-		#net_power_display.add_theme_color_override("font_color", GameData.positive_color)
-		pass
-	else: 
-		#net_power_display.add_theme_color_override("font_color", GameData.negative_color)
-		pass
+	update_towers.emit(
+		has_aura and not has_wep, 
+		power_surplus_buffs, 
+		slot_id, 
+		data,)
+	
 	net_power_display.text = str(net_power)

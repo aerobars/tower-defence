@@ -8,6 +8,7 @@ signal mod_updated(mod: StaticBody2D)
 
 ## Tower Setup
 const PROJECTILE_SCENE := preload("res://GameData/Towers/Scenes/tower_projectile.tscn")
+const TURRET_TEXTURE_SIZE : float = 32
 var non_aura_radius : float #equal to TowerBase's Marker2D radius
 var data : PrototypeMod
 var button_slot_id : int

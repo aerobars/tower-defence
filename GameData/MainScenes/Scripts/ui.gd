@@ -40,7 +40,7 @@ func set_tower_preview(mouse_pos: Vector2, data: Dictionary, drag_tower: Node2D)
 			elif data["aura_tower"]:
 				range_texture.modulate = Color("BLUE")
 			else: #mod is an aura but not aura tower
-				scaling = drag_tower.get_node("CollisionShape2D").shape.size.x / 600.0
+				scaling = drag_tower.non_aura_radius / 600.0
 			range_texture.scale = Vector2(scaling, scaling)
 			control.add_child(range_texture, true)
 			#add mod texture

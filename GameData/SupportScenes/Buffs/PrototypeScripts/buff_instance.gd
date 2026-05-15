@@ -65,5 +65,4 @@ func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 		if buff.buff_to_apply != null:
 			for target in onhit_targets:
 				target.data.add_buff(buff.buff_to_apply)
-	print('on hit triggered')
 		#call(buff.name.to_snake_case(), damage_tags, pending_buffs)

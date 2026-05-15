@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="1_vr3hp"]
 [ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/SupportScenes/buff_display_container.tscn" id="3_7nr08"]
 
-[node name="Control" type="Control" node_paths=PackedStringArray("path_health_bar")]
+[node name="Control" type="Control" node_paths=PackedStringArray("path_health_bar", "path_buff_display_container")]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 3
 anchors_preset = 0
@@ -12,6 +12,7 @@ offset_right = 60.0
 offset_bottom = 14.0
 script = ExtResource("1_7nr08")
 path_health_bar = NodePath("VBoxContainer/HealthBar")
+path_buff_display_container = NodePath("VBoxContainer/BuffDisplayContainer")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(60, 23)

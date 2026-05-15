@@ -16,7 +16,6 @@ var grid_size : int :
 
 const MAX_LEVEL = 4
 var mod_slot_count : int = 0 #set during verify and build Game Scene function
-var all_marker_pos : Dictionary[Marker2D,Vector2]
 var build_data : Dictionary
 var tower_data : TowerBaseData
 
@@ -103,14 +102,18 @@ func tower_update(
 	button_mod_data: PrototypeMod = null, 
 	) -> void:
 	
+	var mod_list : Dictionary = {0 : [], #Aura
+								 1 : [], #Power
+								 2 : []} #Weapon
+	
 	aura_tower = aura_status
 	net_power = 0
 	
 	for child in tower_children: 
 		if button_slot_id == child.button_slot_id:
-			if child.data != null and child.data.mod_class == child.data.ModClass.AURA: 
-				for body in child.aura_targets: #clears aura effects of old aura before updating
-					child.clear_buffs(body)
+			if child.data != null and child.data.mod_class == child.data.ModClass.AURA: #Aura
+				for target in child.aura_targets: #clears aura effects of old aura before updating
+					child.remove_buff(target)
 				child.aura_targets = []
 			if button_mod_data != null: #set tower mod's data
 				child.data = button_mod_data.duplicate(true)
@@ -123,17 +126,20 @@ func tower_update(
 			else:
 				child.data = null
 		if child.data != null:
+			mod_list[child.data.mod_class].append(child)
 			child.data.setup_stats(tower_data.level)
 			net_power += child.data.current_power
 			child.data.power_surplus_buffs = power_surplus_buffs
-
+	
+	if not aura_tower and mod_list[0].size() > 0:
+		apply_auras(mod_list)
 	
 	update_mods.emit(net_power)
+	
 	#if low power, set low power display
 
-func apply_auras(buff: Buff) -> void:
+func apply_auras(mod_list: Dictionary) -> void:
 	#add aura effects to any weapon mods in the same tower
-	for child in tower_children:
-		if child.data.mod_class == child.data.ModClass.WEAPON:
-			child.data.add_buff(buff)
-	pass
+	for aura in mod_list[0]:
+		for wep in mod_list[2]:
+			wep.data.add_buff(aura.data.buff_data)
