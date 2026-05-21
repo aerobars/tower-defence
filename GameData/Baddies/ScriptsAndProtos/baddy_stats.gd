@@ -9,8 +9,9 @@ signal health_changed(current_health: int, max_health: int)
 @export var texture : Texture2D
 
 @export_group("Spawn Data", "spawn_")
-@export var spawn_per_wave: int = 1
-@export var spawn_interval: float = 0.5
+@export var spawn_per_wave : int = 1
+@export var spawn_interval : float = 0.5
+@export var spawn_summon : bool = false
 
 ##Baddy Stats
 const BADDY_BUFFABLE_STATS = [ #values to line up with BuffableStats enum values

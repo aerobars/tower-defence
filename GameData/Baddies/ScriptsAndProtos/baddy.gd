@@ -33,8 +33,13 @@ func _ready() -> void:
 	data.health_changed.connect(healthbar_update)
 	data.health_depleted.connect(destroy)
 	
+	#buff setup
 	for buff in data.initial_buffs:
 		data.add_buff(buff)
+	for effect in data.last_laugh_effects:
+		path_health_bar.path_buff_display_container.update_display(effect)
+		if effect is LastLaughSpawn:
+			pass
 
 ##Runtime Functions
 func _process(delta: float) -> void:
@@ -47,7 +52,7 @@ func _physics_process(delta: float) -> void:
 			return
 		destroyed = true
 		$CharacterBody2D.free()
-		base_damage.emit(data.current_damage)
+		base_damage.emit(data.current_damage, data.spawn_summon)
 		queue_free()
 	move(delta)
 

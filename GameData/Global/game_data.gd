@@ -63,7 +63,8 @@ func get_wave_data() -> Dictionary:
 		wave_data["wave_total"] = 1
 	else:
 		wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
-		while SaveManager.save_data_run.previous_wave.has(wave_data["wave_baddies"][0]) and SaveManager.save_data_run.previous_wave.has(wave_data["wave_baddies"][1]): #prevents same wave back to back
+		while SaveManager.save_data_run.previous_wave.has(wave_data["wave_baddies"][0]) and SaveManager.save_data_run.previous_wave.has(wave_data["wave_baddies"][1]): 
+		#prevents same wave back to back
 			wave_data["wave_baddies"] = [act_baddies[current_act][randi() % act_size], act_baddies[current_act][randi() % act_size]]
 		for i in wave_data["wave_baddies"]:
 			var spawn_data = load("res://GameData/Baddies/Act" + str(current_act + 1) + "/" + i)
