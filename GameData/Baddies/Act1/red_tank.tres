@@ -8,9 +8,9 @@
 
 [resource]
 script = ExtResource("3_hy6ss")
-name = "Red Tank"
-description = "Last Laugh: Boosts nearby baddies damage on death"
-texture = ExtResource("3_m6ybo")
+info_name = "Red Tank"
+info_description = "Last Laugh: boost damage of nearby baddies"
+info_texture = ExtResource("3_m6ybo")
 spawn_per_wave = 10
 base_max_health = 50.0
 base_move_speed = 200.0

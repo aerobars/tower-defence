@@ -8,9 +8,9 @@
 
 [resource]
 script = ExtResource("3_j35i5")
-name = "Blue Tank"
-description = "Boosts movespeed of nearby baddies"
-texture = ExtResource("4_j35i5")
+info_name = "Blue Tank"
+info_description = "Boosts Speed of nearby baddys"
+info_texture = ExtResource("4_j35i5")
 spawn_per_wave = 5
 aura_aoe = 300.0
 initial_buffs = Array[ExtResource("1_lsdsb")]([ExtResource("2_j35i5")])

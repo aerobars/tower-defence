@@ -18,37 +18,37 @@ enum BaddyArmorTags {
 }
 
 const DEFENCE_TABLE : Dictionary = {
-	BaddyArmorTags.UNARMORED: {
-		GlobalEnums.DamageTag.BLEED: 1.0,
-		GlobalEnums.DamageTag.BLUNT: 1.0,
+	BaddyArmorTags.UNARMORED: { #Nakies
+		GlobalEnums.DamageTag.BLEED: 1.5,
+		GlobalEnums.DamageTag.BLUNT: 1.5,
 		GlobalEnums.DamageTag.BURN: 1.5,
-		GlobalEnums.DamageTag.PIERCE: 2.0,
-		GlobalEnums.DamageTag.POISON: 1.0,
-		GlobalEnums.DamageTag.SHOCK: 0.75,
+		GlobalEnums.DamageTag.PIERCE: 1.0,
+		GlobalEnums.DamageTag.POISON: 1.5,
+		GlobalEnums.DamageTag.SHOCK: 1,
 	},
-	BaddyArmorTags.LIGHT: {
+	BaddyArmorTags.LIGHT: { #Cloth
 		GlobalEnums.DamageTag.BLEED: 1.0,
 		GlobalEnums.DamageTag.BLUNT: 1.0,
-		GlobalEnums.DamageTag.BURN: 1.0,
+		GlobalEnums.DamageTag.BURN: 2.0,
 		GlobalEnums.DamageTag.PIERCE: 1.0,
 		GlobalEnums.DamageTag.POISON: 1.0,
-		GlobalEnums.DamageTag.SHOCK: 0.75,
+		GlobalEnums.DamageTag.SHOCK: 1,
 	},
-	BaddyArmorTags.MEDIUM: {
-		GlobalEnums.DamageTag.BLEED: 1.0,
-		GlobalEnums.DamageTag.BLUNT: 1.0,
-		GlobalEnums.DamageTag.BURN: 1.0,
-		GlobalEnums.DamageTag.PIERCE: 1.0,
-		GlobalEnums.DamageTag.POISON: 1.0,
-		GlobalEnums.DamageTag.SHOCK: 0.75,
-	},
-	BaddyArmorTags.HEAVY: {
+	BaddyArmorTags.MEDIUM: { #Leather Daddy
 		GlobalEnums.DamageTag.BLEED: 0.75,
 		GlobalEnums.DamageTag.BLUNT: 0.75,
 		GlobalEnums.DamageTag.BURN: 0.75,
-		GlobalEnums.DamageTag.PIERCE: 0.75,
+		GlobalEnums.DamageTag.PIERCE: 1.5,
 		GlobalEnums.DamageTag.POISON: 0.75,
-		GlobalEnums.DamageTag.SHOCK: 0.75,
+		GlobalEnums.DamageTag.SHOCK: 0.5,
+	},
+	BaddyArmorTags.HEAVY: { #Metal Armor
+		GlobalEnums.DamageTag.BLEED: 0.5,
+		GlobalEnums.DamageTag.BLUNT: 0.5,
+		GlobalEnums.DamageTag.BURN: 0.5,
+		GlobalEnums.DamageTag.PIERCE: 0.75,
+		GlobalEnums.DamageTag.POISON: 0.5,
+		GlobalEnums.DamageTag.SHOCK: 1.5,
 	},
 } 
 

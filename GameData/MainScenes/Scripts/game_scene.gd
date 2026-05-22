@@ -1,10 +1,11 @@
 extends Node2D
 
 signal game_finished(result)
+signal pathing_updated
 
 ## UI
 @export_group("Scene Paths")
-@export_subgroup("UI")
+@export_subgroup("UI", "path_")
 const BADDY_SCENE := preload("res://GameData/Baddies/ScriptsAndProtos/baddy.tscn")
 const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/Scenes/mod_draggable.tscn")
 const TOWER_BUTTON := preload("res://GameData/UIScenes/GUI/Scenes/tower_button.tscn")
@@ -13,31 +14,25 @@ const POPUPS : Dictionary = {
 	"mod" : preload("res://GameData/UIScenes/GUI/Scenes/mod_popup.tscn"),
 	"tower" : preload("res://GameData/UIScenes/GUI/Scenes/tower_popup.tscn")
 }
-@export var ui : CanvasLayer
-@export var build_bar : ColorRect
-@export var inventory_ui : GridContainer
-@export var baddy_info_foldable : FoldableContainer
-@export var tower_buttons : HBoxContainer
-@export var game_bookend_popup : Control
-@export var tutorial : Control
-@onready var new_slot := inventory_ui.connect("slot_created", connect_inv_button_signal)
+@export var path_ui : CanvasLayer
+@export var path_build_bar : ColorRect
+@export var path_inventory_ui : GridContainer
+@export var path_baddy_info_foldable : FoldableContainer
+@export var path_tower_buttons : HBoxContainer
+@export var path_game_bookend_popup : Control
+@export var path_tutorial : Control
+@onready var new_slot := path_inventory_ui.connect("slot_created", connect_inv_button_signal)
 var cur_popup : Node2D
 
 ## Pathfinding
-@export_subgroup("Map and Pathfinding")
-@export var map_node : Node2D #set in _ready instead if using multiple maps
-@export var path_debug :Line2D
-var astar : AStarGrid2D = AStarGrid2D.new()
+@export_subgroup("Map and Pathfinding", "path_")
+@export var path_map_node : Node2D #set in _ready instead if using multiple maps
+@export var path_pathfinding_line :Line2D
 var path : PackedVector2Array = []
-const WALL_TILE_COORD := Vector2i(0,0)
-const FLOOR_TILE_COORD := Vector2i(0,0)
-const CELL_SIZE : int = 64
-const CELL := Vector2(CELL_SIZE, CELL_SIZE)
-@warning_ignore("integer_division")
-const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
+
 var tower_grid_size : int :
 	get():
-		return CELL_SIZE * 3 #CELL_SIZE * number of columns in tower grid(3)
+		return path_map_node.CELL_SIZE * 3 #CELL_SIZE * number of columns in tower grid(3)
 var previous_tiles := [Vector2i(0, 0)]
 
 ## Gameplay 
@@ -51,16 +46,16 @@ var escaped_baddies := 0
 var player_health : int :
 	set(value):
 		SaveManager.save_data_run.current_player_health = value
-		if ui:
-			ui.update_health_bar(SaveManager.save_data_run.current_player_health, max_player_health)
+		if path_ui:
+			path_ui.update_health_bar(SaveManager.save_data_run.current_player_health, max_player_health)
 	get:
 		return SaveManager.save_data_run.current_player_health
 #var character : String = "Tester"
 var player_cash : int :
 	set(value):
 		SaveManager.save_data_run.current_cash = value
-		if ui:
-			ui.update_cash_display(SaveManager.save_data_run.current_cash)
+		if path_ui:
+			path_ui.update_cash_display(SaveManager.save_data_run.current_cash)
 	get:
 		return SaveManager.save_data_run.current_cash
 var wave_reward : int :
@@ -81,18 +76,11 @@ var build_mode_tower : Node2D
 
 func _ready() -> void:
 	## Pathfinding setup
-	astar.cell_size = Vector2(CELL_SIZE, CELL_SIZE)
-	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_AT_LEAST_ONE_WALKABLE
-	astar.region = map_node.ground_layer.get_used_rect()
-	astar.update()
-	for tile in map_node.exclusion_layer.get_used_cells():
-		#pathing_layer.set_cell(tile, 0, Vector2i(0,0), 0)
-		astar.set_point_solid(tile, true)
-	baddy_path_update()
+	pathing_update()
 	
 	## UI Setup
-	ui.update_health_bar(player_health, max_player_health)
-	ui.update_cash_display(player_cash)
+	path_ui.update_health_bar(player_health, max_player_health)
+	path_ui.update_cash_display(player_cash)
 	
 	## Button Setup
 	var build_buttons_count : int
@@ -135,9 +123,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		if build_mode:
 			verify_and_build()
 	if event.is_action_pressed("hotkey_button_1"):
-		tower_buttons.get_child(0).pressed.emit()
+		path_tower_buttons.get_child(0).pressed.emit()
 	if event.is_action_pressed("hotkey_button_2"):
-		tower_buttons.get_child(1).pressed.emit()
+		path_tower_buttons.get_child(1).pressed.emit()
 	#if event.is_action_pressed("hotkey_button_3"):
 		#tower_buttons.get_child(2).pressed.emit()
 	#if event.is_action_pressed("hotkey_button_4"):
@@ -168,7 +156,7 @@ func spawn_baddies(wave_data) -> void:
 			"spawn_per_wave" : baddy_data.spawn_per_wave,
 			"spawn_interval" : baddy_data.spawn_interval
 			})
-		ui.update_baddy_info(baddy_data)
+		path_ui.update_baddy_info(baddy_data)
 		
 	while spawning:
 		spawning = false
@@ -180,23 +168,27 @@ func spawn_baddies(wave_data) -> void:
 				new_baddy.data = baddy.data.duplicate(true)
 				new_baddy.base_damage.connect(on_base_damage)
 				new_baddy.baddy_death.connect(on_baddy_death)
-				map_node.baddy_path.add_child(new_baddy, true)
+				pathing_updated.connect(new_baddy.update_pathing)
+				new_baddy.path_map = path_map_node
+				new_baddy.global_position = path_map_node.path_start_point.global_position + path_map_node.CELL_CENTRE
+				path_map_node.path_baddy_container.add_child(new_baddy, true)
 				
 				baddy.spawn_count += 1
 				living_baddies += 1
 				remaining_spawns -= 1
 				await get_tree().create_timer(baddy.spawn_interval, false).timeout
 
-func on_base_damage(damage) -> void:
+func on_base_damage(damage, is_summon) -> void:
 	player_health -= damage
-	escaped_baddies += 1
-	if (player_health <= 0 or escaped_baddies == wave_total) and not game_bookend_popup.game_over:
-		game_bookend_popup.game_over = true
-		ui.update_game_message("Game Over!", 2.0, 0.0, 75)
-		game_bookend_popup.get_node("TextureRect/Label").text = "Thank you for playing! 
+	if not is_summon:
+		escaped_baddies += 1
+	if (player_health <= 0 or escaped_baddies == wave_total) and not path_game_bookend_popup.game_over:
+		path_game_bookend_popup.game_over = true
+		path_ui.update_game_message("Game Over!", 2.0, 0.0, 75)
+		path_game_bookend_popup.get_node("TextureRect/Label").text = "Thank you for playing! 
 		Please click the button below to complete a quick feedback survey and return to the main menu (and start a new game (＾ ＾)b )"
-		game_bookend_popup.get_node("TextureRect/Button").text = "Go to survey"
-		game_bookend_popup.visible = true
+		path_game_bookend_popup.get_node("TextureRect/Button").text = "Go to survey"
+		path_game_bookend_popup.visible = true
 	else:
 		on_baddy_death()
 
@@ -206,45 +198,32 @@ func on_baddy_death() -> void:
 		wave_cleared()
 
 func wave_cleared() -> void:
-	ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
+	path_ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
 	player_cash += wave_reward
 	var new_reward_ui = REWARD_UI.instantiate()
 	new_reward_ui.total_rewards = SaveManager.save_data_run.wave_reward_total
 	new_reward_ui.connect_reward_card.connect(reward_signal_connection)
-	ui.clear_baddy_info()
-	ui.add_child(new_reward_ui)
-	ui.update_wave_button()
+	path_ui.clear_baddy_info()
+	path_ui.add_child(new_reward_ui)
+	path_ui.update_wave_button()
 	#load next level/wave selection
 
 func reward_signal_connection(reward_card) -> void:
-	reward_card.reward_selected.connect(inventory_ui.data.update_inventory)
+	reward_card.reward_selected.connect(path_inventory_ui.data.update_inventory)
 
 ## Pathfinding Functions
-func baddy_path_update() -> void:
-	#not needed if whole map is set at initiation, called in _ready
-	#astar.update()
-	
-	path = astar.get_point_path(map_node.start_point.position / CELL_SIZE, map_node.end_point.position / CELL_SIZE)
-	var curve = Curve2D.new()
-	path_debug.clear_points()
+func pathing_update() -> void:
+	path = path_map_node.update_pathing(path_map_node.path_start_point.global_position)
+	path_pathfinding_line.clear_points()
 	for cell in path:
-		curve.add_point(cell + CELL_CENTRE)
-		path_debug.add_point(cell + CELL_CENTRE)
-	map_node.baddy_path.curve = curve
-	path.clear()
-
-func pathfinding_update() -> void:
-	path = astar.get_point_path(map_node.start_point.position / CELL_SIZE, map_node.end_point.position / CELL_SIZE)
-	path_debug.clear_points()
-	for cell in path:
-		path_debug.add_point(cell + CELL_CENTRE)
+		path_pathfinding_line.add_point(cell)
 
 ## Building Functions
 func initiate_build_mode(data: Dictionary, btn_ref) -> void: #connected to build buttons' pressed signal, data contains tower mods and aura tower status
 	if build_mode:
 		cancel_build_mode()
 	if player_cash < btn_ref.build_cost:
-		ui.update_game_message("Unable to build: insufficient funds", 1.0, 0.5)
+		path_ui.update_game_message("Unable to build: insufficient funds", 1.0, 0.5)
 		return
 	build_btn_ref = btn_ref
 	build_data = data
@@ -253,23 +232,23 @@ func initiate_build_mode(data: Dictionary, btn_ref) -> void: #connected to build
 	build_valid = false
 	#move tower instatiation to hear as a variable, to allow for rotation during update_tower_preview
 	build_mode_tower = create_tower()
-	ui.set_tower_preview(get_global_mouse_position(), build_data, build_mode_tower)
+	path_ui.set_tower_preview(get_global_mouse_position(), build_data, build_mode_tower)
 
 func update_tower_preview() -> void:
 	var mouse_pos : Vector2 = get_global_mouse_position()
-	var centre_tile : Vector2i = map_node.exclusion_layer.local_to_map(mouse_pos)
-	var centre_tile_pos : Vector2 = map_node.exclusion_layer.map_to_local(centre_tile)
+	var centre_tile : Vector2i = path_map_node.path_exclusion_layer.local_to_map(mouse_pos)
+	var centre_tile_pos : Vector2 = path_map_node.path_exclusion_layer.map_to_local(centre_tile)
 	var colour : String
 	var all_cells : Array[Vector2i] = []
 	
 	#for each cell in tower shape, do below code
 	build_valid = true
 	for child in build_mode_tower.tower_children:
-		var current_cell : Vector2i = map_node.exclusion_layer.local_to_map(child.global_position)
+		var current_cell : Vector2i = path_map_node.path_exclusion_layer.local_to_map(child.global_position)
 		all_cells.append(current_cell)
-		map_node.pathfinding_layer.set_cell(current_cell, 0, Vector2i(0,0), 0)
-		astar.set_point_solid(current_cell, true)
-		if map_node.exclusion_layer.get_cell_source_id(current_cell) != -1 or path.is_empty():
+		path_map_node.path_pathfinding_layer.set_cell(current_cell, 0, Vector2i(0,0), 0)
+		path_map_node.astar_pathing.set_point_solid(current_cell, true)
+		if path_map_node.path_exclusion_layer.get_cell_source_id(current_cell) != -1 or path.is_empty():
 			build_valid = false
 	if build_valid:
 		colour = "GREEN"
@@ -278,23 +257,23 @@ func update_tower_preview() -> void:
 		build_rotation = build_mode_tower.rotation
 	else:
 		colour = "CRIMSON"
-	ui.update_tower_preview(centre_tile_pos, colour)
-		
+	path_ui.update_tower_preview(centre_tile_pos, colour)
+	
 	for tile in previous_tiles:
 		if all_cells.has(tile):
 			continue
-		if map_node.exclusion_layer.get_cell_source_id(tile) == -1:
-			astar.set_point_solid(tile, false)
-		map_node.pathfinding_layer.clear()
+		if path_map_node.path_exclusion_layer.get_cell_source_id(tile) == -1:
+			path_map_node.astar_pathing.set_point_solid(tile, false)
+		path_map_node.path_pathfinding_layer.clear()
 	previous_tiles = all_cells
 	
-	pathfinding_update()
+	pathing_update()
 	
 
 func cancel_build_mode() -> void:
 	build_mode = false
 	build_valid = false
-	map_node.pathfinding_layer.clear()
+	path_map_node.path_pathfinding_layer.clear()
 	$UI/TowerPreview.free()
 
 func verify_and_build() -> void:
@@ -303,7 +282,8 @@ func verify_and_build() -> void:
 		cancel_build_mode()
 		create_tower(tower_rotation)
 		player_cash -= build_btn_ref.build_cost
-		baddy_path_update()
+		pathing_update()
+		pathing_updated.emit()
 
 func create_tower(
 	_build_rotation: float = 0.0, 
@@ -337,30 +317,31 @@ func create_tower(
 		new_tower.rotation = _build_rotation
 	else:
 		new_tower.rotation = new_tower.tower_data.rotation
-	map_node.tower_container.add_child(new_tower, true) #TowerContainer is in Map Scene
+	path_map_node.path_tower_container.add_child(new_tower, true) #TowerContainer is in Map Scene
 	for child in new_tower.tower_children:
-		var child_tile = map_node.exclusion_layer.local_to_map(child.global_position)
-		map_node.exclusion_layer.set_cell(child_tile, 5, Vector2i(1,0), 0)
-		astar.set_point_solid(child_tile, true)
+		var child_tile = path_map_node.path_exclusion_layer.local_to_map(child.global_position)
+		path_map_node.path_exclusion_layer.set_cell(child_tile, 5, Vector2i(1,0), 0)
+		path_map_node.astar_pathing.set_point_solid(child_tile, true)
 
 func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) -> void:
 	if player_cash < upgrade_cost:
-		ui.update_game_message("Unable to upgrade: insufficient funds", 1.0, 0.5)
+		path_ui.update_game_message("Unable to upgrade: insufficient funds", 1.0, 0.5)
 	else:
 		tower.level_up()
 		popup.setup_stats()
 		player_cash -= upgrade_cost
-		ui.update_cash_display(player_cash)
+		path_ui.update_cash_display(player_cash)
 
 func sell_tower(sell_value : int, tower : TowerBase) -> void:
 	for child in tower.tower_children:
-		var tile_pos: Vector2i = map_node.exclusion_layer.local_to_map(child.global_position)
-		map_node.exclusion_layer.set_cell(tile_pos)
-		astar.set_point_solid(tile_pos, false)
-	baddy_path_update()
+		var tile_pos: Vector2i = path_map_node.path_exclusion_layer.local_to_map(child.global_position)
+		path_map_node.path_exclusion_layer.set_cell(tile_pos)
+		path_map_node.astar_pathing.set_point_solid(tile_pos, false)
+	pathing_update()
+	pathing_updated.emit()
 	tower.queue_free()
 	player_cash += sell_value
-	ui.update_cash_display(player_cash)
+	path_ui.update_cash_display(player_cash)
 
 ## UI Functions
 func connect_inv_button_signal(inventory_slot) -> void: #connects new inventory slot signal
@@ -379,9 +360,9 @@ func create_draggable(
 	GameData.is_dragging = _is_dragging
 	new_draggable.draggable = _is_dragging
 	new_draggable.data = tower_mod.duplicate()
-	new_draggable.mod_dropped.connect(inventory_ui.data.update_inventory)
-	build_bar.add_child(new_draggable)
-	new_draggable.inventory_pos = Vector2((inventory_ui.global_position.x + inventory_ui.size.x/2), (inventory_ui.global_position.y + inventory_ui.size.y/2))
+	new_draggable.mod_dropped.connect(path_inventory_ui.data.update_inventory)
+	path_build_bar.add_child(new_draggable)
+	new_draggable.inventory_pos = Vector2((path_inventory_ui.global_position.x + path_inventory_ui.size.x/2), (path_inventory_ui.global_position.y + path_inventory_ui.size.y/2))
 	new_draggable.initial_pos = initial_pos
 	if slot_occupied != null:
 		slot_occupied.occupying_mod = new_draggable
@@ -399,7 +380,7 @@ func create_popup(popup_type: String , data, popup_owner : TowerBase = null) -> 
 		popup.popup_owner = popup_owner
 		popup.upgrade_check.connect(upgrade_check)
 		popup.sell.connect(sell_tower)
-	ui.add_child(popup)
+	path_ui.add_child(popup)
 	cur_popup = popup
 
 func clear_popup() -> void:
@@ -417,7 +398,7 @@ func create_tower_button(num: int) -> void:
 		new_button.button_data = SaveManager.save_data_run.button_data[num]
 	new_button.create_draggable.connect(create_draggable)
 	new_button.pressed.connect(func(): initiate_build_mode(new_button.tower_data, new_button))
-	tower_buttons.add_child(new_button)
+	path_tower_buttons.add_child(new_button)
 
 ##Save/Load Testing
 func _on_save_button_up() -> void:

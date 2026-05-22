@@ -2,7 +2,7 @@ class_name BuffDisplayContainer extends HBoxContainer
 
 const BUFF_DISPLAY_SCENE = preload("res://GameData/SupportScenes/buff_display.tscn")
 
-func update_display(buff: Buff, buff_stacks: int = 1) -> void:
+func update_display(buff, buff_stacks: int = 1) -> void:
 	for child in get_children(): #check if mod exists in inventory and increment
 		if child.info_name == buff.info_name:
 			child.update_stacks(buff_stacks)

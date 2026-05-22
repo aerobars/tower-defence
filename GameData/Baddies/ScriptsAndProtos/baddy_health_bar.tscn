@@ -1,17 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://dhqdc43v3lx86"]
+[gd_scene load_steps=6 format=3 uid="uid://dhqdc43v3lx86"]
 
 [ext_resource type="Script" uid="uid://ol8ew5jbqkrx" path="res://GameData/Baddies/ScriptsAndProtos/baddy_health_bar.gd" id="1_7nr08"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="1_vr3hp"]
 [ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/SupportScenes/buff_display_container.tscn" id="3_7nr08"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="3_ga1hp"]
 
-[node name="Control" type="Control" node_paths=PackedStringArray("path_health_bar", "path_buff_display_container")]
+[sub_resource type="AtlasTexture" id="AtlasTexture_qekkw"]
+atlas = ExtResource("3_ga1hp")
+region = Rect2(640, 48, 16, 16)
+
+[node name="Control" type="Control" node_paths=PackedStringArray("path_health_bar", "path_defence_label", "path_buff_display_container")]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 60.0
 offset_bottom = 14.0
 script = ExtResource("1_7nr08")
-path_health_bar = NodePath("VBoxContainer/HealthBar")
+path_health_bar = NodePath("VBoxContainer/HealthandDefenceContainer/HealthBar")
+path_defence_label = NodePath("VBoxContainer/HealthandDefenceContainer/TextureRect/DefenceValue")
 path_buff_display_container = NodePath("VBoxContainer/BuffDisplayContainer")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -21,15 +27,32 @@ offset_right = 60.0
 offset_bottom = 22.0
 theme_override_constants/separation = 1
 
-[node name="HealthBar" type="TextureProgressBar" parent="VBoxContainer"]
+[node name="HealthandDefenceContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="HealthBar" type="TextureProgressBar" parent="VBoxContainer/HealthandDefenceContainer"]
 custom_minimum_size = Vector2(60, 6)
 layout_mode = 2
+size_flags_vertical = 4
 value = 50.0
 nine_patch_stretch = true
 texture_under = ExtResource("1_vr3hp")
 texture_progress = ExtResource("1_vr3hp")
 tint_under = Color(0.207843, 0.207843, 0.207843, 1)
 tint_progress = Color(3.60981e-06, 0.629484, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer/HealthandDefenceContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = SubResource("AtlasTexture_qekkw")
+
+[node name="DefenceValue" type="Label" parent="VBoxContainer/HealthandDefenceContainer/TextureRect"]
+layout_mode = 0
+offset_right = 15.0
+offset_bottom = 18.0
+theme_override_font_sizes/font_size = 13
+text = "11"
 
 [node name="BuffDisplayContainer" parent="VBoxContainer" instance=ExtResource("3_7nr08")]
 layout_mode = 2

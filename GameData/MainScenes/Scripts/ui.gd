@@ -114,17 +114,17 @@ func update_baddy_info(baddy) -> void:
 	for child in baddy_info.get_children():
 		if child.text == "":
 			if child.name == "Name":
-				child.text = child.name + ": " + baddy.name
+				child.text = child.name + ": " + baddy.info_name
 			elif child.name == "Description":
-				child.text =  child.name + ": " + baddy.description
+				child.text =  child.name + ": " + baddy.info_description
 			else: 
 				var stat_name : String = str("base_" + child.name.to_snake_case())
 				child.text = child.name + ": " + str(baddy.get(stat_name))
 		else:
 			if child.name == "Name":
-				child.text += " / " + baddy.name
+				child.text += " / " + baddy.info_name
 			elif child.name == "Description":
-				child.text +=  " / " + baddy.description
+				child.text +=  " / " + baddy.info_description
 			else: 
 				var stat_name : String = str("base_" + child.name.to_snake_case())
 				child.text += " / " + str(baddy.get(stat_name))

@@ -8,7 +8,7 @@ var buff_owner : Node2D
 var stacks : int = 0
 var dot_timer : float
 var time_remaining : float
-var last_progress: float = 0.0
+var last_position : Vector2
 var stat_buff : StatBuff
 var level : int = 0
 #var affected_stats : Array[GlobalEnums.BuffableStats]
@@ -19,11 +19,12 @@ func _init(_buff: Buff, _buff_owner, _buff_level : int = 0) -> void:
 	buff_owner = _buff_owner
 	level = _buff_level
 	time_remaining = buff.buff_duration[level]
+	last_position = buff_owner.global_position
 	
 
-func update(delta: float, progress: float = 0.0) -> void:
+func update(delta: float, position: Vector2 = Vector2(0,0)) -> void:
 	if buff is DotBuff:
-		call(buff.info_name.to_snake_case(), delta, progress)
+		call(buff.info_name.to_snake_case(), delta, position)
 		if dot_timer >= buff.dot_interval[level]:
 			buff_owner.calculate_damage([buff.damage_amount[level] * stacks, buff.damage_tag, false])
 			dot_timer = 0.0
@@ -36,11 +37,11 @@ func update(delta: float, progress: float = 0.0) -> void:
 ##Function names = buff names, if updating buff names, update func names too!!
 
 ##DoT
-func bleed(_delta : float, progress : float) -> void:
-	dot_timer += abs(progress - last_progress)
-	last_progress = progress
+func bleed(_delta : float, position : Vector2) -> void:
+	dot_timer += position.distance_to(last_position)
+	last_position = position
 
-func burn(delta : float, _progress : float) -> void:
+func burn(delta : float, _position : float) -> void:
 	dot_timer += delta
 
 ##On Hit

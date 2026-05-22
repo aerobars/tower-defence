@@ -1,4 +1,4 @@
-class_name Baddy extends PathFollow2D
+class_name Baddy extends Node2D
 
 ##Signals
 signal baddy_death
@@ -13,6 +13,15 @@ signal base_damage(damage)
 @export var path_aura : CollisionShape2D
 @export var path_sprite : Sprite2D
 
+##Pathfinding
+var path_map
+var movement_delta : float
+var path_point_margin : float = 0.5
+
+var current_path_index : int = 0
+var current_path_point : Vector2
+var current_path : PackedVector2Array #set in Game Scene when baddy is instantiated
+
 ##Runtime Variables
 const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/projectile_impact.tscn")
 @export var data : BaddyStats
@@ -22,16 +31,23 @@ var level : int = 0
 ##Setup
 func _ready() -> void:
 	data.buff_owner = self
-	path_sprite.texture = data.texture
+	path_sprite.texture = data.info_texture
 	path_aura.get_shape().radius = data.aura_aoe
 	
 	#healthbar setup
 	healthbar_update(data.health, data.current_max_health)
 	path_health_bar.set_as_top_level(true)
+	path_health_bar.update_defence(data.current_defence)
+	
+	#pathing setup
+	update_pathing()
 	
 	#signal connections
 	data.health_changed.connect(healthbar_update)
 	data.health_depleted.connect(destroy)
+	data.update_defence_display.connect(path_health_bar.update_defence)
+	data.update_buff_display.connect(path_health_bar.path_buff_display_container.update_display)
+	data.remove_buff_display.connect(path_health_bar.path_buff_display_container.remove_buff)
 	
 	#buff setup
 	for buff in data.initial_buffs:
@@ -44,21 +60,41 @@ func _ready() -> void:
 ##Runtime Functions
 func _process(delta: float) -> void:
 	for buff in data.active_buffs:
-		data.active_buffs[buff].update(delta, progress)
+		data.active_buffs[buff].update(delta, global_position)
+	data.process()
 
 func _physics_process(delta: float) -> void:
-	if progress_ratio == 1.0:
-		if destroyed:
+	path_health_bar.position = position + Vector2(-30, 18)
+	if current_path.is_empty():
+		return
+	
+	movement_delta = data.current_move_speed * delta
+	
+	if global_position.distance_to(current_path_point) <= path_point_margin:
+		current_path_index += 1
+		if current_path_index >= current_path.size() and not destroyed:
+			destroyed = true
+			current_path = []
+			current_path_index = 0
+			current_path_point = global_transform.origin
+			base_damage.emit(data.current_damage, data.spawn_summon)
+			$CharacterBody2D.free()
+			queue_free()
 			return
-		destroyed = true
-		$CharacterBody2D.free()
-		base_damage.emit(data.current_damage, data.spawn_summon)
-		queue_free()
-	move(delta)
+	
+	current_path_point = current_path[current_path_index]
+	
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "rotation", global_position.angle_to_point(current_path_point), 0.1)
+	global_position = global_position.move_toward(current_path_point, movement_delta)
 
-func move(delta) -> void:
-	set_progress(get_progress() + data.current_move_speed * delta)
-	path_health_bar.position = position - Vector2(30, 30)
+
+func update_pathing() -> void:
+	current_path = path_map.update_pathing(global_position)
+	current_path_index = 0
+	current_path_point = current_path[current_path_index]
+
+
 
 ##dmg Array contains dmg amt, dmg tags, and crit status
 func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void: 
@@ -73,7 +109,8 @@ func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void:
 		for i in debuff:
 			data.add_buff(i)
 
-func calculate_damage(dmg: Array) -> void:#Array contains dmg amt, dmg tag, and crit status
+##dmg Array contains dmg amt, dmg tags, and crit status
+func calculate_damage(dmg: Array) -> void:
 	for tag in GlobalEnums.DamageTag.keys():
 		var cur_tag = GlobalEnums.DamageTag[tag]
 		if dmg[1] & cur_tag:

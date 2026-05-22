@@ -18,21 +18,21 @@
 [ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/Scenes/tutorial.tscn" id="17_nh22g"]
 [ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/Scenes/game_over_message.tscn" id="19_6qu8u"]
 
-[node name="GameScene" type="Node2D" node_paths=PackedStringArray("ui", "build_bar", "inventory_ui", "baddy_info_foldable", "tower_buttons", "game_bookend_popup", "tutorial", "map_node", "path_debug")]
+[node name="GameScene" type="Node2D" node_paths=PackedStringArray("path_ui", "path_build_bar", "path_inventory_ui", "path_baddy_info_foldable", "path_tower_buttons", "path_game_bookend_popup", "path_tutorial", "path_map_node", "path_pathfinding_line")]
 script = ExtResource("1_g2kuy")
-ui = NodePath("UI")
-build_bar = NodePath("UI/HUD/BuildBar")
-inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryUI")
-baddy_info_foldable = NodePath("UI/HUD/BuildBar/BaddyInfo")
-tower_buttons = NodePath("UI/HUD/BuildBar/TowerButtonsContainer")
-game_bookend_popup = NodePath("UI/GameOverMessage")
-tutorial = NodePath("UI/Tutorial")
-map_node = NodePath("Map")
-path_debug = NodePath("PathDebug")
+path_ui = NodePath("UI")
+path_build_bar = NodePath("UI/HUD/BuildBar")
+path_inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryUI")
+path_baddy_info_foldable = NodePath("UI/HUD/BuildBar/BaddyInfo")
+path_tower_buttons = NodePath("UI/HUD/BuildBar/TowerButtonsContainer")
+path_game_bookend_popup = NodePath("UI/GameOverMessage")
+path_tutorial = NodePath("UI/Tutorial")
+path_map_node = NodePath("Map")
+path_pathfinding_line = NodePath("PathfindingLine")
 
 [node name="Map" parent="." instance=ExtResource("1_akvmk")]
 
-[node name="PathDebug" type="Line2D" parent="."]
+[node name="PathfindingLine" type="Line2D" parent="."]
 width = 5.0
 default_color = Color(0, 0, 0, 1)
 joint_mode = 2

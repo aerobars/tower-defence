@@ -8,9 +8,9 @@
 
 [resource]
 script = ExtResource("3_ai2px")
-name = "Green Tank"
-description = "Chance when hit to heal self and nearby baddies"
-texture = ExtResource("4_lace1")
+info_name = "Green Tank"
+info_description = "Chance on hit to heal self and nearby baddies"
+info_texture = ExtResource("4_lace1")
 spawn_per_wave = 5
 spawn_interval = 1.0
 initial_buffs = Array[ExtResource("1_q3e84")]([ExtResource("2_lace1")])

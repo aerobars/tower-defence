@@ -2,11 +2,14 @@ class_name BaddyStats extends Resource
 
 signal health_depleted
 signal health_changed(current_health: int, max_health: int)
+signal update_defence_display(current_defence: float)
+signal update_buff_display(buff: Buff, stacks: int)
+signal remove_buff_display(buff: Buff)
 
-@export_group("Baddy Info")
-@export var name : String
-@export_multiline var description : String
-@export var texture : Texture2D
+@export_group("Baddy Info", "info_")
+@export var info_name : String
+@export_multiline var info_description : String
+@export var info_texture : Texture2D
 
 @export_group("Spawn Data", "spawn_")
 @export var spawn_per_wave : int = 1
@@ -65,6 +68,9 @@ func setup_stats() -> void:
 	health = current_max_health
 
 ##Runtime
+func process() -> void:
+	pass
+
 func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:
 #	var buff_names : Array
 #	for _buff in active_buffs:
@@ -75,12 +81,12 @@ func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:
 	var inst = active_buffs[buff]
 	inst.stacks = min(inst.stacks + amt, buff.stack_limit[buff_level])
 	inst.time_remaining = buff.buff_duration[buff_level]
-	buff_owner.path_health_bar.path_buff_display_container.update_display(buff, inst.stacks)
+	update_buff_display.emit(buff, inst.stacks)
 	recalculate_stats()
 
 func remove_buff(buff: Buff, _amt = 1) -> void:
 	active_buffs.erase(buff)
-	buff_owner.path_health_bar.path_buff_display_container.remove_buff(buff)
+	remove_buff_display.emit(buff)
 	recalculate_stats()
 
 func recalculate_stats() -> void:
@@ -125,6 +131,8 @@ func recalculate_stats() -> void:
 			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			var cur_property_name: String = str("current_" + stat_name)
 			set(cur_property_name, buff.buff_amount)
+	
+	update_defence_display.emit(current_defence)
 
 func _on_health_set(new_value: float) -> void:
 	health = clamp(new_value, 0, current_max_health)

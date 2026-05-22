@@ -8,9 +8,9 @@
 
 [resource]
 script = ExtResource("3_u323i")
-name = "Black Tank"
-description = "Onhit: chance to briefly boost move speed"
-texture = ExtResource("4_6mq66")
+info_name = "Black Tank"
+info_description = "Chance to gain a burst of speed on hit"
+info_texture = ExtResource("4_6mq66")
 spawn_per_wave = 10
 initial_buffs = Array[ExtResource("1_0cxju")]([ExtResource("2_u323i")])
 metadata/_custom_type_script = "uid://citwba61de3ku"
