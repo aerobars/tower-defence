@@ -17,4 +17,3 @@ func _init(
 	dot_interval = _dot_interval
 	buff_duration = _dot_duration
 	buff_targets = _targets
-	

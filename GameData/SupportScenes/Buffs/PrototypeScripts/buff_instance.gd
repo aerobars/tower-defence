@@ -58,12 +58,14 @@ func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 			onhit_targets = [buff_owner]
 		if buff.damage_tag > 0:
 			for target in onhit_targets:
-				if buff.damage_tag != GlobalEnums.DamageTag.HEAL:
-					buff_owner.calculate_damage([buff.effect_amount[level] * stacks, buff.damage_tag, false])
-				else:
-					target.data.health += buff.effect_amount[level]
-					DamageNumbers.display_number(buff.effect_amount[level], target.global_position, GlobalEnums.DamageTag.HEAL, false)
+				#if buff.damage_tag != GlobalEnums.DamageTag.HEAL:
+				buff_owner.calculate_damage([buff.effect_amount[level] * stacks, buff.damage_tag, false])
+				#else:
+					#target.data.health += buff.effect_amount[level]
+					#DamageNumbers.display_number(buff.effect_amount[level], target.global_position, GlobalEnums.DamageTag.HEAL, false)
 		if buff.buff_to_apply != null:
 			for target in onhit_targets:
 				target.data.add_buff(buff.buff_to_apply)
 		#call(buff.name.to_snake_case(), damage_tags, pending_buffs)
+
+##Periodic Triggers

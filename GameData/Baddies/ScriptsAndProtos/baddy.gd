@@ -61,7 +61,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	for buff in data.active_buffs:
 		data.active_buffs[buff].update(delta, global_position)
-	data.process()
+	data.process(delta)
 
 func _physics_process(delta: float) -> void:
 	path_health_bar.position = position + Vector2(-30, 18)
@@ -90,7 +90,7 @@ func _physics_process(delta: float) -> void:
 
 
 func update_pathing() -> void:
-	current_path = path_map.update_pathing(global_position)
+	current_path = path_map.update_pathing("pathing",global_position)
 	current_path_index = 0
 	current_path_point = current_path[current_path_index]
 
@@ -117,6 +117,8 @@ func calculate_damage(dmg: Array) -> void:
 			if cur_tag == GlobalEnums.DamageTag.BLUNT or cur_tag == GlobalEnums.DamageTag.PIERCE:
 				dmg[0] = max(0, dmg[0] - data.current_defence)
 				impact(cur_tag)
+			elif cur_tag == GlobalEnums.DamageTag.HEAL:
+				dmg[0] = dmg[0] * -1
 			else:
 				dmg[0] *=  GlobalEnums.DEFENCE_TABLE[data.base_defence_tag][cur_tag]
 	data.health -= dmg[0]

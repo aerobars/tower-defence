@@ -45,7 +45,11 @@ var current_move_speed : float
 var health : float = 0 : set = _on_health_set
 
 ##Buffs and Auras
-@export_group("Buffs and Auras")
+@export_group("In Game Effects")
+##Combat Round = 6.0s
+@export var periodic_interval : float = 6.0
+var periodic_timer : float = 0.0
+@export var periodic_effect : Array[Buff] =[]
 @export var aura_aoe : float = 0.0
 ##buffs such as auras
 @export var initial_buffs : Array[Buff] = []
@@ -68,7 +72,12 @@ func setup_stats() -> void:
 	health = current_max_health
 
 ##Runtime
-func process() -> void:
+func process(delta) -> void:
+	periodic_timer += delta
+	if periodic_timer >= periodic_interval:
+		periodic_effect_trigger()
+
+func periodic_effect_trigger() -> void:
 	pass
 
 func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:

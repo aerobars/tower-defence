@@ -213,7 +213,7 @@ func reward_signal_connection(reward_card) -> void:
 
 ## Pathfinding Functions
 func pathing_update() -> void:
-	path = path_map_node.update_pathing(path_map_node.path_start_point.global_position)
+	path = path_map_node.update_pathing("preview")
 	path_pathfinding_line.clear_points()
 	for cell in path:
 		path_pathfinding_line.add_point(cell)
@@ -247,7 +247,7 @@ func update_tower_preview() -> void:
 		var current_cell : Vector2i = path_map_node.path_exclusion_layer.local_to_map(child.global_position)
 		all_cells.append(current_cell)
 		path_map_node.path_pathfinding_layer.set_cell(current_cell, 0, Vector2i(0,0), 0)
-		path_map_node.astar_pathing.set_point_solid(current_cell, true)
+		path_map_node.astar_preview.set_point_solid(current_cell, true)
 		if path_map_node.path_exclusion_layer.get_cell_source_id(current_cell) != -1 or path.is_empty():
 			build_valid = false
 	if build_valid:
@@ -263,7 +263,7 @@ func update_tower_preview() -> void:
 		if all_cells.has(tile):
 			continue
 		if path_map_node.path_exclusion_layer.get_cell_source_id(tile) == -1:
-			path_map_node.astar_pathing.set_point_solid(tile, false)
+			path_map_node.astar_preview.set_point_solid(tile, false)
 		path_map_node.path_pathfinding_layer.clear()
 	previous_tiles = all_cells
 	
