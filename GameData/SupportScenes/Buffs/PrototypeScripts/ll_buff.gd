@@ -12,4 +12,3 @@ func last_laugh(owner: Node) -> void:
 	)
 	for target in ll_targets:
 		target.data.add_buff(buff, -1.0)
-	print("last laugh buff completed")

@@ -1,55 +1,69 @@
-[gd_scene load_steps=18 format=3 uid="uid://b7d7kfemno1ex"]
+[gd_scene load_steps=19 format=3 uid="uid://b7d7kfemno1ex"]
 
 [ext_resource type="PackedScene" uid="uid://egfxblymqfqd" path="res://GameData/Maps/map.tscn" id="1_akvmk"]
 [ext_resource type="Script" uid="uid://djsr0kjgwaton" path="res://GameData/MainScenes/Scripts/game_scene.gd" id="1_g2kuy"]
-[ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/MainScenes/Scripts/ui.gd" id="3_ibdpl"]
+[ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/UIScenes/GUI/Scripts/ui.gd" id="3_ibdpl"]
+[ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="3_p50gf"]
+[ext_resource type="Script" uid="uid://p8btputct86" path="res://GameData/SupportScenes/Scripts/camera_2d.gd" id="4_6qu8u"]
 [ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://VisualResources/Inventory/inventory_bg.tres" id="4_syms3"]
 [ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="5_waasu"]
 [ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://GameData/UIScenes/Inventory/player_inventory.tres" id="6_nh22g"]
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="7_674w2"]
 [ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="8_a0jnf"]
 [ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="9_clpeu"]
+[ext_resource type="PackedScene" uid="uid://jug24xmepvb3" path="res://GameData/UIScenes/GUI/Scenes/baddy_info_foldable.tscn" id="9_p50gf"]
 [ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://VisualResources/Fonts/kfn_50_o1.tres" id="10_0h1f8"]
 [ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://VisualResources/Fonts/kfn_30_o1.tres" id="11_sl8sw"]
 [ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="12_jvyjn"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="13_541wh"]
-[ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/UIScenes/GUI/Scripts/baddy_info.gd" id="15_dts4o"]
-[ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://VisualResources/Fonts/infopopup_font_12.tres" id="15_wrp27"]
 [ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/Scenes/tutorial.tscn" id="17_nh22g"]
 [ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/Scenes/game_over_message.tscn" id="19_6qu8u"]
 
-[node name="GameScene" type="Node2D" node_paths=PackedStringArray("path_ui", "path_build_bar", "path_inventory_ui", "path_baddy_info_foldable", "path_tower_buttons", "path_game_bookend_popup", "path_tutorial", "path_map_node", "path_pathfinding_line")]
+[node name="GameScene" type="Node2D" node_paths=PackedStringArray("path_tower_preview_container", "path_ui", "path_range_display", "path_camera", "path_map_node", "path_pathfinding_line")]
 script = ExtResource("1_g2kuy")
+path_tower_preview_container = NodePath("TowerPreviewContainer")
 path_ui = NodePath("UI")
-path_build_bar = NodePath("UI/HUD/BuildBar")
-path_inventory_ui = NodePath("UI/HUD/BuildBar/InventoryContainer/InventoryUI")
-path_baddy_info_foldable = NodePath("UI/HUD/BuildBar/BaddyInfo")
-path_tower_buttons = NodePath("UI/HUD/BuildBar/TowerButtonsContainer")
-path_game_bookend_popup = NodePath("UI/GameOverMessage")
-path_tutorial = NodePath("UI/Tutorial")
+path_range_display = NodePath("RangeDisplay")
+path_camera = NodePath("Camera2D")
 path_map_node = NodePath("Map")
 path_pathfinding_line = NodePath("PathfindingLine")
 
 [node name="Map" parent="." instance=ExtResource("1_akvmk")]
 
+[node name="TowerPreviewContainer" type="Node2D" parent="."]
+
+[node name="RangeDisplay" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.56078434)
+self_modulate = Color(1, 1, 1, 0.56078434)
+texture = ExtResource("3_p50gf")
+
 [node name="PathfindingLine" type="Line2D" parent="."]
 width = 5.0
-default_color = Color(0, 0, 0, 1)
+default_color = Color(0.32941177, 0.32941177, 0.32941177, 0.6509804)
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 
-[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("hp_bar", "hp_text", "cash_display", "game_message", "baddy_info_foldbable", "baddy_info", "next_wave_button", "pause_button", "ff_button")]
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("4_6qu8u")
+zoom_disabled = true
+
+[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("path_hp_bar", "path_hp_text", "path_cash_display", "path_game_message", "path_baddy_info_foldbable", "path_next_wave_button", "path_pause_button", "path_ff_button", "path_build_bar", "path_inventory_ui", "path_tower_buttons", "path_game_bookend_popup", "path_tutorial")]
 script = ExtResource("3_ibdpl")
-hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
-hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
-cash_display = NodePath("HUD/InfoBar/InfoContainer/Money")
-game_message = NodePath("HUD/GameMessage")
-baddy_info_foldbable = NodePath("HUD/BuildBar/BaddyInfo")
-baddy_info = NodePath("HUD/BuildBar/BaddyInfo/VBoxContainer")
-next_wave_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/NextWave")
-pause_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/PausePlay")
-ff_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/FastForward")
+path_hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
+path_hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
+path_cash_display = NodePath("HUD/InfoBar/InfoContainer/Money")
+path_game_message = NodePath("HUD/GameMessage")
+path_baddy_info_foldbable = NodePath("HUD/BuildBar/BaddyInfo")
+path_next_wave_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/NextWave")
+path_pause_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/PausePlay")
+path_ff_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/FastForward")
+path_build_bar = NodePath("HUD/BuildBar")
+path_inventory_ui = NodePath("HUD/BuildBar/InventoryContainer/InventoryUI")
+path_tower_buttons = NodePath("HUD/BuildBar/TowerButtonsContainer")
+path_game_bookend_popup = NodePath("GameOverMessage")
+path_tutorial = NodePath("Tutorial")
 
 [node name="HUD" type="Control" parent="UI"]
 layout_mode = 3
@@ -112,48 +126,10 @@ size_flags_vertical = 8
 theme_override_constants/separation = 150
 alignment = 1
 
-[node name="BaddyInfo" type="FoldableContainer" parent="UI/HUD/BuildBar"]
+[node name="BaddyInfo" parent="UI/HUD/BuildBar" instance=ExtResource("9_p50gf")]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -275.0
-offset_top = -161.0
-grow_horizontal = 0
-grow_vertical = 0
-size_flags_horizontal = 3
-mouse_filter = 2
-folded = true
-title = "Baddy Info"
-title_position = 1
-script = ExtResource("15_dts4o")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/HUD/BuildBar/BaddyInfo"]
-visible = false
-layout_mode = 2
-theme = ExtResource("15_wrp27")
-
-[node name="Name" type="Label" parent="UI/HUD/BuildBar/BaddyInfo/VBoxContainer"]
-layout_mode = 2
-accessibility_name = "Name"
-theme_override_font_sizes/font_size = 12
-
-[node name="MaxHealth" type="Label" parent="UI/HUD/BuildBar/BaddyInfo/VBoxContainer"]
-layout_mode = 2
-
-[node name="Damage" type="Label" parent="UI/HUD/BuildBar/BaddyInfo/VBoxContainer"]
-layout_mode = 2
-
-[node name="Defence" type="Label" parent="UI/HUD/BuildBar/BaddyInfo/VBoxContainer"]
-layout_mode = 2
-
-[node name="MoveSpeed" type="Label" parent="UI/HUD/BuildBar/BaddyInfo/VBoxContainer"]
-layout_mode = 2
-
-[node name="Description" type="Label" parent="UI/HUD/BuildBar/BaddyInfo/VBoxContainer"]
-layout_mode = 2
+offset_top = -31.0
+offset_bottom = 0.0
 
 [node name="InfoBar" type="ColorRect" parent="UI/HUD"]
 self_modulate = Color(0, 0, 0, 0.470588)

@@ -2,19 +2,14 @@
 
 [ext_resource type="Script" uid="uid://ol8ew5jbqkrx" path="res://GameData/Baddies/ScriptsAndProtos/baddy_health_bar.gd" id="1_7nr08"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="1_vr3hp"]
-[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/SupportScenes/buff_display_container.tscn" id="3_7nr08"]
+[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/SupportScenes/Scenes/buff_display_container.tscn" id="3_7nr08"]
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="3_ga1hp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qekkw"]
 atlas = ExtResource("3_ga1hp")
 region = Rect2(640, 48, 16, 16)
 
-[node name="Control" type="Control" node_paths=PackedStringArray("path_health_bar", "path_defence_label", "path_buff_display_container")]
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 3
-anchors_preset = 0
-offset_right = 60.0
-offset_bottom = 14.0
+[node name="Control" type="Node2D" node_paths=PackedStringArray("path_health_bar", "path_defence_label", "path_buff_display_container")]
 script = ExtResource("1_7nr08")
 path_health_bar = NodePath("VBoxContainer/HealthandDefenceContainer/HealthBar")
 path_defence_label = NodePath("VBoxContainer/HealthandDefenceContainer/TextureRect/DefenceValue")
@@ -22,9 +17,8 @@ path_buff_display_container = NodePath("VBoxContainer/BuffDisplayContainer")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(60, 23)
-layout_mode = 0
-offset_right = 60.0
-offset_bottom = 22.0
+offset_right = 77.0
+offset_bottom = 33.0
 theme_override_constants/separation = 1
 
 [node name="HealthandDefenceContainer" type="HBoxContainer" parent="VBoxContainer"]

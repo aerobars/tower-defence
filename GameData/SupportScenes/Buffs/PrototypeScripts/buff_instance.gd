@@ -41,7 +41,7 @@ func bleed(_delta : float, position : Vector2) -> void:
 	dot_timer += position.distance_to(last_position)
 	last_position = position
 
-func burn(delta : float, _position : float) -> void:
+func burn(delta : float, _position : Vector2) -> void:
 	dot_timer += delta
 
 ##On Hit

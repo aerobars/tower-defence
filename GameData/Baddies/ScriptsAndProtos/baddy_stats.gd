@@ -2,7 +2,7 @@ class_name BaddyStats extends Resource
 
 signal health_depleted
 signal health_changed(current_health: int, max_health: int)
-signal update_defence_display(current_defence: float)
+signal stats_updated
 signal update_buff_display(buff: Buff, stacks: int)
 signal remove_buff_display(buff: Buff)
 
@@ -49,7 +49,7 @@ var health : float = 0 : set = _on_health_set
 ##Combat Round = 6.0s
 @export var periodic_interval : float = 6.0
 var periodic_timer : float = 0.0
-@export var periodic_effect : Array[Buff] =[]
+@export var periodic_effect : Array[Buff] = []
 @export var aura_aoe : float = 0.0
 ##buffs such as auras
 @export var initial_buffs : Array[Buff] = []
@@ -72,15 +72,8 @@ func setup_stats() -> void:
 	health = current_max_health
 
 ##Runtime
-func process(delta) -> void:
-	periodic_timer += delta
-	if periodic_timer >= periodic_interval:
-		periodic_effect_trigger()
 
-func periodic_effect_trigger() -> void:
-	pass
-
-func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:
+func add_buff(buff: Buff, buff_level : int, amt : int = 1) -> void:
 #	var buff_names : Array
 #	for _buff in active_buffs:
 #		buff_names.append(_buff.name)
@@ -141,7 +134,7 @@ func recalculate_stats() -> void:
 			var cur_property_name: String = str("current_" + stat_name)
 			set(cur_property_name, buff.buff_amount)
 	
-	update_defence_display.emit(current_defence)
+	stats_updated.emit()
 
 func _on_health_set(new_value: float) -> void:
 	health = clamp(new_value, 0, current_max_health)

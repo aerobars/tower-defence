@@ -1,6 +1,6 @@
 extends Node2D
 
-signal pathing_updated(new_path: PackedVector2Array)
+#signal pathing_updated(new_path: PackedVector2Array)
 
 @export_group("Node Paths", "path_")
 @export var path_tower_container : Node2D
@@ -12,15 +12,16 @@ signal pathing_updated(new_path: PackedVector2Array)
 @export var path_pathfinding_layer : TileMapLayer
 
 ##Pathfinding
-var astar_pathing : AStarGrid2D = AStarGrid2D.new()
-var astar_preview : AStarGrid2D = AStarGrid2D.new()
-var astar_array : Array[AStarGrid2D] = [astar_pathing, astar_preview]
-#const WALL_TILE_COORD := Vector2i(0,0)
-#const FLOOR_TILE_COORD := Vector2i(0,0)
 const CELL_SIZE : int = 64
 const CELL := Vector2(CELL_SIZE, CELL_SIZE)
 @warning_ignore("integer_division")
 const CELL_CENTRE := Vector2(CELL_SIZE/2, CELL_SIZE/2)
+var astar_pathing : AStarGrid2D = AStarGrid2D.new()
+var astar_preview : AStarGrid2D = AStarGrid2D.new()
+var astar_array : Array[AStarGrid2D] = [astar_pathing, astar_preview]
+var all_waypoints : Array[Vector2] = []
+#const WALL_TILE_COORD := Vector2i(0,0)
+#const FLOOR_TILE_COORD := Vector2i(0,0)
 
 func _ready() -> void:
 	for astar in astar_array:
@@ -34,9 +35,30 @@ func _ready() -> void:
 		for tile in path_exclusion_layer.get_used_cells():
 			#pathing_layer.set_cell(tile, 0, Vector2i(0,0), 0)
 			astar.set_point_solid(tile, true)
+	_get_all_waypoints()
 
-func update_pathing(astar_grid: String, initial_position: Vector2 = path_start_point.global_position) -> PackedVector2Array:
-	var astar = get("astar_" + astar_grid)
-	var local_pos := path_ground_layer.to_local(initial_position)
-	var current_tile : Vector2i = path_ground_layer.local_to_map(local_pos)
-	return astar.get_point_path(current_tile, path_ground_layer.local_to_map(path_end_point.global_position))
+func _get_all_waypoints() -> void:
+	all_waypoints = []
+	for child in get_children():
+		if child is Marker2D:
+			all_waypoints.append(child.global_position)
+
+func update_preview() -> PackedVector2Array:
+	var path : PackedVector2Array
+	
+	for i in all_waypoints.size() - 1:
+		var segment : PackedVector2Array = astar_preview.get_point_path(_get_current_tile(all_waypoints[i]), _get_current_tile(all_waypoints[i+1]))
+		if segment.is_empty():
+			return segment
+		if i > 0:
+			segment.remove_at(0) #removes duplicate point
+		path.append_array(segment)
+	return path
+
+func update_pathing(current_position: Vector2, waypoint_index: int) -> PackedVector2Array:
+	if waypoint_index >= all_waypoints.size():
+		return PackedVector2Array([Vector2(-1000,-1000)])
+	return astar_pathing.get_point_path(_get_current_tile(current_position), _get_current_tile(all_waypoints[waypoint_index]))
+
+func _get_current_tile(current_position: Vector2) -> Vector2i:
+	return path_ground_layer.local_to_map(path_ground_layer.to_local(current_position))

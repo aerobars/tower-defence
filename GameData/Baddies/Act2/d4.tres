@@ -1,17 +1,24 @@
-[gd_resource type="Resource" script_class="BaddyStats" load_steps=6 format=3 uid="uid://b3kcld877434q"]
+[gd_resource type="Resource" script_class="BaddyStats" load_steps=8 format=3 uid="uid://b3kcld877434q"]
 
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_qursn"]
 [ext_resource type="Texture2D" uid="uid://cd202ld65x6uk" path="res://Assets/Environment/Tilesets/towerDefense_tilesheet.png" id="2_jchw8"]
 [ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/last_laugh.gd" id="3_os8gp"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="4_jchw8"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="4_jk71w"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_md5ny"]
 atlas = ExtResource("2_jchw8")
 region = Rect2(272, 784, 32, 40)
 
+[sub_resource type="Resource" id="Resource_os8gp"]
+script = ExtResource("4_jchw8")
+stat = 32
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
+
 [resource]
 script = ExtResource("4_jk71w")
 info_name = "D4 Dice"
-info_description = "Every 6 seconds heals 1-4 damage to all enemies in AoE."
+info_description = "Every 6 seconds increases max hp by 1-4 to all baddies in AoE."
 info_texture = SubResource("AtlasTexture_md5ny")
+periodic_effect = Array[ExtResource("1_qursn")]([SubResource("Resource_os8gp")])
 metadata/_custom_type_script = "uid://citwba61de3ku"

@@ -1,10 +1,14 @@
-class_name TowerMod extends Node2D
 ##Handles gametime tower functions (shooting, etc.) and last step of mod updates (update to mod class and net power)
+class_name TowerCell extends UnitPrototype
 
 
 ## Signals
-signal tower_clicked
 signal mod_updated(mod: StaticBody2D)
+#signal clear_popup
+#signal display_popup
+signal update_range_display(tower_cell: TowerCell)
+signal hide_range_display
+
 
 ## Tower Setup
 const PROJECTILE_SCENE := preload("res://GameData/Towers/Scenes/tower_projectile.tscn")
@@ -12,12 +16,16 @@ const TURRET_TEXTURE_SIZE : float = 32
 var non_aura_radius : float #equal to TowerBase's Marker2D radius
 var data : PrototypeMod
 var button_slot_id : int
-@onready var path_turret := $Turret
-@onready var path_muzzle := $Turret/Muzzle
-@onready var path_range_scene := $Range
-@onready var path_range_aoe := $Range/CollisionShape2D
-@onready var path_animation_player := $AnimationPlayer
-@onready var path_buff_display := $BuffDisplayContainer
+
+@export_group("Tower Node Paths", "path_")
+@export var path_turret : Sprite2D
+@export var path_muzzle : Marker2D
+@export var path_range_scene : Area2D
+@export var path_range_aoe : CollisionShape2D
+@export var path_animation_player : AnimationPlayer
+@export var path_buff_display : HBoxContainer
+@export var path_timer : Timer
+@onready var path_tower_highlight := $TowerHighlight
 
 
 ## Gametime
@@ -70,6 +78,35 @@ func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData,
 	if updated_mod in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(updated_mod)
 
+##Input Event Handling
+
+func _on_mouse_entered() -> void:
+	if get_parent().is_built == false:
+		return
+	super()
+	if data == null:
+		return
+	#path_timer.start()
+	if data.mod_class == PrototypeMod.ModClass.WEAPON or (data.mod_class == PrototypeMod.ModClass.AURA and get_parent().aura_tower):
+		update_range_display.emit(self)
+
+func _on_mouse_exited() -> void:
+	super()
+	#path_timer.stop()
+	hide_range_display.emit()
+	#clear_popup.emit()
+
+
+func _on_timer_timeout() -> void:
+#	display_popup.emit(POPUP_TYPE, data)
+	pass # Replace with function body.
+
+#func _on_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+#	super(viewport, event, shape_idx)
+
+#func set_tower_highlight(value: bool) -> void:
+	#path_tower_highlight.visible = value
+
 ## In-Game Function
 func _process(delta: float) -> void:
 	if data == null or data is PowerMod: 
@@ -87,7 +124,7 @@ func _process(delta: float) -> void:
 		if attack_timer >= data.current_attack_speed:
 			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.aura_effect and get_parent().aura_tower:
 				for baddy in baddies_in_range:
-					add_buff(baddy)
+					add_buff(data.buff_data, get_parent().tower_data.level, baddy)
 			elif data is WeaponMod:
 				#attack_tracker += 1
 				for i in data.current_multitarget:
@@ -101,45 +138,41 @@ func _on_range_body_entered(body) -> void:
 	if data == null or body == self:
 		return
 	if body.is_in_group("baddies"):
-		baddies_in_range.append(body.get_parent())
+		baddies_in_range.append(body)
 		if data.mod_class == data.ModClass.AURA and data.buff_data.aura_effect:
-			add_buff(body.get_parent())
+			add_buff(data.buff_data, get_parent().tower_data.level, body)
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		if data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
 			return #nothing gets added for offensive auras in aura mode
 		else:
 			aura_targets.append(body)
-			add_buff(body)
+			add_buff(data.buff_data, get_parent().tower_data.level, body)
 
 func _on_range_body_exited(body) -> void:
 	if data == null:
 		return
 	if body.is_in_group("baddies"):
-		baddies_in_range.erase(body.get_parent())
+		baddies_in_range.erase(body)
 		if data.mod_class == data.ModClass.AURA and data.buff_data.aura_effect:
-			remove_buff(body.get_parent())
+			remove_buff(data.buff_data, body)
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		aura_targets.erase(body)
-		remove_buff(body)
+		remove_buff(data.buff_data, body)
 
-func add_buff(body) -> void:
-	body.data.add_buff(data.buff_data, get_parent().tower_data.level)
+#func add_buff(body) -> void:
+#	body.data.add_buff(data.buff_data, get_parent().tower_data.level)
 
-func remove_buff(body) -> void:
-	body.data.remove_buff(data.buff_data)
+#func remove_buff(body) -> void:
+#	body.data.remove_buff(data.buff_data)
 
-func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event.is_action_released("ui_accept"):
-		tower_clicked.emit()
 
 ## Weapon Function
 func select_targets() -> Array:
-	var target_progress_array := baddies_in_range
-	target_progress_array.sort_custom(func(a, b): return a.progress > b.progress)
-	return target_progress_array
+	return baddies_in_range
 
 func turn():
-	path_turret.look_at(attack_targets[0].position)
+	if is_instance_valid(attack_targets[0]):
+		path_turret.look_at(attack_targets[0].position)
 
 func fire(target):
 	if data.projectile_speed > 0:

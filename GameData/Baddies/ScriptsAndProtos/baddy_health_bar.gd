@@ -1,4 +1,4 @@
-extends Control
+extends Node2D
 
 @export var path_health_bar : TextureProgressBar
 @export var path_defence_label : Label 

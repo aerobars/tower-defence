@@ -1,43 +1,53 @@
-class_name Baddy extends Node2D
+class_name Baddy extends UnitPrototype
 
 ##Signals
 signal baddy_death
 signal base_damage(damage)
+signal open_baddy_display(data: BaddyStats)
+signal update_baddy_display(data: BaddyStats)
+#signal unit_selected(baddy: Baddy)
 
 ##Node Paths
 @export_group("Node Paths", "path")
-@export var path_health_bar : Control
+@export var path_status_display : Node2D
 @export var path_impact_area : Marker2D
 @export var path_damage_number_origin : Marker2D
 @export var path_hit_flash : AnimationPlayer
 @export var path_aura : CollisionShape2D
-@export var path_sprite : Sprite2D
+@export var path_baddy_texture : Sprite2D
+#@export var path_selection_circle : Sprite2D
 
 ##Pathfinding
 var path_map
 var movement_delta : float
 var path_point_margin : float = 0.5
 
+var current_path : PackedVector2Array #set in Game Scene when baddy is instantiated
 var current_path_index : int = 0
 var current_path_point : Vector2
-var current_path : PackedVector2Array #set in Game Scene when baddy is instantiated
+var waypoint_index : int = 1
 
 ##Runtime Variables
-const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/projectile_impact.tscn")
+const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/Scenes/projectile_impact.tscn")
 @export var data : BaddyStats
 var destroyed := false
 var level : int = 0
+#var selected := false
 
 ##Setup
+
 func _ready() -> void:
+	if data == null:
+		print("missing baddy data")
+		return
 	data.buff_owner = self
-	path_sprite.texture = data.info_texture
+	path_baddy_texture.texture = data.info_texture
 	path_aura.get_shape().radius = data.aura_aoe
 	
 	#healthbar setup
 	healthbar_update(data.health, data.current_max_health)
-	path_health_bar.set_as_top_level(true)
-	path_health_bar.update_defence(data.current_defence)
+	path_status_display.position = position + Vector2(-30, 18)
+	path_status_display.update_defence(data.current_defence)
 	
 	#pathing setup
 	update_pathing()
@@ -45,26 +55,29 @@ func _ready() -> void:
 	#signal connections
 	data.health_changed.connect(healthbar_update)
 	data.health_depleted.connect(destroy)
-	data.update_defence_display.connect(path_health_bar.update_defence)
-	data.update_buff_display.connect(path_health_bar.path_buff_display_container.update_display)
-	data.remove_buff_display.connect(path_health_bar.path_buff_display_container.remove_buff)
+	data.stats_updated.connect(stats_update)
+	data.update_buff_display.connect(path_status_display.path_buff_display_container.update_display)
+	data.remove_buff_display.connect(path_status_display.path_buff_display_container.remove_buff)
 	
 	#buff setup
 	for buff in data.initial_buffs:
-		data.add_buff(buff)
+		add_buff(buff, level)
 	for effect in data.last_laugh_effects:
-		path_health_bar.path_buff_display_container.update_display(effect)
+		path_status_display.path_buff_display_container.update_display(effect)
 		if effect is LastLaughSpawn:
 			pass
 
 ##Runtime Functions
+
 func _process(delta: float) -> void:
+	data.periodic_timer += delta
+	if data.periodic_timer >= data.periodic_interval:
+		periodic_effect_trigger()
 	for buff in data.active_buffs:
 		data.active_buffs[buff].update(delta, global_position)
-	data.process(delta)
 
 func _physics_process(delta: float) -> void:
-	path_health_bar.position = position + Vector2(-30, 18)
+	path_status_display.position = position + Vector2(-30, 18)
 	if current_path.is_empty():
 		return
 	
@@ -72,29 +85,33 @@ func _physics_process(delta: float) -> void:
 	
 	if global_position.distance_to(current_path_point) <= path_point_margin:
 		current_path_index += 1
-		if current_path_index >= current_path.size() and not destroyed:
-			destroyed = true
-			current_path = []
-			current_path_index = 0
-			current_path_point = global_transform.origin
-			base_damage.emit(data.current_damage, data.spawn_summon)
-			$CharacterBody2D.free()
-			queue_free()
-			return
+		if current_path_index >= current_path.size(): 
+			waypoint_index += 1
+			update_pathing()
+			if current_path == PackedVector2Array([Vector2(-1000,-1000)]) and not destroyed:
+				destroyed = true
+				#current_path = []
+				#current_path_index = 0
+				#current_path_point = global_transform.origin
+				base_damage.emit(data.current_damage, data.spawn_summon)
+				queue_free()
+				return
 	
 	current_path_point = current_path[current_path_index]
 	
 	var tween = get_tree().create_tween()
-	tween.tween_property(self, "rotation", global_position.angle_to_point(current_path_point), 0.1)
+	tween.tween_property(self, "rotation", global_position.angle_to_point(current_path_point), 0.15)
 	global_position = global_position.move_toward(current_path_point, movement_delta)
 
+func periodic_effect_trigger() -> void:
+	if not data.periodic_effect.is_empty():
+		for effect in data.periodic_effect:
+			add_buff(effect, level)
 
 func update_pathing() -> void:
-	current_path = path_map.update_pathing("pathing",global_position)
+	current_path = path_map.update_pathing(global_position, waypoint_index)
 	current_path_index = 0
 	current_path_point = current_path[current_path_index]
-
-
 
 ##dmg Array contains dmg amt, dmg tags, and crit status
 func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void: 
@@ -107,7 +124,7 @@ func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void:
 	debuff.append_array(pending_buffs)
 	if debuff != []:
 		for i in debuff:
-			data.add_buff(i)
+			add_buff(i, level)
 
 ##dmg Array contains dmg amt, dmg tags, and crit status
 func calculate_damage(dmg: Array) -> void:
@@ -125,8 +142,13 @@ func calculate_damage(dmg: Array) -> void:
 	DamageNumbers.display_number(dmg[0], path_damage_number_origin.global_position, dmg[1], dmg[2])
 
 func healthbar_update(health, max_health) -> void:
-	path_health_bar.path_health_bar.max_value = max_health
-	path_health_bar.path_health_bar.value = health
+	path_status_display.path_health_bar.max_value = max_health
+	path_status_display.path_health_bar.value = health
+	update_baddy_display.emit(self)
+
+func stats_update() -> void:
+	path_status_display.update_defence(data.current_defence)
+	update_baddy_display.emit(self)
 
 func impact(damage_type: GlobalEnums.DamageTag) -> void:
 	if damage_type == GlobalEnums.DamageTag.BLUNT or damage_type == GlobalEnums.DamageTag.PIERCE:
@@ -144,7 +166,7 @@ func destroy() -> void:
 		return
 	destroyed = true
 	data.health_depleted.disconnect(destroy)
-	$CharacterBody2D.free()
+	#$CharacterBody2D.free()
 	for effect in data.last_laugh_effects:
 		await effect.last_laugh(self)
 	await (get_tree().create_timer(0.2).timeout)
@@ -152,6 +174,7 @@ func destroy() -> void:
 	baddy_death.emit()
 
 ##Aura Functions
+
 func _on_aura_range_body_entered(body: Node2D) -> void:
 	if path_aura.get_shape().radius < 1 or data.initial_buffs.size() == 0: #min radius is 0.01, instead of making separate boolean variable
 		return
@@ -160,9 +183,9 @@ func _on_aura_range_body_entered(body: Node2D) -> void:
 		if buff_targets == GlobalEnums.Targets.NONE:
 			continue
 		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
-			add_buff(body.get_parent(), buff)
+			add_buff(buff, level, body)
 		elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
-			add_buff(body, buff)
+			add_buff(buff, level, body)
 
 func _on_aura_range_body_exited(body: Node2D) -> void:
 	if path_aura.get_shape().radius < 1: #min radius is 0.01, instead of making separate boolean variable
@@ -172,12 +195,33 @@ func _on_aura_range_body_exited(body: Node2D) -> void:
 		if buff_targets == GlobalEnums.Targets.NONE:
 			continue
 		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
-			remove_buff(body.get_parent(), buff)
+			remove_buff(buff, body)
 		elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
-			remove_buff(body, buff)
+			remove_buff(buff, body)
 
-func add_buff(body : Node2D, buff : Buff) -> void:
-	body.data.add_buff(buff, level)
+#func add_buff(body : CollisionObject2D, buff : Buff, cur_level : int) -> void:
+#	body.data.add_buff(buff, cur_level)
 
-func remove_buff(body : Node2D, buff : Buff) -> void:
-	body.data.remove_buff(buff)
+#func remove_buff(body : CollisionObject2D, buff : Buff) -> void:
+#	body.data.remove_buff(buff)
+
+## Input Functions
+
+#func _on_mouse_entered() -> void:
+#	path_selection_circle.visible = true
+
+#func _on_mouse_exited() -> void:
+#	if not selected:
+#		path_selection_circle.visible = false
+
+#func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+#	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+#		unit_selected.emit(self)
+
+func set_selected(value: bool) -> void:
+#	selected = value
+#	if not selected:
+#		path_selection_circle.visible = false
+	super(value)
+	if selected:
+		open_baddy_display.emit(self)

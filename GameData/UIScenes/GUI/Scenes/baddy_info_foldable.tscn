@@ -1,0 +1,87 @@
+[gd_scene load_steps=8 format=3 uid="uid://jug24xmepvb3"]
+
+[ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/UIScenes/GUI/Scripts/baddy_info.gd" id="1_6f8tt"]
+[ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://VisualResources/Fonts/infopopup_font_12.tres" id="2_04737"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="2_c35k2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_04737"]
+atlas = ExtResource("2_c35k2")
+region = Rect2(624, 160, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c35k2"]
+atlas = ExtResource("2_c35k2")
+region = Rect2(544, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8a5v"]
+atlas = ExtResource("2_c35k2")
+region = Rect2(640, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_53mtg"]
+atlas = ExtResource("2_c35k2")
+region = Rect2(384, 336, 16, 16)
+
+[node name="BaddyInfo" type="FoldableContainer" node_paths=PackedStringArray("path_baddy_name", "path_baddy_health", "path_baddy_damage", "path_baddy_defence", "path_baddy_move_speed", "path_baddy_description")]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -275.0
+offset_top = -161.0
+offset_bottom = -130.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 3
+mouse_filter = 2
+folded = true
+title = "Baddy Info"
+title_position = 1
+script = ExtResource("1_6f8tt")
+path_baddy_name = NodePath("VBoxContainer/Name")
+path_baddy_health = NodePath("VBoxContainer/Health")
+path_baddy_damage = NodePath("VBoxContainer/Damage")
+path_baddy_defence = NodePath("VBoxContainer/Defence")
+path_baddy_move_speed = NodePath("VBoxContainer/MoveSpeed")
+path_baddy_description = NodePath("VBoxContainer/Description")
+img_health = SubResource("AtlasTexture_04737")
+img_damage = SubResource("AtlasTexture_c35k2")
+img_defence = SubResource("AtlasTexture_e8a5v")
+img_move_speed = SubResource("AtlasTexture_53mtg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 2
+theme = ExtResource("2_04737")
+
+[node name="Name" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+accessibility_name = "Name"
+bbcode_enabled = true
+scroll_active = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+
+[node name="Health" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+scroll_active = false
+
+[node name="Damage" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+scroll_active = false
+
+[node name="Defence" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+scroll_active = false
+
+[node name="MoveSpeed" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+scroll_active = false
+
+[node name="Description" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+scroll_active = false

@@ -1,0 +1,138 @@
+[gd_scene load_steps=11 format=3 uid="uid://bp51akjapuerf"]
+
+[ext_resource type="Script" uid="uid://dvux8hj1euiax" path="res://GameData/Towers/Scripts/tower_cell.gd" id="1_kv3af"]
+[ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="2_a0cob"]
+[ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="2_a3qir"]
+[ext_resource type="Texture2D" uid="uid://c44rk0b010555" path="res://Assets/Effects/towerDefense_tile297.png" id="3_a0cob"]
+[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/SupportScenes/Scenes/buff_display_container.tscn" id="4_qw5iw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n0uum"]
+size = Vector2(52, 52)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3lnkv"]
+resource_local_to_scene = true
+radius = 0.01
+
+[sub_resource type="Animation" id="Animation_n4w1k"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TurretTexture/Muzzle/MuzzleFlash:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_kyc6b"]
+resource_name = "fire"
+length = 0.15
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TurretTexture/Muzzle/MuzzleFlash:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_260rg"]
+_data = {
+&"RESET": SubResource("Animation_n4w1k"),
+&"fire": SubResource("Animation_kyc6b")
+}
+
+[node name="TowerCellPrototype" type="StaticBody2D" node_paths=PackedStringArray("path_turret", "path_muzzle", "path_range_scene", "path_range_aoe", "path_animation_player", "path_buff_display", "path_timer", "path_mouse_detection", "path_selection_circle") groups=["towers"]]
+input_pickable = true
+script = ExtResource("1_kv3af")
+path_turret = NodePath("TurretTexture")
+path_muzzle = NodePath("TurretTexture/Muzzle")
+path_range_scene = NodePath("Range")
+path_range_aoe = NodePath("Range/RangeAoe")
+path_animation_player = NodePath("AnimationPlayer")
+path_buff_display = NodePath("BuffDisplayContainer")
+path_timer = NodePath("Timer")
+path_mouse_detection = NodePath(".")
+path_selection_circle = NodePath("SelectionCircle")
+
+[node name="TowerHighlight" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.8627451, 0.42745098, 0, 0.42352942)
+
+[node name="SelectionCircle" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(0, 1, 0, 1)
+scale = Vector2(0.11, 0.11)
+texture = ExtResource("2_a0cob")
+
+[node name="TowerBase" type="Sprite2D" parent="."]
+texture = ExtResource("2_a3qir")
+
+[node name="MouseDetection" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_n0uum")
+
+[node name="TurretTexture" type="Sprite2D" parent="."]
+scale = Vector2(0.7, 0.7)
+
+[node name="Muzzle" type="Marker2D" parent="TurretTexture"]
+position = Vector2(43, 0)
+
+[node name="MuzzleFlash" type="Sprite2D" parent="TurretTexture/Muzzle"]
+visible = false
+position = Vector2(10, 7.10543e-15)
+rotation = 1.5708
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("3_a0cob")
+
+[node name="Range" type="Area2D" parent="."]
+input_pickable = false
+
+[node name="RangeAoe" type="CollisionShape2D" parent="Range"]
+shape = SubResource("CircleShape2D_3lnkv")
+debug_color = Color(0, 0.6, 0.7, 0.42)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_260rg")
+}
+
+[node name="BuffDisplayContainer" parent="." instance=ExtResource("4_qw5iw")]
+custom_minimum_size = Vector2(48, 16)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -24.0
+offset_top = 8.0
+offset_right = 24.0
+offset_bottom = 24.0
+grow_horizontal = 2
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="body_entered" from="Range" to="." method="_on_range_body_entered"]
+[connection signal="body_exited" from="Range" to="." method="_on_range_body_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

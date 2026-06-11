@@ -29,6 +29,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			for baddy in baddies:
 				baddy.on_hit(damage.duplicate(), on_hit_effects)
 		else:
-			body.get_parent().on_hit(damage.duplicate(), on_hit_effects)
+			body.on_hit(damage.duplicate(), on_hit_effects)
 		if pierce_count == pierce_total:
 			queue_free()

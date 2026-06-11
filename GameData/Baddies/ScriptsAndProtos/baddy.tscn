@@ -1,18 +1,16 @@
-[gd_scene load_steps=15 format=3 uid="uid://cjn6jcx1rl4js"]
+[gd_scene load_steps=16 format=3 uid="uid://cjn6jcx1rl4js"]
 
 [ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/ScriptsAndProtos/baddy.gd" id="1_21g7o"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_ki846"]
 [ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/last_laugh.gd" id="3_ptvfa"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="4_soyye"]
 [ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/ScriptsAndProtos/hit_flash.tres" id="5_dic3x"]
+[ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="5_uio4o"]
 [ext_resource type="Texture2D" uid="uid://5pqxlre1amih" path="res://Assets/Baddies/tank_dark.png" id="6_c006g"]
 [ext_resource type="PackedScene" uid="uid://dhqdc43v3lx86" path="res://GameData/Baddies/ScriptsAndProtos/baddy_health_bar.tscn" id="7_ptvfa"]
 
-[sub_resource type="Resource" id="Resource_tji8d"]
-resource_local_to_scene = true
+[sub_resource type="Resource" id="Resource_ptvfa"]
 script = ExtResource("4_soyye")
-spawn_per_wave = 10
-base_damage = 10.0
 metadata/_custom_type_script = "uid://citwba61de3ku"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7b3mk"]
@@ -29,7 +27,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:material:shader_parameter/enabled")
+tracks/0/path = NodePath("../Sprite2D:material:shader_parameter/enabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -45,7 +43,7 @@ length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:material:shader_parameter/enabled")
+tracks/0/path = NodePath("../Sprite2D:material:shader_parameter/enabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -65,31 +63,37 @@ _data = {
 resource_local_to_scene = true
 radius = 0.01
 
-[node name="Baddy" type="Node2D" node_paths=PackedStringArray("path_health_bar", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_aura", "path_sprite")]
+[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("path_status_display", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_aura", "path_baddy_texture", "path_mouse_detection", "path_selection_circle") groups=["baddies"]]
+input_pickable = true
 script = ExtResource("1_21g7o")
-path_health_bar = NodePath("HealthBarDisplay")
+path_status_display = NodePath("StatusDisplay")
 path_impact_area = NodePath("Impact")
 path_damage_number_origin = NodePath("DamageNumberOrigin")
 path_hit_flash = NodePath("HitFlashAnimation")
 path_aura = NodePath("AuraRange/CollisionShape2D")
-path_sprite = NodePath("Sprite2D")
-data = SubResource("Resource_tji8d")
+path_baddy_texture = NodePath("BaddyTexture")
+data = SubResource("Resource_ptvfa")
+path_mouse_detection = NodePath(".")
+path_selection_circle = NodePath("SelectionCircle")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["baddies"]]
+[node name="SelectionCircle" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(0, 1, 0, 1)
+position = Vector2(-2.3841858e-07, -7.1525574e-07)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("5_uio4o")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="MouseDetection" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_7b3mk")
 debug_color = Color(0, 0.6, 0.7, 0.42)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="BaddyTexture" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_44shp")
 texture = ExtResource("6_c006g")
 
-[node name="HealthBarDisplay" parent="." instance=ExtResource("7_ptvfa")]
-offset_left = -30.0
-offset_top = 18.0
-offset_right = 30.0
-offset_bottom = 32.0
+[node name="StatusDisplay" parent="." instance=ExtResource("7_ptvfa")]
+top_level = true
+position = Vector2(-32, 26)
 
 [node name="Impact" type="Marker2D" parent="."]
 position = Vector2(-15, -15)
@@ -102,9 +106,11 @@ libraries = {
 }
 
 [node name="AuraRange" type="Area2D" parent="."]
+input_pickable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AuraRange"]
 shape = SubResource("CircleShape2D_8h6r8")
 
-[connection signal="body_entered" from="AuraRange" to="." method="_on_aura_range_body_entered"]
-[connection signal="body_exited" from="AuraRange" to="." method="_on_aura_range_body_exited"]
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
