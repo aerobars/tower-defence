@@ -73,6 +73,7 @@ func _process(delta: float) -> void:
 	data.periodic_timer += delta
 	if data.periodic_timer >= data.periodic_interval:
 		periodic_effect_trigger()
+		data.periodic_timer = 0.0
 	for buff in data.active_buffs:
 		data.active_buffs[buff].update(delta, global_position)
 
@@ -104,9 +105,10 @@ func _physics_process(delta: float) -> void:
 	global_position = global_position.move_toward(current_path_point, movement_delta)
 
 func periodic_effect_trigger() -> void:
-	if not data.periodic_effect.is_empty():
-		for effect in data.periodic_effect:
-			add_buff(effect, level)
+	if data.periodic_effect.is_empty():
+		return
+	for effect in data.periodic_effect:
+		add_buff(effect, level)
 
 func update_pathing() -> void:
 	current_path = path_map.update_pathing(global_position, waypoint_index)
@@ -119,9 +121,9 @@ func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void:
 	var pending_buffs : Array[Buff] = []
 	for buff in data.active_buffs:
 		data.active_buffs[buff].level = tower_mod_level
-		if buff is OnHitBuff:
+		if buff is BuffOnHit:
 			data.active_buffs[buff].on_hit_check(dmg[1], pending_buffs)
-	debuff.append_array(pending_buffs)
+	#debuff.append_array(pending_buffs)
 	if debuff != []:
 		for i in debuff:
 			add_buff(i, level)
@@ -166,7 +168,6 @@ func destroy() -> void:
 		return
 	destroyed = true
 	data.health_depleted.disconnect(destroy)
-	#$CharacterBody2D.free()
 	for effect in data.last_laugh_effects:
 		await effect.last_laugh(self)
 	await (get_tree().create_timer(0.2).timeout)
@@ -176,7 +177,7 @@ func destroy() -> void:
 ##Aura Functions
 
 func _on_aura_range_body_entered(body: Node2D) -> void:
-	if path_aura.get_shape().radius < 1 or data.initial_buffs.size() == 0: #min radius is 0.01, instead of making separate boolean variable
+	if path_aura.get_shape().radius < 1 or data.initial_buffs.size() < 1: #min radius is 0.01, instead of making separate boolean variable
 		return
 	for buff in data.initial_buffs:
 		var buff_targets = buff.buff_targets
@@ -199,29 +200,9 @@ func _on_aura_range_body_exited(body: Node2D) -> void:
 		elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
 			remove_buff(buff, body)
 
-#func add_buff(body : CollisionObject2D, buff : Buff, cur_level : int) -> void:
-#	body.data.add_buff(buff, cur_level)
-
-#func remove_buff(body : CollisionObject2D, buff : Buff) -> void:
-#	body.data.remove_buff(buff)
-
 ## Input Functions
 
-#func _on_mouse_entered() -> void:
-#	path_selection_circle.visible = true
-
-#func _on_mouse_exited() -> void:
-#	if not selected:
-#		path_selection_circle.visible = false
-
-#func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-#	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-#		unit_selected.emit(self)
-
 func set_selected(value: bool) -> void:
-#	selected = value
-#	if not selected:
-#		path_selection_circle.visible = false
 	super(value)
 	if selected:
 		open_baddy_display.emit(self)

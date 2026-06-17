@@ -185,6 +185,8 @@ func spawn_baddies(wave_data) -> void:
 				
 				var new_baddy = BADDY_SCENE.instantiate()
 				new_baddy.data = baddy["data"].duplicate(true)
+				
+				
 				new_baddy.base_damage.connect(on_base_damage)
 				new_baddy.baddy_death.connect(on_baddy_death)
 				new_baddy.unit_selected.connect(on_unit_selection)
@@ -286,8 +288,7 @@ func set_tower_preview() -> void:
 				scaling = tower_preview.non_aura_radius / 600.0
 			range_texture.scale = Vector2(scaling, scaling)
 			path_tower_preview_container.add_child(range_texture, true)
-			range_texture.position = Vector2(build_data["shape"][slot_id].x * path_map_node.CELL_SIZE, 
-												build_data["shape"][slot_id].y * path_map_node.CELL_SIZE) #position needed if range is offest from tower
+			range_texture.position = Vector2(build_data["shape"][slot_id].x * path_map_node.CELL_SIZE, build_data["shape"][slot_id].y * path_map_node.CELL_SIZE) #position needed if range is offest from tower
 			#add mod texture
 
 	path_tower_preview_container.add_child(tower_preview, true)

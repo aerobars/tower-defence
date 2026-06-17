@@ -37,6 +37,7 @@ var attack_tracker : int
 
 
 ## Initial Setup
+
 func _ready():
 	if data != null:
 		data.buff_owner = self
@@ -48,6 +49,7 @@ func _ready():
 	#above signals allow other mods to be added to auras after they are updated
 
 ## Mod Updates
+
 func update_mod(net_power : int = 0) -> void:
 	if data == null:
 		path_range_aoe.get_shape().radius = 0.0
@@ -96,7 +98,6 @@ func _on_mouse_exited() -> void:
 	hide_range_display.emit()
 	#clear_popup.emit()
 
-
 func _on_timer_timeout() -> void:
 #	display_popup.emit(POPUP_TYPE, data)
 	pass # Replace with function body.
@@ -108,6 +109,7 @@ func _on_timer_timeout() -> void:
 	#path_tower_highlight.visible = value
 
 ## In-Game Function
+
 func _process(delta: float) -> void:
 	if data == null or data is PowerMod: 
 		return
@@ -122,7 +124,7 @@ func _process(delta: float) -> void:
 			if not path_animation_player.is_playing():
 				turn()
 		if attack_timer >= data.current_attack_speed:
-			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.aura_effect and get_parent().aura_tower:
+			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.persistent_effect and get_parent().aura_tower:
 				for baddy in baddies_in_range:
 					add_buff(data.buff_data, get_parent().tower_data.level, baddy)
 			elif data is WeaponMod:
@@ -139,7 +141,7 @@ func _on_range_body_entered(body) -> void:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body)
-		if data.mod_class == data.ModClass.AURA and data.buff_data.aura_effect:
+		if data.mod_class == data.ModClass.AURA and data.buff_data.persistent_effect:
 			add_buff(data.buff_data, get_parent().tower_data.level, body)
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		if data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
@@ -153,20 +155,14 @@ func _on_range_body_exited(body) -> void:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body)
-		if data.mod_class == data.ModClass.AURA and data.buff_data.aura_effect:
+		if data.mod_class == data.ModClass.AURA and data.buff_data.persistent_effect:
 			remove_buff(data.buff_data, body)
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		aura_targets.erase(body)
 		remove_buff(data.buff_data, body)
 
-#func add_buff(body) -> void:
-#	body.data.add_buff(data.buff_data, get_parent().tower_data.level)
-
-#func remove_buff(body) -> void:
-#	body.data.remove_buff(data.buff_data)
-
-
 ## Weapon Function
+
 func select_targets() -> Array:
 	return baddies_in_range
 

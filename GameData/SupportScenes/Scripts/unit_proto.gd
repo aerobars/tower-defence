@@ -16,11 +16,11 @@ func _ready() -> void:
 
 ## Buff
 
-##UnitProtoype function, body defaults to self
+##UnitProtoype function, calls the add_buff function in data resource, body defaults to self
 func add_buff(buff : Buff, cur_level : int = 0, body : CollisionObject2D = self) -> void:
 	body.data.add_buff(buff, cur_level)
 
-##UnitProtoype function, body defaults to self
+##UnitProtoype function, calls the remove_buff function in data resource, body defaults to self
 func remove_buff(buff: Buff, body : CollisionObject2D = self) -> void:
 	body.data.remove_buff(buff)
 

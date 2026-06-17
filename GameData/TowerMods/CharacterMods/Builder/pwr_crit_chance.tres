@@ -14,5 +14,6 @@ power_surplus_buffable_stats = Array[int]([4])
 info_name = "Crit Chance Boost Power"
 info_description = "Provides power and increases Crit Chance of weapon mods by 10% per point of surplus power."
 info_texture = SubResource("AtlasTexture_do3r7")
+base_power_levels = Array[int]([4, 4, 4, 4, 4])
 mod_class = 1
 metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

@@ -1,4 +1,4 @@
-class_name AbsoluteBuff extends StatBuff
+class_name BuffAbsolute extends BuffStat
 
 
 func set_stat(buff_owner) -> void:

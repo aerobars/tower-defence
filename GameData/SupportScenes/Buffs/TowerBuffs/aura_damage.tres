@@ -14,5 +14,6 @@ buff_type = 1
 info_name = "Damage"
 info_display_icon = SubResource("AtlasTexture_1au8h")
 buff_targets = 1
+effect_amount = Array[float]([5.0, 5.0, 5.0, 5.0, 5.0])
 aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

@@ -10,11 +10,11 @@ region = Rect2(416, 176, 16, 16)
 [resource]
 script = ExtResource("1_o1r8d")
 stat = 2
-buff_amount = Array[float]([0.25, 0.25, 0.25, 0.25, 0.25])
 buff_type = 2
 info_name = "Attack Speed"
 info_display_icon = SubResource("AtlasTexture_gp121")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 1
+effect_amount = Array[float]([0.25, 0.25, 0.25, 0.25, 0.25])
 aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

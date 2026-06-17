@@ -10,12 +10,12 @@ region = Rect2(32, 32, 32, 32)
 [resource]
 script = ExtResource("1_befca")
 stat = 64
-buff_amount = Array[float]([-0.25, -0.25, -0.25, -0.25, -0.25])
 buff_type = 2
 info_name = "Slaura"
 info_display_icon = SubResource("AtlasTexture_51r1l")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_duration = Array[float]([5.0, 5.0, 5.0, 5.0, 5.0])
 buff_targets = 2
+effect_amount = Array[float]([-0.3, -0.3, -0.3, -0.3, -0.3])
 aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

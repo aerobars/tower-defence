@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="OnHitBuff" load_steps=4 format=3 uid="uid://b5ha8kudqnffh"]
+[gd_resource type="Resource" script_class="BuffOnHit" load_steps=4 format=3 uid="uid://b5ha8kudqnffh"]
 
 [ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_onhit.gd" id="1_ibicu"]
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_tskji"]
@@ -11,11 +11,11 @@ region = Rect2(400, 192, 16, 16)
 script = ExtResource("1_ibicu")
 success_chance_per_stack = Array[float]([0.3, 0.3, 0.3, 0.3, 0.3])
 damage_tag = 8
-effect_aoe = Array[float]([150.0, 150.0, 150.0, 150.0, 150.0])
-effect_amount = Array[float]([15.0, 15.0, 15.0, 15.0, 15.0])
 info_name = "Heal"
 info_display_icon = SubResource("AtlasTexture_au4bm")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_duration = Array[float]([0.0, 0.0, 0.0, 0.0, 0.0])
-aura_effect = true
+buff_targets = 2
+buff_effect_aoe = Array[float]([150.0, 150.0, 150.0, 150.0, 150.0])
+effect_amount = Array[float]([15.0, 15.0, 15.0, 15.0, 15.0])
 metadata/_custom_type_script = "uid://cxkis28w2jd6p"

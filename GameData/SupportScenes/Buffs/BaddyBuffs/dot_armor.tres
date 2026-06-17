@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="BuffPeriodic" load_steps=2 format=3 uid="uid://bbxew1qe87grq"]
+
+[ext_resource type="Script" uid="uid://drjxef8b6c7mc" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_periodic.gd" id="1_hwjpd"]
+
+[resource]
+script = ExtResource("1_hwjpd")
+metadata/_custom_type_script = "uid://drjxef8b6c7mc"

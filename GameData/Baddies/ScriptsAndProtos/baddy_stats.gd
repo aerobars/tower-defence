@@ -74,9 +74,6 @@ func setup_stats() -> void:
 ##Runtime
 
 func add_buff(buff: Buff, buff_level : int, amt : int = 1) -> void:
-#	var buff_names : Array
-#	for _buff in active_buffs:
-#		buff_names.append(_buff.name)
 	if not active_buffs.has(buff):
 		var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
 		active_buffs[buff] = new_inst
@@ -95,21 +92,21 @@ func recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
 	var stat_addends: Dictionary = {} #Amt to add to stats
 	for buff in active_buffs.keys():
-		if buff is StatBuff:
+		if buff is BuffStat:
 			var inst = active_buffs[buff]
 			var stat_name : String = ""
 			for stat in GlobalEnums.BuffableStats.keys():
 				if buff.stat & GlobalEnums.BuffableStats[stat]:
 					stat_name = stat.to_lower()
 					match buff.buff_type:
-						StatBuff.BuffType.ADD:
+						BuffStat.BuffType.ADD:
 							if not stat_addends.has(stat_name):
 								stat_addends[stat_name] = 0.0
-							stat_addends[stat_name] += buff.buff_amount[inst.level] * inst.stacks
-						StatBuff.BuffType.MULTIPLY:
+							stat_addends[stat_name] += buff.effect_amount[inst.level] * inst.stacks
+						BuffStat.BuffType.MULTIPLY:
 							if not stat_multipliers.has(stat_name):
 								stat_multipliers[stat_name] = 1.0
-							stat_multipliers[stat_name] += buff.buff_amount[inst.level] * inst.stacks
+							stat_multipliers[stat_name] += buff.effect_amount[inst.level] * inst.stacks
 							stat_multipliers[stat_name] = max(stat_multipliers[stat_name], 0)
 	
 	#var stat_sample_pos: float = level
@@ -129,10 +126,10 @@ func recalculate_stats() -> void:
 	current_move_speed = clamp(current_move_speed, 75, 500) #don't use setter for this for stun MS
 	
 	for buff in active_buffs.keys():
-		if buff is StatBuff and buff.buff_type == StatBuff.BuffType.ABS:
+		if buff is BuffStat and buff.buff_type == BuffStat.BuffType.ABS:
 			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			var cur_property_name: String = str("current_" + stat_name)
-			set(cur_property_name, buff.buff_amount)
+			set(cur_property_name, buff.effect_amount)
 	
 	stats_updated.emit()
 

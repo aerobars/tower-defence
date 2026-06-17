@@ -9,34 +9,34 @@ var stacks : int = 0
 var dot_timer : float
 var time_remaining : float
 var last_position : Vector2
-var stat_buff : StatBuff
 var level : int = 0
+#var stat_buff : StatBuff
 #var affected_stats : Array[GlobalEnums.BuffableStats]
 
-##Setup and Updates
+## Setup and Updates
+
 func _init(_buff: Buff, _buff_owner, _buff_level : int = 0) -> void:
 	buff = _buff
 	buff_owner = _buff_owner
 	level = _buff_level
 	time_remaining = buff.buff_duration[level]
 	last_position = buff_owner.global_position
-	
 
 func update(delta: float, position: Vector2 = Vector2(0,0)) -> void:
 	if buff is DotBuff:
 		call(buff.info_name.to_snake_case(), delta, position)
 		if dot_timer >= buff.dot_interval[level]:
-			buff_owner.calculate_damage([buff.damage_amount[level] * stacks, buff.damage_tag, false])
+			effect_trigger()
+		#	buff_owner.calculate_damage([buff.damage_amount[level] * stacks, buff.damage_tag, false])
 			dot_timer = 0.0
-	if buff.aura_effect: #prevents aura buffs from expiring while active 
+	if buff.persistent_effect: #prevents aura buffs from expiring while active 
 		return
 	time_remaining -= delta
 	if time_remaining <= 0.0:
 		buff_owner.data.remove_buff(buff)
 
-##Function names = buff names, if updating buff names, update func names too!!
+## DoT Function names = buff names, if updating buff names, update func names too!!
 
-##DoT
 func bleed(_delta : float, position : Vector2) -> void:
 	dot_timer += position.distance_to(last_position)
 	last_position = position
@@ -44,28 +44,41 @@ func bleed(_delta : float, position : Vector2) -> void:
 func burn(delta : float, _position : Vector2) -> void:
 	dot_timer += delta
 
-##On Hit
+## On Hit
+
 func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 	if randf() <= float(buff.success_chance_per_stack[level] * stacks):
-		var onhit_targets : Array
-		if buff_owner.data.aura_aoe > 1:
-			onhit_targets = await AOESetup.setup_aoe(
-				buff_owner, 
-				buff_owner.global_position,
-				GlobalEnums.Targets.keys()[buff.buff_targets].to_lower(), 
-				buff_owner.data.aura_aoe)
-		else:
-			onhit_targets = [buff_owner]
-		if buff.damage_tag > 0:
-			for target in onhit_targets:
-				#if buff.damage_tag != GlobalEnums.DamageTag.HEAL:
-				buff_owner.calculate_damage([buff.effect_amount[level] * stacks, buff.damage_tag, false])
-				#else:
-					#target.data.health += buff.effect_amount[level]
-					#DamageNumbers.display_number(buff.effect_amount[level], target.global_position, GlobalEnums.DamageTag.HEAL, false)
-		if buff.buff_to_apply != null:
-			for target in onhit_targets:
-				target.data.add_buff(buff.buff_to_apply)
-		#call(buff.name.to_snake_case(), damage_tags, pending_buffs)
+		print('on hit success')
+		effect_trigger()
+		if buff.persistent_effect == false:
+			buff_owner.data.remove_buff(buff)
+	print("on hit check completed")
 
-##Periodic Triggers
+## Periodic Triggers
+
+func effect_trigger() -> void:
+	var onhit_targets : Array
+	onhit_targets = []
+	if buff.buff_targets == GlobalEnums.Targets.BADDIES or buff.buff_targets == GlobalEnums.Targets.TOWERS:
+		onhit_targets = await AOESetup.setup_aoe(
+			buff_owner, 
+			buff_owner.global_position,
+			GlobalEnums.Targets.keys()[buff.buff_targets].to_lower(), 
+			buff.buff_effect_aoe[level])
+	elif buff.buff_targets == GlobalEnums.Targets.SELF:
+		onhit_targets = [buff_owner]
+	else:
+		print("no effect targets")
+		return
+#	print("targets for ", buff_owner.data.info_name, ": ", onhit_targets)
+	if buff.damage_tag > 0:
+		for target in onhit_targets:
+			buff_owner.calculate_damage([buff.effect_amount[level] * stacks, buff.damage_tag, false])
+	else:
+		print("no dmg tag")
+	if buff.buff_to_apply != null:
+		for target in onhit_targets:
+			target.data.add_buff(buff.buff_to_apply, level)
+	else:
+		print("no buff to apply")
+	#call(buff.name.to_snake_case(), damage_tags, pending_buffs)

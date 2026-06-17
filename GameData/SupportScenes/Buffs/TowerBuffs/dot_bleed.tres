@@ -1,20 +1,19 @@
-[gd_resource type="Resource" script_class="DotBuff" load_steps=4 format=3 uid="uid://bknnisvsdw5ra"]
+[gd_resource type="Resource" script_class="BuffPeriodic" load_steps=4 format=3 uid="uid://bknnisvsdw5ra"]
 
+[ext_resource type="Script" uid="uid://drjxef8b6c7mc" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_periodic.gd" id="1_bjplq"]
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_n6dkp"]
-[ext_resource type="Script" uid="uid://2ja3gh17qp02" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_dot.gd" id="1_ojdmr"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_d0qat"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_n6dkp"]
 atlas = ExtResource("1_n6dkp")
 region = Rect2(656, 160, 16, 16)
 
 [resource]
-script = ExtResource("1_ojdmr")
+script = ExtResource("1_bjplq")
 damage_tag = 1
-dot_interval = Array[float]([25.0, 25.0, 25.0, 25.0, 25.0])
+effect_interval = Array[float]([10.0, 10.0, 10.0, 10.0, 10.0])
 info_name = "Bleed"
-info_display_icon = SubResource("AtlasTexture_d0qat")
+info_display_icon = SubResource("AtlasTexture_n6dkp")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
-buff_duration = Array[float]([5.0, 5.0, 5.0, 5.0, 5.0])
+buff_duration = Array[float]([10.0, 10.0, 10.0, 10.0, 10.0])
 buff_targets = 2
-aura_effect = null
-metadata/_custom_type_script = "uid://2ja3gh17qp02"
+metadata/_custom_type_script = "uid://drjxef8b6c7mc"

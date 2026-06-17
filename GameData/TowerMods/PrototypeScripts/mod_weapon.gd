@@ -60,13 +60,13 @@ func calculate_damage() -> Array: #returns [total attack damage, damage tags, di
 		return [current_damage, damage_tags, false]
 
 func add_on_hit_effect(buff : Buff) -> void:
-	if buff is not StatBuff and buff.damage_tag > 0:
+	if buff is not BuffStat and buff.damage_tag > 0:
 		damage_tags |= buff.damage_tag
 	buff_owner.path_buff_display.update_display(buff)
 	on_hit_effects.append(buff)
 
 func remove_on_hit_effect(buff : Buff) -> void:
-	if buff is not StatBuff and buff.damage_tag > 0:
+	if buff is not BuffStat and buff.damage_tag > 0:
 		damage_tags &= ~buff.damage_tag
 	buff_owner.path_buff_display.remove_buff(buff)
 	on_hit_effects.erase(buff)

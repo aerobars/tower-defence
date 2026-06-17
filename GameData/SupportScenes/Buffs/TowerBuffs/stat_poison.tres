@@ -10,11 +10,11 @@ region = Rect2(16, 16, 32, 32)
 [resource]
 script = ExtResource("1_qgkxy")
 stat = 64
-buff_amount = Array[float]([-0.1, -0.1, -0.1, -0.1, -0.1])
 buff_type = 2
 info_name = "Posion"
 info_display_icon = SubResource("AtlasTexture_p6gfi")
 stack_limit = Array[int]([10, 20, 30, 40, 50])
 buff_duration = Array[float]([2.0, 2.0, 2.0, 2.0, 2.0])
 buff_targets = 2
+effect_amount = Array[float]([0.01, 0.01, 0.01, 0.01, 0.01])
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
