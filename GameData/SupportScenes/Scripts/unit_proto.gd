@@ -6,6 +6,7 @@ signal unit_selected(unit: UnitPrototype)
 @export_group("Unit Node Paths", "path_")
 @export var path_mouse_detection : CollisionObject2D
 @export var path_selection_circle : Sprite2D
+@export var path_effect_aoe_container : Area2D
 
 var selected : bool = false
 
@@ -23,6 +24,13 @@ func add_buff(buff : Buff, cur_level : int = 0, body : CollisionObject2D = self)
 ##UnitProtoype function, calls the remove_buff function in data resource, body defaults to self
 func remove_buff(buff: Buff, body : CollisionObject2D = self) -> void:
 	body.data.remove_buff(buff)
+
+func add_buff_aoe(buff : Buff, _body : CollisionObject2D = self) -> void:
+		var new_aoe = EffectAoE.new()
+		new_aoe.shape = CircleShape2D
+		new_aoe.get_shape().radius = buff.buff_effect_aoe
+		new_aoe.connected_buff = buff
+		path_effect_aoe_container.add_child(new_aoe)
 
 ## Mouse Detection
 

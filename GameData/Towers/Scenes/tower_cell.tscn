@@ -1,10 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://bp51akjapuerf"]
+[gd_scene load_steps=12 format=3 uid="uid://bp51akjapuerf"]
 
 [ext_resource type="Script" uid="uid://dvux8hj1euiax" path="res://GameData/Towers/Scripts/tower_cell.gd" id="1_kv3af"]
 [ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="2_a0cob"]
 [ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="2_a3qir"]
 [ext_resource type="Texture2D" uid="uid://c44rk0b010555" path="res://Assets/Effects/towerDefense_tile297.png" id="3_a0cob"]
-[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/SupportScenes/Scenes/buff_display_container.tscn" id="4_qw5iw"]
+[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/UIScenes/GUI/Scenes/buff_display_container.tscn" id="4_qw5iw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n0uum"]
 size = Vector2(52, 52)
@@ -51,7 +51,11 @@ _data = {
 &"fire": SubResource("Animation_kyc6b")
 }
 
-[node name="TowerCellPrototype" type="StaticBody2D" node_paths=PackedStringArray("path_turret", "path_muzzle", "path_range_scene", "path_range_aoe", "path_animation_player", "path_buff_display", "path_timer", "path_mouse_detection", "path_selection_circle") groups=["towers"]]
+[sub_resource type="CircleShape2D" id="CircleShape2D_a3qir"]
+resource_local_to_scene = true
+radius = 0.01
+
+[node name="TowerCellPrototype" type="StaticBody2D" node_paths=PackedStringArray("path_turret", "path_muzzle", "path_range_scene", "path_range_aoe", "path_animation_player", "path_buff_display", "path_timer", "path_mouse_detection", "path_selection_circle", "path_effect_aoe_container") groups=["towers"]]
 input_pickable = true
 script = ExtResource("1_kv3af")
 path_turret = NodePath("TurretTexture")
@@ -63,6 +67,7 @@ path_buff_display = NodePath("BuffDisplayContainer")
 path_timer = NodePath("Timer")
 path_mouse_detection = NodePath(".")
 path_selection_circle = NodePath("SelectionCircle")
+path_effect_aoe_container = NodePath("EffectAoeContainer")
 
 [node name="TowerHighlight" type="ColorRect" parent="."]
 visible = false
@@ -129,6 +134,12 @@ offset_bottom = 24.0
 grow_horizontal = 2
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="EffectAoeContainer" type="Area2D" parent="."]
+input_pickable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectAoeContainer"]
+shape = SubResource("CircleShape2D_a3qir")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

@@ -62,6 +62,8 @@ func _ready() -> void:
 	#buff setup
 	for buff in data.initial_buffs:
 		add_buff(buff, level)
+		if data.aura_aoe > 1:
+			add_buff_aoe(buff, self)
 	for effect in data.last_laugh_effects:
 		path_status_display.path_buff_display_container.update_display(effect)
 		if effect is LastLaughSpawn:
@@ -176,7 +178,33 @@ func destroy() -> void:
 
 ##Aura Functions
 
+func _on_effect_aoe_container_body_shape_entered(_body_rid: RID, body: Node2D, _body_shape_index: int, local_shape_index: int) -> void:
+	var shape_node = shape_owner_get_owner(shape_find_owner(local_shape_index))
+	if shape_node.get_shape().radius < 1 or data.initial_buffs.size() < 1: #min radius is 0.01, instead of making separate boolean variable
+		return
+	var buff_targets = shape_node.connected_buff.buff_targets
+	if buff_targets == GlobalEnums.Targets.NONE:
+		return
+	if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
+		add_buff(shape_node.connected_buff, level, body)
+	elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
+		add_buff(shape_node.connected_buff, level, body)
+
+func _on_effect_aoe_container_body_shape_exited(_body_rid: RID, body: Node2D, _body_shape_index: int, local_shape_index: int) -> void:
+	var shape_node = shape_owner_get_owner(shape_find_owner(local_shape_index))
+	if shape_node.get_shape().radius < 1: #min radius is 0.01, instead of making separate boolean variable
+		return
+	var buff_targets = shape_node.connected_buff.buff_targets
+	if buff_targets == GlobalEnums.Targets.NONE:
+		return
+	if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
+		remove_buff(shape_node.connected_buff, body)
+	elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
+		remove_buff(shape_node.connected_buff, body)
+
+
 func _on_aura_range_body_entered(body: Node2D) -> void:
+	return
 	if path_aura.get_shape().radius < 1 or data.initial_buffs.size() < 1: #min radius is 0.01, instead of making separate boolean variable
 		return
 	for buff in data.initial_buffs:
@@ -189,6 +217,7 @@ func _on_aura_range_body_entered(body: Node2D) -> void:
 			add_buff(buff, level, body)
 
 func _on_aura_range_body_exited(body: Node2D) -> void:
+	return
 	if path_aura.get_shape().radius < 1: #min radius is 0.01, instead of making separate boolean variable
 		return
 	for buff in data.initial_buffs:

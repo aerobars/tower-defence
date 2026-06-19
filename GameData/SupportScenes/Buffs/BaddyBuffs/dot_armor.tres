@@ -1,7 +1,33 @@
-[gd_resource type="Resource" script_class="BuffPeriodic" load_steps=2 format=3 uid="uid://bbxew1qe87grq"]
+[gd_resource type="Resource" script_class="BuffPeriodic" load_steps=7 format=3 uid="uid://bbxew1qe87grq"]
 
 [ext_resource type="Script" uid="uid://drjxef8b6c7mc" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_periodic.gd" id="1_hwjpd"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_spwm1"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="2_afywx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x2s3w"]
+atlas = ExtResource("1_spwm1")
+region = Rect2(624, 64, 16, 16)
+
+[sub_resource type="Resource" id="Resource_aefme"]
+script = ExtResource("2_afywx")
+stat = 16
+buff_type = 1
+info_name = "Armor"
+info_display_icon = SubResource("AtlasTexture_x2s3w")
+buff_targets = 3
+persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofoi2"]
+atlas = ExtResource("1_spwm1")
+region = Rect2(480, 0, 16, 16)
 
 [resource]
 script = ExtResource("1_hwjpd")
+buff_to_apply = SubResource("Resource_aefme")
+info_name = "Armor Up"
+info_display_icon = SubResource("AtlasTexture_ofoi2")
+stack_limit = Array[int]([1, 1, 1, 1, 1])
+buff_targets = 3
+persistent_effect = true
 metadata/_custom_type_script = "uid://drjxef8b6c7mc"

@@ -11,6 +11,6 @@ info_name = "Move Speed"
 info_display_icon = ExtResource("1_6ig0j")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 2
-effect_amount = Array[float]([0.25, 0.25, 0.25, 0.25, 0.25])
+buff_effect_aoe = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 persistent_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

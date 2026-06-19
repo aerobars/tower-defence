@@ -18,7 +18,6 @@ buff_type = 1
 info_name = "Defence+"
 info_display_icon = SubResource("AtlasTexture_2nqi8")
 buff_targets = 3
-aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [resource]

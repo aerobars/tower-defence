@@ -63,15 +63,16 @@ _data = {
 resource_local_to_scene = true
 radius = 0.01
 
-[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("path_status_display", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_aura", "path_baddy_texture", "path_mouse_detection", "path_selection_circle") groups=["baddies"]]
+[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("path_status_display", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_aura", "path_baddy_texture", "path_effect_aoe_container", "path_mouse_detection", "path_selection_circle") groups=["baddies"]]
 input_pickable = true
 script = ExtResource("1_21g7o")
 path_status_display = NodePath("StatusDisplay")
 path_impact_area = NodePath("Impact")
 path_damage_number_origin = NodePath("DamageNumberOrigin")
 path_hit_flash = NodePath("HitFlashAnimation")
-path_aura = NodePath("AuraRange/CollisionShape2D")
+path_aura = NodePath("EffectAoEContainer/CollisionShape2D")
 path_baddy_texture = NodePath("BaddyTexture")
+path_effect_aoe_container = NodePath("EffectAoEContainer")
 data = SubResource("Resource_ptvfa")
 path_mouse_detection = NodePath(".")
 path_selection_circle = NodePath("SelectionCircle")
@@ -105,10 +106,10 @@ libraries = {
 &"": SubResource("AnimationLibrary_8x5kb")
 }
 
-[node name="AuraRange" type="Area2D" parent="."]
+[node name="EffectAoEContainer" type="Area2D" parent="."]
 input_pickable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AuraRange"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectAoEContainer"]
 shape = SubResource("CircleShape2D_8h6r8")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]

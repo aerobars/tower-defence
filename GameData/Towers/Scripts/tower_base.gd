@@ -71,7 +71,7 @@ func get_coords_from_vectors(cell: Vector2i) -> Vector2:
 	@warning_ignore("integer_division")
 	return Vector2(cell.x * CELL_SIZE, cell.y * CELL_SIZE)
 
-func get_slot_id(value: int) -> void:
+func get_slot_id(_value: int) -> void:
 	
 	pass
 
