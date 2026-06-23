@@ -8,8 +8,8 @@ signal remove_buff_display(buff: Buff)
 
 @export_group("Baddy Info", "info_")
 @export var info_name : String
-@export_multiline var info_description : String
 @export var info_texture : Texture2D
+@export_multiline var info_description : String
 
 @export_group("Spawn Data", "spawn_")
 @export var spawn_per_wave : int = 1
@@ -46,15 +46,7 @@ var health : float = 0 : set = _on_health_set
 
 ##Buffs and Auras
 @export_group("In Game Effects")
-##Combat Round = 6.0s
-@export var periodic_interval : float = 6.0
-var periodic_timer : float = 0.0
-@export var periodic_effect : Array[Buff] = []
-@export var aura_aoe : float = 0.0
-##buffs such as auras
-@export var initial_buffs : Array[Buff] = []
-##buffs that trigger when the baddy dies
-@export var last_laugh_effects : Array[LastLaugh] = []
+@export var innate_abilities : Array[PackedScene]
 var active_buffs: Dictionary[Buff, BuffInstance]
 var buff_owner : Node2D
 

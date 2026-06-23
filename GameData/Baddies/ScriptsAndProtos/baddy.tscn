@@ -1,8 +1,6 @@
-[gd_scene load_steps=16 format=3 uid="uid://cjn6jcx1rl4js"]
+[gd_scene format=3 uid="uid://cjn6jcx1rl4js"]
 
 [ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/ScriptsAndProtos/baddy.gd" id="1_21g7o"]
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_ki846"]
-[ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/last_laugh.gd" id="3_ptvfa"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="4_soyye"]
 [ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/ScriptsAndProtos/hit_flash.tres" id="5_dic3x"]
 [ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="5_uio4o"]
@@ -11,6 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_ptvfa"]
 script = ExtResource("4_soyye")
+innate_abilities = Array[PackedScene]([null])
 metadata/_custom_type_script = "uid://citwba61de3ku"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7b3mk"]
@@ -59,58 +58,48 @@ _data = {
 &"hit_flash": SubResource("Animation_kdlqi")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_8h6r8"]
-resource_local_to_scene = true
-radius = 0.01
-
-[node name="CharacterBody2D" type="CharacterBody2D" node_paths=PackedStringArray("path_status_display", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_aura", "path_baddy_texture", "path_effect_aoe_container", "path_mouse_detection", "path_selection_circle") groups=["baddies"]]
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=190301640 node_paths=PackedStringArray("path_status_display", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_aura", "path_baddy_texture", "path_mouse_detection", "path_selection_circle", "path_effect_aoe_container") groups=["baddies"]]
 input_pickable = true
 script = ExtResource("1_21g7o")
 path_status_display = NodePath("StatusDisplay")
 path_impact_area = NodePath("Impact")
 path_damage_number_origin = NodePath("DamageNumberOrigin")
 path_hit_flash = NodePath("HitFlashAnimation")
-path_aura = NodePath("EffectAoEContainer/CollisionShape2D")
+path_aura = NodePath("")
 path_baddy_texture = NodePath("BaddyTexture")
-path_effect_aoe_container = NodePath("EffectAoEContainer")
 data = SubResource("Resource_ptvfa")
 path_mouse_detection = NodePath(".")
 path_selection_circle = NodePath("SelectionCircle")
+path_effect_aoe_container = NodePath("")
 
-[node name="SelectionCircle" type="Sprite2D" parent="."]
+[node name="SelectionCircle" type="Sprite2D" parent="." unique_id=2076822852]
 visible = false
 modulate = Color(0, 1, 0, 1)
 position = Vector2(-2.3841858e-07, -7.1525574e-07)
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("5_uio4o")
 
-[node name="MouseDetection" type="CollisionShape2D" parent="."]
+[node name="MouseDetection" type="CollisionShape2D" parent="." unique_id=693995944]
 shape = SubResource("RectangleShape2D_7b3mk")
 debug_color = Color(0, 0.6, 0.7, 0.42)
 
-[node name="BaddyTexture" type="Sprite2D" parent="."]
+[node name="BaddyTexture" type="Sprite2D" parent="." unique_id=535085855]
 material = SubResource("ShaderMaterial_44shp")
 texture = ExtResource("6_c006g")
 
-[node name="StatusDisplay" parent="." instance=ExtResource("7_ptvfa")]
+[node name="StatusDisplay" parent="." unique_id=614670546 instance=ExtResource("7_ptvfa")]
 top_level = true
 position = Vector2(-32, 26)
 
-[node name="Impact" type="Marker2D" parent="."]
+[node name="Impact" type="Marker2D" parent="." unique_id=1011480061]
 position = Vector2(-15, -15)
 
-[node name="DamageNumberOrigin" type="Marker2D" parent="."]
+[node name="DamageNumberOrigin" type="Marker2D" parent="." unique_id=339599142]
 
-[node name="HitFlashAnimation" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_8x5kb")
-}
+[node name="HitFlashAnimation" type="AnimationPlayer" parent="." unique_id=1962352191]
+libraries/ = SubResource("AnimationLibrary_8x5kb")
 
-[node name="EffectAoEContainer" type="Area2D" parent="."]
-input_pickable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectAoEContainer"]
-shape = SubResource("CircleShape2D_8h6r8")
+[node name="AbilityContainer" type="Node2D" parent="." unique_id=1942257094]
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

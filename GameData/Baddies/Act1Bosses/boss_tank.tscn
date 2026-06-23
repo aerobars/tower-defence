@@ -1,8 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://ba1o7qkvjrf5e"]
+[gd_scene format=3 uid="uid://ba1o7qkvjrf5e"]
 
 [ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/ScriptsAndProtos/baddy.gd" id="1_6oru5"]
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="2_rtklc"]
-[ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/last_laugh.gd" id="3_pm7px"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="2_rtklc"]
+[ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/last_laugh.gd" id="3_pm7px"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="4_rb4bj"]
 [ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/ScriptsAndProtos/hit_flash.tres" id="5_r3gbj"]
 [ext_resource type="Texture2D" uid="uid://b0eq1kq5p5fbb" path="res://Assets/Baddies/tank_bigRed.png" id="6_6oru5"]

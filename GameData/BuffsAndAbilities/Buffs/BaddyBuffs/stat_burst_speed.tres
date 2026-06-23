@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="BuffStat" load_steps=3 format=3 uid="uid://cmijnc8cpsfbi"]
+[gd_resource type="Resource" script_class="BuffStat" format=3 uid="uid://cmijnc8cpsfbi"]
 
 [ext_resource type="Texture2D" uid="uid://lqnf6vvd76vi" path="res://Assets/Effects/explosion1.png" id="1_76uyw"]
-[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="2_42fmt"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="2_42fmt"]
 
 [resource]
 resource_local_to_scene = true

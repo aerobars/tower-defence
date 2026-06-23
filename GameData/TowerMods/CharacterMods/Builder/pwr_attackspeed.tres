@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="PowerMod" load_steps=5 format=3 uid="uid://c7wq5f4g5shp1"]
+[gd_resource type="Resource" script_class="PowerMod" format=3 uid="uid://c7wq5f4g5shp1"]
 
 [ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="1_55rpv"]
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_r1lbh"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="1_r1lbh"]
 [ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_55rpv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q0dr2"]

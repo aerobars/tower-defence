@@ -5,6 +5,7 @@ signal baddy_death
 signal base_damage(damage)
 signal open_baddy_display(data: BaddyStats)
 signal update_baddy_display(data: BaddyStats)
+signal hit_detected
 #signal unit_selected(baddy: Baddy)
 
 ##Node Paths
@@ -59,7 +60,12 @@ func _ready() -> void:
 	data.update_buff_display.connect(path_status_display.path_buff_display_container.update_display)
 	data.remove_buff_display.connect(path_status_display.path_buff_display_container.remove_buff)
 	
-	#buff setup
+	#ability setup
+	
+	for ability in data.inate_abilities:
+		ability.ability_owner = self
+		ability.ability_setup()
+	
 	for buff in data.initial_buffs:
 		add_buff(buff, level)
 		if data.aura_aoe > 1:
@@ -72,10 +78,6 @@ func _ready() -> void:
 ##Runtime Functions
 
 func _process(delta: float) -> void:
-	data.periodic_timer += delta
-	if data.periodic_timer >= data.periodic_interval:
-		periodic_effect_trigger()
-		data.periodic_timer = 0.0
 	for buff in data.active_buffs:
 		data.active_buffs[buff].update(delta, global_position)
 
@@ -110,7 +112,7 @@ func periodic_effect_trigger() -> void:
 	if data.periodic_effect.is_empty():
 		return
 	for effect in data.periodic_effect:
-		add_buff(effect, level)
+		add_buff(effect, self, level)
 
 func update_pathing() -> void:
 	current_path = path_map.update_pathing(global_position, waypoint_index)
@@ -121,6 +123,7 @@ func update_pathing() -> void:
 func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void: 
 	calculate_damage(dmg)
 	var pending_buffs : Array[Buff] = []
+	hit_detected.emit()
 	for buff in data.active_buffs:
 		data.active_buffs[buff].level = tower_mod_level
 		if buff is BuffOnHit:
@@ -128,7 +131,7 @@ func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void:
 	#debuff.append_array(pending_buffs)
 	if debuff != []:
 		for i in debuff:
-			add_buff(i, level)
+			add_buff(i, self ,level)
 
 ##dmg Array contains dmg amt, dmg tags, and crit status
 func calculate_damage(dmg: Array) -> void:
@@ -170,64 +173,9 @@ func destroy() -> void:
 		return
 	destroyed = true
 	data.health_depleted.disconnect(destroy)
-	for effect in data.last_laugh_effects:
-		await effect.last_laugh(self)
+	baddy_death.emit()
 	await (get_tree().create_timer(0.2).timeout)
 	queue_free()
-	baddy_death.emit()
-
-##Aura Functions
-
-func _on_effect_aoe_container_body_shape_entered(_body_rid: RID, body: Node2D, _body_shape_index: int, local_shape_index: int) -> void:
-	var shape_node = shape_owner_get_owner(shape_find_owner(local_shape_index))
-	if shape_node.get_shape().radius < 1 or data.initial_buffs.size() < 1: #min radius is 0.01, instead of making separate boolean variable
-		return
-	var buff_targets = shape_node.connected_buff.buff_targets
-	if buff_targets == GlobalEnums.Targets.NONE:
-		return
-	if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
-		add_buff(shape_node.connected_buff, level, body)
-	elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
-		add_buff(shape_node.connected_buff, level, body)
-
-func _on_effect_aoe_container_body_shape_exited(_body_rid: RID, body: Node2D, _body_shape_index: int, local_shape_index: int) -> void:
-	var shape_node = shape_owner_get_owner(shape_find_owner(local_shape_index))
-	if shape_node.get_shape().radius < 1: #min radius is 0.01, instead of making separate boolean variable
-		return
-	var buff_targets = shape_node.connected_buff.buff_targets
-	if buff_targets == GlobalEnums.Targets.NONE:
-		return
-	if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
-		remove_buff(shape_node.connected_buff, body)
-	elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
-		remove_buff(shape_node.connected_buff, body)
-
-
-func _on_aura_range_body_entered(body: Node2D) -> void:
-	return
-	if path_aura.get_shape().radius < 1 or data.initial_buffs.size() < 1: #min radius is 0.01, instead of making separate boolean variable
-		return
-	for buff in data.initial_buffs:
-		var buff_targets = buff.buff_targets
-		if buff_targets == GlobalEnums.Targets.NONE:
-			continue
-		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
-			add_buff(buff, level, body)
-		elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
-			add_buff(buff, level, body)
-
-func _on_aura_range_body_exited(body: Node2D) -> void:
-	return
-	if path_aura.get_shape().radius < 1: #min radius is 0.01, instead of making separate boolean variable
-		return
-	for buff in data.initial_buffs:
-		var buff_targets = buff.buff_targets
-		if buff_targets == GlobalEnums.Targets.NONE:
-			continue
-		if body.is_in_group("baddies") and buff_targets == GlobalEnums.Targets.BADDIES:
-			remove_buff(buff, body)
-		elif body.is_in_group("towers") and buff_targets == GlobalEnums.Targets.TOWERS:
-			remove_buff(buff, body)
 
 ## Input Functions
 

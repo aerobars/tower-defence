@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="BuffStat" load_steps=3 format=3 uid="uid://e7n1t7sxx8la"]
+[gd_resource type="Resource" script_class="BuffStat" format=3 uid="uid://e7n1t7sxx8la"]
 
 [ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="1_6ig0j"]
-[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="1_i6p2u"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="1_i6p2u"]
 
 [resource]
 script = ExtResource("1_i6p2u")

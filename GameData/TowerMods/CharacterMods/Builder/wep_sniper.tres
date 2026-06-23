@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="WeaponMod" load_steps=5 format=3 uid="uid://bom6sbxgavdq8"]
+[gd_resource type="Resource" script_class="WeaponMod" format=3 uid="uid://bom6sbxgavdq8"]
 
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_r7mg6"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="1_r7mg6"]
 [ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_qbblq"]
 [ext_resource type="Texture2D" uid="uid://ctr4gkegia16c" path="res://Assets/Towers/towerDefense_tile249.png" id="3_38wf7"]
 

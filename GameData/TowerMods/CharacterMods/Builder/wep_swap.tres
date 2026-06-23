@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="WeaponMod" load_steps=7 format=3 uid="uid://b5dugaoy183s0"]
+[gd_resource type="Resource" script_class="WeaponMod" format=3 uid="uid://b5dugaoy183s0"]
 
 [ext_resource type="Texture2D" uid="uid://b2ltga1mpc26e" path="res://Assets/Effects/explosionSmoke3.png" id="1_f6xmm"]
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd" id="1_ktte7"]
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="1_ktte7"]
 [ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_3yhde"]
-[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd" id="3_3yhde"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="3_3yhde"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s3nbj"]
 atlas = ExtResource("1_f6xmm")
