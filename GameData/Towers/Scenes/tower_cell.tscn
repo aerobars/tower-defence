@@ -1,10 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://bp51akjapuerf"]
+[gd_scene format=3 uid="uid://bp51akjapuerf"]
 
 [ext_resource type="Script" uid="uid://dvux8hj1euiax" path="res://GameData/Towers/Scripts/tower_cell.gd" id="1_kv3af"]
 [ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="2_a0cob"]
 [ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="2_a3qir"]
 [ext_resource type="Texture2D" uid="uid://c44rk0b010555" path="res://Assets/Effects/towerDefense_tile297.png" id="3_a0cob"]
-[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/UIScenes/GUI/Scenes/buff_display_container.tscn" id="4_qw5iw"]
+[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/SupportScenes/Scenes/effect_display_container.tscn" id="4_qw5iw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n0uum"]
 size = Vector2(52, 52)
@@ -55,7 +55,7 @@ _data = {
 resource_local_to_scene = true
 radius = 0.01
 
-[node name="TowerCellPrototype" type="StaticBody2D" node_paths=PackedStringArray("path_turret", "path_muzzle", "path_range_scene", "path_range_aoe", "path_animation_player", "path_buff_display", "path_timer", "path_mouse_detection", "path_selection_circle", "path_effect_aoe_container") groups=["towers"]]
+[node name="TowerCellPrototype" type="StaticBody2D" unique_id=924904849 node_paths=PackedStringArray("path_turret", "path_muzzle", "path_range_scene", "path_range_aoe", "path_animation_player", "path_buff_display", "path_timer", "path_mouse_detection", "path_selection_circle", "path_effect_aoe_container") groups=["towers"]]
 input_pickable = true
 script = ExtResource("1_kv3af")
 path_turret = NodePath("TurretTexture")
@@ -69,7 +69,7 @@ path_mouse_detection = NodePath(".")
 path_selection_circle = NodePath("SelectionCircle")
 path_effect_aoe_container = NodePath("EffectAoeContainer")
 
-[node name="TowerHighlight" type="ColorRect" parent="."]
+[node name="TowerHighlight" type="ColorRect" parent="." unique_id=798781811]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -85,44 +85,42 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.8627451, 0.42745098, 0, 0.42352942)
 
-[node name="SelectionCircle" type="Sprite2D" parent="."]
+[node name="SelectionCircle" type="Sprite2D" parent="." unique_id=2041061378]
 visible = false
 modulate = Color(0, 1, 0, 1)
 scale = Vector2(0.11, 0.11)
 texture = ExtResource("2_a0cob")
 
-[node name="TowerBase" type="Sprite2D" parent="."]
+[node name="TowerBase" type="Sprite2D" parent="." unique_id=728789668]
 texture = ExtResource("2_a3qir")
 
-[node name="MouseDetection" type="CollisionShape2D" parent="."]
+[node name="MouseDetection" type="CollisionShape2D" parent="." unique_id=1546086629]
 shape = SubResource("RectangleShape2D_n0uum")
 
-[node name="TurretTexture" type="Sprite2D" parent="."]
+[node name="TurretTexture" type="Sprite2D" parent="." unique_id=1865504837]
 scale = Vector2(0.7, 0.7)
 
-[node name="Muzzle" type="Marker2D" parent="TurretTexture"]
+[node name="Muzzle" type="Marker2D" parent="TurretTexture" unique_id=668648147]
 position = Vector2(43, 0)
 
-[node name="MuzzleFlash" type="Sprite2D" parent="TurretTexture/Muzzle"]
+[node name="MuzzleFlash" type="Sprite2D" parent="TurretTexture/Muzzle" unique_id=955695878]
 visible = false
 position = Vector2(10, 7.10543e-15)
 rotation = 1.5708
 scale = Vector2(0.7, 0.7)
 texture = ExtResource("3_a0cob")
 
-[node name="Range" type="Area2D" parent="."]
+[node name="Range" type="Area2D" parent="." unique_id=210636383]
 input_pickable = false
 
-[node name="RangeAoe" type="CollisionShape2D" parent="Range"]
+[node name="RangeAoe" type="CollisionShape2D" parent="Range" unique_id=1221913980]
 shape = SubResource("CircleShape2D_3lnkv")
 debug_color = Color(0, 0.6, 0.7, 0.42)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_260rg")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2071551637]
+libraries/ = SubResource("AnimationLibrary_260rg")
 
-[node name="BuffDisplayContainer" parent="." instance=ExtResource("4_qw5iw")]
+[node name="BuffDisplayContainer" parent="." unique_id=1406744702 instance=ExtResource("4_qw5iw")]
 custom_minimum_size = Vector2(48, 16)
 anchors_preset = 5
 anchor_left = 0.5
@@ -133,12 +131,12 @@ offset_right = 24.0
 offset_bottom = 24.0
 grow_horizontal = 2
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=671922255]
 
-[node name="EffectAoeContainer" type="Area2D" parent="."]
+[node name="EffectAoeContainer" type="Area2D" parent="." unique_id=1791205797]
 input_pickable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectAoeContainer"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EffectAoeContainer" unique_id=1716896160]
 shape = SubResource("CircleShape2D_a3qir")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]

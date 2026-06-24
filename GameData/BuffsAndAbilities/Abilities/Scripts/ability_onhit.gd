@@ -5,11 +5,11 @@ var success_chance : float :
 	get():
 		return 1
 
-func ability_setup() -> void:
+func ability_setup(_ability_owner) -> void:
 	ability_owner.hit_detected.connect(on_hit_check)
 
 func on_hit_check() -> void:
-	if data.success_chance >= randf():
+	if success_chance >= randf():
 		triggered_effect()
 
 func triggered_effect() -> void:

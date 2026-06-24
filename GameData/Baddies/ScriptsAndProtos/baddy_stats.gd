@@ -46,7 +46,7 @@ var health : float = 0 : set = _on_health_set
 
 ##Buffs and Auras
 @export_group("In Game Effects")
-@export var innate_abilities : Array[PackedScene]
+@export var innate_abilities : Array[AbilityPrototype]
 var active_buffs: Dictionary[Buff, BuffInstance]
 var buff_owner : Node2D
 

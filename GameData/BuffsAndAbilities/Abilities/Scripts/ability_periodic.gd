@@ -1,16 +1,15 @@
 ##Contains functions for abilities that trigger on a timer at regular intervals
 class_name AbilityPeriodic extends AbilityTriggeredPrototype
 
-func ability_setup() -> void:
-	pass
+func ability_setup(_ability_owner) -> void:
+	super(ability_owner)
 
-func _process(delta: float) -> void:
+func process(delta: float) -> void:
 	cooldown_timer += delta
-	if cooldown_timer >= data.cooldown:
+	if cooldown_timer >= cooldown:
 		triggered_effect()
-		cooldown_timer = 0.0
 
 func triggered_effect() -> void:
-	pass
+	cooldown_timer = 0.0
 	
 	

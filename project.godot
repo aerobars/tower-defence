@@ -36,6 +36,14 @@ window/size/viewport_height=900
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image="uid://fu8tlh1sblwb"
 
+[file_customization]
+
+folder_colors={
+"res://GameData/Baddies/": "red",
+"res://GameData/TowerMods/": "purple",
+"res://GameData/Towers/": "purple"
+}
+
 [global_group]
 
 droppable=""

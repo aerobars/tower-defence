@@ -58,19 +58,17 @@ _data = {
 &"hit_flash": SubResource("Animation_kdlqi")
 }
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=190301640 node_paths=PackedStringArray("path_status_display", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_aura", "path_baddy_texture", "path_mouse_detection", "path_selection_circle", "path_effect_aoe_container") groups=["baddies"]]
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=190301640 node_paths=PackedStringArray("path_status_display", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_baddy_texture", "path_mouse_detection", "path_selection_circle") groups=["baddies"]]
 input_pickable = true
 script = ExtResource("1_21g7o")
 path_status_display = NodePath("StatusDisplay")
 path_impact_area = NodePath("Impact")
 path_damage_number_origin = NodePath("DamageNumberOrigin")
 path_hit_flash = NodePath("HitFlashAnimation")
-path_aura = NodePath("")
 path_baddy_texture = NodePath("BaddyTexture")
 data = SubResource("Resource_ptvfa")
 path_mouse_detection = NodePath(".")
 path_selection_circle = NodePath("SelectionCircle")
-path_effect_aoe_container = NodePath("")
 
 [node name="SelectionCircle" type="Sprite2D" parent="." unique_id=2076822852]
 visible = false

@@ -14,7 +14,7 @@ signal hit_detected
 @export var path_impact_area : Marker2D
 @export var path_damage_number_origin : Marker2D
 @export var path_hit_flash : AnimationPlayer
-@export var path_aura : CollisionShape2D
+@export var path_ability_container : Node2D
 @export var path_baddy_texture : Sprite2D
 #@export var path_selection_circle : Sprite2D
 
@@ -29,6 +29,7 @@ var current_path_point : Vector2
 var waypoint_index : int = 1
 
 ##Runtime Variables
+const AURA_SCENE := preload("res://GameData/BuffsAndAbilities/Abilities/Scenes/ability_aura.tscn")
 const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/Scenes/projectile_impact.tscn")
 @export var data : BaddyStats
 var destroyed := false
@@ -43,7 +44,6 @@ func _ready() -> void:
 		return
 	data.buff_owner = self
 	path_baddy_texture.texture = data.info_texture
-	path_aura.get_shape().radius = data.aura_aoe
 	
 	#healthbar setup
 	healthbar_update(data.health, data.current_max_health)
@@ -62,18 +62,17 @@ func _ready() -> void:
 	
 	#ability setup
 	
-	for ability in data.inate_abilities:
-		ability.ability_owner = self
-		ability.ability_setup()
+	for ability in data.innate_abilities:
+		ability.ability_setup(self)
+		path_status_display.path_buff_display_container.update_display(ability.info_)
 	
 	for buff in data.initial_buffs:
-		add_buff(buff, level)
-		if data.aura_aoe > 1:
-			add_buff_aoe(buff, self)
-	for effect in data.last_laugh_effects:
-		path_status_display.path_buff_display_container.update_display(effect)
-		if effect is LastLaughSpawn:
-			pass
+		add_buff(buff, self, level)
+
+func aura_setup(aura_data) -> void:
+	var new_aura = AURA_SCENE.instantiate()
+	new_aura.ability_aura_data = aura_data
+	path_ability_container.add_child(new_aura)
 
 ##Runtime Functions
 
