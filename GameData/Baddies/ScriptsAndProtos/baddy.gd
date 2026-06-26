@@ -1,4 +1,4 @@
-class_name Baddy extends UnitPrototype
+class_name Baddy extends UnitScenePrototype
 
 ##Signals
 signal baddy_death
@@ -6,6 +6,7 @@ signal base_damage(damage)
 signal open_baddy_display(data: BaddyStats)
 signal update_baddy_display(data: BaddyStats)
 signal hit_detected
+signal process_update(delta: float, cur_pos: Vector2)
 #signal unit_selected(baddy: Baddy)
 
 ##Node Paths
@@ -29,7 +30,7 @@ var current_path_point : Vector2
 var waypoint_index : int = 1
 
 ##Runtime Variables
-const AURA_SCENE := preload("res://GameData/BuffsAndAbilities/Abilities/Scenes/ability_aura.tscn")
+const AURA_SCENE := preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scenes/ability_aura.tscn")
 const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/Scenes/projectile_impact.tscn")
 @export var data : BaddyStats
 var destroyed := false
@@ -60,14 +61,13 @@ func _ready() -> void:
 	data.update_buff_display.connect(path_status_display.path_buff_display_container.update_display)
 	data.remove_buff_display.connect(path_status_display.path_buff_display_container.remove_buff)
 	
-	#ability setup
+	#innate effects setup
 	
 	for ability in data.innate_abilities:
-		ability.ability_setup(self)
-		path_status_display.path_buff_display_container.update_display(ability.info_)
-	
-	for buff in data.initial_buffs:
-		add_buff(buff, self, level)
+		var new_ability = ability.duplicate(true)
+		data.active_abilities.append(new_ability)
+		new_ability.ability_setup(self)
+		path_status_display.path_buff_display_container.update_display(new_ability)
 
 func aura_setup(aura_data) -> void:
 	var new_aura = AURA_SCENE.instantiate()
@@ -77,8 +77,7 @@ func aura_setup(aura_data) -> void:
 ##Runtime Functions
 
 func _process(delta: float) -> void:
-	for buff in data.active_buffs:
-		data.active_buffs[buff].update(delta, global_position)
+	process_update.emit(delta, global_position)
 
 func _physics_process(delta: float) -> void:
 	path_status_display.position = position + Vector2(-30, 18)

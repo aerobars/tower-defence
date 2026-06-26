@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityOnHit" format=3 uid="uid://cdjgi2qqen6v6"]
+
+[ext_resource type="Script" uid="uid://stua4x4ldhoc" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd" id="1_tsu4x"]
+[ext_resource type="Resource" uid="uid://cmijnc8cpsfbi" path="res://GameData/BuffsAndAbilities/Buffs/BaddyBuffs/stat_burst_speed.tres" id="1_ywiir"]
+[ext_resource type="Texture2D" uid="uid://b7813pvk1mmp0" path="res://Assets/Environment/Props/crateWood.png" id="2_k0qi0"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_tsu4x")
+onhit_success_chance = Array[float]([0.3, 0.3, 0.3, 0.3, 0.3])
+info_name = "Burst Speed"
+info_display_icon = ExtResource("2_k0qi0")
+info_description = "Chance on hit to get a burst of speed"
+buff_data = ExtResource("1_ywiir")
+ability_targets = 3
+ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+metadata/_custom_type_script = "uid://stua4x4ldhoc"

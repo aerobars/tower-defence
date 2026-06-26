@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="BuffStat" format=3 uid="uid://bw54hxxtoj4hc"]
+
+[ext_resource type="Texture2D" uid="uid://tl8l0jorj0gj" path="res://Assets/Effects/explosion4.png" id="1_08mox"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="1_j5job"]
+
+[resource]
+script = ExtResource("1_j5job")
+stat = 8
+buff_type = 1
+info_name = "Damage Boost"
+info_display_icon = ExtResource("1_08mox")
+buff_targets = 2
+persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

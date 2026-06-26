@@ -1,5 +1,5 @@
 ##Handles gametime tower functions (shooting, etc.) and last step of mod updates (update to mod class and net power)
-class_name TowerCell extends UnitPrototype
+class_name TowerCell extends UnitScenePrototype
 
 
 ## Signals
@@ -126,7 +126,7 @@ func _process(delta: float) -> void:
 		if attack_timer >= data.current_attack_speed:
 			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.persistent_effect and get_parent().aura_tower:
 				for baddy in baddies_in_range:
-					add_buff(data.buff_data, get_parent().tower_data.level, baddy)
+					add_buff(data.buff_data, baddy, get_parent().tower_data.level)
 			elif data is WeaponMod:
 				#attack_tracker += 1
 				for i in data.current_multitarget:
@@ -142,13 +142,13 @@ func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body)
 		if data.mod_class == data.ModClass.AURA and data.buff_data.persistent_effect:
-			add_buff(data.buff_data, get_parent().tower_data.level, body)
+			add_buff(data.buff_data, body, get_parent().tower_data.level)
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		if data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
 			return #nothing gets added for offensive auras in aura mode
 		else:
 			aura_targets.append(body)
-			add_buff(data.buff_data, get_parent().tower_data.level, body)
+			add_buff(data.buff_data, body, get_parent().tower_data.level)
 
 func _on_range_body_exited(body) -> void:
 	if data == null:
@@ -176,7 +176,7 @@ func fire(target):
 	else:
 		fire_instant()
 		if data.current_aoe > 0:
-			var baddies = await AOESetup.setup_aoe(
+			var baddies = AOESetup.setup_aoe(
 				self, 
 				target.global_position, 
 				"baddies", 

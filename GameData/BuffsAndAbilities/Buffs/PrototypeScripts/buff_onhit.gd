@@ -13,5 +13,5 @@ enum AffectedStat {
 @export var buff_to_apply : Buff
 @warning_ignore("int_as_enum_without_cast")
 @warning_ignore("int_as_enum_without_match")
-##BLEED = 1, BLUNT = 2, BURN = 4, HEAL = 8, PIERCE = 16, POISON = 32, SHOCK = 64, Damage Tag = 0 is no effect
+##Damage Tag = 0 is no effect
 @export var damage_tag : GlobalEnums.DamageTag = 0

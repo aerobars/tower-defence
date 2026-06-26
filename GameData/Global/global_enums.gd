@@ -1,20 +1,21 @@
 class_name GlobalEnums extends Resource
 
+##Damage Tag = 0 is no effect
 enum DamageTag {
-	BLUNT = 1 << 1, #2
-	PIERCE = 1 << 4, # 16, weapon damage types first to maintain additives before mulitplicatives in damage calculation
-	BLEED = 1 << 0, #1
-	BURN = 1 << 2, #4
-	POISON = 1 << 5, #32
-	SHOCK = 1 << 6, #64
-	HEAL = 1 << 3, #8
+	BLUNT = 1 << 1, ##2
+	PIERCE = 1 << 4, ## 16, weapon damage types first to maintain additives before mulitplicatives in damage calculation
+	BLEED = 1 << 0, ##1
+	BURN = 1 << 2, ##4
+	POISON = 1 << 5, ##32
+	SHOCK = 1 << 6, ##64
+	HEAL = 1 << 3, ##8
 }
 
 enum BaddyArmorTags {
-	UNARMORED,
-	LIGHT,
-	MEDIUM,
-	HEAVY
+	UNARMORED, ##0
+	LIGHT, ##1
+	MEDIUM, ##2
+	HEAVY ##3
 }
 
 const DEFENCE_TABLE : Dictionary = {
@@ -53,20 +54,20 @@ const DEFENCE_TABLE : Dictionary = {
 } 
 
 enum BuffableStats {
-	AOE = 1 << 0, #1
-	ATTACK_SPEED = 1 << 1, #2
-	CRIT_CHANCE = 1 << 2, #4
-	CRIT_DAMAGE = 1 << 7, #128
-	DAMAGE = 1 << 3, #8
-	DEFENCE = 1 << 4, #16
-	MAX_HEALTH = 1 << 5, #32
-	MOVE_SPEED = 1 << 6, #64
-	RANGE = 1 << 8, #256
+	AOE = 1 << 0, ##1
+	ATTACK_SPEED = 1 << 1, ##2
+	CRIT_CHANCE = 1 << 2, ##4
+	CRIT_DAMAGE = 1 << 7, ##128
+	DAMAGE = 1 << 3, ##8
+	DEFENCE = 1 << 4, ##16
+	MAX_HEALTH = 1 << 5, ##32
+	MOVE_SPEED = 1 << 6, ##64
+	RANGE = 1 << 8, ##256
 }
 
 enum Targets {
-	NONE,
-	TOWERS,
-	BADDIES,
-	SELF,
+	NONE, ##0
+	TOWERS, ##1
+	BADDIES, ##2
+	SELF, ##3
 }

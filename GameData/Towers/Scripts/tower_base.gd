@@ -86,23 +86,6 @@ func tower_selected(tower_cell) -> void:
 		show_upgrade_panel.emit(POPUP_TYPE, mod_data, self)
 		unit_selected.emit(tower_cell)
 
-func _unhandled_key_input(event: InputEvent) -> void:
-	return
-	if is_built:
-		return
-	if event.is_action_pressed("rotate_counterclockwise"):
-		var tween = get_tree().create_tween()
-		tween.tween_property(self, "rotation", rotation - PI/2, 0.1)
-		tower_data.rotation = rotation
-		#counter rotate mod image
-		return
-	if event.is_action_pressed("rotate_clockwise"):
-		var tween = get_tree().create_tween()
-		tween.tween_property(self, "rotation", rotation + PI/2, 0.1)
-		tower_data.rotation = rotation
-		#counter rotate mod image
-		return
-
 func level_up() -> void:
 	tower_data.level = min(tower_data.level + 1, MAX_LEVEL)
 	for child in tower_children:

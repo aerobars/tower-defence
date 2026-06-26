@@ -25,7 +25,11 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("baddies"):
 		pierce_count += 1
 		if aoe > 0:
-			var baddies = await AOESetup.setup_aoe(self, body.global_position, "baddies", aoe)
+			var baddies = AOESetup.setup_aoe(
+				self, 
+				body.global_position, 
+				"baddies", 
+				aoe)
 			for baddy in baddies:
 				baddy.on_hit(damage.duplicate(), on_hit_effects)
 		else:

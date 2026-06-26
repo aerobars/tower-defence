@@ -7,7 +7,7 @@ var ability_aura_data : AbilityAura
 
 
 func _ready() -> void:
-	$CollisionShape2D.get_shape().radius = ability_aura_data.aura_aoe
+	$CollisionShape2D.get_shape().radius = ability_aura_data.ability_aoe[ability_aura_data.owner_level]
 	add_buff.connect(ability_aura_data.ability_owner.add_buff)
 	remove_buff.connect(ability_aura_data.ability_owner.remove_buff)
 

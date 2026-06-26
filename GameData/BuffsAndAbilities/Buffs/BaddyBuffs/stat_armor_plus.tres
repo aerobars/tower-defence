@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="BuffStat" format=3 uid="uid://bi6l8t12f2lkr"]
+
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="1_5m64a"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_gkcwe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nwjix"]
+atlas = ExtResource("1_gkcwe")
+region = Rect2(640, 48, 16, 16)
+
+[resource]
+script = ExtResource("1_5m64a")
+stat = 16
+buff_type = 1
+info_name = "Armor Plus"
+info_display_icon = SubResource("AtlasTexture_nwjix")
+buff_targets = 3
+persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

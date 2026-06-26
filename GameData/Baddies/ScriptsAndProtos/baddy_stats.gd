@@ -1,15 +1,10 @@
-class_name BaddyStats extends Resource
+class_name BaddyStats extends UnitDataPrototype
 
 signal health_depleted
 signal health_changed(current_health: int, max_health: int)
 signal stats_updated
-signal update_buff_display(buff: Buff, stacks: int)
 signal remove_buff_display(buff: Buff)
 
-@export_group("Baddy Info", "info_")
-@export var info_name : String
-@export var info_texture : Texture2D
-@export_multiline var info_description : String
 
 @export_group("Spawn Data", "spawn_")
 @export var spawn_per_wave : int = 1
@@ -47,25 +42,22 @@ var health : float = 0 : set = _on_health_set
 ##Buffs and Auras
 @export_group("In Game Effects")
 @export var innate_abilities : Array[AbilityPrototype]
-var active_buffs: Dictionary[Buff, BuffInstance]
-var buff_owner : Node2D
+var active_abilities: Array[AbilityPrototype]
 
 ##currently unused
 @export var experience : int = 0: set = _on_experience_set
-var level : int :
-	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
+#var level : int = 0 :
+#	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
 
 ##Stats Setup and Adjustment
-func _init() -> void:
-	setup_stats.call_deferred()
 
-func setup_stats() -> void:
-	recalculate_stats()
+func setup_stats(_level: int = 0) -> void:
+	super(_level)
 	health = current_max_health
 
 ##Runtime
 
-func add_buff(buff: Buff, buff_level : int, amt : int = 1) -> void:
+func add_buff(buff: Buff, buff_level : int, amt : int = 1, _buff_source : CollisionObject2D = null) -> void:
 	if not active_buffs.has(buff):
 		var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
 		active_buffs[buff] = new_inst

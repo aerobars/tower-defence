@@ -3,12 +3,19 @@ extends Node
 signal mod_update_check(mod: StaticBody2D)
 
 ## Script Preloading
-const BUFF = preload("res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_proto.gd")
-const STAT_BUFF = preload("res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_stat.gd")
-const ONHIT_BUFF = preload("res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_onhit.gd")
-const ABSOLUTE_BUFF = preload("res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_abs.gd")
-const PERIODIC_BUFF = preload("res://GameData/SupportScenes/Buffs/PrototypeScripts/buff_periodic.gd")
 
+const BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd")
+const STAT_BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd")
+const ONHIT_BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_onhit.gd")
+const ABSOLUTE_BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_abs.gd")
+const DOT_BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_dot.gd")
+
+const ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_proto.gd")
+const TRIGGERED_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_triggered_proto.gd")
+const AURA_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_aura_scene.gd")
+const LAST_LAUGH_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_last_laugh.gd")
+const ONHIT_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd")
+const PERIODIC_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_periodic.gd")
 
 ## Game Colours
 
@@ -18,6 +25,14 @@ var critical_colour : Color = Color.html("#B22")
 var poison_colour : Color = Color.html("#235417")
 var shock_colour : Color = Color.GOLD
 var burn_colour : Color = Color.html("#f26d07")
+
+## Image Paths
+
+const ICON_ATLAS := preload("res://Assets/Environment/Tilesets/colored_packed.png")
+const ICON_DAMAGE_COORDS = Rect2(544.0, 96.0, 16.0, 16.0)
+const ICON_DEFENCE_COORDS = Rect2(640.0, 48.0, 16.0, 16.0)
+const ICON_HEALTH_COORDS = Rect2(624.0, 48.0, 16.0, 16.0)
+const ICON_MOVE_SPEED_COORDS = Rect2(384.0, 336.0, 16.0, 16.0)
 
 var is_dragging = false
 

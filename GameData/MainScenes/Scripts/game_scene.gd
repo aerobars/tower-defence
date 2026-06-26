@@ -32,7 +32,7 @@ var preview_path : PackedVector2Array = []
 var tower_grid_size : int :
 	get():
 		return path_map_node.CELL_SIZE * 3 #CELL_SIZE * number of columns in tower grid(3)
-var previous_tiles := [Vector2i(0, 0)]
+var previous_tiles : Array[Vector2i]
 
 ## Gameplay 
 
@@ -254,7 +254,7 @@ func initiate_build_mode(data: Dictionary, btn_ref) -> void: #connected to build
 	build_btn_ref = btn_ref
 	build_data = data
 	build_mode = true
-	previous_tiles = [Vector2i(-100,-100)]
+	previous_tiles = [Vector2(0,0)]
 	build_valid = false
 	path_tower_preview_container.rotation = 0
 	#move tower instatiation to hear as a variable, to allow for rotation during update_tower_preview

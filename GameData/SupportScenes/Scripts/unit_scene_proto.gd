@@ -1,7 +1,7 @@
 @abstract ##prototype for baddy and towers for shared features
-class_name UnitPrototype extends CollisionObject2D
+class_name UnitScenePrototype extends CollisionObject2D
 
-signal unit_selected(unit: UnitPrototype)
+signal unit_selected(unit: UnitScenePrototype)
 
 @export_group("Unit Node Paths", "path_")
 @export var path_mouse_detection : CollisionObject2D
@@ -22,7 +22,7 @@ func add_buff(buff : Buff, body : CollisionObject2D = self, cur_level : int = 0)
 	body.data.add_buff(buff, cur_level)
 
 ##UnitProtoype function, calls the remove_buff function in data resource, body defaults to self
-func remove_buff(buff: Buff, body : CollisionObject2D = self, cur_level : int = 0) -> void:
+func remove_buff(buff: Buff, body : CollisionObject2D = self, _cur_level : int = 0) -> void:
 	body.data.remove_buff(buff)
 
 func add_buff_aoe(buff : Buff, _body : CollisionObject2D = self) -> void:

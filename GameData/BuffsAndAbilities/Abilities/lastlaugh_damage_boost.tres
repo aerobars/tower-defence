@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AbilityLastLaugh" format=3 uid="uid://billxb52g8pds"]
+
+[ext_resource type="Script" uid="uid://fsmcacyx68e1" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_last_laugh.gd" id="1_4ngyx"]
+[ext_resource type="Resource" uid="uid://bw54hxxtoj4hc" path="res://GameData/BuffsAndAbilities/Buffs/BaddyBuffs/stat_damage_plus.tres" id="1_kb35f"]
+[ext_resource type="Texture2D" uid="uid://22enqo8rhfpx" path="res://Assets/Effects/explosion2.png" id="2_hlutl"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_4ngyx")
+info_name = "Last Laugh Damage Boost"
+info_display_icon = ExtResource("2_hlutl")
+info_description = "Last Laugh: Boosts Damage of baddies in a medium range"
+buff_data = ExtResource("1_kb35f")
+ability_targets = 2
+ability_aoe = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
+metadata/_custom_type_script = "uid://fsmcacyx68e1"

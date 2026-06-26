@@ -23,7 +23,7 @@ func get_rewards() -> Array[PrototypeMod]:
 	var rewards : Array[PrototypeMod] = []
 	for i in total_rewards:
 		var mod = load(filepath + GameData.character_mods[character][randi() % GameData.character_mods[character].size()])
-		while rewards.has(mod): #duplicate prevention
+		while rewards.has(mod) or mod == null: #duplicate and error prevention
 			mod = load(filepath + GameData.character_mods[character][randi() % GameData.character_mods[character].size()])
 		rewards.append(mod)
 		#code to account for weighted randomness

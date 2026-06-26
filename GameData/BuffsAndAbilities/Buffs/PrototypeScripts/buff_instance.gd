@@ -1,8 +1,5 @@
 class_name BuffInstance extends Resource
 
-const BURST_SPEED = preload("res://GameData/SupportScenes/Buffs/BaddyBuffs/onhit_burst_speed.tres")
-#var poison_stat = preload("res://GameData/SupportScenes/Buffs/TowerBuffs/test_poison_sb.tres")
-
 var buff : Buff
 var buff_owner : Node2D 
 var stacks : int = 0
@@ -21,6 +18,7 @@ func _init(_buff: Buff, _buff_owner, _buff_level : int = 0) -> void:
 	level = _buff_level
 	time_remaining = buff.buff_duration[level]
 	last_position = buff_owner.global_position
+	buff_owner.process_update.connect(update)
 
 func update(delta: float, position: Vector2 = Vector2(0,0)) -> void:
 	if buff is DotBuff:
@@ -57,10 +55,9 @@ func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 ## Periodic Triggers
 
 func effect_trigger() -> void:
-	var onhit_targets : Array
-	onhit_targets = []
+	var onhit_targets := []
 	if buff.buff_targets == GlobalEnums.Targets.BADDIES or buff.buff_targets == GlobalEnums.Targets.TOWERS:
-		onhit_targets = await AOESetup.setup_aoe(
+		onhit_targets = AOESetup.setup_aoe(
 			buff_owner, 
 			buff_owner.global_position,
 			GlobalEnums.Targets.keys()[buff.buff_targets].to_lower(), 
@@ -68,7 +65,7 @@ func effect_trigger() -> void:
 	elif buff.buff_targets == GlobalEnums.Targets.SELF:
 		onhit_targets = [buff_owner]
 	else:
-		print("no effect targets")
+		print("no buff targets")
 		return
 #	print("targets for ", buff_owner.data.info_name, ": ", onhit_targets)
 	if buff.damage_tag > 0:

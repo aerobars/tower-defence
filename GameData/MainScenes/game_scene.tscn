@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b7d7kfemno1ex"]
+[gd_scene format=3 uid="uid://b7d7kfemno1ex"]
 
 [ext_resource type="PackedScene" uid="uid://egfxblymqfqd" path="res://GameData/Maps/map.tscn" id="1_akvmk"]
 [ext_resource type="Script" uid="uid://djsr0kjgwaton" path="res://GameData/MainScenes/Scripts/game_scene.gd" id="1_g2kuy"]
@@ -19,7 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/Scenes/tutorial.tscn" id="17_nh22g"]
 [ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/Scenes/game_over_message.tscn" id="19_6qu8u"]
 
-[node name="GameScene" type="Node2D" node_paths=PackedStringArray("path_tower_preview_container", "path_ui", "path_range_display", "path_camera", "path_map_node", "path_pathfinding_line")]
+[node name="GameScene" type="Node2D" unique_id=2134006224 node_paths=PackedStringArray("path_tower_preview_container", "path_ui", "path_range_display", "path_camera", "path_map_node", "path_pathfinding_line")]
 script = ExtResource("1_g2kuy")
 path_tower_preview_container = NodePath("TowerPreviewContainer")
 path_ui = NodePath("UI")
@@ -28,28 +28,28 @@ path_camera = NodePath("Camera2D")
 path_map_node = NodePath("Map")
 path_pathfinding_line = NodePath("PathfindingLine")
 
-[node name="Map" parent="." instance=ExtResource("1_akvmk")]
+[node name="Map" parent="." unique_id=2134769239 instance=ExtResource("1_akvmk")]
 
-[node name="TowerPreviewContainer" type="Node2D" parent="."]
+[node name="TowerPreviewContainer" type="Node2D" parent="." unique_id=2054570]
 
-[node name="RangeDisplay" type="Sprite2D" parent="."]
+[node name="RangeDisplay" type="Sprite2D" parent="." unique_id=541214347]
 visible = false
 modulate = Color(1, 1, 1, 0.56078434)
 self_modulate = Color(1, 1, 1, 0.56078434)
 texture = ExtResource("3_p50gf")
 
-[node name="PathfindingLine" type="Line2D" parent="."]
+[node name="PathfindingLine" type="Line2D" parent="." unique_id=167819267]
 width = 5.0
 default_color = Color(0.32941177, 0.32941177, 0.32941177, 0.6509804)
 joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1305964899]
 script = ExtResource("4_6qu8u")
 zoom_disabled = true
 
-[node name="UI" type="CanvasLayer" parent="." node_paths=PackedStringArray("path_hp_bar", "path_hp_text", "path_cash_display", "path_game_message", "path_baddy_info_foldbable", "path_next_wave_button", "path_pause_button", "path_ff_button", "path_build_bar", "path_inventory_ui", "path_tower_buttons", "path_game_bookend_popup", "path_tutorial")]
+[node name="UI" type="CanvasLayer" parent="." unique_id=910804750 node_paths=PackedStringArray("path_hp_bar", "path_hp_text", "path_cash_display", "path_game_message", "path_baddy_info_foldbable", "path_next_wave_button", "path_pause_button", "path_ff_button", "path_build_bar", "path_inventory_ui", "path_tower_buttons", "path_game_bookend_popup", "path_tutorial")]
 script = ExtResource("3_ibdpl")
 path_hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
 path_hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
@@ -65,7 +65,7 @@ path_tower_buttons = NodePath("HUD/BuildBar/TowerButtonsContainer")
 path_game_bookend_popup = NodePath("GameOverMessage")
 path_tutorial = NodePath("Tutorial")
 
-[node name="HUD" type="Control" parent="UI"]
+[node name="HUD" type="Control" parent="UI" unique_id=795196558]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -75,7 +75,7 @@ grow_vertical = 2
 size_flags_horizontal = 6
 mouse_filter = 2
 
-[node name="BuildBar" type="ColorRect" parent="UI/HUD"]
+[node name="BuildBar" type="ColorRect" parent="UI/HUD" unique_id=1112982375]
 custom_minimum_size = Vector2(1280, 100)
 layout_mode = 1
 anchors_preset = 12
@@ -87,7 +87,7 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
 
-[node name="InventoryContainer" type="PanelContainer" parent="UI/HUD/BuildBar"]
+[node name="InventoryContainer" type="PanelContainer" parent="UI/HUD/BuildBar" unique_id=1295810885]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
 anchors_preset = 2
@@ -99,7 +99,7 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = ExtResource("4_syms3")
 
-[node name="InventoryUI" type="GridContainer" parent="UI/HUD/BuildBar/InventoryContainer" node_paths=PackedStringArray("game_scene")]
+[node name="InventoryUI" type="GridContainer" parent="UI/HUD/BuildBar/InventoryContainer" unique_id=103575042 node_paths=PackedStringArray("game_scene")]
 layout_mode = 2
 mouse_filter = 2
 columns = 3
@@ -107,7 +107,7 @@ script = ExtResource("5_waasu")
 data = ExtResource("6_nh22g")
 game_scene = NodePath("../../../../..")
 
-[node name="TowerButtonsContainer" type="HBoxContainer" parent="UI/HUD/BuildBar"]
+[node name="TowerButtonsContainer" type="HBoxContainer" parent="UI/HUD/BuildBar" unique_id=1462006887]
 process_mode = 3
 layout_mode = 1
 anchors_preset = 7
@@ -126,12 +126,12 @@ size_flags_vertical = 8
 theme_override_constants/separation = 150
 alignment = 1
 
-[node name="BaddyInfo" parent="UI/HUD/BuildBar" instance=ExtResource("9_p50gf")]
+[node name="BaddyInfo" parent="UI/HUD/BuildBar" unique_id=1592459042 instance=ExtResource("9_p50gf")]
 layout_mode = 1
 offset_top = -31.0
 offset_bottom = 0.0
 
-[node name="InfoBar" type="ColorRect" parent="UI/HUD"]
+[node name="InfoBar" type="ColorRect" parent="UI/HUD" unique_id=1638929168]
 self_modulate = Color(0, 0, 0, 0.470588)
 custom_minimum_size = Vector2(0, 60)
 layout_mode = 1
@@ -140,17 +140,17 @@ anchor_right = 1.0
 offset_bottom = 71.0
 grow_horizontal = 2
 
-[node name="SaveButton" type="HBoxContainer" parent="UI/HUD/InfoBar"]
+[node name="SaveButton" type="HBoxContainer" parent="UI/HUD/InfoBar" unique_id=39488801]
 layout_mode = 0
 offset_left = 64.0
 offset_right = 180.0
 offset_bottom = 71.0
 
-[node name="Save" type="Button" parent="UI/HUD/InfoBar/SaveButton"]
+[node name="Save" type="Button" parent="UI/HUD/InfoBar/SaveButton" unique_id=236056422]
 layout_mode = 2
 text = "Save and Quit"
 
-[node name="InfoContainer" type="HBoxContainer" parent="UI/HUD/InfoBar"]
+[node name="InfoContainer" type="HBoxContainer" parent="UI/HUD/InfoBar" unique_id=2091727925]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -159,7 +159,7 @@ offset_left = 272.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Symbol" type="Label" parent="UI/HUD/InfoBar/InfoContainer"]
+[node name="Symbol" type="Label" parent="UI/HUD/InfoBar/InfoContainer" unique_id=355145448]
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
@@ -169,7 +169,7 @@ text = "$"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Money" type="Label" parent="UI/HUD/InfoBar/InfoContainer"]
+[node name="Money" type="Label" parent="UI/HUD/InfoBar/InfoContainer" unique_id=1203486635]
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
@@ -177,13 +177,13 @@ theme_override_fonts/font = ExtResource("11_sl8sw")
 theme_override_font_sizes/font_size = 30
 vertical_alignment = 1
 
-[node name="HealthIcon" type="TextureRect" parent="UI/HUD/InfoBar/InfoContainer"]
+[node name="HealthIcon" type="TextureRect" parent="UI/HUD/InfoBar/InfoContainer" unique_id=1237741575]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 10
 texture = ExtResource("12_jvyjn")
 
-[node name="HealthBar" type="TextureProgressBar" parent="UI/HUD/InfoBar/InfoContainer"]
+[node name="HealthBar" type="TextureProgressBar" parent="UI/HUD/InfoBar/InfoContainer" unique_id=1348416111]
 custom_minimum_size = Vector2(250, 30)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -195,7 +195,7 @@ texture_progress = ExtResource("13_541wh")
 tint_under = Color(0.215686, 0.215686, 0.215686, 1)
 tint_progress = Color(0, 0.658824, 0, 1)
 
-[node name="HealthAmount" type="Label" parent="UI/HUD/InfoBar/InfoContainer/HealthBar"]
+[node name="HealthAmount" type="Label" parent="UI/HUD/InfoBar/InfoContainer/HealthBar" unique_id=368690271]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -212,11 +212,11 @@ text = "100/100"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Control" type="Control" parent="UI/HUD/InfoBar/InfoContainer"]
+[node name="Control" type="Control" parent="UI/HUD/InfoBar/InfoContainer" unique_id=660258614]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/InfoBar"]
+[node name="MarginContainer" type="MarginContainer" parent="UI/HUD/InfoBar" unique_id=434772202]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -228,18 +228,18 @@ grow_horizontal = 2
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="GameControls" type="HBoxContainer" parent="UI/HUD/InfoBar/MarginContainer"]
+[node name="GameControls" type="HBoxContainer" parent="UI/HUD/InfoBar/MarginContainer" unique_id=1543938063]
 process_mode = 3
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="NextWave" type="Button" parent="UI/HUD/InfoBar/MarginContainer/GameControls"]
+[node name="NextWave" type="Button" parent="UI/HUD/InfoBar/MarginContainer/GameControls" unique_id=1200878527]
 process_mode = 3
 layout_mode = 2
 text = "Next Wave"
 
-[node name="PausePlay" type="TextureButton" parent="UI/HUD/InfoBar/MarginContainer/GameControls"]
+[node name="PausePlay" type="TextureButton" parent="UI/HUD/InfoBar/MarginContainer/GameControls" unique_id=620616077]
 process_mode = 3
 custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
@@ -252,7 +252,7 @@ texture_pressed = ExtResource("8_a0jnf")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="FastForward" type="TextureButton" parent="UI/HUD/InfoBar/MarginContainer/GameControls"]
+[node name="FastForward" type="TextureButton" parent="UI/HUD/InfoBar/MarginContainer/GameControls" unique_id=2045430385]
 custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -261,7 +261,7 @@ texture_normal = ExtResource("9_clpeu")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="GameMessage" type="Label" parent="UI/HUD"]
+[node name="GameMessage" type="Label" parent="UI/HUD" unique_id=1803925622]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -280,9 +280,9 @@ theme_override_colors/font_color = Color(1, 1, 1, 0.78431374)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 75
 
-[node name="Tutorial" parent="UI" instance=ExtResource("17_nh22g")]
+[node name="Tutorial" parent="UI" unique_id=1588393518 instance=ExtResource("17_nh22g")]
 
-[node name="GameOverMessage" parent="UI" instance=ExtResource("19_6qu8u")]
+[node name="GameOverMessage" parent="UI" unique_id=25078715 instance=ExtResource("19_6qu8u")]
 visible = false
 
 [connection signal="button_up" from="UI/HUD/InfoBar/SaveButton/Save" to="." method="_on_save_button_up"]

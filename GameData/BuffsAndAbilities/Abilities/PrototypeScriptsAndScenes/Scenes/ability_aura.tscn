@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://c4j7lbggggv30"]
 
-[ext_resource type="Script" uid="uid://352otc5i7omg" path="res://GameData/BuffsAndAbilities/Abilities/Scripts/ability_aura_scene.gd" id="1_a53ff"]
+[ext_resource type="Script" uid="uid://352otc5i7omg" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_aura_scene.gd" id="1_rv65q"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jjb4j"]
 radius = 0.01
 
 [node name="AbilityAura" type="Area2D" unique_id=872625708]
-script = ExtResource("1_a53ff")
+script = ExtResource("1_rv65q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=679063053]
 shape = SubResource("CircleShape2D_jjb4j")

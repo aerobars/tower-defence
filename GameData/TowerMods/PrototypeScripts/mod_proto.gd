@@ -1,19 +1,15 @@
 @abstract
-class_name PrototypeMod extends Resource
+class_name PrototypeMod extends UnitDataPrototype
 
 enum ModClass { AURA, POWER, WEAPON }
 
-@export_group("Mod Info", "info_")
-@export var info_name : String
-@export_multiline var info_description : String
-@export var info_texture : Texture2D
+
 var class_string : String: 
 	get: 
 		return ModClass.keys()[ModClass.values().find(mod_class)]
 
 ##Stats for all mod types
 @export_group("Universal Mod Stats", "base_")
-var level : int #first level will be 0 after setup_stats to line up with arrays
 @export var base_power_levels : Array[int] = [-1, -1, -1, -1, -1]
 ##range is radius of range circle, default (26) is 1/2 tower base
 @export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] 
@@ -27,9 +23,6 @@ var current_range : float
 @export var swap_buff : Buff
 @export var swap_buff_duration: float
 
-
-var buff_owner : Node2D
-var active_buffs: Dictionary[Buff, BuffInstance] = {}
 ##Can add onhit buffs that tower starts with
 @export var on_hit_effects : Array[Buff] = []
 var net_power : int = 0
@@ -39,32 +32,15 @@ var power_calc : float :
 		return (1 + float(net_power)/10) # * float(power_surplus_buffs[stat_name])/10)
 
 
-func _init() -> void:
-	setup_stats.call_deferred()
-
-func setup_stats(_level : int = 0) -> void:
-	level = _level
-	recalculate_stats()
-
-func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1) -> void:
+func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1, buff_source : CollisionObject2D = null) -> void:
 	if buff.buff_targets == GlobalEnums.Targets.TOWERS or buff.buff_targets == GlobalEnums.Targets.SELF:
-		if not active_buffs.has(buff):
-			var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
-			active_buffs[buff] = new_inst
-		var inst = active_buffs[buff]
-		inst.level = buff_level
-		inst.stacks = min(inst.stacks + amt, buff.stack_limit[buff_level])
-		inst.time_remaining = buff.buff_duration[buff_level]
-		buff_owner.path_buff_display.update_display(buff, inst.stacks)
-		recalculate_stats.call_deferred()
+		super(buff, buff_level, amt, buff_source)
 	elif buff.buff_targets == GlobalEnums.Targets.BADDIES:
 		add_on_hit_effect(buff)
 
 func remove_buff(buff : Buff) -> void:
 	if buff is BuffStat and buff.buff_targets == GlobalEnums.Targets.TOWERS:
-		active_buffs.erase(buff)
-		buff_owner.path_buff_display.remove_buff(buff)
-		recalculate_stats.call_deferred()
+		super(buff)
 	else:
 		remove_on_hit_effect(buff)
 

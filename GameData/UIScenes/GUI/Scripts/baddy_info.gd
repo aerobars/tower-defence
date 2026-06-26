@@ -10,21 +10,30 @@ extends FoldableContainer
 @export var path_baddy_description: RichTextLabel
 
 ## Img Files
-@export_group("Images", "img_")
-@export var img_health: Texture2D
-@export var img_damage: Texture2D
-@export var img_defence: Texture2D
-@export var img_move_speed: Texture2D
+var img_health: Texture2D
+var img_damage: Texture2D
+var img_defence: Texture2D
+var img_move_speed: Texture2D
 
 var label_children: Array[RichTextLabel]
 var baddy_id
 
 func _ready() -> void:
+	img_health = set_image(GameData.ICON_HEALTH_COORDS)
+	img_damage = set_image(GameData.ICON_DAMAGE_COORDS)
+	img_defence = set_image(GameData.ICON_DEFENCE_COORDS)
+	img_move_speed = set_image(GameData.ICON_MOVE_SPEED_COORDS)
 	for child in $VBoxContainer.get_children():
 		if child is RichTextLabel:
 			label_children.append(child)
 		else:
 			print("incorrect node type in Baddy Info Foldable")
+
+func set_image(atlas_region: Rect2) -> Texture2D:
+	var new_atlas = AtlasTexture.new()
+	new_atlas.atlas = GameData.ICON_ATLAS
+	new_atlas.region = atlas_region
+	return new_atlas
 
 func wave_display(wave_data) -> void:
 	clear_display()

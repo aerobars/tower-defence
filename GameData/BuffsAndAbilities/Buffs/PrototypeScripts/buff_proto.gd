@@ -7,7 +7,6 @@ class_name Buff extends Resource
 ##For OnHit Buffs, this refers to the buff applied 
 ##(ex. shock: buff duration is for the shock buff, effect duration is for the stun)
 @export var buff_duration : Array[float] = [1, 1, 1, 1, 1]
-## No Target = 0, Towers = 1, Baddies = 2, Self = 3
 @export var buff_targets : GlobalEnums.Targets
 @export var buff_effect_aoe : Array[float] = [0, 0, 0, 0, 0]
 ##Amount of damage for damaging buffs such as periodic effects or on hit effects like shock, 

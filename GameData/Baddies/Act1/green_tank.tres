@@ -1,17 +1,16 @@
 [gd_resource type="Resource" script_class="BaddyStats" format=3 uid="uid://or4r8bc00nem"]
 
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="1_q3e84"]
-[ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/last_laugh.gd" id="2_ai2px"]
-[ext_resource type="Resource" uid="uid://b5ha8kudqnffh" path="res://GameData/BuffsAndAbilities/Buffs/BaddyBuffs/onhit_heal.tres" id="2_lace1"]
+[ext_resource type="Script" uid="uid://7msmskgebvqe" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_proto.gd" id="2_q3e84"]
 [ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="3_ai2px"]
+[ext_resource type="Resource" uid="uid://bdjaveqp40030" path="res://GameData/BuffsAndAbilities/Abilities/onhit_heal.tres" id="3_lace1"]
 [ext_resource type="Texture2D" uid="uid://5jujfvl5qfbb" path="res://Assets/Baddies/tank_green.png" id="4_lace1"]
 
 [resource]
 script = ExtResource("3_ai2px")
 info_name = "Green Tank"
-info_description = "Chance on hit to heal self and nearby baddies"
 info_texture = ExtResource("4_lace1")
+info_description = "Chance on hit to heal self and nearby baddies"
 spawn_per_wave = 5
 spawn_interval = 1.0
-initial_buffs = Array[ExtResource("1_q3e84")]([ExtResource("2_lace1")])
+innate_abilities = Array[ExtResource("2_q3e84")]([ExtResource("3_lace1")])
 metadata/_custom_type_script = "uid://citwba61de3ku"
