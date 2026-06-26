@@ -34,13 +34,14 @@ var power_calc : float :
 
 func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1, buff_source : CollisionObject2D = null) -> void:
 	if buff.buff_targets == GlobalEnums.Targets.TOWERS or buff.buff_targets == GlobalEnums.Targets.SELF:
-		super(buff, buff_level, amt, buff_source)
+		if buff_check(buff.stat):
+			super(buff, buff_level, amt, buff_source)
 	elif buff.buff_targets == GlobalEnums.Targets.BADDIES:
 		add_on_hit_effect(buff)
 
-func remove_buff(buff : Buff) -> void:
+func remove_buff(buff : Buff, amt : = 1) -> void:
 	if buff is BuffStat and buff.buff_targets == GlobalEnums.Targets.TOWERS:
-		super(buff)
+		super(buff, amt)
 	else:
 		remove_on_hit_effect(buff)
 
@@ -50,7 +51,7 @@ func add_on_hit_effect(_buff : Buff) -> void: #setup for Weapon Mods
 func remove_on_hit_effect(_buff : Buff) -> void:#setup for Weapon Mods
 	pass
 
-func recalculate_stats() -> void:
+func defunct_recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
 	var stat_addends: Dictionary = {} #Amt to add to stats
 	for buff in active_buffs.keys():
@@ -92,8 +93,11 @@ func recalculate_stats() -> void:
 			var cur_property_name: String = str("current_" + stat_name)
 			set(cur_property_name, buff.effect_amount[active_buffs[buff].level])
 
-@abstract
-func buff_check(buff_stat) -> bool
+func power_buff() -> void:
+	for stat_name in power_surplus_buffs.keys():
+		if buff_check(stat_name):
+			var cur_property_name: String = str("current_" + stat_name)
+			set(cur_property_name, get(cur_property_name) * power_calc)
 
 @abstract
 func set_current_stats() -> void

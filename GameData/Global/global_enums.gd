@@ -62,6 +62,7 @@ enum BuffableStats {
 	DEFENCE = 1 << 4, ##16
 	MAX_HEALTH = 1 << 5, ##32
 	MOVE_SPEED = 1 << 6, ##64
+	POWER = 1 << 9, ##512
 	RANGE = 1 << 8, ##256
 }
 

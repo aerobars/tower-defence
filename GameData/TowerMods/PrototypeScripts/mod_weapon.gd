@@ -9,6 +9,16 @@ enum WeaponBuffableStats {
 	POWER
 }
 
+const BUFFABLE_STATS = [
+	GlobalEnums.BuffableStats.AOE,
+	GlobalEnums.BuffableStats.ATTACK_SPEED,
+	GlobalEnums.BuffableStats.CRIT_CHANCE,
+	GlobalEnums.BuffableStats.CRIT_DAMAGE,
+	GlobalEnums.BuffableStats.DAMAGE,
+	GlobalEnums.BuffableStats.RANGE,
+	GlobalEnums.BuffableStats.POWER,
+]
+
 ##A projectile speed of 0 is an instant attack
 @export var projectile_speed : float = 750
 ##BLEED = 1, BLUNT = 2, BURN = 4, HEAL = 8, PIERCE = 16, POISON = 32, SHOCK = 64
@@ -32,15 +42,8 @@ var current_damage : float
 var current_multitarget : int
 var current_pierce : int
 
-func buff_check(buff_stat) -> bool:
-	var stat_name : String = ""
-	if buff_stat is int:
-		for stat in GlobalEnums.BuffableStats.keys():
-			if buff_stat & GlobalEnums.BuffableStats[stat]:
-				stat_name = stat.to_upper()
-	else:
-		stat_name = buff_stat.to_upper()
-	return WeaponBuffableStats.keys().has(stat_name)
+func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
+	return BUFFABLE_STATS
 
 func set_current_stats() -> void:
 	current_aoe = base_aoe_levels[level]

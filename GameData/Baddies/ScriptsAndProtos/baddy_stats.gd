@@ -3,7 +3,6 @@ class_name BaddyStats extends UnitDataPrototype
 signal health_depleted
 signal health_changed(current_health: int, max_health: int)
 signal stats_updated
-signal remove_buff_display(buff: Buff)
 
 
 @export_group("Spawn Data", "spawn_")
@@ -12,7 +11,9 @@ signal remove_buff_display(buff: Buff)
 @export var spawn_summon : bool = false
 
 ##Baddy Stats
-const BADDY_BUFFABLE_STATS = [ #values to line up with BuffableStats enum values
+
+##values to line up with BuffableStats enum values
+const BUFFABLE_STATS = [ 
 	GlobalEnums.BuffableStats.DAMAGE,
 	GlobalEnums.BuffableStats.DEFENCE,
 	GlobalEnums.BuffableStats.MAX_HEALTH,
@@ -57,22 +58,11 @@ func setup_stats(_level: int = 0) -> void:
 
 ##Runtime
 
-func add_buff(buff: Buff, buff_level : int, amt : int = 1, _buff_source : CollisionObject2D = null) -> void:
-	if not active_buffs.has(buff):
-		var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
-		active_buffs[buff] = new_inst
-	var inst = active_buffs[buff]
-	inst.stacks = min(inst.stacks + amt, buff.stack_limit[buff_level])
-	inst.time_remaining = buff.buff_duration[buff_level]
-	update_buff_display.emit(buff, inst.stacks)
-	recalculate_stats()
+#add_buff and remove_buff functions in unit_data_proto
+func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
+	return BUFFABLE_STATS
 
-func remove_buff(buff: Buff, _amt = 1) -> void:
-	active_buffs.erase(buff)
-	remove_buff_display.emit(buff)
-	recalculate_stats()
-
-func recalculate_stats() -> void:
+func defunct_recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
 	var stat_addends: Dictionary = {} #Amt to add to stats
 	for buff in active_buffs.keys():
@@ -116,6 +106,12 @@ func recalculate_stats() -> void:
 			set(cur_property_name, buff.effect_amount)
 	
 	stats_updated.emit()
+
+func set_current_stats() -> void:
+	current_max_health = base_max_health * wave_ratio
+	current_damage = base_damage #don't scale base damage
+	current_defence = base_defence * wave_ratio
+	current_move_speed = base_move_speed * wave_ratio
 
 func _on_health_set(new_value: float) -> void:
 	health = clamp(new_value, 0, current_max_health)
