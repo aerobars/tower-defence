@@ -7,9 +7,9 @@
 
 [resource]
 script = ExtResource("3_sv8df")
-info_name = "White Tank"
-info_texture = ExtResource("3_fsosn")
-info_description = "Gains +1 Defence every 6 seconds"
 spawn_per_wave = 10
 innate_abilities = Array[ExtResource("2_q7lch")]([ExtResource("3_hbo36")])
+info_name = "White Tank"
+info_description = "Gains +1 Defence every 6 seconds"
+info_texture = ExtResource("3_fsosn")
 metadata/_custom_type_script = "uid://citwba61de3ku"

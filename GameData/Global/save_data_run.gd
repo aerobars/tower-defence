@@ -1,24 +1,31 @@
 class_name SaveDataRun extends Resource
 
-##Run Data
+## Run Data
+
 var new_game : bool
 var init_btn_count : int = 2
 var init_tower_shapes : Array = [[Vector2i(0, -1), Vector2i(0, 0)] , [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1)]]
 
-##Act Related
+## Act Related
+
 @export var current_act : int = 0
 @export var current_wave : int = 0
 @export var previous_wave : Array = []
 @export var wave_reward_total : int = 2
 
-##Player Related
+## Player Related
+
 @export var character : String = "Builder"
+##Initial value is starting cash for new games
 @export var current_cash : int = 50
 @export var current_player_health : int = 100
 
-##Mod Related
-@export var inventory_data : InventoryData #mods in inventory
-@export var button_data : Array[TowerButtonData] = [] #mods in tower button slots
+## Mod Related
+
+##Mods in Inventory
+@export var inventory_data : InventoryData 
+##Mods in tower button slots
+@export var button_data : Array[TowerButtonData] = [] 
 @export var tower_data : Array[TowerBaseData] = []
 
 #currently unused

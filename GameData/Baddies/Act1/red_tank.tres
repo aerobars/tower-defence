@@ -7,11 +7,11 @@
 
 [resource]
 script = ExtResource("3_hy6ss")
-info_name = "Red Tank"
-info_texture = ExtResource("3_m6ybo")
-info_description = "Last Laugh: boost damage of nearby baddies"
 spawn_per_wave = 10
 base_max_health = 50.0
 base_move_speed = 200.0
 innate_abilities = Array[ExtResource("2_cu7e3")]([ExtResource("3_acbwq")])
+info_name = "Red Tank"
+info_description = "Last Laugh: boost damage of nearby baddies"
+info_texture = ExtResource("3_m6ybo")
 metadata/_custom_type_script = "uid://citwba61de3ku"

@@ -2,23 +2,24 @@ class_name BuffInstance extends Resource
 
 var buff : Buff
 var buff_owner : Node2D 
+var buff_source : Array[Node2D]
 var stacks : int = 0
 var dot_timer : float
 var time_remaining : float
 var last_position : Vector2
 var level : int = 0
-#var stat_buff : StatBuff
-#var affected_stats : Array[GlobalEnums.BuffableStats]
 
 ## Setup and Updates
 
-func _init(_buff: Buff, _buff_owner, _buff_level : int = 0) -> void:
+func _init(_buff: Buff, _buff_owner: Node2D, _buff_source: Node2D, _buff_level: int = 0) -> void:
 	buff = _buff
 	buff_owner = _buff_owner
 	level = _buff_level
 	time_remaining = buff.buff_duration[level]
 	last_position = buff_owner.global_position
 	buff_owner.process_update.connect(update)
+	buff_source.append(_buff_source)
+		#get unit emitting aura and add to aura_source
 
 func update(delta: float, position: Vector2 = Vector2(0,0)) -> void:
 	if buff is DotBuff:
@@ -31,7 +32,8 @@ func update(delta: float, position: Vector2 = Vector2(0,0)) -> void:
 		return
 	time_remaining -= delta
 	if time_remaining <= 0.0:
-		buff_owner.data.remove_buff(buff)
+		buff_owner.data.remove_buff(buff, buff_source[0], stacks)
+#buff_source shouldn't matter in above call, since it's only checked for persistent effects
 
 ## DoT Function names = buff names, if updating buff names, update func names too!!
 

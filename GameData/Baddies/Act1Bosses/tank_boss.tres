@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b0eq1kq5p5fbb" path="res://Assets/Baddies/tank_bigRed.png" id="1_4i0k2"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="1_ilrj7"]
-[ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/last_laugh.gd" id="2_4i0k2"]
+[ext_resource type="Script" uid="uid://7msmskgebvqe" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_proto.gd" id="2_lvw06"]
 [ext_resource type="Script" uid="uid://biom68p5pr7a2" path="res://GameData/Baddies/Act1Bosses/tank_boss.gd" id="3_lmi36"]
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="5_lvw06"]
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="6_rac3x"]
@@ -13,12 +13,10 @@ region = Rect2(672, 288, 16, 16)
 
 [sub_resource type="Resource" id="Resource_6fc4o"]
 script = ExtResource("6_rac3x")
-buff_amount = Array[float]([0.0, 0.0, 0.0, 0.0, 0.0])
 info_name = "Heavily Armored"
 info_display_icon = SubResource("AtlasTexture_62s7l")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 3
-aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y8xbs"]
@@ -31,7 +29,6 @@ info_name = "Mediumly Armored"
 info_display_icon = SubResource("AtlasTexture_y8xbs")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 3
-aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4lltq"]
@@ -44,7 +41,6 @@ info_name = "Lightly Armored"
 info_display_icon = SubResource("AtlasTexture_4lltq")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 3
-aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xecpt"]
@@ -57,17 +53,16 @@ info_name = "Unarmored"
 info_display_icon = SubResource("AtlasTexture_xecpt")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 3
-aura_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [resource]
 script = ExtResource("3_lmi36")
 health_thresholds = Array[float]([0.25, 0.5, 0.75])
 threshold_display = Array[ExtResource("1_ilrj7")]([SubResource("Resource_6fc4o"), SubResource("Resource_isypu"), SubResource("Resource_6dvj6"), SubResource("Resource_rx3pi")])
-info_name = "Big Bertha"
-info_description = "Loses armor and defence but gains movespeed as health decreases"
-info_texture = ExtResource("1_4i0k2")
 base_max_health = 1000.0
 base_damage = 100.0
 base_defence_tag = 3
+info_name = "Big Bertha"
+info_description = "Loses armor and defence but gains movespeed as health decreases"
+info_texture = ExtResource("1_4i0k2")
 metadata/_custom_type_script = "uid://biom68p5pr7a2"

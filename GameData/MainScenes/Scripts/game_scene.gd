@@ -167,7 +167,7 @@ func spawn_baddies(wave_data) -> void:
 	var spawning := true
 	
 	for i in wave_data: 
-		var baddy_data = load("res://GameData/Baddies/Act" + str(SaveManager.save_data_run.current_act + 1) + "/" + i)
+		var baddy_data = GameData.get_baddy_filepath(i)
 		
 		wave_baddies.append({
 			"data" : baddy_data,

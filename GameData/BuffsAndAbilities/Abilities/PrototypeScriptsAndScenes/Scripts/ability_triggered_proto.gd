@@ -22,5 +22,5 @@ func triggered_effect() -> void:
 		print("no dmg tag")
 	if buff_data != null:
 		for target in onhit_targets:
-			target.data.add_buff(buff_data, owner_level)
+			target.data.add_buff(buff_data, ability_owner, owner_level)
 	#call(buff.name.to_snake_case(), damage_tags, pending_buffs)

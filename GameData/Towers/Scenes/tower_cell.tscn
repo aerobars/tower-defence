@@ -55,7 +55,7 @@ _data = {
 resource_local_to_scene = true
 radius = 0.01
 
-[node name="TowerCellPrototype" type="StaticBody2D" unique_id=924904849 node_paths=PackedStringArray("path_turret", "path_muzzle", "path_range_scene", "path_range_aoe", "path_animation_player", "path_buff_display", "path_timer", "path_mouse_detection", "path_selection_circle", "path_effect_aoe_container") groups=["towers"]]
+[node name="TowerCellPrototype" type="StaticBody2D" unique_id=924904849 node_paths=PackedStringArray("path_turret", "path_muzzle", "path_range_scene", "path_range_aoe", "path_animation_player", "path_buff_display", "path_timer", "path_mouse_detection", "path_selection_circle") groups=["towers"]]
 input_pickable = true
 script = ExtResource("1_kv3af")
 path_turret = NodePath("TurretTexture")
@@ -67,7 +67,6 @@ path_buff_display = NodePath("BuffDisplayContainer")
 path_timer = NodePath("Timer")
 path_mouse_detection = NodePath(".")
 path_selection_circle = NodePath("SelectionCircle")
-path_effect_aoe_container = NodePath("EffectAoeContainer")
 
 [node name="TowerHighlight" type="ColorRect" parent="." unique_id=798781811]
 visible = false

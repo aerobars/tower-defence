@@ -7,9 +7,9 @@
 
 [resource]
 script = ExtResource("3_j35i5")
-info_name = "Blue Tank"
-info_texture = ExtResource("4_j35i5")
-info_description = "Boosts Speed of nearby baddys"
 spawn_per_wave = 5
 innate_abilities = Array[ExtResource("2_iks48")]([ExtResource("3_tyxp7")])
+info_name = "Blue Tank"
+info_description = "Boosts Speed of nearby baddys"
+info_texture = ExtResource("4_j35i5")
 metadata/_custom_type_script = "uid://citwba61de3ku"

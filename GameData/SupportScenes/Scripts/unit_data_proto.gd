@@ -3,6 +3,7 @@ class_name UnitDataPrototype extends Resource
 
 signal update_buff_display(buff: Buff, stacks: int)
 signal remove_buff_display(buff: Buff)
+signal stats_updated
 
 @export_group("Unit Info", "info_")
 @export var info_name : String
@@ -11,30 +12,44 @@ signal remove_buff_display(buff: Buff)
 
 ##first level will be 0 after setup_stats to line up with arrays
 var level : int = 0 
+##buff_owner is the unti affected by the buff
 var buff_owner : UnitScenePrototype
-var active_buffs: Dictionary[Buff, BuffInstance] = {}
+var active_buffs : Dictionary[Buff, BuffInstance] = {}
 
 func _init() -> void:
 	setup_stats.call_deferred()
 
-func setup_stats(_level: int = 0) -> void:
+func setup_stats(_level : int = 0) -> void:
 	level = _level
 	recalculate_stats()
 
-func add_buff(buff: Buff, buff_level : int, amt : int = 1, _buff_source : CollisionObject2D = null) -> void:
+##buff_owner is the unit affected by the buff, buff_source is the unit providing the buff being added
+func add_buff(buff : Buff, buff_source : CollisionObject2D, buff_level : int, amt : int = 1) -> void:
 	if not active_buffs.has(buff):
-		var new_inst = BuffInstance.new(buff, buff_owner, buff_level)
+		var new_inst = BuffInstance.new(buff, buff_owner, buff_source, buff_level)
 		active_buffs[buff] = new_inst
+	
 	var inst = active_buffs[buff]
+	
+	if not inst.buff_source.has(buff_source):
+		inst.buff_source.append(buff_source)
 	inst.stacks = min(inst.stacks + amt, buff.stack_limit[buff_level])
 	inst.time_remaining = buff.buff_duration[buff_level]
 	update_buff_display.emit(buff, inst.stacks)
 	recalculate_stats()
 
-func remove_buff(buff: Buff, _amt = 1) -> void:
-	active_buffs.erase(buff)
-	remove_buff_display.emit(buff)
-	recalculate_stats()
+func remove_buff(buff : Buff, buff_source : CollisionObject2D, amt : int = 1) -> void:
+	var inst = active_buffs[buff]
+	
+	if buff.persistent_effect: #check whether buff is an aura/persistent effect
+		inst.buff_source.erase(buff_source)
+	else:
+		inst.stacks = max(inst.stacks - amt, 0)
+	
+	if inst.buff_source.size() == 0 or inst.stacks == 0:
+		active_buffs.erase(buff)
+		remove_buff_display.emit(buff)
+		recalculate_stats()
 
 func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
 	return []
@@ -51,7 +66,7 @@ func recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
 	var stat_addends: Dictionary = {} #Amt to add to stats
 	for buff in active_buffs.keys():
-		if buff_check(buff.stat):
+		if buff is BuffStat:
 			var stat_name : String = ""
 			var inst = active_buffs[buff]
 			for stat in GlobalEnums.BuffableStats.keys():
@@ -86,6 +101,8 @@ func recalculate_stats() -> void:
 			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			var cur_property_name: String = str("current_" + stat_name)
 			set(cur_property_name, buff.effect_amount[active_buffs[buff].level])
+	
+	stats_updated.emit()
 
 func power_buff() -> void:
 	pass

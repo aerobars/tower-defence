@@ -3,7 +3,7 @@ extends Node
 func display_number(value: int, position: Vector2, damage_source, is_critical: bool = false) -> void:
 	var number = Label.new()
 	number.global_position = position
-	number.text = str(value)
+	number.text = str(abs(value))
 	number.z_index = 5
 	number.label_settings = LabelSettings.new()
 	

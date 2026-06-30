@@ -23,7 +23,7 @@ var current_range : float
 @export var swap_buff : Buff
 @export var swap_buff_duration: float
 
-##Can add onhit buffs that tower starts with
+##Innate onhit effects that tower starts with
 @export var on_hit_effects : Array[Buff] = []
 var net_power : int = 0
 var power_surplus_buffs : Dictionary = {}
@@ -31,17 +31,16 @@ var power_calc : float :
 	get:
 		return (1 + float(net_power)/10) # * float(power_surplus_buffs[stat_name])/10)
 
-
-func add_buff(buff: Buff, buff_level : int = 0, amt : int = 1, buff_source : CollisionObject2D = null) -> void:
+func add_buff(buff : Buff, _buff_source : CollisionObject2D, buff_level : int, amt : int = 1) -> void:
 	if buff.buff_targets == GlobalEnums.Targets.TOWERS or buff.buff_targets == GlobalEnums.Targets.SELF:
 		if buff_check(buff.stat):
-			super(buff, buff_level, amt, buff_source)
+			super(buff, _buff_source, buff_level, amt)
 	elif buff.buff_targets == GlobalEnums.Targets.BADDIES:
 		add_on_hit_effect(buff)
 
-func remove_buff(buff : Buff, amt : = 1) -> void:
+func remove_buff(buff : Buff, buff_source : CollisionObject2D, amt : = 1) -> void:
 	if buff is BuffStat and buff.buff_targets == GlobalEnums.Targets.TOWERS:
-		super(buff, amt)
+		super(buff, buff_source ,amt)
 	else:
 		remove_on_hit_effect(buff)
 

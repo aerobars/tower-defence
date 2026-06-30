@@ -1,16 +1,10 @@
 [gd_scene format=3 uid="uid://cjn6jcx1rl4js"]
 
 [ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/ScriptsAndProtos/baddy.gd" id="1_21g7o"]
-[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="4_soyye"]
 [ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/ScriptsAndProtos/hit_flash.tres" id="5_dic3x"]
 [ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="5_uio4o"]
 [ext_resource type="Texture2D" uid="uid://5pqxlre1amih" path="res://Assets/Baddies/tank_dark.png" id="6_c006g"]
 [ext_resource type="PackedScene" uid="uid://dhqdc43v3lx86" path="res://GameData/Baddies/ScriptsAndProtos/baddy_health_bar.tscn" id="7_ptvfa"]
-
-[sub_resource type="Resource" id="Resource_ptvfa"]
-script = ExtResource("4_soyye")
-innate_abilities = Array[PackedScene]([null])
-metadata/_custom_type_script = "uid://citwba61de3ku"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7b3mk"]
 size = Vector2(42, 42)
@@ -67,7 +61,6 @@ path_damage_number_origin = NodePath("DamageNumberOrigin")
 path_hit_flash = NodePath("HitFlashAnimation")
 path_ability_container = NodePath("AbilityContainer")
 path_baddy_texture = NodePath("BaddyTexture")
-data = SubResource("Resource_ptvfa")
 path_mouse_detection = NodePath(".")
 path_selection_circle = NodePath("SelectionCircle")
 

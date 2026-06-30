@@ -1,20 +1,9 @@
-[gd_scene format=3 uid="uid://ba1o7qkvjrf5e"]
+[gd_scene format=3 uid="uid://okk1kxf3of6c"]
 
 [ext_resource type="Script" uid="uid://jggugre4rngi" path="res://GameData/Baddies/ScriptsAndProtos/baddy.gd" id="1_6oru5"]
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="2_rtklc"]
-[ext_resource type="Script" uid="uid://2ng32kxred6f" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/last_laugh.gd" id="3_pm7px"]
-[ext_resource type="Script" uid="uid://citwba61de3ku" path="res://GameData/Baddies/ScriptsAndProtos/baddy_stats.gd" id="4_rb4bj"]
 [ext_resource type="Shader" uid="uid://ckb62mi0oiuj" path="res://GameData/Baddies/ScriptsAndProtos/hit_flash.tres" id="5_r3gbj"]
 [ext_resource type="Texture2D" uid="uid://b0eq1kq5p5fbb" path="res://Assets/Baddies/tank_bigRed.png" id="6_6oru5"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="7_5ow1n"]
-
-[sub_resource type="Resource" id="Resource_tji8d"]
-resource_local_to_scene = true
-script = ExtResource("4_rb4bj")
-base_max_health = 1000.0
-base_damage = 21.0
-base_defence = 10.0
-metadata/_custom_type_script = "uid://citwba61de3ku"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7b3mk"]
 size = Vector2(42, 42)
@@ -64,22 +53,21 @@ _data = {
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pm7px"]
 
-[node name="BossTank" type="PathFollow2D"]
+[node name="BossTank" type="PathFollow2D" unique_id=1951168723]
 loop = false
 script = ExtResource("1_6oru5")
-data = SubResource("Resource_tji8d")
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["baddies"]]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1206992888 groups=["baddies"]]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1626045945]
 shape = SubResource("RectangleShape2D_7b3mk")
 debug_color = Color(0, 0.6, 0.7, 0.42)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=435277249]
 material = SubResource("ShaderMaterial_44shp")
 texture = ExtResource("6_6oru5")
 
-[node name="HealthBar" type="TextureProgressBar" parent="."]
+[node name="HealthBar" type="TextureProgressBar" parent="." unique_id=1209175812]
 offset_left = -30.0
 offset_top = -30.0
 offset_right = 30.0
@@ -91,17 +79,15 @@ texture_progress = ExtResource("7_5ow1n")
 tint_under = Color(0.207843, 0.207843, 0.207843, 1)
 tint_progress = Color(3.60981e-06, 0.629484, 0, 1)
 
-[node name="Impact" type="Marker2D" parent="."]
+[node name="Impact" type="Marker2D" parent="." unique_id=407868225]
 position = Vector2(-15, -15)
 
-[node name="DamageNumberOrigin" type="Marker2D" parent="."]
+[node name="DamageNumberOrigin" type="Marker2D" parent="." unique_id=1427141834]
 
-[node name="HitFlashAnimation" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_8x5kb")
-}
+[node name="HitFlashAnimation" type="AnimationPlayer" parent="." unique_id=347676002]
+libraries/ = SubResource("AnimationLibrary_8x5kb")
 
-[node name="AuraRange" type="Area2D" parent="."]
+[node name="AuraRange" type="Area2D" parent="." unique_id=405340896]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AuraRange"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AuraRange" unique_id=667306362]
 shape = SubResource("CircleShape2D_pm7px")

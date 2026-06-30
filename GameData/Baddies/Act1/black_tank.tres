@@ -7,9 +7,9 @@
 
 [resource]
 script = ExtResource("3_u323i")
-info_name = "Black Tank"
-info_texture = ExtResource("4_6mq66")
-info_description = "Chance to gain a burst of speed on hit"
 spawn_per_wave = 10
 innate_abilities = Array[ExtResource("2_6mq66")]([ExtResource("3_jhior")])
+info_name = "Black Tank"
+info_description = "Chance to gain a burst of speed on hit"
+info_texture = ExtResource("4_6mq66")
 metadata/_custom_type_script = "uid://citwba61de3ku"

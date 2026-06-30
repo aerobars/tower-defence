@@ -14,7 +14,6 @@ signal hide_range_display
 const PROJECTILE_SCENE := preload("res://GameData/Towers/Scenes/tower_projectile.tscn")
 const TURRET_TEXTURE_SIZE : float = 32
 var non_aura_radius : float #equal to TowerBase's Marker2D radius
-var data : PrototypeMod
 var button_slot_id : int
 
 @export_group("Tower Node Paths", "path_")
@@ -47,6 +46,7 @@ func _ready():
 	mod_updated.connect(GameData.mod_updated) #for when this mod gets updated
 	GameData.mod_update_check.connect(_on_mod_updated) #for when other mods get updated
 	#above signals allow other mods to be added to auras after they are updated
+	#data.stats_updated.connect()
 
 ## Mod Updates
 

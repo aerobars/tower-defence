@@ -32,7 +32,7 @@ var waypoint_index : int = 1
 ##Runtime Variables
 const AURA_SCENE := preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scenes/ability_aura.tscn")
 const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/Scenes/projectile_impact.tscn")
-@export var data : BaddyStats
+
 var destroyed := false
 var level : int = 0
 #var selected := false
@@ -49,7 +49,6 @@ func _ready() -> void:
 	#healthbar setup
 	healthbar_update(data.health, data.current_max_health)
 	path_status_display.position = position + Vector2(-30, 18)
-	path_status_display.update_defence(data.current_defence)
 	
 	#pathing setup
 	update_pathing()

@@ -1,18 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://bii7ege1adnq6"]
+[gd_scene format=3 uid="uid://bii7ege1adnq6"]
 
 [ext_resource type="Script" uid="uid://dbwt1vxl8r3tq" path="res://GameData/UIScenes/GUI/Scripts/tower_button_mod_slot.gd" id="1_xjtiu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exgtw"]
 size = Vector2(32, 32)
 
-[node name="ModSlot" type="StaticBody2D" groups=["droppable"]]
+[node name="ModSlot" type="StaticBody2D" unique_id=635031877 groups=["droppable"]]
 z_index = -1
+collision_layer = 16
+collision_mask = 0
 script = ExtResource("1_xjtiu")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=75683257]
 shape = SubResource("RectangleShape2D_exgtw")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=905551119]
 offset_left = -16.0
 offset_top = -16.0
 offset_right = 16.0

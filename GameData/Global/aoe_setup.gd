@@ -6,7 +6,7 @@ static func setup_aoe(
 		target_group : String, 
 		radius : float
 		) -> Array[Node2D]:
-			
+	
 	var targets : Array[Node2D] = []
 	
 	var aoe_radius = CircleShape2D.new()
@@ -18,8 +18,7 @@ static func setup_aoe(
 	aoe.collide_with_bodies = true
 	
 	for body in aoe_owner.get_world_2d().direct_space_state.intersect_shape(aoe):
-		#print(body)
 		if body.collider.is_in_group(target_group):
 			targets.append(body.collider)
-
+	
 	return targets
