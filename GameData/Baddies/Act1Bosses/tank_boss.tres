@@ -7,28 +7,17 @@
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="5_lvw06"]
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="6_rac3x"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_62s7l"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_xecpt"]
 atlas = ExtResource("5_lvw06")
-region = Rect2(672, 288, 16, 16)
+region = Rect2(672, 304, 16, 16)
 
-[sub_resource type="Resource" id="Resource_6fc4o"]
+[sub_resource type="Resource" id="Resource_rx3pi"]
 script = ExtResource("6_rac3x")
-info_name = "Heavily Armored"
-info_display_icon = SubResource("AtlasTexture_62s7l")
+info_name = "Unarmored"
+info_display_icon = SubResource("AtlasTexture_xecpt")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 3
-metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y8xbs"]
-atlas = ExtResource("5_lvw06")
-region = Rect2(752, 288, 16, 16)
-
-[sub_resource type="Resource" id="Resource_isypu"]
-script = ExtResource("6_rac3x")
-info_name = "Mediumly Armored"
-info_display_icon = SubResource("AtlasTexture_y8xbs")
-stack_limit = Array[int]([1, 1, 1, 1, 1])
-buff_targets = 3
+persistent_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4lltq"]
@@ -41,24 +30,39 @@ info_name = "Lightly Armored"
 info_display_icon = SubResource("AtlasTexture_4lltq")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 3
+persistent_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xecpt"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_y8xbs"]
 atlas = ExtResource("5_lvw06")
-region = Rect2(672, 304, 16, 16)
+region = Rect2(752, 288, 16, 16)
 
-[sub_resource type="Resource" id="Resource_rx3pi"]
+[sub_resource type="Resource" id="Resource_isypu"]
 script = ExtResource("6_rac3x")
-info_name = "Unarmored"
-info_display_icon = SubResource("AtlasTexture_xecpt")
+info_name = "Mediumly Armored"
+info_display_icon = SubResource("AtlasTexture_y8xbs")
 stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 3
+persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62s7l"]
+atlas = ExtResource("5_lvw06")
+region = Rect2(672, 288, 16, 16)
+
+[sub_resource type="Resource" id="Resource_6fc4o"]
+script = ExtResource("6_rac3x")
+info_name = "Heavily Armored"
+info_display_icon = SubResource("AtlasTexture_62s7l")
+stack_limit = Array[int]([1, 1, 1, 1, 1])
+buff_targets = 3
+persistent_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [resource]
 script = ExtResource("3_lmi36")
 health_thresholds = Array[float]([0.25, 0.5, 0.75])
-threshold_display = Array[ExtResource("1_ilrj7")]([SubResource("Resource_6fc4o"), SubResource("Resource_isypu"), SubResource("Resource_6dvj6"), SubResource("Resource_rx3pi")])
+threshold_display = Array[ExtResource("1_ilrj7")]([SubResource("Resource_rx3pi"), SubResource("Resource_6dvj6"), SubResource("Resource_isypu"), SubResource("Resource_6fc4o")])
 base_max_health = 1000.0
 base_damage = 100.0
 base_defence_tag = 3

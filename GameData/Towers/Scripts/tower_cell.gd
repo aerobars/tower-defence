@@ -47,6 +47,10 @@ func _ready():
 	GameData.mod_update_check.connect(_on_mod_updated) #for when other mods get updated
 	#above signals allow other mods to be added to auras after they are updated
 	#data.stats_updated.connect()
+	super()
+
+func get_level() -> int:
+	return get_parent().tower_data.level
 
 ## Mod Updates
 

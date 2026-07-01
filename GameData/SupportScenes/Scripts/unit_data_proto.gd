@@ -16,8 +16,8 @@ var level : int = 0
 var buff_owner : UnitScenePrototype
 var active_buffs : Dictionary[Buff, BuffInstance] = {}
 
-func _init() -> void:
-	setup_stats.call_deferred()
+#func _init() -> void:
+#	setup_stats.call_deferred()
 
 func setup_stats(_level : int = 0) -> void:
 	level = _level

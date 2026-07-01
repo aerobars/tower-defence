@@ -16,7 +16,7 @@ func _init(_buff: Buff, _buff_owner: Node2D, _buff_source: Node2D, _buff_level: 
 	buff_owner = _buff_owner
 	level = _buff_level
 	time_remaining = buff.buff_duration[level]
-	last_position = buff_owner.global_position
+	last_position = Vector2(0,0)
 	buff_owner.process_update.connect(update)
 	buff_source.append(_buff_source)
 		#get unit emitting aura and add to aura_source

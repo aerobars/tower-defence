@@ -7,16 +7,16 @@ class_name TankBoss extends BaddyBossProto
 @export var threshold_display : Array[Buff]
 var current_threshold : Buff
 
-func _init() -> void:
-	super()
-	add_buff(current_threshold, buff_owner, level)
 
 func _on_health_set(new_value: float) -> void:
 	super(new_value)
 	for threshold in health_thresholds:
 		if health / current_max_health <= threshold:
 			boss_effect()
-			break
+			health_thresholds.erase(threshold)
+			return
+	current_threshold = threshold_display[base_defence_tag]
+	add_buff(current_threshold, buff_owner, level)
 
 func boss_effect() -> void:
 	base_defence_tag = max(base_defence_tag - 1, 0)

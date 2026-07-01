@@ -41,10 +41,10 @@ func wave_display(wave_data) -> void:
 	for baddy in wave_data:
 		path_baddy_name.custom_minimum_size.y = 16
 		path_baddy_name.add_image(baddy["data"].info_texture, 16, 16)
-		if first:
-			path_baddy_name.append_text(baddy["data"].info_name + " and ")
-		else:
+		if not first or wave_data.size() == 1:
 			path_baddy_name.append_text(baddy["data"].info_name)
+		else:
+			path_baddy_name.append_text(baddy["data"].info_name + " and ")
 		first = false
 	set_folded(false)
 

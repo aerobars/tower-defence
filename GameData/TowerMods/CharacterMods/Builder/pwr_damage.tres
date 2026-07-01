@@ -10,9 +10,9 @@ region = Rect2(40, 33, 32, 32)
 
 [resource]
 script = ExtResource("2_0vrf7")
+base_power_levels = Array[int]([4, 4, 4, 4, 4])
+mod_class = 1
 info_name = "Damage Boost Power"
 info_description = "Provides power and boosts damage of weapon mods by 10% per point of surplus power"
 info_texture = SubResource("AtlasTexture_0vrf7")
-base_power_levels = Array[int]([4, 4, 4, 4, 4])
-mod_class = 1
 metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

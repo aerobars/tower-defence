@@ -11,10 +11,12 @@ var data : UnitDataPrototype
 
 var selected : bool = false
 
-#func _ready() -> void:
-#	path_mouse_detection.input_event.connect(_on_input_event)
-#	path_mouse_detection.mouse_entered.connect(_on_mouse_entered)
-#	path_mouse_detection.mouse_exited.connect(_on_mouse_exited)
+@abstract func get_level() -> int
+
+func _ready() -> void:
+	if data != null:
+		data.setup_stats(get_level())
+
 
 ##UnitProtoype function, calls the add_buff function in data resource, body defaults to self
 func add_buff(buff : Buff, body : CollisionObject2D = self, cur_level : int = 0) -> void:
