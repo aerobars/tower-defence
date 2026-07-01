@@ -33,7 +33,7 @@ var burn_colour : Color = Color.html("#f26d07")
 const ICON_ATLAS := preload("res://Assets/Environment/Tilesets/colored_packed.png")
 const ICON_DAMAGE_COORDS = Rect2(544.0, 96.0, 16.0, 16.0)
 const ICON_DEFENCE_COORDS = Rect2(640.0, 48.0, 16.0, 16.0)
-const ICON_HEALTH_COORDS = Rect2(624.0, 48.0, 16.0, 16.0)
+const ICON_HEALTH_COORDS = Rect2(624.0, 160.0, 16.0, 16.0)
 const ICON_MOVE_SPEED_COORDS = Rect2(384.0, 336.0, 16.0, 16.0)
 
 var is_dragging = false
