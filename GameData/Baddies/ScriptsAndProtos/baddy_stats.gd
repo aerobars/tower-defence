@@ -1,7 +1,7 @@
 class_name BaddyStats extends UnitDataPrototype
 
 signal health_depleted
-signal health_changed(current_health: int, max_health: int)
+signal health_changed(current_health: float, max_health: float)
 
 
 @export_group("Spawn Data", "spawn_")
