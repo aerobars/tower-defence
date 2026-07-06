@@ -38,8 +38,7 @@ var attack_tracker : int
 ## Initial Setup
 
 func _ready():
-	if data != null:
-		data.buff_owner = self
+	super()
 	for body in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(body)
 	
@@ -47,7 +46,6 @@ func _ready():
 	GameData.mod_update_check.connect(_on_mod_updated) #for when other mods get updated
 	#above signals allow other mods to be added to auras after they are updated
 	#data.stats_updated.connect()
-	super()
 
 func get_level() -> int:
 	return get_parent().tower_data.level
@@ -115,7 +113,7 @@ func _on_timer_timeout() -> void:
 ## In-Game Function
 
 func _process(delta: float) -> void:
-	if data == null or data is PowerMod: 
+	if data == null or data is ModPower: 
 		return
 	for buff in data.active_buffs:
 		data.active_buffs[buff].update(delta)
@@ -128,10 +126,10 @@ func _process(delta: float) -> void:
 			if not path_animation_player.is_playing():
 				turn()
 		if attack_timer >= data.current_attack_speed:
-			if data is AuraMod and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.persistent_effect and get_parent().aura_tower:
+			if data is ModAura and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.persistent_effect and get_parent().aura_tower:
 				for baddy in baddies_in_range:
 					add_buff(data.buff_data, baddy, get_parent().tower_data.level)
-			elif data is WeaponMod:
+			elif data is ModWeapon:
 				#attack_tracker += 1
 				for i in data.current_multitarget:
 					if i < attack_targets.size():
@@ -180,7 +178,7 @@ func fire(target):
 	else:
 		fire_instant()
 		if data.current_aoe > 0:
-			var baddies = AOESetup.setup_aoe(
+			var baddies = StaticFunctions.setup_aoe(
 				self, 
 				target.global_position, 
 				"baddies", 

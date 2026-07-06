@@ -114,7 +114,7 @@ func tower_update(
 				child.aura_targets = []
 			if button_mod_data != null: #set tower mod's data
 				child.data = button_mod_data.duplicate(true)
-				child.data.buff_owner = child
+				child.data.data_owner = child
 				if child.data.swap_enabled:
 					if child.data.swap_buff == null or child.data.swap_buff_duration == 0.0:
 						print("Swapper enabled with incomplete swap data for ", child.data.name)

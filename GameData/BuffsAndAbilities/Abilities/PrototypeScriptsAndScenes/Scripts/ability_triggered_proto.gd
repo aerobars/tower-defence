@@ -4,7 +4,7 @@
 func triggered_effect() -> void:
 	var onhit_targets := []
 	if ability_targets == GlobalEnums.Targets.BADDIES or ability_targets == GlobalEnums.Targets.TOWERS:
-		onhit_targets = AOESetup.setup_aoe(
+		onhit_targets = StaticFunctions.setup_aoe(
 			ability_owner, 
 			ability_owner.global_position,
 			GlobalEnums.Targets.keys()[ability_targets].to_lower(), 

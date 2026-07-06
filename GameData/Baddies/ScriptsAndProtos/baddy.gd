@@ -7,6 +7,7 @@ signal open_baddy_display(data: BaddyStats)
 signal update_baddy_display(data: BaddyStats)
 signal hit_detected
 signal process_update(delta: float, cur_pos: Vector2)
+signal checkpoint_reached
 #signal unit_selected(baddy: Baddy)
 
 ##Node Paths
@@ -40,10 +41,7 @@ var level : int = 0
 ##Setup
 
 func _ready() -> void:
-	if data == null:
-		print("missing baddy data")
-		return
-	data.buff_owner = self
+	super()
 	path_baddy_texture.texture = data.info_texture
 	
 	#healthbar setup
@@ -67,8 +65,6 @@ func _ready() -> void:
 		data.active_abilities.append(new_ability)
 		new_ability.ability_setup(self)
 		path_status_display.path_buff_display_container.update_display(new_ability)
-	
-	super()
 
 func get_level() -> int:
 	return level
@@ -94,6 +90,7 @@ func _physics_process(delta: float) -> void:
 		current_path_index += 1
 		if current_path_index >= current_path.size(): 
 			waypoint_index += 1
+			checkpoint_reached.emit()
 			update_pathing()
 			if current_path == PackedVector2Array([Vector2(-1000,-1000)]) and not destroyed:
 				destroyed = true
@@ -109,12 +106,6 @@ func _physics_process(delta: float) -> void:
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "rotation", global_position.angle_to_point(current_path_point), 0.15)
 	global_position = global_position.move_toward(current_path_point, movement_delta)
-
-func periodic_effect_trigger() -> void:
-	if data.periodic_effect.is_empty():
-		return
-	for effect in data.periodic_effect:
-		add_buff(effect, self, level)
 
 func update_pathing() -> void:
 	current_path = path_map.update_pathing(global_position, waypoint_index)

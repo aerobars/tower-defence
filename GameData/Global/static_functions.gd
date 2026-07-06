@@ -1,4 +1,4 @@
-class_name AOESetup extends Node
+class_name StaticFunctions extends Node
 
 static func setup_aoe(
 		aoe_owner : Node2D, 

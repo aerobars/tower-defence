@@ -1,13 +1,4 @@
-class_name WeaponMod extends PrototypeMod
-
-enum WeaponBuffableStats {
-	DAMAGE,
-	ATTACK_SPEED,
-	AOE,
-	CRIT_CHANCE,
-	RANGE,
-	POWER
-}
+class_name ModWeapon extends PrototypeMod
 
 const BUFFABLE_STATS = [
 	GlobalEnums.BuffableStats.AOE,
@@ -65,11 +56,11 @@ func calculate_damage() -> Array: #returns [total attack damage, damage tags, di
 func add_on_hit_effect(buff : Buff) -> void:
 	if buff is not BuffStat and buff.damage_tag > 0:
 		damage_tags |= buff.damage_tag
-	buff_owner.path_buff_display.update_display(buff)
+	data_owner.path_buff_display.update_display(buff)
 	on_hit_effects.append(buff)
 
 func remove_on_hit_effect(buff : Buff) -> void:
 	if buff is not BuffStat and buff.damage_tag > 0:
 		damage_tags &= ~buff.damage_tag
-	buff_owner.path_buff_display.remove_buff(buff)
+	data_owner.path_buff_display.remove_buff(buff)
 	on_hit_effects.erase(buff)

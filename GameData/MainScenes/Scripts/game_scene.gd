@@ -278,7 +278,7 @@ func set_tower_preview() -> void:
 		var slot_id = key % 10
 		if mod.mod_class == mod.ModClass.AURA or mod.mod_class == mod.ModClass.WEAPON:
 			range_texture = Sprite2D.new()
-			var scaling : float = mod.current_range / 300.0
+			var scaling : float = mod.base_range_levels[0] / 300.0
 			range_texture.texture = PREVIEW_RANGE_DISPLAY
 			if mod.mod_class == mod.ModClass.WEAPON:
 				range_texture.modulate = Color("CRIMSON")

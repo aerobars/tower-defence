@@ -16,12 +16,13 @@ func _on_health_set(new_value: float) -> void:
 			health_thresholds.erase(threshold)
 			return
 	current_threshold = threshold_display[base_defence_tag]
-	add_buff(current_threshold, buff_owner, level)
+	add_buff(current_threshold, data_owner, level)
 
+##change boss effect to ability
 func boss_effect() -> void:
 	base_defence_tag = max(base_defence_tag - 1, 0)
 	base_move_speed += 50
 	base_defence -= 2
-	remove_buff(current_threshold, buff_owner)
+	remove_buff(current_threshold, data_owner)
 	current_threshold = threshold_display[base_defence_tag]
-	add_buff(current_threshold, buff_owner, level)
+	add_buff(current_threshold, data_owner, level)

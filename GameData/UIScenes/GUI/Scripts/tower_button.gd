@@ -79,7 +79,7 @@ func get_tower_mods() -> Dictionary:
 				has_wep = true
 			elif child_data.mod_class == child_data.ModClass.AURA:
 				has_aura = true
-		if child_data is PowerMod:
+		if child_data is ModPower:
 			var stat_name : String = ""
 			for stat in GlobalEnums.BuffableStats.keys():
 				for i in child_data.power_surplus_buffable_stats:

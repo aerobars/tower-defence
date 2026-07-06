@@ -1,5 +1,5 @@
-@abstract
-class_name UnitDataPrototype extends Resource
+##Parent script for BaddyStats and PrototypeMod
+@abstract class_name UnitDataPrototype extends Resource
 
 signal update_buff_display(buff: Buff, stacks: int)
 signal remove_buff_display(buff: Buff)
@@ -13,7 +13,7 @@ signal stats_updated
 ##first level will be 0 after setup_stats to line up with arrays
 var level : int = 0 
 ##buff_owner is the unti affected by the buff
-var buff_owner : UnitScenePrototype
+var data_owner : UnitScenePrototype
 var active_buffs : Dictionary[Buff, BuffInstance] = {}
 
 #func _init() -> void:
@@ -23,10 +23,10 @@ func setup_stats(_level : int = 0) -> void:
 	level = _level
 	recalculate_stats()
 
-##buff_owner is the unit affected by the buff, buff_source is the unit providing the buff being added
+##buff/data_owner is the unit affected by the buff, buff_source is the unit providing the buff being added
 func add_buff(buff : Buff, buff_source : CollisionObject2D, buff_level : int, amt : int = 1) -> void:
 	if not active_buffs.has(buff):
-		var new_inst = BuffInstance.new(buff, buff_owner, buff_source, buff_level)
+		var new_inst = BuffInstance.new(buff, data_owner, buff_source, buff_level)
 		active_buffs[buff] = new_inst
 	
 	var inst = active_buffs[buff]

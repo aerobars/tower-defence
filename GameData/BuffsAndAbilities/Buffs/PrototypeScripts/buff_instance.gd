@@ -59,7 +59,7 @@ func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
 func effect_trigger() -> void:
 	var onhit_targets := []
 	if buff.buff_targets == GlobalEnums.Targets.BADDIES or buff.buff_targets == GlobalEnums.Targets.TOWERS:
-		onhit_targets = AOESetup.setup_aoe(
+		onhit_targets = StaticFunctions.setup_aoe(
 			buff_owner, 
 			buff_owner.global_position,
 			GlobalEnums.Targets.keys()[buff.buff_targets].to_lower(), 

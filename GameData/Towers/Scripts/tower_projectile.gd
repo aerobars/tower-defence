@@ -25,7 +25,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("baddies"):
 		pierce_count += 1
 		if aoe > 0:
-			var baddies = AOESetup.setup_aoe(
+			var baddies = StaticFunctions.setup_aoe(
 				self, 
 				body.global_position, 
 				"baddies", 

@@ -1,4 +1,4 @@
-class_name AuraMod extends PrototypeMod
+class_name ModAura extends PrototypeMod
 
 const BUFFABLE_STATS = [
 	GlobalEnums.BuffableStats.RANGE,

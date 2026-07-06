@@ -15,7 +15,10 @@ var selected : bool = false
 
 func _ready() -> void:
 	if data != null:
+		data.data_owner = self
 		data.setup_stats(get_level())
+	else:
+		print("no data file detected")
 
 
 ##UnitProtoype function, calls the add_buff function in data resource, body defaults to self

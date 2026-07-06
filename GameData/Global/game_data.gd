@@ -18,6 +18,7 @@ const AURA_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/Prototy
 const LAST_LAUGH_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_last_laugh.gd")
 const ONHIT_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd")
 const PERIODIC_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_periodic.gd")
+const HP_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_hp_threshold.gd")
 
 ## Game Colours
 
@@ -41,7 +42,7 @@ var is_dragging = false
 const BADDY_FILEPATH = "res://GameData/Baddies/"
 const CHAR_FILEPATH = "res://GameData/TowerMods/CharacterMods/"
 const TOTAL_ACTS = 1
-const BOSS_WAVES := [1]
+const BOSS_WAVES := [2]
 
 var character_mods : Dictionary = {}
 var act_baddies : Dictionary = {}
