@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PowerMod" format=3 uid="uid://c0b02to1odbhe"]
+[gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://c0b02to1odbhe"]
 
 [ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="1_bwwys"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="2_ik7bv"]
@@ -11,9 +11,9 @@ region = Rect2(8, 8, 32, 32)
 [resource]
 resource_local_to_scene = true
 script = ExtResource("1_bwwys")
+base_power_levels = Array[int]([4, 4, 4, 4, 4])
+mod_class = 1
 info_name = "Test Power"
 info_description = "Test Power for testing"
 info_texture = SubResource("AtlasTexture_ik7bv")
-base_power_levels = Array[int]([4, 4, 4, 4, 4])
-mod_class = 1
 metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

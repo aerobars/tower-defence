@@ -2,13 +2,19 @@
 
 [ext_resource type="Texture2D" uid="uid://tl8l0jorj0gj" path="res://Assets/Effects/explosion4.png" id="1_08mox"]
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="1_j5job"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_k6yox"]
+
+[sub_resource type="Resource" id="Resource_04737"]
+script = ExtResource("2_k6yox")
+stat = 8
+modification_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
 
 [resource]
 script = ExtResource("1_j5job")
-stat = 8
-buff_type = 1
+modifying_stats = Array[ExtResource("2_k6yox")]([SubResource("Resource_04737")])
 info_name = "Damage Boost"
 info_display_icon = ExtResource("1_08mox")
 buff_targets = 2
-persistent_effect = true
+buff_persistent_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

@@ -1,20 +1,25 @@
-[gd_resource type="Resource" script_class="StatBuff" format=3 uid="uid://bg70q2egkue1q"]
+[gd_resource type="Resource" script_class="BuffStat" format=3 uid="uid://bg70q2egkue1q"]
 
 [ext_resource type="Texture2D" uid="uid://vey2hsb1283a" path="res://Assets/Effects/towerDefense_tile134.png" id="1_ophol"]
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="1_qgkxy"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_3eiq0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p6gfi"]
 atlas = ExtResource("1_ophol")
 region = Rect2(16, 16, 32, 32)
 
+[sub_resource type="Resource" id="Resource_p50gf"]
+script = ExtResource("2_3eiq0")
+stat = 64
+modification_type = 1
+modification_amount = Array[float]([-0.01, -0.01, -0.01, -0.01, -0.01])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
 [resource]
 script = ExtResource("1_qgkxy")
-stat = 64
-buff_type = 2
+modifying_stats = Array[ExtResource("2_3eiq0")]([SubResource("Resource_p50gf")])
 info_name = "Posion"
 info_display_icon = SubResource("AtlasTexture_p6gfi")
-stack_limit = Array[int]([10, 20, 30, 40, 50])
 buff_duration = Array[float]([2.0, 2.0, 2.0, 2.0, 2.0])
 buff_targets = 2
-effect_amount = Array[float]([0.01, 0.01, 0.01, 0.01, 0.01])
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

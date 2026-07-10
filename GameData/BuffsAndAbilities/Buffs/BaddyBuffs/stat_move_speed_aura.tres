@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="BuffStat" format=3 uid="uid://e7n1t7sxx8la"]
+
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_88gdy"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_tj065"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="3_lki38"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_esp53"]
+atlas = ExtResource("1_88gdy")
+region = Rect2(384, 336, 16, 16)
+
+[sub_resource type="Resource" id="Resource_mqbod"]
+script = ExtResource("2_tj065")
+stat = 64
+modification_type = 1
+modification_amount = Array[float]([0.25, 0.25, 0.25, 0.25, 0.25])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
+[resource]
+script = ExtResource("3_lki38")
+modifying_stats = Array[ExtResource("2_tj065")]([SubResource("Resource_mqbod")])
+info_name = "Aura Move Speed"
+info_display_icon = SubResource("AtlasTexture_esp53")
+buff_stack_limit = Array[int]([1, 1, 1, 1, 1])
+buff_targets = 2
+buff_persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

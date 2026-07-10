@@ -1,7 +1,11 @@
 class_name AbilityHPThreshold extends AbilityTriggeredPrototype
 
-##Order threshold levels from lowest > highest
+signal threshold_reached
+
+##float is hp/max hp ratio to trigger effect, 
+##bool tracks if effect has already been triggered to prevent repeating
 @export var threshold_levels : Dictionary[float, bool]
+##If true, effect will repeat if baddy health crosses the given threshold again
 @export var repeateable_effect : bool = false 
 
 func ability_setup(_ability_owner: CollisionObject2D) -> void:
@@ -15,6 +19,7 @@ func threshold_check(current_health: float, max_health: float) -> void:
 	for threshold in thresholds:
 		if hp_ratio <= threshold and threshold_levels[threshold] == false:
 			threshold_levels[threshold] = true
+			threshold_reached.emit()
 			triggered_effect()
 		elif hp_ratio >= threshold and repeateable_effect:
 			threshold_levels[threshold] = false

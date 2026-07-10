@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://bcjwqiwydy8x8"]
+[gd_scene format=3 uid="uid://bcjwqiwydy8x8"]
 
 [ext_resource type="Script" uid="uid://bj3330ofewhxu" path="res://GameData/Towers/Scripts/tower_frame_generator.gd" id="1_swin5"]
 [ext_resource type="PackedScene" uid="uid://dn8ubfvk3765f" path="res://GameData/Towers/Scenes/frame_cell.tscn" id="2_irpsu"]
 
-[node name="TowerFrame" type="Node2D"]
+[node name="TowerFrame" type="Node2D" unique_id=1797670936]
 script = ExtResource("1_swin5")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1042391219]
 custom_minimum_size = Vector2(192, 192)
 anchors_preset = 8
 anchor_left = 0.5
@@ -22,37 +22,29 @@ grow_vertical = 2
 color = Color(0.1882353, 0.19215687, 0.21176471, 1)
 metadata/_edit_use_anchors_ = true
 
-[node name="FrameCell" parent="." instance=ExtResource("2_irpsu")]
-visible = false
+[node name="FrameCell" parent="." unique_id=2040774109 instance=ExtResource("2_irpsu")]
 position = Vector2(-64, -64)
 
-[node name="FrameCell2" parent="." instance=ExtResource("2_irpsu")]
-visible = false
+[node name="FrameCell2" parent="." unique_id=1021570959 instance=ExtResource("2_irpsu")]
 position = Vector2(0, -64)
 
-[node name="FrameCell3" parent="." instance=ExtResource("2_irpsu")]
-visible = false
+[node name="FrameCell3" parent="." unique_id=903316225 instance=ExtResource("2_irpsu")]
 position = Vector2(64, -64)
 
-[node name="FrameCell4" parent="." instance=ExtResource("2_irpsu")]
-visible = false
+[node name="FrameCell4" parent="." unique_id=1657576890 instance=ExtResource("2_irpsu")]
 position = Vector2(-64, 0)
 
-[node name="FrameCell5" parent="." instance=ExtResource("2_irpsu")]
+[node name="FrameCell5" parent="." unique_id=1874636761 instance=ExtResource("2_irpsu")]
 visible = false
 
-[node name="FrameCell6" parent="." instance=ExtResource("2_irpsu")]
-visible = false
+[node name="FrameCell6" parent="." unique_id=201302962 instance=ExtResource("2_irpsu")]
 position = Vector2(64, 0)
 
-[node name="FrameCell7" parent="." instance=ExtResource("2_irpsu")]
-visible = false
+[node name="FrameCell7" parent="." unique_id=646529474 instance=ExtResource("2_irpsu")]
 position = Vector2(-64, 64)
 
-[node name="FrameCell8" parent="." instance=ExtResource("2_irpsu")]
-visible = false
+[node name="FrameCell8" parent="." unique_id=250825379 instance=ExtResource("2_irpsu")]
 position = Vector2(0, 64)
 
-[node name="FrameCell9" parent="." instance=ExtResource("2_irpsu")]
-visible = false
+[node name="FrameCell9" parent="." unique_id=1104975178 instance=ExtResource("2_irpsu")]
 position = Vector2(64, 64)

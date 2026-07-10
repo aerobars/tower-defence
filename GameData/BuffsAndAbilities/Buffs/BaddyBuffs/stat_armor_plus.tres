@@ -2,17 +2,23 @@
 
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="1_5m64a"]
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_gkcwe"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_5ts70"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nwjix"]
 atlas = ExtResource("1_gkcwe")
 region = Rect2(640, 48, 16, 16)
 
+[sub_resource type="Resource" id="Resource_k7x87"]
+script = ExtResource("2_5ts70")
+stat = 16
+modification_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
 [resource]
 script = ExtResource("1_5m64a")
-stat = 16
-buff_type = 1
+modifying_stats = Array[ExtResource("2_5ts70")]([SubResource("Resource_k7x87")])
 info_name = "Armor Plus"
 info_display_icon = SubResource("AtlasTexture_nwjix")
 buff_targets = 3
-persistent_effect = true
+buff_persistent_effect = true
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

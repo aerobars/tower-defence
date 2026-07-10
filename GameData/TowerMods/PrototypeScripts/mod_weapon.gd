@@ -18,7 +18,7 @@ const BUFFABLE_STATS = [
 ##Level based variables
 @export_group("Weapon Stats", "base_")
 @export var base_aoe_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
-##CD between attacks in seconds
+##Number of attacks per second
 @export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] 
 @export_range(0.0, 1.0, 0.01,) var base_crit_chance_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 @export var base_crit_multiplier_levels: Array[float] = [1.5, 1.5, 1.5, 1.5, 1.5]
@@ -33,6 +33,12 @@ var current_damage : float
 var current_multitarget : int
 var current_pierce : int
 
+var activation_cooldown : float
+
+func setup_stats(_level : int = 0) -> void:
+	super(_level)
+	stats_updated.connect(set_activation_cooldown)
+
 func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
 	return BUFFABLE_STATS
 
@@ -46,6 +52,9 @@ func set_current_stats() -> void:
 	current_pierce = base_pierce_levels[level]
 	current_power = base_power_levels[level]
 	current_range = base_range_levels[level]
+
+func set_activation_cooldown() -> void:
+	activation_cooldown = 1 / current_attack_speed
 
 func calculate_damage() -> Array: #returns [total attack damage, damage tags, did the attack crit]
 	if current_crit_chance > randf():

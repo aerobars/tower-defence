@@ -33,8 +33,7 @@ var power_calc : float :
 
 func add_buff(buff : Buff, _buff_source : CollisionObject2D, buff_level : int, amt : int = 1) -> void:
 	if buff.buff_targets == GlobalEnums.Targets.TOWERS or buff.buff_targets == GlobalEnums.Targets.SELF:
-		if buff_check(buff.stat):
-			super(buff, _buff_source, buff_level, amt)
+		super(buff, _buff_source, buff_level, amt)
 	elif buff.buff_targets == GlobalEnums.Targets.BADDIES:
 		add_on_hit_effect(buff)
 
@@ -61,11 +60,11 @@ func defunct_recalculate_stats() -> void:
 				if buff.stat & GlobalEnums.BuffableStats[stat]:
 					stat_name = stat.to_lower()
 					match buff.buff_type:
-						BuffStat.BuffType.ADD:
+						StatModifier.BuffModificationType.ADD:
 							if not stat_addends.has(stat_name):
 								stat_addends[stat_name] = 0.0
 							stat_addends[stat_name] += buff.effect_amount[inst.level] * inst.stacks
-						BuffStat.BuffType.MULTIPLY:
+						StatModifier.BuffModificationType.MULTIPLY:
 							if not stat_multipliers.has(stat_name):
 								stat_multipliers[stat_name] = 1.0
 							stat_multipliers[stat_name] += buff.effect_amount[inst.level] * inst.stacks

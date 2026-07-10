@@ -16,6 +16,5 @@ info_display_icon = SubResource("AtlasTexture_tk0ni")
 info_description = "Chance on hit to heal baddies in a small aoe"
 ability_targets = 2
 ability_effect_amount = Array[float]([10.0, 10.0, 10.0, 10.0, 10.0])
-damage_tag = 8
 ability_aoe = Array[float]([150.0, 200.0, 250.0, 300.0, 350.0])
 metadata/_custom_type_script = "uid://stua4x4ldhoc"

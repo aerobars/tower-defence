@@ -53,6 +53,8 @@ _data = {
 }
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=190301640 node_paths=PackedStringArray("path_status_display", "path_impact_area", "path_damage_number_origin", "path_hit_flash", "path_ability_container", "path_baddy_texture", "path_mouse_detection", "path_selection_circle") groups=["baddies"]]
+collision_layer = 2
+collision_mask = 3
 input_pickable = true
 script = ExtResource("1_21g7o")
 path_status_display = NodePath("StatusDisplay")

@@ -15,14 +15,15 @@ var ability_owner : CollisionObject2D
 
 var owner_level
 
+@export_group("Universal Ability Data", "ability_")
 @export var ability_targets : GlobalEnums.Targets
 ##Damage or heal amount
 @export var ability_effect_amount : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 ##Damage Tag = 0 is no effect
-@export var damage_tag : GlobalEnums.DamageTag
+@export var ability_damage_tag : GlobalEnums.DamageTag
 
 var cooldown_timer : float  
-@export var cooldown : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
+@export var ability_cooldown : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 ##AoE of ability effect. Aura range for auras, aoe of triggered abiliites, etc.
 @export var ability_aoe : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 
@@ -30,7 +31,7 @@ var cooldown_timer : float
 func ability_setup(_ability_owner: CollisionObject2D) -> void:
 	ability_owner = _ability_owner
 	owner_level = ability_owner.level
-	if cooldown[owner_level] > 0.0:
+	if ability_cooldown[owner_level] > 0.0:
 		ability_owner.process_update.connect(process)
 
 ##Dummy function to allow process signal setup

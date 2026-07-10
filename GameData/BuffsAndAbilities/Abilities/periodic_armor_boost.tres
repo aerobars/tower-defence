@@ -17,5 +17,5 @@ info_description = "Combat Round: Adds +1 defence"
 buff_data = ExtResource("1_t4ynq")
 ability_targets = 3
 ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
-cooldown = Array[float]([6.0, 6.0, 6.0, 6.0, 6.0])
+ability_cooldown = Array[float]([6.0, 6.0, 6.0, 6.0, 6.0])
 metadata/_custom_type_script = "uid://pa8fwdfly17a"

@@ -18,7 +18,7 @@ func _ready() -> void:
 		data.data_owner = self
 		data.setup_stats(get_level())
 	else:
-		print("no data file detected")
+		print("unit_scene_proto: no data file detected")
 
 
 ##UnitProtoype function, calls the add_buff function in data resource, body defaults to self

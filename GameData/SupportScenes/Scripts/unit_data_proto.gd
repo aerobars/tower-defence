@@ -16,9 +16,6 @@ var level : int = 0
 var data_owner : UnitScenePrototype
 var active_buffs : Dictionary[Buff, BuffInstance] = {}
 
-#func _init() -> void:
-#	setup_stats.call_deferred()
-
 func setup_stats(_level : int = 0) -> void:
 	level = _level
 	recalculate_stats()
@@ -33,7 +30,7 @@ func add_buff(buff : Buff, buff_source : CollisionObject2D, buff_level : int, am
 	
 	if not inst.buff_source.has(buff_source):
 		inst.buff_source.append(buff_source)
-	inst.stacks = min(inst.stacks + amt, buff.stack_limit[buff_level])
+	inst.stacks = min(inst.stacks + amt, buff.buff_stack_limit[buff_level])
 	inst.time_remaining = buff.buff_duration[buff_level]
 	update_buff_display.emit(buff, inst.stacks)
 	recalculate_stats()
@@ -41,7 +38,7 @@ func add_buff(buff : Buff, buff_source : CollisionObject2D, buff_level : int, am
 func remove_buff(buff : Buff, buff_source : CollisionObject2D, amt : int = 1) -> void:
 	var inst = active_buffs[buff]
 	
-	if buff.persistent_effect: #check whether buff is an aura/persistent effect
+	if buff.buff_persistent_effect: #check whether buff is an aura/persistent effect
 		inst.buff_source.erase(buff_source)
 	else:
 		inst.stacks = max(inst.stacks - amt, 0)
@@ -67,20 +64,22 @@ func recalculate_stats() -> void:
 	var stat_addends: Dictionary = {} #Amt to add to stats
 	for buff in active_buffs.keys():
 		if buff is BuffStat:
-			var stat_name : String = ""
-			var inst = active_buffs[buff]
-			for stat in GlobalEnums.BuffableStats.keys():
-				if buff.stat & GlobalEnums.BuffableStats[stat]:
-					stat_name = stat.to_lower()
-					match buff.buff_type:
-						BuffStat.BuffType.ADD:
-							if not stat_addends.has(stat_name):
-								stat_addends[stat_name] = 0.0
-							stat_addends[stat_name] += buff.effect_amount[inst.level] * inst.stacks
-						BuffStat.BuffType.MULTIPLY:
-							if not stat_multipliers.has(stat_name):
-								stat_multipliers[stat_name] = 1.0
-							stat_multipliers[stat_name] += buff.effect_amount[inst.level] * inst.stacks
+			for buff_stat in buff.modifying_stats:
+				if buff_check(buff_stat):
+					var stat_name : String = ""
+					var inst = active_buffs[buff]
+					for stat in GlobalEnums.BuffableStats.keys():
+						if buff_stat.stat & GlobalEnums.BuffableStats[stat]:
+							stat_name = stat.to_lower()
+							match buff_stat.modification_type:
+								StatModifier.BuffModificationType.ADD:
+									if not stat_addends.has(stat_name):
+										stat_addends[stat_name] = 0.0
+									stat_addends[stat_name] += buff_stat.modification_amount[inst.level] * inst.stacks
+								StatModifier.BuffModificationType.MULTIPLY:
+									if not stat_multipliers.has(stat_name):
+										stat_multipliers[stat_name] = 1.0
+									stat_multipliers[stat_name] += buff_stat.modification_amount[inst.level] * inst.stacks
 	
 	set_current_stats()
 	
@@ -93,7 +92,9 @@ func recalculate_stats() -> void:
 		var cur_property_name: String = str("current_" + stat_name)
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
 	
-	if self is PrototypeMod:
+	if self is BaddyStats:
+		clamp_movespeed()
+	elif self is PrototypeMod:
 		power_buff()
 	
 	for buff in active_buffs.keys():
@@ -105,6 +106,9 @@ func recalculate_stats() -> void:
 	stats_updated.emit()
 
 func power_buff() -> void:
+	pass
+
+func clamp_movespeed() -> void:
 	pass
 
 @abstract

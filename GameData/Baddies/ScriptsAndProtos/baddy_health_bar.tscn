@@ -47,7 +47,7 @@ layout_mode = 0
 offset_right = 15.0
 offset_bottom = 18.0
 theme_override_font_sizes/font_size = 13
-text = "11"
+text = "xx"
 
 [node name="BuffDisplayContainer" parent="VBoxContainer" unique_id=1839551657 instance=ExtResource("3_7nr08")]
 layout_mode = 2

@@ -2,12 +2,19 @@
 
 [ext_resource type="Texture2D" uid="uid://lqnf6vvd76vi" path="res://Assets/Effects/explosion1.png" id="1_76uyw"]
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="2_42fmt"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_s3uhx"]
+
+[sub_resource type="Resource" id="Resource_04737"]
+script = ExtResource("2_s3uhx")
+stat = 64
+modification_type = 1
+modification_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
 
 [resource]
 resource_local_to_scene = true
 script = ExtResource("2_42fmt")
-stat = 64
-buff_type = 2
+modifying_stats = Array[ExtResource("2_s3uhx")]([SubResource("Resource_04737")])
 info_name = "Burst Move Speed"
 info_display_icon = ExtResource("1_76uyw")
 stack_limit = Array[int]([1, 1, 1, 1, 1])

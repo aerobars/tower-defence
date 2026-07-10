@@ -7,9 +7,9 @@
 [ext_resource type="Script" uid="uid://p8btputct86" path="res://GameData/SupportScenes/Scripts/camera_2d.gd" id="4_6qu8u"]
 [ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://VisualResources/Inventory/inventory_bg.tres" id="4_syms3"]
 [ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="5_waasu"]
-[ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://GameData/UIScenes/Inventory/player_inventory.tres" id="6_nh22g"]
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="7_674w2"]
 [ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="8_a0jnf"]
+[ext_resource type="Resource" uid="uid://cin7we6rrg05o" path="res://GameData/UIScenes/Inventory/test_inventory.tres" id="8_p50gf"]
 [ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="9_clpeu"]
 [ext_resource type="PackedScene" uid="uid://jug24xmepvb3" path="res://GameData/UIScenes/GUI/Scenes/baddy_info_foldable.tscn" id="9_p50gf"]
 [ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://VisualResources/Fonts/kfn_50_o1.tres" id="10_0h1f8"]
@@ -104,7 +104,7 @@ layout_mode = 2
 mouse_filter = 2
 columns = 3
 script = ExtResource("5_waasu")
-data = ExtResource("6_nh22g")
+data = ExtResource("8_p50gf")
 game_scene = NodePath("../../../../..")
 
 [node name="TowerButtonsContainer" type="HBoxContainer" parent="UI/HUD/BuildBar" unique_id=1462006887]

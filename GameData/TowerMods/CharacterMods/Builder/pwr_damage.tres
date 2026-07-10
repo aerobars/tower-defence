@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="PowerMod" format=3 uid="uid://daxore4jcvu1"]
+[gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://daxore4jcvu1"]
 
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="1_0vrf7"]
 [ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_0vrf7"]

@@ -72,11 +72,11 @@ func defunct_recalculate_stats() -> void:
 				if buff.stat & GlobalEnums.BuffableStats[stat]:
 					stat_name = stat.to_lower()
 					match buff.buff_type:
-						BuffStat.BuffType.ADD:
+						StatModifier.BuffModificationType.ADD:
 							if not stat_addends.has(stat_name):
 								stat_addends[stat_name] = 0.0
 							stat_addends[stat_name] += buff.effect_amount[inst.level] * inst.stacks
-						BuffStat.BuffType.MULTIPLY:
+						StatModifier.BuffModificationType.MULTIPLY:
 							if not stat_multipliers.has(stat_name):
 								stat_multipliers[stat_name] = 1.0
 							stat_multipliers[stat_name] += buff.effect_amount[inst.level] * inst.stacks
@@ -99,7 +99,7 @@ func defunct_recalculate_stats() -> void:
 	current_move_speed = clamp(current_move_speed, 75, 500) #don't use setter for this for stun MS
 	
 	for buff in active_buffs.keys():
-		if buff is BuffStat and buff.buff_type == BuffStat.BuffType.ABS:
+		if buff is BuffAbsolute:
 			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
 			var cur_property_name: String = str("current_" + stat_name)
 			set(cur_property_name, buff.effect_amount)
@@ -111,6 +111,9 @@ func set_current_stats() -> void:
 	current_damage = base_damage #don't scale base damage
 	current_defence = base_defence * wave_ratio
 	current_move_speed = base_move_speed * wave_ratio
+
+func clamp_move_speed() -> void:
+	current_move_speed = clampf(current_move_speed, 75, 500) #don't use setter for this for stun MS
 
 func _on_health_set(new_value: float) -> void:
 	health = clamp(new_value, 0, current_max_health)

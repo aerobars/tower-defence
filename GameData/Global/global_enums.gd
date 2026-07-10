@@ -53,6 +53,8 @@ const DEFENCE_TABLE : Dictionary = {
 	},
 } 
 
+##AOE = 1, ATTACK_SPEED = 2, CRIT_CHANCE = 4, DAMAGE = 8, DEFENCE = 16, 
+##MAX_HEATLH = 32, MOVE_SPEED = 64, CRIT_DAMAGE = 128, RANGE = 256, POWER = 512
 enum BuffableStats {
 	AOE = 1 << 0, ##1
 	ATTACK_SPEED = 1 << 1, ##2
@@ -71,4 +73,9 @@ enum Targets {
 	TOWERS, ##1
 	BADDIES, ##2
 	SELF, ##3
+}
+
+enum ProcessingMethods {
+		TIME, ##0
+	POSITION ##1
 }

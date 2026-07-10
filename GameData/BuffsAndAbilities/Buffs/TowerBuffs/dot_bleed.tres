@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="DotBuff" format=3 uid="uid://kux04p2pup06"]
+[gd_resource type="Resource" script_class="BuffDot" format=3 uid="uid://kux04p2pup06"]
 
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_n6dkp"]
 [ext_resource type="Script" uid="uid://2ja3gh17qp02" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_dot.gd" id="1_tkq8f"]
@@ -11,9 +11,10 @@ region = Rect2(656, 160, 16, 16)
 script = ExtResource("1_tkq8f")
 damage_tag = 1
 dot_interval = Array[float]([10.0, 10.0, 10.0, 10.0, 10.0])
+buff_process_type = 1
 info_name = "Bleed"
 info_display_icon = SubResource("AtlasTexture_wpnq4")
-stack_limit = Array[int]([1, 1, 1, 1, 1])
+buff_stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_duration = Array[float]([5.0, 5.0, 5.0, 5.0, 5.0])
 buff_targets = 2
 metadata/_custom_type_script = "uid://2ja3gh17qp02"

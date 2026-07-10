@@ -119,7 +119,7 @@ func tower_update(
 					if child.data.swap_buff == null or child.data.swap_buff_duration == 0.0:
 						print("Swapper enabled with incomplete swap data for ", child.data.name)
 					else:
-						child.data.add_buff(child.data.swap_buff)
+						child.data.add_buff(child.data.swap_buff, child, tower_data.level)
 			else:
 				child.data = null
 		if child.data != null:
@@ -139,7 +139,7 @@ func apply_auras(mod_list: Dictionary) -> void:
 	#add aura effects to any weapon mods in the same tower
 	for aura in mod_list[0]:
 		for wep in mod_list[2]:
-			wep.data.add_buff(aura.data.buff_data)
+			wep.data.add_buff(aura.data.buff_data, aura, tower_data.level)
 
 func clear_popup_received() -> void:
 	clear_popup.emit()

@@ -15,9 +15,9 @@ func triggered_effect() -> void:
 		print("no ability targets")
 		return
 #	print("targets for ", buff_owner.data.info_name, ": ", onhit_targets)
-	if damage_tag > 0:
+	if ability_damage_tag > 0:
 		for target in onhit_targets:
-			ability_owner.calculate_damage([ability_effect_amount[owner_level], damage_tag, false])
+			ability_owner.calculate_damage([ability_effect_amount[owner_level], ability_damage_tag, false])
 	else:
 		print("no dmg tag")
 	if buff_data != null:

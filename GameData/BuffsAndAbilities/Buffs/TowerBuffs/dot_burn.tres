@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="DotBuff" format=3 uid="uid://bi5uxnya2aq4d"]
+[gd_resource type="Resource" script_class="BuffDot" format=3 uid="uid://bi5uxnya2aq4d"]
 
 [ext_resource type="Texture2D" uid="uid://ddyaqh83bxrgn" path="res://Assets/Effects/towerDefense_tile298.png" id="1_apqjp"]
 [ext_resource type="Script" uid="uid://2ja3gh17qp02" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_dot.gd" id="1_imnq3"]

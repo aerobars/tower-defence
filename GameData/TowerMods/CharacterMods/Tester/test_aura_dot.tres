@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="AuraMod" format=3 uid="uid://bqlb20t172exs"]
+[gd_resource type="Resource" script_class="ModAura" format=3 uid="uid://bqlb20t172exs"]
 
 [ext_resource type="Resource" uid="uid://bi5uxnya2aq4d" path="res://GameData/BuffsAndAbilities/Buffs/TowerBuffs/dot_burn.tres" id="1_ksu01"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="2_jtub3"]
@@ -13,8 +13,8 @@ region = Rect2(16, 16, 32, 32)
 resource_local_to_scene = true
 script = ExtResource("2_mx055")
 buff_data = ExtResource("1_ksu01")
+base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 info_name = "Test DoT Aura"
 info_description = "Test DoT Aura"
 info_texture = SubResource("AtlasTexture_tgssl")
-base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 metadata/_custom_type_script = "uid://bshp47gjxu8sm"

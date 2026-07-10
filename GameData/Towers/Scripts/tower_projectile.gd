@@ -22,17 +22,17 @@ func _process(delta: float) -> void:
 		queue_free()
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("baddies"):
-		pierce_count += 1
-		if aoe > 0:
-			var baddies = StaticFunctions.setup_aoe(
-				self, 
-				body.global_position, 
-				"baddies", 
-				aoe)
-			for baddy in baddies:
-				baddy.on_hit(damage.duplicate(), on_hit_effects)
-		else:
-			body.on_hit(damage.duplicate(), on_hit_effects)
-		if pierce_count == pierce_total:
-			queue_free()
+	#don't need to check body type because of collision layers 
+	pierce_count += 1
+	if aoe > 0:
+		var baddies = StaticFunctions.setup_aoe(
+			self, 
+			body.global_position, 
+			"baddies", 
+			aoe)
+		for baddy in baddies:
+			baddy.on_hit(damage.duplicate(), on_hit_effects)
+	else:
+		body.on_hit(damage.duplicate(), on_hit_effects)
+	if pierce_count == pierce_total:
+		queue_free()

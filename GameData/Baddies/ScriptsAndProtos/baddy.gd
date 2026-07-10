@@ -65,6 +65,8 @@ func _ready() -> void:
 		data.active_abilities.append(new_ability)
 		new_ability.ability_setup(self)
 		path_status_display.path_buff_display_container.update_display(new_ability)
+	
+	stats_update()
 
 func get_level() -> int:
 	return level

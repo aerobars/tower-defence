@@ -8,6 +8,7 @@ signal mod_updated(mod: StaticBody2D)
 #signal display_popup
 signal update_range_display(tower_cell: TowerCell)
 signal hide_range_display
+signal process_update(delta: float, cur_pos: Vector2)
 
 
 ## Tower Setup
@@ -30,8 +31,7 @@ var button_slot_id : int
 ## Gametime
 var baddies_in_range : Array
 var attack_targets : Array = []
-var aura_targets : Array = []
-var attack_timer : float = 0.0
+var activation_timer : float = 0.0
 var attack_tracker : int
 
 
@@ -115,18 +115,17 @@ func _on_timer_timeout() -> void:
 func _process(delta: float) -> void:
 	if data == null or data is ModPower: 
 		return
-	for buff in data.active_buffs:
-		data.active_buffs[buff].update(delta)
+	process_update.emit(delta, global_position)
 	if get_parent().net_power < 0:
 		return
-	attack_timer = clamp(attack_timer + delta, 0, data.current_attack_speed)
+	activation_timer = clamp(activation_timer + delta, 0, data.activation_cooldown)
 	if baddies_in_range.size() > 0:
 		attack_targets = select_targets()
 		if data.mod_class == data.ModClass.WEAPON:
 			if not path_animation_player.is_playing():
 				turn()
-		if attack_timer >= data.current_attack_speed:
-			if data is ModAura and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.persistent_effect and get_parent().aura_tower:
+		if activation_timer >= data.activation_cooldown:
+			if data is ModAura and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.buff_persistent_effect and get_parent().aura_tower:
 				for baddy in baddies_in_range:
 					add_buff(data.buff_data, baddy, get_parent().tower_data.level)
 			elif data is ModWeapon:
@@ -134,7 +133,7 @@ func _process(delta: float) -> void:
 				for i in data.current_multitarget:
 					if i < attack_targets.size():
 						fire(attack_targets[i])
-			attack_timer = 0.0
+			activation_timer = 0.0
 	else:
 		attack_targets = [null]
 
@@ -143,13 +142,12 @@ func _on_range_body_entered(body) -> void:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body)
-		if data.mod_class == data.ModClass.AURA and data.buff_data.persistent_effect:
+		if data.mod_class == data.ModClass.AURA and data.buff_data.buff_persistent_effect:
 			add_buff(data.buff_data, body, get_parent().tower_data.level)
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		if data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
 			return #nothing gets added for offensive auras in aura mode
 		else:
-			aura_targets.append(body)
 			add_buff(data.buff_data, body, get_parent().tower_data.level)
 
 func _on_range_body_exited(body) -> void:
@@ -157,10 +155,7 @@ func _on_range_body_exited(body) -> void:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body)
-		if data.mod_class == data.ModClass.AURA and data.buff_data.persistent_effect:
-			remove_buff(data.buff_data, body)
-	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
-		aura_targets.erase(body)
+	if data.mod_class == data.ModClass.AURA and data.buff_data.buff_persistent_effect:
 		remove_buff(data.buff_data, body)
 
 ## Weapon Function

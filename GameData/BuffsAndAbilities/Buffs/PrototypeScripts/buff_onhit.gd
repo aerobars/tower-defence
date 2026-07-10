@@ -8,6 +8,8 @@ enum AffectedStat {
 	ATTACK_SPEED,
 	DEFENCE,
 }
+
+@export_group("On Hit Data")
 ##Chance to successfully trigger onhit effect, 1.0 = 100%
 @export_range(0.0, 1.0, 0.1) var success_chance_per_stack : Array[float] = [0.1, 0.1, 0.1, 0.1, 0.1]
 @export var buff_to_apply : Buff

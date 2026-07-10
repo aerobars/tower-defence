@@ -56,6 +56,7 @@ resource_local_to_scene = true
 radius = 0.01
 
 [node name="TowerCellPrototype" type="StaticBody2D" unique_id=924904849 node_paths=PackedStringArray("path_turret", "path_muzzle", "path_range_scene", "path_range_aoe", "path_animation_player", "path_buff_display", "path_timer", "path_mouse_detection", "path_selection_circle") groups=["towers"]]
+collision_mask = 3
 input_pickable = true
 script = ExtResource("1_kv3af")
 path_turret = NodePath("TurretTexture")
@@ -110,6 +111,8 @@ scale = Vector2(0.7, 0.7)
 texture = ExtResource("3_a0cob")
 
 [node name="Range" type="Area2D" parent="." unique_id=210636383]
+collision_layer = 0
+collision_mask = 3
 input_pickable = false
 
 [node name="RangeAoe" type="CollisionShape2D" parent="Range" unique_id=1221913980]
@@ -133,6 +136,8 @@ grow_horizontal = 2
 [node name="Timer" type="Timer" parent="." unique_id=671922255]
 
 [node name="EffectAoeContainer" type="Area2D" parent="." unique_id=1791205797]
+collision_layer = 0
+collision_mask = 3
 input_pickable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EffectAoeContainer" unique_id=1716896160]
