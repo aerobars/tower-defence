@@ -2,9 +2,9 @@ class_name Baddy extends UnitScenePrototype
 
 ##Signals
 signal baddy_death
-signal base_damage(damage)
+signal baddy_escaped(damage: float, is_summon: bool)
 signal open_baddy_display(data: BaddyStats)
-signal update_baddy_display(data: BaddyStats)
+signal update_baddy_display(baddy: Baddy)
 signal hit_detected
 signal process_update(delta: float, cur_pos: Vector2)
 signal checkpoint_reached
@@ -21,7 +21,7 @@ signal checkpoint_reached
 #@export var path_selection_circle : Sprite2D
 
 ##Pathfinding
-var path_map
+var path_map : Node2D
 var movement_delta : float
 var path_point_margin : float = 0.5
 
@@ -99,18 +99,18 @@ func _physics_process(delta: float) -> void:
 				#current_path = []
 				#current_path_index = 0
 				#current_path_point = global_transform.origin
-				base_damage.emit(data.current_damage, data.spawn_summon)
+				baddy_escaped.emit(data.current_damage, false)
 				queue_free()
 				return
 	
 	current_path_point = current_path[current_path_index]
 	
-	var tween = get_tree().create_tween()
-	tween.tween_property(self, "rotation", global_position.angle_to_point(current_path_point), 0.15)
+	rotation = lerp_angle(rotation, global_position.angle_to_point(current_path_point), 10.0 * delta)
+	
 	global_position = global_position.move_toward(current_path_point, movement_delta)
 
 func update_pathing() -> void:
-	current_path = path_map.update_pathing(global_position, waypoint_index)
+	current_path = path_map.update_baddy_pathing(global_position, waypoint_index)
 	current_path_index = 0
 	current_path_point = current_path[current_path_index]
 

@@ -4,7 +4,7 @@ signal mod_dropped #connected to inventory_ui
 #signal hovered(data: PrototypeMod)
 #signal clear_popup
 
-var data : PrototypeMod
+var data : ModPrototype
 
 var draggable := false
 var inside_droppable := false

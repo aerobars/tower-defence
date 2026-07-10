@@ -12,7 +12,7 @@ signal stats_updated
 
 ##first level will be 0 after setup_stats to line up with arrays
 var level : int = 0 
-##buff_owner is the unti affected by the buff
+##buff_owner is the unit affected by the buff
 var data_owner : UnitScenePrototype
 var active_buffs : Dictionary[Buff, BuffInstance] = {}
 
@@ -93,8 +93,8 @@ func recalculate_stats() -> void:
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
 	
 	if self is BaddyStats:
-		clamp_movespeed()
-	elif self is PrototypeMod:
+		clamp_move_speed()
+	elif self is ModPrototype:
 		power_buff()
 	
 	for buff in active_buffs.keys():
@@ -108,7 +108,7 @@ func recalculate_stats() -> void:
 func power_buff() -> void:
 	pass
 
-func clamp_movespeed() -> void:
+func clamp_move_speed() -> void:
 	pass
 
 @abstract

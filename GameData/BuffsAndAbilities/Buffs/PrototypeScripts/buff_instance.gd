@@ -71,7 +71,7 @@ func effect_trigger() -> void:
 #	print("targets for ", buff_owner.data.info_name, ": ", onhit_targets)
 	if buff.damage_tag > 0:
 		for target in onhit_targets:
-			buff_owner.calculate_damage([buff.buff_effect_amount[level] * stacks, buff.damage_tag, false])
+			target.calculate_damage([buff.buff_effect_amount[level] * stacks, buff.damage_tag, false])
 	else:
 		print("no dmg tag")
 	if buff is BuffOnHit and buff.buff_to_apply != null:

@@ -1,6 +1,6 @@
 class_name TowerButtonModSlot extends StaticBody2D
 
-signal mod_updated(StaticBody2D, PrototypeMod) #connected to build buttons
+signal mod_updated(slot_id : int, data : ModPrototype) #connected to build buttons
 
 var slot_id : int
 var occupied := false
@@ -17,7 +17,7 @@ func _process(_delta: float) -> void:
 	else:
 		visible = false
 
-func update(_data : PrototypeMod, _occupied : bool = occupied, _occupying_mod : ModDraggable = occupying_mod) -> void:
+func update(_data : ModPrototype, _occupied : bool = occupied, _occupying_mod : ModDraggable = occupying_mod) -> void:
 	occupied = _occupied
 	#data = _data
 	occupying_mod = _occupying_mod

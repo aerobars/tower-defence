@@ -1,6 +1,7 @@
 ##Handles gametime tower functions (shooting, etc.) and last step of mod updates (update to mod class and net power)
 class_name TowerCell extends UnitScenePrototype
 
+signal create_projectile(data: ModPrototype)
 
 ## Signals
 signal mod_updated(mod: StaticBody2D)
@@ -91,7 +92,7 @@ func _on_mouse_entered() -> void:
 	if data == null:
 		return
 	#path_timer.start()
-	if data.mod_class == PrototypeMod.ModClass.WEAPON or (data.mod_class == PrototypeMod.ModClass.AURA and get_parent().aura_tower):
+	if data.mod_class == ModPrototype.ModClass.WEAPON or (data.mod_class == ModPrototype.ModClass.AURA and get_parent().aura_tower):
 		update_range_display.emit(self)
 
 func _on_mouse_exited() -> void:
@@ -165,7 +166,7 @@ func select_targets() -> Array:
 
 func turn():
 	if is_instance_valid(attack_targets[0]):
-		path_turret.look_at(attack_targets[0].position)
+		path_turret.look_at(attack_targets[0].global_position)
 
 func fire(target):
 	if data.projectile_speed > 0:
@@ -192,7 +193,7 @@ func fire_projectile(target) -> void:
 	new_projectile.aoe = data.current_aoe
 	add_child(new_projectile)
 	new_projectile.position = path_muzzle.position
-	new_projectile.look_at(target.position)
+	new_projectile.look_at(target.global_position)
 	new_projectile.direction = Vector2.RIGHT.rotated(new_projectile.rotation)
 
 func fire_instant() -> void:

@@ -2,7 +2,7 @@ class_name RewardCard extends Control
 
 signal reward_selected(towermod: TowerCell) #connected to InventoryUI data (InventoryData)
 
-var data : PrototypeMod
+var data : ModPrototype
 @onready var container : VBoxContainer = $Background/VBoxContainer
 @onready var mod_name : Label = $Background/VBoxContainer/Name
 @onready var mod_class : Label = $Background/VBoxContainer/Class

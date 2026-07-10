@@ -1,5 +1,5 @@
 @abstract
-class_name PrototypeMod extends UnitDataPrototype
+class_name ModPrototype extends UnitDataPrototype
 
 enum ModClass { AURA, POWER, WEAPON }
 
@@ -48,48 +48,6 @@ func add_on_hit_effect(_buff : Buff) -> void: #setup for Weapon Mods
 
 func remove_on_hit_effect(_buff : Buff) -> void:#setup for Weapon Mods
 	pass
-
-func defunct_recalculate_stats() -> void:
-	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
-	var stat_addends: Dictionary = {} #Amt to add to stats
-	for buff in active_buffs.keys():
-		if buff_check(buff.stat):
-			var stat_name : String = ""
-			var inst = active_buffs[buff]
-			for stat in GlobalEnums.BuffableStats.keys():
-				if buff.stat & GlobalEnums.BuffableStats[stat]:
-					stat_name = stat.to_lower()
-					match buff.buff_type:
-						StatModifier.BuffModificationType.ADD:
-							if not stat_addends.has(stat_name):
-								stat_addends[stat_name] = 0.0
-							stat_addends[stat_name] += buff.effect_amount[inst.level] * inst.stacks
-						StatModifier.BuffModificationType.MULTIPLY:
-							if not stat_multipliers.has(stat_name):
-								stat_multipliers[stat_name] = 1.0
-							stat_multipliers[stat_name] += buff.effect_amount[inst.level] * inst.stacks
-	
-	set_current_stats()
-	
-	#addends first so it benefits from multipliers
-	for stat_name in stat_addends:
-		var cur_property_name: String = str("current_" + stat_name)
-		set(cur_property_name, get(cur_property_name) + stat_addends[stat_name])
-	
-	for stat_name in stat_multipliers:
-		var cur_property_name: String = str("current_" + stat_name)
-		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
-	
-	for stat_name in power_surplus_buffs.keys():
-		if buff_check(stat_name):
-			var cur_property_name: String = str("current_" + stat_name)
-			set(cur_property_name, get(cur_property_name) * power_calc)
-	
-	for buff in active_buffs.keys():
-		if buff is BuffAbsolute:
-			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
-			var cur_property_name: String = str("current_" + stat_name)
-			set(cur_property_name, buff.effect_amount[active_buffs[buff].level])
 
 func power_buff() -> void:
 	for stat_name in power_surplus_buffs.keys():

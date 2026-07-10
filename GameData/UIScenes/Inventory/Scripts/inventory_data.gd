@@ -5,7 +5,7 @@ class_name InventoryData extends Resource
 
 var inventory_ui : InventoryUI
 
-func update_inventory(mod: PrototypeMod, value: int = 1) -> void:
+func update_inventory(mod: ModPrototype, value: int = 1) -> void:
 	for i in slots: #check if mod exists in inventory and increment
 		if i.inventory_mod.info_name == mod.info_name:
 			i.quantity += value

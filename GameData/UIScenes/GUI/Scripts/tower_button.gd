@@ -5,10 +5,10 @@ signal update_towers(
 	aura_status: bool, 
 	power_surplus_buffs : Dictionary,
 	mod_slot_ref: StaticBody2D, 
-	slot_data: PrototypeMod,
+	slot_data: ModPrototype,
 	) 
 signal create_draggable(
-	tower_mod: PrototypeMod, 
+	tower_mod: ModPrototype, 
 	initial_pos : Vector2, 
 	slot_occupied : TowerButtonModSlot,
 	is_dragging : bool,
@@ -29,7 +29,7 @@ var build_cost : int :
 	set(value): 
 		build_cost = 1 + value * 3 #value should always be slot count
 		build_cost_label.text = "$" + str(build_cost)
-var tower_data : Dictionary : get = get_tower_mods
+var tower_data : TowerBuildData : get = get_tower_mods
 
 
 ## Setup
@@ -67,7 +67,10 @@ func set_slot_position(slot: TowerButtonModSlot, slot_num: int) -> void:
 	slot.position.y = slot_radius * sin(angle) + size.y/2
 
 ## In-Game
-func get_tower_mods() -> Dictionary:
+
+##Returns RefCounted of type TowerBuildData containing tower data stored in button,
+##specifically, aura status, mod_data, 
+func get_tower_mods() -> TowerBuildData:
 	var power_surplus_buffs : Dictionary
 	var has_wep := false
 	var has_aura := false
@@ -89,14 +92,13 @@ func get_tower_mods() -> Dictionary:
 							power_surplus_buffs[stat_name] = 0
 						power_surplus_buffs[stat_name] += 1
 	
-	return {
-		"aura_tower": has_aura and not has_wep,
-		"mods": button_data.mod_data,
-		"power_buffs": power_surplus_buffs,
-		"shape": button_data.tower_shape
-		}
+	return TowerBuildData.new(
+		has_aura and not has_wep, 
+		button_data.mod_data, 
+		power_surplus_buffs,
+		button_data.tower_shape)
 
-func on_mod_update(slot_id : int, data : PrototypeMod = button_data.mod_data[slot_id]) -> void:
+func on_mod_update(slot_id : int, data : ModPrototype = button_data.mod_data[slot_id]) -> void:
 	var net_power := 0
 	var power_surplus_buffs : Dictionary = {}
 	var has_aura := false

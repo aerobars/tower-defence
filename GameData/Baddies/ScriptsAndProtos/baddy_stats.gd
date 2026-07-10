@@ -61,51 +61,6 @@ func setup_stats(_level: int = 0) -> void:
 func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
 	return BUFFABLE_STATS
 
-func defunct_recalculate_stats() -> void:
-	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
-	var stat_addends: Dictionary = {} #Amt to add to stats
-	for buff in active_buffs.keys():
-		if buff is BuffStat:
-			var inst = active_buffs[buff]
-			var stat_name : String = ""
-			for stat in GlobalEnums.BuffableStats.keys():
-				if buff.stat & GlobalEnums.BuffableStats[stat]:
-					stat_name = stat.to_lower()
-					match buff.buff_type:
-						StatModifier.BuffModificationType.ADD:
-							if not stat_addends.has(stat_name):
-								stat_addends[stat_name] = 0.0
-							stat_addends[stat_name] += buff.effect_amount[inst.level] * inst.stacks
-						StatModifier.BuffModificationType.MULTIPLY:
-							if not stat_multipliers.has(stat_name):
-								stat_multipliers[stat_name] = 1.0
-							stat_multipliers[stat_name] += buff.effect_amount[inst.level] * inst.stacks
-							stat_multipliers[stat_name] = max(stat_multipliers[stat_name], 0)
-	
-	#var stat_sample_pos: float = level
-	current_max_health = base_max_health * wave_ratio
-	current_damage = base_damage #don't scale base damage
-	current_defence = base_defence * wave_ratio
-	current_move_speed = base_move_speed * wave_ratio
-	
-	#addends first so it benefits from multipliers
-	for stat_name in stat_addends:
-		var cur_property_name: String = str("current_" + stat_name)
-		set(cur_property_name, get(cur_property_name) + stat_addends[stat_name])
-	
-	for stat_name in stat_multipliers:
-		var cur_property_name: String = str("current_" + stat_name)
-		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
-	current_move_speed = clamp(current_move_speed, 75, 500) #don't use setter for this for stun MS
-	
-	for buff in active_buffs.keys():
-		if buff is BuffAbsolute:
-			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
-			var cur_property_name: String = str("current_" + stat_name)
-			set(cur_property_name, buff.effect_amount)
-	
-	stats_updated.emit()
-
 func set_current_stats() -> void:
 	current_max_health = base_max_health * wave_ratio
 	current_damage = base_damage #don't scale base damage

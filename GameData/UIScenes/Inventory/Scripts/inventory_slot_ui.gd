@@ -1,6 +1,6 @@
 class_name InventorySlotUi extends Button
 
-signal hovered(info_popup, data: PrototypeMod)
+signal hovered(info_popup, data: ModPrototype)
 signal clear_popup
 
 #SlotData holds TowerMod and quantity

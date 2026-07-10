@@ -1,3 +1,5 @@
+##Data Stored for Saved Game that is specific to each tower,
+##i.e. can't be retrieved from connected Button/TowerBuildData
 class_name TowerBaseData extends Resource
 
 var position : Vector2

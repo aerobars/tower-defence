@@ -1,4 +1,4 @@
-class_name ModWeapon extends PrototypeMod
+class_name ModWeapon extends ModPrototype
 
 const BUFFABLE_STATS = [
 	GlobalEnums.BuffableStats.AOE,

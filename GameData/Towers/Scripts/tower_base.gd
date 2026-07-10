@@ -12,15 +12,15 @@ signal hide_range_display
 @export var non_aura_radius : float = 10
 const COLUMNS : int = 3
 const ROWS : int = 3
-const CELL_SIZE : int = 64
+var cell_size : int #set to Map Node CELL_SIZE in Game Scene via Build Mode Container
 
 var grid_size : int : 
 	get():
-		return CELL_SIZE * COLUMNS
+		return cell_size * COLUMNS
 
 const MAX_LEVEL = 4
 var mod_slot_count : int = 0 #set during verify and build Game Scene function
-var build_data : Dictionary
+var build_data : TowerBuildData
 var tower_data : TowerBaseData
 
 ## Gameplay
@@ -35,11 +35,12 @@ var tower_children : Array = []
 
 ## Setup
 func _ready() -> void:
-	var tower_mods : Dictionary = build_data["mods"]
-	var init_power_buffs : Dictionary = build_data["power_buffs"]
-	tower_data.tower_shape = build_data["shape"]
-	aura_tower = build_data["aura_tower"]
+	var tower_mods : Dictionary = build_data.mods
+	var init_power_buffs : Dictionary = build_data.power_buffs
+	tower_data.tower_shape = build_data.shape
+	aura_tower = build_data.aura_tower
 	mod_slot_count = tower_data.tower_shape.size() 
+	cell_size = build_data.cell_size
 	
 	#var mod_list = tower_mods.keys()
 	for i in mod_slot_count:
@@ -65,11 +66,11 @@ func _ready() -> void:
 ##currently unused
 func get_coords_from_mod_data(button_id: int) -> Vector2:
 	@warning_ignore("integer_division")
-	return Vector2i(button_id / 10 * CELL_SIZE, button_id % 10 * CELL_SIZE)
+	return Vector2i(button_id / 10 * cell_size, button_id % 10 * cell_size)
 
 func get_coords_from_vectors(cell: Vector2i) -> Vector2:
 	@warning_ignore("integer_division")
-	return Vector2(cell.x * CELL_SIZE, cell.y * CELL_SIZE)
+	return Vector2(cell.x * cell_size, cell.y * cell_size)
 
 func get_slot_id(_value: int) -> void:
 	
@@ -96,7 +97,7 @@ func tower_update(
 	aura_status: bool, 
 	power_surplus_buffs : Dictionary,
 	button_slot_id: int = 0, 
-	button_mod_data: PrototypeMod = null, 
+	button_mod_data: ModPrototype = null, 
 	) -> void:
 	
 	var mod_list : Dictionary = {0 : [], #Aura

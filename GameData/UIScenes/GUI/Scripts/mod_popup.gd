@@ -1,6 +1,6 @@
 class_name InfoPopup extends Node2D
 
-var data : PrototypeMod
+var data : ModPrototype
 @export var container : VBoxContainer
 @export var mod_name : Label
 @export var mod_class : Label

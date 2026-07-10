@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://bs6ykvufkigbj"]
+[gd_scene format=3 uid="uid://bs6ykvufkigbj"]
 
 [ext_resource type="Script" uid="uid://oe8tvtkxqkb7" path="res://GameData/UIScenes/GUI/Scripts/game_over_message.gd" id="1_13jiq"]
 [ext_resource type="Texture2D" uid="uid://d0c26ox538jjk" path="res://Assets/UI/Buttons/button_rectangle_gradient.png" id="1_foxll"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://VisualResources/Fonts/infopopup_font_12.tres" id="2_13jiq"]
 
-[node name="GameOverMessage" type="Control"]
+[node name="GameOverMessage" type="Control" unique_id=797061591]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_13jiq")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=961130836]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -28,7 +28,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_foxll")
 
-[node name="Button" type="Button" parent="TextureRect"]
+[node name="Button" type="Button" parent="TextureRect" unique_id=94910795]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -43,7 +43,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Yawn..."
 
-[node name="Label" type="Label" parent="TextureRect"]
+[node name="Label" type="Label" parent="TextureRect" unique_id=582161157]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

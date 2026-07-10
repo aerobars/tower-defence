@@ -1,56 +1,63 @@
 [gd_scene format=3 uid="uid://b7d7kfemno1ex"]
 
-[ext_resource type="PackedScene" uid="uid://egfxblymqfqd" path="res://GameData/Maps/map.tscn" id="1_akvmk"]
-[ext_resource type="Script" uid="uid://djsr0kjgwaton" path="res://GameData/MainScenes/Scripts/game_scene.gd" id="1_g2kuy"]
-[ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/UIScenes/GUI/Scripts/ui.gd" id="3_ibdpl"]
-[ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="3_p50gf"]
-[ext_resource type="Script" uid="uid://p8btputct86" path="res://GameData/SupportScenes/Scripts/camera_2d.gd" id="4_6qu8u"]
-[ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://VisualResources/Inventory/inventory_bg.tres" id="4_syms3"]
-[ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="5_waasu"]
-[ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="7_674w2"]
-[ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="8_a0jnf"]
-[ext_resource type="Resource" uid="uid://cin7we6rrg05o" path="res://GameData/UIScenes/Inventory/test_inventory.tres" id="8_p50gf"]
-[ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="9_clpeu"]
-[ext_resource type="PackedScene" uid="uid://jug24xmepvb3" path="res://GameData/UIScenes/GUI/Scenes/baddy_info_foldable.tscn" id="9_p50gf"]
-[ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://VisualResources/Fonts/kfn_50_o1.tres" id="10_0h1f8"]
-[ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://VisualResources/Fonts/kfn_30_o1.tres" id="11_sl8sw"]
-[ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="12_jvyjn"]
-[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="13_541wh"]
-[ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/Scenes/tutorial.tscn" id="17_nh22g"]
-[ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/Scenes/game_over_message.tscn" id="19_6qu8u"]
+[ext_resource type="Script" uid="uid://djsr0kjgwaton" path="res://GameData/MainScenes/Scripts/game_scene.gd" id="1_ipu8h"]
+[ext_resource type="PackedScene" uid="uid://egfxblymqfqd" path="res://GameData/Maps/map.tscn" id="2_mkklv"]
+[ext_resource type="Script" uid="uid://cjnxrul4i727n" path="res://GameData/MainScenes/Scripts/build_mode_container.gd" id="3_crvjy"]
+[ext_resource type="Script" uid="uid://d3qbohfr5g7cr" path="res://GameData/MainScenes/Scripts/tower_container.gd" id="3_mkklv"]
+[ext_resource type="Script" uid="uid://d26dcb2y5cl72" path="res://GameData/MainScenes/Scripts/baddy_container.gd" id="3_skb8s"]
+[ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="4_crvjy"]
+[ext_resource type="Script" uid="uid://p8btputct86" path="res://GameData/SupportScenes/Scripts/camera_2d.gd" id="5_o3ukp"]
+[ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/UIScenes/GUI/Scripts/ui.gd" id="6_d6kyk"]
+[ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://VisualResources/Inventory/inventory_bg.tres" id="7_lb214"]
+[ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="8_dxi7t"]
+[ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://GameData/UIScenes/Inventory/player_inventory.tres" id="9_8pkxk"]
+[ext_resource type="PackedScene" uid="uid://jug24xmepvb3" path="res://GameData/UIScenes/GUI/Scenes/baddy_info_foldable.tscn" id="10_2fa2s"]
+[ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://VisualResources/Fonts/kfn_50_o1.tres" id="11_k11wq"]
+[ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://VisualResources/Fonts/kfn_30_o1.tres" id="12_vv4yf"]
+[ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="13_mrls8"]
+[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="14_0l3vd"]
+[ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="15_2pb0w"]
+[ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="16_kwcc8"]
+[ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="17_igako"]
+[ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/Scenes/tutorial.tscn" id="18_v8hmh"]
+[ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/Scenes/game_over_message.tscn" id="19_h8guh"]
 
-[node name="GameScene" type="Node2D" unique_id=2134006224 node_paths=PackedStringArray("path_tower_preview_container", "path_ui", "path_range_display", "path_camera", "path_map_node", "path_pathfinding_line")]
-script = ExtResource("1_g2kuy")
-path_tower_preview_container = NodePath("TowerPreviewContainer")
+[node name="GameScene" type="Node2D" unique_id=2134006224 node_paths=PackedStringArray("path_ui", "path_range_display", "path_camera", "path_build_mode_container", "path_tower_container", "path_baddy_container", "path_projectile_container", "path_map_node")]
+script = ExtResource("1_ipu8h")
 path_ui = NodePath("UI")
 path_range_display = NodePath("RangeDisplay")
 path_camera = NodePath("Camera2D")
+path_build_mode_container = NodePath("BuildModeContainer")
+path_tower_container = NodePath("TowerContainer")
+path_baddy_container = NodePath("BaddyContainer")
+path_projectile_container = NodePath("ProjectileContainer")
 path_map_node = NodePath("Map")
-path_pathfinding_line = NodePath("PathfindingLine")
 
-[node name="Map" parent="." unique_id=2134769239 instance=ExtResource("1_akvmk")]
+[node name="Map" parent="." unique_id=2134769239 instance=ExtResource("2_mkklv")]
 
-[node name="TowerPreviewContainer" type="Node2D" parent="." unique_id=2054570]
+[node name="BuildModeContainer" type="Node2D" parent="." unique_id=2054570]
+script = ExtResource("3_crvjy")
+
+[node name="TowerContainer" type="Node2D" parent="." unique_id=750083117]
+script = ExtResource("3_mkklv")
+
+[node name="BaddyContainer" type="Node2D" parent="." unique_id=492987642]
+script = ExtResource("3_skb8s")
+
+[node name="ProjectileContainer" type="Node2D" parent="." unique_id=155900036]
 
 [node name="RangeDisplay" type="Sprite2D" parent="." unique_id=541214347]
 visible = false
 modulate = Color(1, 1, 1, 0.56078434)
 self_modulate = Color(1, 1, 1, 0.56078434)
-texture = ExtResource("3_p50gf")
-
-[node name="PathfindingLine" type="Line2D" parent="." unique_id=167819267]
-width = 5.0
-default_color = Color(0.32941177, 0.32941177, 0.32941177, 0.6509804)
-joint_mode = 2
-begin_cap_mode = 2
-end_cap_mode = 2
+texture = ExtResource("4_crvjy")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1305964899]
-script = ExtResource("4_6qu8u")
+script = ExtResource("5_o3ukp")
 zoom_disabled = true
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=910804750 node_paths=PackedStringArray("path_hp_bar", "path_hp_text", "path_cash_display", "path_game_message", "path_baddy_info_foldbable", "path_next_wave_button", "path_pause_button", "path_ff_button", "path_build_bar", "path_inventory_ui", "path_tower_buttons", "path_game_bookend_popup", "path_tutorial")]
-script = ExtResource("3_ibdpl")
+script = ExtResource("6_d6kyk")
 path_hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
 path_hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
 path_cash_display = NodePath("HUD/InfoBar/InfoContainer/Money")
@@ -97,14 +104,14 @@ offset_top = -160.0
 offset_right = 128.0
 grow_vertical = 0
 mouse_filter = 2
-theme_override_styles/panel = ExtResource("4_syms3")
+theme_override_styles/panel = ExtResource("7_lb214")
 
 [node name="InventoryUI" type="GridContainer" parent="UI/HUD/BuildBar/InventoryContainer" unique_id=103575042 node_paths=PackedStringArray("game_scene")]
 layout_mode = 2
 mouse_filter = 2
 columns = 3
-script = ExtResource("5_waasu")
-data = ExtResource("8_p50gf")
+script = ExtResource("8_dxi7t")
+data = ExtResource("9_8pkxk")
 game_scene = NodePath("../../../../..")
 
 [node name="TowerButtonsContainer" type="HBoxContainer" parent="UI/HUD/BuildBar" unique_id=1462006887]
@@ -126,7 +133,7 @@ size_flags_vertical = 8
 theme_override_constants/separation = 150
 alignment = 1
 
-[node name="BaddyInfo" parent="UI/HUD/BuildBar" unique_id=1592459042 instance=ExtResource("9_p50gf")]
+[node name="BaddyInfo" parent="UI/HUD/BuildBar" unique_id=1592459042 instance=ExtResource("10_2fa2s")]
 layout_mode = 1
 offset_top = -31.0
 offset_bottom = 0.0
@@ -163,7 +170,7 @@ grow_vertical = 2
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
-theme_override_fonts/font = ExtResource("10_0h1f8")
+theme_override_fonts/font = ExtResource("11_k11wq")
 theme_override_font_sizes/font_size = 50
 text = "$"
 horizontal_alignment = 2
@@ -173,7 +180,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(120, 60)
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
-theme_override_fonts/font = ExtResource("11_sl8sw")
+theme_override_fonts/font = ExtResource("12_vv4yf")
 theme_override_font_sizes/font_size = 30
 vertical_alignment = 1
 
@@ -181,7 +188,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 10
-texture = ExtResource("12_jvyjn")
+texture = ExtResource("13_mrls8")
 
 [node name="HealthBar" type="TextureProgressBar" parent="UI/HUD/InfoBar/InfoContainer" unique_id=1348416111]
 custom_minimum_size = Vector2(250, 30)
@@ -190,8 +197,8 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 value = 100.0
 nine_patch_stretch = true
-texture_under = ExtResource("13_541wh")
-texture_progress = ExtResource("13_541wh")
+texture_under = ExtResource("14_0l3vd")
+texture_progress = ExtResource("14_0l3vd")
 tint_under = Color(0.215686, 0.215686, 0.215686, 1)
 tint_progress = Color(0, 0.658824, 0, 1)
 
@@ -247,8 +254,8 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 toggle_mode = true
 button_pressed = true
-texture_normal = ExtResource("7_674w2")
-texture_pressed = ExtResource("8_a0jnf")
+texture_normal = ExtResource("15_2pb0w")
+texture_pressed = ExtResource("16_kwcc8")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -257,7 +264,7 @@ custom_minimum_size = Vector2(70, 70)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = ExtResource("9_clpeu")
+texture_normal = ExtResource("17_igako")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -280,9 +287,9 @@ theme_override_colors/font_color = Color(1, 1, 1, 0.78431374)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 75
 
-[node name="Tutorial" parent="UI" unique_id=1588393518 instance=ExtResource("17_nh22g")]
+[node name="Tutorial" parent="UI" unique_id=1588393518 instance=ExtResource("18_v8hmh")]
 
-[node name="GameOverMessage" parent="UI" unique_id=25078715 instance=ExtResource("19_6qu8u")]
+[node name="GameOverMessage" parent="UI" unique_id=25078715 instance=ExtResource("19_h8guh")]
 visible = false
 
 [connection signal="button_up" from="UI/HUD/InfoBar/SaveButton/Save" to="." method="_on_save_button_up"]

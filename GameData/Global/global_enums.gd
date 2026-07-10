@@ -3,7 +3,7 @@ class_name GlobalEnums extends Resource
 ##Damage Tag = 0 is no effect
 enum DamageTag {
 	BLUNT = 1 << 1, ##2
-	PIERCE = 1 << 4, ## 16, weapon damage types first to maintain additives before mulitplicatives in damage calculation
+	PIERCE = 1 << 4, ## 16, weapon damage types first to maintain additives before multiplicatives in damage calculation
 	BLEED = 1 << 0, ##1
 	BURN = 1 << 2, ##4
 	POISON = 1 << 5, ##32
@@ -54,7 +54,7 @@ const DEFENCE_TABLE : Dictionary = {
 } 
 
 ##AOE = 1, ATTACK_SPEED = 2, CRIT_CHANCE = 4, DAMAGE = 8, DEFENCE = 16, 
-##MAX_HEATLH = 32, MOVE_SPEED = 64, CRIT_DAMAGE = 128, RANGE = 256, POWER = 512
+##MAX_HEALTH = 32, MOVE_SPEED = 64, CRIT_DAMAGE = 128, RANGE = 256, POWER = 512
 enum BuffableStats {
 	AOE = 1 << 0, ##1
 	ATTACK_SPEED = 1 << 1, ##2

@@ -57,7 +57,7 @@ func get_act_data(filepath: String) -> void:
 		var dir := ResourceLoader.list_directory(filepath + str(i+1))
 		
 		if dir == null:
-			print("BADDY DIRETORY FAILED TO OPEN")
+			print("BADDY DIRECTORY FAILED TO OPEN")
 		var boss_dir := ResourceLoader.list_directory(filepath + str(i+1) + "Bosses/")
 		
 		act_baddies[i] = []

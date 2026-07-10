@@ -44,7 +44,7 @@ func _ready() -> void:
 
 ## Tower Preview
 
-func initiate_build_mode(data: Dictionary, btn_ref) -> void:
+func initiate_build_mode(data: TowerBuildData, btn_ref: BuildTowerButton) -> void:
 	engage_build_mode.emit(data, btn_ref)
 
 ## UI
@@ -77,7 +77,7 @@ func create_tower_button(num: int) -> void:
 	new_button.button_data = TowerButtonData.new()
 	if SaveManager.save_data_run.new_game:
 		new_button.button_data.button_id = num + 1
-		new_button.button_data.tower_shape = SaveManager.save_data_run.init_tower_shapes[num]
+		new_button.button_data.tower_shape = SaveManager.save_data_run.init_tower_shapes[num] as Array[Vector2i]
 		SaveManager.save_data_run.button_data.append(new_button.button_data)
 	else:
 		new_button.button_data = SaveManager.save_data_run.button_data[num]
@@ -86,7 +86,7 @@ func create_tower_button(num: int) -> void:
 	path_tower_buttons.add_child(new_button)
 
 func initiate_create_draggable(
-	tower_mod: PrototypeMod, 
+	tower_mod: ModPrototype, 
 	initial_pos : Vector2 = Vector2(0,0), 
 	slot_occupied : TowerButtonModSlot = null, 
 	_is_dragging = true
@@ -146,5 +146,10 @@ func update_baddy_info(baddy: Baddy) -> void:
 func clear_baddy_info() -> void:
 	path_baddy_info_foldbable.clear_display()
 
-func end_game(_result) -> void:
-	pass
+func game_over(_result) -> void:
+	path_game_bookend_popup.game_over = true
+	update_game_message("Game Over!", 2.0, 0.0, 75)
+	path_game_bookend_popup.get_node("TextureRect/Label").text = "Thank you for playing! 
+	Please click the button below to complete a quick feedback survey and return to the main menu (and start a new game (＾ ＾)b )"
+	path_game_bookend_popup.get_node("TextureRect/Button").text = "Go to survey"
+	path_game_bookend_popup.visible = true

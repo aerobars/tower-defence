@@ -5,8 +5,8 @@ extends Node
 @onready var quit_button := $MainMenu/Margin/VBox/Quit
 @onready var feedback_button := $MainMenu/Margin/VBox/Feedback
 
-const GAME_SCENE = preload("res://GameData/MainScenes/game_scene.tscn")
-var main_menu = preload("res://GameData/MainScenes/main_menu.tscn")
+const GAME_SCENE = preload("res://GameData/MainScenes/Scenes/game_scene.tscn")
+var main_menu = preload("res://GameData/MainScenes/Scenes/main_menu.tscn")
 var game_instance
 var unloading_game : bool = false
 var unload_count : int = 0

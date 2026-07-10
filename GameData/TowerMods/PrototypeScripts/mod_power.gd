@@ -1,4 +1,4 @@
-class_name ModPower extends PrototypeMod
+class_name ModPower extends ModPrototype
 
 const BUFFABLE_STATS = [
 	GlobalEnums.BuffableStats.POWER
