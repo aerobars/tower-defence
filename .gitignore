@@ -5,3 +5,4 @@ Executable/
 *.x86_64
 *.pck
 *.dmg
+addons/
