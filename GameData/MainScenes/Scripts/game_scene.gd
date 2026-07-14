@@ -101,10 +101,11 @@ func _ready() -> void:
 	
 	path_build_mode_container.cell_size = path_map_node.CELL_SIZE
 	path_build_mode_container.path_map = path_map_node
-	path_build_mode_container.build_tower.connect(path_tower_container.create_tower)
 	path_build_mode_container.build_tower.connect(on_tower_built)
 	
-	path_tower_container.new_tower_built.connect(connect_new_tower_base)
+	path_map_node.path_baddy_container = path_baddy_container
+	
+	path_tower_container.connect_new_tower.connect(connect_new_tower_base)
 	path_tower_container.new_tower_built.connect(path_map_node.on_tower_built)
 	path_tower_container.tower_sold.connect(path_map_node.on_tower_sold)
 	path_tower_container.tower_sold.connect(on_tower_sold)
@@ -220,9 +221,10 @@ func connect_new_tower_cell(new_cell: TowerCell) -> void:
 	new_cell.mod_updated.connect(tower_cell_updated) #for when new_cell gets updated
 	tower_cell_update_check.connect(new_cell.on_tower_cell_updated) #for when other mods get updated
 
-func on_tower_built(_data, build_btn_ref, _position, _rotation) -> void:
+func on_tower_built(data, build_btn_ref, tower_rotation) -> void:
 	player_cash -= build_btn_ref.build_cost
 	path_ui.update_cash_display(player_cash)
+	path_tower_container.create_tower(data, build_btn_ref, tower_rotation)
 
 func on_tower_sold(sell_value: int, _tower) -> void:
 	player_cash += sell_value

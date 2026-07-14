@@ -10,7 +10,7 @@ const BADDY_SCENE := preload("res://GameData/Baddies/ScriptsAndProtos/baddy.tscn
 
 var wave_total : int
 var remaining_spawns : int
-var living_baddies : int
+var living_baddies : Array[Baddy] = []
 var escaped_baddies : int
 
 func start_next_wave() -> void:
@@ -18,7 +18,7 @@ func start_next_wave() -> void:
 	var wave_data = GameData.get_wave_data()
 	wave_total = wave_data["wave_total"]
 	remaining_spawns = wave_total
-	living_baddies = 0
+	living_baddies = []
 	escaped_baddies = 0
 	spawn_baddies(wave_data["wave_baddies"])
 
@@ -52,20 +52,20 @@ func spawn_baddies(wave_data) -> void:
 				add_child(new_baddy, true)
 				
 				baddy["spawn_count"] += 1
-				living_baddies += 1
+				living_baddies.append(new_baddy)
 				remaining_spawns -= 1
 				await get_tree().create_timer(baddy["spawn_interval"], false).timeout
 
-func on_baddy_death() -> void:
-	living_baddies -= 1
-	if living_baddies == 0 and remaining_spawns == 0:
+func on_baddy_death(baddy: Baddy) -> void:
+	living_baddies.erase(baddy)
+	if living_baddies.size() == 0 and remaining_spawns == 0:
 		wave_cleared.emit()
 
-func baddy_escaped(baddy_damage, is_summon) -> void:
-	if not is_summon:
+func baddy_escaped(baddy: Baddy) -> void:
+	if not baddy.data.spawn_summon:
 		escaped_baddies += 1
 	if escaped_baddies == wave_total:
 		game_over.emit()
 	else:
-		base_damaged.emit(baddy_damage)
-		on_baddy_death()
+		base_damaged.emit(baddy.data.current_damage)
+		on_baddy_death(baddy)

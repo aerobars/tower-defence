@@ -65,7 +65,7 @@ func recalculate_stats() -> void:
 	for buff in active_buffs.keys():
 		if buff is BuffStat:
 			for buff_stat in buff.modifying_stats:
-				if buff_check(buff_stat):
+				if buff_check(buff_stat.stat):
 					var stat_name : String = ""
 					var inst = active_buffs[buff]
 					for stat in GlobalEnums.BuffableStats.keys():

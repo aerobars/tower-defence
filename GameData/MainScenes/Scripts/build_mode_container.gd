@@ -1,6 +1,6 @@
 extends Node2D
 
-signal build_tower(tower_data: TowerBuildData, tower_rotation: float)
+signal build_tower(tower_data: TowerBuildData, build_button_ref: BuildTowerButton, tower_rotation: float)
 
 const PREVIEW_RANGE_DISPLAY : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
 const TOWER_BASE_SCENE : PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
@@ -39,7 +39,6 @@ func set_tower_preview() -> void:
 	
 	var range_texture : Sprite2D
 	
-	##use build_data dictionary to set correct position of preview range.
 	
 	for button_id in build_data.mods: #adds range indicator to auras and weapons
 		if button_id == null or build_data.mods[button_id] == null:
@@ -68,7 +67,8 @@ func create_tower_preview() -> TowerBase:
 	var new_tower = TOWER_BASE_SCENE.instantiate()
 	
 	new_tower.build_data = build_data
-	new_tower.tower_data = TowerBaseData.new(build_data.shape, build_btn_ref.button_data.button_id)
+	new_tower.tower_data = TowerBaseData.new()
+	new_tower.tower_data.connected_button_id = build_btn_ref.button_data.button_id
 	new_tower.cell_size = cell_size
 	
 	return new_tower
@@ -103,8 +103,7 @@ func verify_and_build() -> void:
 	if tower_preview.build_data.build_valid and get_parent().check_cash(build_btn_ref.build_cost):
 		build_tower.emit(
 			tower_preview.build_data, 
-			build_btn_ref, 
-			tower_preview.build_data.build_position, 
+			build_btn_ref,  
 			rotation
 			)
 		cancel_build_mode()

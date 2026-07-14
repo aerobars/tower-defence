@@ -35,7 +35,8 @@ var occupied_cells : Array[Vector2i]
 
 ## Build Mode
 
-var previous_tiles
+var previous_tiles : Array[Vector2i]
+var path_baddy_container : Node2D
 
 func _ready() -> void:
 	for astar in astar_array:
@@ -58,18 +59,20 @@ func _get_all_waypoints() -> void:
 	all_waypoints = []
 	for child in get_children():
 		if child is Marker2D:
-			all_waypoints.append(child.global_position)
+			all_waypoints.append(get_current_tile(child.global_position))
 
+##Updates the pathfinding line
 func pathing_visual_update() -> void:
 	path_pathfinding_visual.clear_points()
 	for cell in update_preview():
 		path_pathfinding_visual.add_point(cell)
 
+##Returns pathing based on position of tower preview and exclusion layer
 func update_preview() -> PackedVector2Array:
 	var path : PackedVector2Array
 	
 	for i in all_waypoints.size() - 1:
-		var segment : PackedVector2Array = astar_preview.get_point_path(_get_current_tile(all_waypoints[i]), _get_current_tile(all_waypoints[i+1]))
+		var segment : PackedVector2Array = astar_preview.get_point_path(all_waypoints[i], all_waypoints[i+1])
 		if segment.is_empty():
 			return segment
 		if i > 0:
@@ -77,15 +80,14 @@ func update_preview() -> PackedVector2Array:
 		path.append_array(segment)
 	return path
 
-func _get_current_tile(current_position: Vector2) -> Vector2i:
-	return path_ground_layer.local_to_map(path_ground_layer.to_local(current_position))
+func get_current_tile(current_global_position: Vector2) -> Vector2i:
+	return path_ground_layer.local_to_map(path_ground_layer.to_local(current_global_position))
 
 func reset_previous_tiles() -> void:
 	previous_tiles = [Vector2(0, 0)]
 
 func update_build_status(tower_preview: TowerBase) -> void:
-	var mouse_pos : Vector2 = get_global_mouse_position()
-	var centre_tile : Vector2i = path_ground_layer.local_to_map(path_ground_layer.to_local(mouse_pos))
+	var centre_tile : Vector2i = get_current_tile(get_global_mouse_position())
 	var centre_tile_pos : Vector2 = path_ground_layer.map_to_local(centre_tile)
 	var all_tiles : Array[Vector2i] = []
 	var baddy_occupied_tiles : Array[Vector2i] =[]
@@ -93,14 +95,16 @@ func update_build_status(tower_preview: TowerBase) -> void:
 	tower_preview.build_data.build_position = centre_tile_pos
 	tower_preview.build_data.build_valid = true
 	
-	for baddy in get_tree().get_nodes_in_group("baddies"):
-		var occupied_tile = path_ground_layer.local_to_map(path_ground_layer.to_local(baddy.global_position))
+	for baddy in path_baddy_container.living_baddies:
+		if not is_instance_valid(baddy):
+			continue
+		var occupied_tile = get_current_tile(baddy.global_position)
 		if not baddy_occupied_tiles.has(occupied_tile):
 			baddy_occupied_tiles.append(occupied_tile)
 	
 	#determines if tower can be built at current position
 	for child in tower_preview.tower_children:
-		var current_tile : Vector2i = path_ground_layer.local_to_map(path_ground_layer.to_local(child.global_position))
+		var current_tile : Vector2i = get_current_tile(child.global_position)
 		all_tiles.append(current_tile)
 		path_pathfinding_layer.set_cell(current_tile, 0, Vector2i(0,0), 0)
 		astar_preview.set_point_solid(current_tile, true)
@@ -110,9 +114,6 @@ func update_build_status(tower_preview: TowerBase) -> void:
 	update_preview_layers(all_tiles)
 	
 	pathing_visual_update()
-
-func can_build(tower_preview: TowerBase) -> void:
-	pass
 
 ##Checks if the cells in previous_tiles are still being occupied. 
 ##If not, cleans up pathfinding_layer and removes the tile from astar_preview 
@@ -127,13 +128,11 @@ func update_preview_layers(all_tiles: Array[Vector2i]) -> void:
 
 func build_mode_cleanup() -> void:
 	path_pathfinding_layer.clear()
-	for tile in previous_tiles:
-		astar_preview.set_point_solid(tile, false)
 	pathing_visual_update()
 
 func on_tower_built(new_tower: TowerBase) -> void:
 	for child in new_tower.tower_children:
-		var child_tile = path_exclusion_layer.local_to_map(child.global_position)
+		var child_tile = get_current_tile(child.global_position)
 		path_exclusion_layer.set_cell(child_tile, 5, Vector2i(1,0), 0)
 		astar_pathing.set_point_solid(child_tile, true)
 		astar_preview.set_point_solid(child_tile, true)
@@ -142,13 +141,13 @@ func on_tower_built(new_tower: TowerBase) -> void:
 
 func on_tower_sold(_sell_value: int, tower: TowerBase) -> void:
 	for child in tower.tower_children:
-		var tile_pos: Vector2i = path_exclusion_layer.local_to_map(child.global_position)
-		path_exclusion_layer.set_cell(tile_pos)
-		astar_pathing.set_point_solid(tile_pos, false)
+		var child_tile: Vector2i = get_current_tile(child.global_position)
+		path_exclusion_layer.set_cell(child_tile)
+		astar_pathing.set_point_solid(child_tile, false)
 	pathing_visual_update()
 	pathing_updated.emit()
 
-func update_baddy_pathing(current_position: Vector2, waypoint_index: int) -> PackedVector2Array:
+func update_baddy_pathing(current_tile: Vector2i, waypoint_index: int) -> PackedVector2Array:
 	if waypoint_index >= all_waypoints.size():
 		return PackedVector2Array([Vector2(-1000,-1000)])
-	return astar_pathing.get_point_path(_get_current_tile(current_position), _get_current_tile(all_waypoints[waypoint_index]))
+	return astar_pathing.get_point_path(current_tile, all_waypoints[waypoint_index])

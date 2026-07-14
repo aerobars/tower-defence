@@ -1,8 +1,10 @@
 ##Abstract Ability class for abilities that trigger under certain conditions, such as on hit or a periodic timer.
 @abstract class_name AbilityTriggeredPrototype extends AbilityPrototype
 
-func triggered_effect() -> void:
+func triggered_effect(_baddy: UnitScenePrototype = ability_owner) -> void:
 	var onhit_targets := []
+	
+	#Determine ability targets
 	if ability_targets == GlobalEnums.Targets.BADDIES or ability_targets == GlobalEnums.Targets.TOWERS:
 		onhit_targets = StaticFunctions.setup_aoe(
 			ability_owner, 
@@ -14,13 +16,11 @@ func triggered_effect() -> void:
 	else:
 		print("no ability targets")
 		return
-#	print("targets for ", buff_owner.data.info_name, ": ", onhit_targets)
+	
 	if ability_damage_tag > 0:
 		for target in onhit_targets:
 			ability_owner.calculate_damage([ability_effect_amount[owner_level], ability_damage_tag, false])
-	else:
-		print("no dmg tag")
+	
 	if buff_data != null:
 		for target in onhit_targets:
 			target.data.add_buff(buff_data, ability_owner, owner_level)
-	#call(buff.name.to_snake_case(), damage_tags, pending_buffs)

@@ -1,8 +1,9 @@
 class_name Baddy extends UnitScenePrototype
 
-##Signals
-signal baddy_death
-signal baddy_escaped(damage: float, is_summon: bool)
+## Signals
+
+signal baddy_death(baddy: Baddy)
+signal baddy_escaped(baddy: Baddy)
 signal open_baddy_display(data: BaddyStats)
 signal update_baddy_display(baddy: Baddy)
 signal hit_detected
@@ -10,7 +11,8 @@ signal process_update(delta: float, cur_pos: Vector2)
 signal checkpoint_reached
 #signal unit_selected(baddy: Baddy)
 
-##Node Paths
+## Node Paths
+
 @export_group("Node Paths", "path")
 @export var path_status_display : Node2D
 @export var path_impact_area : Marker2D
@@ -20,17 +22,22 @@ signal checkpoint_reached
 @export var path_baddy_texture : Sprite2D
 #@export var path_selection_circle : Sprite2D
 
-##Pathfinding
+## Pathfinding
+
 var path_map : Node2D
 var movement_delta : float
 var path_point_margin : float = 0.5
-
-var current_path : PackedVector2Array #set in Game Scene when baddy is instantiated
+var current_tile: Vector2i : 
+	set(cur_pos) :
+		current_tile = path_map.get_current_tile(cur_pos)
+##set in BaddyContainer when baddy is instantiated
+var current_path : PackedVector2Array 
 var current_path_index : int = 0
 var current_path_point : Vector2
 var waypoint_index : int = 1
 
-##Runtime Variables
+## Runtime Variables
+
 const AURA_SCENE := preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scenes/ability_aura.tscn")
 const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/Scenes/projectile_impact.tscn")
 
@@ -38,7 +45,7 @@ var destroyed := false
 var level : int = 0
 #var selected := false
 
-##Setup
+## Setup
 
 func _ready() -> void:
 	super()
@@ -49,6 +56,7 @@ func _ready() -> void:
 	path_status_display.position = position + Vector2(-30, 18)
 	
 	#pathing setup
+	current_tile = global_position
 	update_pathing()
 	
 	#signal connections
@@ -90,16 +98,14 @@ func _physics_process(delta: float) -> void:
 	
 	if global_position.distance_to(current_path_point) <= path_point_margin:
 		current_path_index += 1
+		current_tile = global_position
 		if current_path_index >= current_path.size(): 
 			waypoint_index += 1
 			checkpoint_reached.emit()
 			update_pathing()
 			if current_path == PackedVector2Array([Vector2(-1000,-1000)]) and not destroyed:
 				destroyed = true
-				#current_path = []
-				#current_path_index = 0
-				#current_path_point = global_transform.origin
-				baddy_escaped.emit(data.current_damage, false)
+				baddy_escaped.emit(self)
 				queue_free()
 				return
 	
@@ -110,7 +116,7 @@ func _physics_process(delta: float) -> void:
 	global_position = global_position.move_toward(current_path_point, movement_delta)
 
 func update_pathing() -> void:
-	current_path = path_map.update_baddy_pathing(global_position, waypoint_index)
+	current_path = path_map.update_baddy_pathing(current_tile, waypoint_index)
 	current_path_index = 0
 	current_path_point = current_path[current_path_index]
 
@@ -168,7 +174,7 @@ func destroy() -> void:
 		return
 	destroyed = true
 	data.health_depleted.disconnect(destroy)
-	baddy_death.emit()
+	baddy_death.emit(self)
 	await (get_tree().create_timer(0.2).timeout)
 	queue_free()
 

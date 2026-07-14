@@ -1,3 +1,4 @@
+##Contains Tower Data stored in associated build button, as well as build mode specific variables
 class_name TowerBuildData extends RefCounted
 
 var aura_tower : bool

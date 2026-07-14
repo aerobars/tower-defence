@@ -39,6 +39,7 @@ func _ready() -> void:
 	var tower_mods : Dictionary = build_data.mods
 	var init_power_buffs : Dictionary = build_data.power_buffs
 	aura_tower = build_data.aura_tower
+	tower_data.tower_shape = build_data.shape
 	mod_slot_count = tower_data.tower_shape.size() 
 	cell_size = build_data.cell_size
 	

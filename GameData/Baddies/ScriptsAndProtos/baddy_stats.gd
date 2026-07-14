@@ -7,6 +7,7 @@ signal health_changed(current_health: float, max_health: float)
 @export_group("Spawn Data", "spawn_")
 @export var spawn_per_wave : int = 1
 @export var spawn_interval : float = 0.5
+##If true, baddy is considered a summon and doesn't count towards escaped baddies game over condition
 @export var spawn_summon : bool = false
 
 ##Baddy Stats
