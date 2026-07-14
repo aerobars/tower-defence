@@ -12,3 +12,10 @@ var tower_shape : Array = []
 #		"mods": {},
 #		"power_buffs": {},
 #		}
+
+func _init(
+	_tower_shape: Array,
+	_connected_button_id: int
+) -> void:
+	tower_shape = _tower_shape
+	connected_button_id = _connected_button_id

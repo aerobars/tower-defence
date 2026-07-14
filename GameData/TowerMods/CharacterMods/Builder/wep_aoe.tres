@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WeaponMod" format=3 uid="uid://brep14nhiu8em"]
+[gd_resource type="Resource" script_class="ModWeapon" format=3 uid="uid://brep14nhiu8em"]
 
 [ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_jx127"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="2_lue6a"]
@@ -12,9 +12,9 @@ region = Rect2(16, 16, 32, 32)
 script = ExtResource("2_jx127")
 damage_tags = 2
 base_aoe_levels = Array[float]([100.0, 150.0, 200.0, 250.0, 300.0])
+base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
+mod_class = 2
 info_name = "AoE Weapon"
 info_description = "Hits enemies within aoe"
 info_texture = SubResource("AtlasTexture_lue6a")
-base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
-mod_class = 2
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

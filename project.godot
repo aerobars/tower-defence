@@ -24,6 +24,7 @@ config/icon="res://icon.svg"
 GameData="*res://GameData/Global/game_data.gd"
 DamageNumbers="*res://GameData/Global/damage_numbers.gd"
 SaveManager="*res://GameData/Global/save_manager.gd"
+_mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [debug]
 
@@ -35,6 +36,10 @@ window/size/viewport_width=1600
 window/size/viewport_height=900
 window/stretch/mode="canvas_items"
 mouse_cursor/custom_image="uid://fu8tlh1sblwb"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_ai/plugin.cfg")
 
 [file_customization]
 

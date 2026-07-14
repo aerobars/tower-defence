@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cspv52j38kqra"]
+
+[ext_resource type="Script" uid="uid://bk3ntmtbue8ok" path="res://GameData/SupportScenes/Scripts/projectile.gd" id="1_pfsx8"]
+[ext_resource type="Texture2D" uid="uid://bp5aad61ufbfa" path="res://Assets/Effects/towerDefense_tile297_rotated.png" id="2_mth3a"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_238f6"]
+radius = 6.0
+height = 32.0
+
+[node name="TowerProjectile" type="Node2D" unique_id=1722038830]
+script = ExtResource("1_pfsx8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1799478137]
+texture = ExtResource("2_mth3a")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=732158194]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=777436403]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_238f6")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

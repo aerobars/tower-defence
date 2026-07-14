@@ -9,7 +9,7 @@ var cell_size : int #set to Map Node CELL_SIZE in Game Scene
 var path_map : Node2D
 
 var build_btn_ref : BuildTowerButton
-##"aura_tower": bool, "mods": button_data.mod_data (Dictionary[slot_id: int, PrototypeMod]), "power_buffs": power_surplus_buffs (Dictionary[stat, amt: int]), "shape": button_data.tower_shape (Array[Vector2i])
+##aura_tower: bool, mods: button_data.mod_data (Dictionary[slot_id: int, PrototypeMod]), power_buffs: power_surplus_buffs (Dictionary[stat, amt: int]), shape: button_data.tower_shape (Array[Vector2i])
 var build_data : TowerBuildData
 ##Used for valid build locations
 var build_location : Vector2 = Vector2(0, 0)
@@ -22,9 +22,6 @@ func _process(_delta: float) -> void:
 
 func initiate_build_mode(data: TowerBuildData, btn_ref: BuildTowerButton) -> void: #connected to build buttons' pressed signal, data contains tower mods and aura tower status
 	check_build_mode()
-	#if player_cash < btn_ref.build_cost:
-	#	path_ui.update_game_message("Unable to build: insufficient funds", 1.0, 0.5)
-	#	return
 	
 	if build_btn_ref != btn_ref: #maintains rotation when building multiple of same tower
 		rotation = 0
@@ -71,8 +68,7 @@ func create_tower_preview() -> TowerBase:
 	var new_tower = TOWER_BASE_SCENE.instantiate()
 	
 	new_tower.build_data = build_data
-	new_tower.tower_data = TowerBaseData.new()
-	new_tower.tower_data.connected_button_id = build_btn_ref.button_data.button_id
+	new_tower.tower_data = TowerBaseData.new(build_data.shape, build_btn_ref.button_data.button_id)
 	new_tower.cell_size = cell_size
 	
 	return new_tower
@@ -80,8 +76,8 @@ func create_tower_preview() -> TowerBase:
 func update_tower_preview() -> void:
 	var colour : String
 	
-	path_map.build_status(tower_preview)
-
+	path_map.update_build_status(tower_preview)
+	
 	if tower_preview.build_data.build_valid:
 		colour = "GREEN"
 	else:
@@ -112,6 +108,3 @@ func verify_and_build() -> void:
 			rotation
 			)
 		cancel_build_mode()
-		#player_cash -= build_btn_ref.build_cost
-		#pathing_update()
-		#pathing_updated.emit()

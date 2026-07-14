@@ -2,8 +2,6 @@
 ##such as standard colours and icons
 extends Node
 
-signal mod_update_check(mod: StaticBody2D)
-
 ## Script Preloading
 
 const BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd")
@@ -113,6 +111,3 @@ func get_baddy_filepath(baddy_file: String) -> BaddyStats:
 	if BOSS_WAVES.has(SaveManager.save_data_run.current_wave):
 		return load("res://GameData/Baddies/Act" + str(SaveManager.save_data_run.current_act + 1) + "Bosses/" + baddy_file)
 	return load("res://GameData/Baddies/Act" + str(SaveManager.save_data_run.current_act + 1) + "/" + baddy_file)
-
-func mod_updated(mod: StaticBody2D) -> void:
-	mod_update_check.emit(mod)

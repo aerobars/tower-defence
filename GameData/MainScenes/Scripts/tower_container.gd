@@ -33,9 +33,9 @@ func create_tower(
 	else:
 		new_tower.rotation = new_tower.tower_data.rotation
 	
+	new_tower_built.emit(new_tower)
 	add_child(new_tower, true)
 	
-	new_tower_built.emit(new_tower)
 
 func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) -> void:
 	if get_parent().check_cash(upgrade_cost):

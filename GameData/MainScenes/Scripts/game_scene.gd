@@ -1,6 +1,7 @@
 extends Node2D
 
 signal game_finished(result)
+signal tower_cell_update_check
 
 ## UI
 
@@ -103,7 +104,7 @@ func _ready() -> void:
 	path_build_mode_container.build_tower.connect(path_tower_container.create_tower)
 	path_build_mode_container.build_tower.connect(on_tower_built)
 	
-	path_tower_container.new_tower_built.connect(connect_new_tower)
+	path_tower_container.new_tower_built.connect(connect_new_tower_base)
 	path_tower_container.new_tower_built.connect(path_map_node.on_tower_built)
 	path_tower_container.tower_sold.connect(path_map_node.on_tower_sold)
 	path_tower_container.tower_sold.connect(on_tower_sold)
@@ -207,11 +208,17 @@ func check_cash(value) -> bool:
 		return false
 	return true
 
-func connect_new_tower(new_tower: TowerBase) -> void:
+func connect_new_tower_base(new_tower: TowerBase) -> void:
 	new_tower.show_upgrade_panel.connect(create_popup)
 	new_tower.unit_selected.connect(on_unit_selection)
 	new_tower.update_range_display.connect(update_range_display)
 	new_tower.hide_range_display.connect(hide_range_display)
+	new_tower.cell_created.connect(connect_new_tower_cell)
+
+func connect_new_tower_cell(new_cell: TowerCell) -> void:
+	new_cell.create_projectile.connect(path_projectile_container.create_projectile)
+	new_cell.mod_updated.connect(tower_cell_updated) #for when new_cell gets updated
+	tower_cell_update_check.connect(new_cell.on_tower_cell_updated) #for when other mods get updated
 
 func on_tower_built(_data, build_btn_ref, _position, _rotation) -> void:
 	player_cash -= build_btn_ref.build_cost
@@ -298,3 +305,6 @@ func on_unit_selection(unit) -> void:
 ##Save/Load Testing
 func _on_save_button_up() -> void:
 	game_finished.emit(false)
+
+func tower_cell_updated(cell: TowerCell) -> void:
+	tower_cell_update_check.emit(cell)

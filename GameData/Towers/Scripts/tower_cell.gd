@@ -1,19 +1,19 @@
 ##Handles gametime tower functions (shooting, etc.) and last step of mod updates (update to mod class and net power)
 class_name TowerCell extends UnitScenePrototype
 
-signal create_projectile(data: ModPrototype)
 
 ## Signals
-signal mod_updated(mod: StaticBody2D)
-#signal clear_popup
-#signal display_popup
+signal mod_updated(cell: TowerCell)
+signal create_projectile(projectile_data: ProjectileData)
 signal update_range_display(tower_cell: TowerCell)
 signal hide_range_display
 signal process_update(delta: float, cur_pos: Vector2)
+#signal display_popup
+#signal clear_popup
 
 
 ## Tower Setup
-const PROJECTILE_SCENE := preload("res://GameData/Towers/Scenes/tower_projectile.tscn")
+
 const TURRET_TEXTURE_SIZE : float = 32
 var non_aura_radius : float #equal to TowerBase's Marker2D radius
 var button_slot_id : int
@@ -30,8 +30,8 @@ var button_slot_id : int
 
 
 ## Gametime
-var baddies_in_range : Array
-var attack_targets : Array = []
+var baddies_in_range : Array[UnitScenePrototype]
+var attack_targets : Array = [UnitScenePrototype]
 var activation_timer : float = 0.0
 var attack_tracker : int
 
@@ -42,11 +42,6 @@ func _ready():
 	super()
 	for body in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(body)
-	
-	mod_updated.connect(GameData.mod_updated) #for when this mod gets updated
-	GameData.mod_update_check.connect(_on_mod_updated) #for when other mods get updated
-	#above signals allow other mods to be added to auras after they are updated
-	#data.stats_updated.connect()
 
 func get_level() -> int:
 	return get_parent().tower_data.level
@@ -77,11 +72,11 @@ func update_mod(net_power : int = 0) -> void:
 	path_turret.texture = data.info_texture
 	mod_updated.emit(self)
 
-func _on_mod_updated(updated_mod: StaticBody2D) -> void: #Connected to GameData, triggers whenever any mod is updated
-	if updated_mod == self:
+func on_tower_cell_updated(updated_cell: TowerCell) -> void: #Connected to GameData, triggers whenever any mod is updated
+	if updated_cell == self:
 		return
-	if updated_mod in path_range_scene.get_overlapping_bodies():
-		_on_range_body_entered(updated_mod)
+	if updated_cell in path_range_scene.get_overlapping_bodies():
+		_on_range_body_entered(updated_cell)
 
 ##Input Event Handling
 
@@ -168,7 +163,7 @@ func turn():
 	if is_instance_valid(attack_targets[0]):
 		path_turret.look_at(attack_targets[0].global_position)
 
-func fire(target):
+func fire(target: UnitScenePrototype):
 	if data.projectile_speed > 0:
 		fire_projectile(target)
 	else:
@@ -184,17 +179,16 @@ func fire(target):
 		else:
 			target.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
 
-func fire_projectile(target) -> void:
-	var new_projectile = PROJECTILE_SCENE.instantiate()
-	new_projectile.speed = data.projectile_speed
-	new_projectile.pierce_total = data.current_pierce
-	new_projectile.damage = data.calculate_damage()
-	new_projectile.on_hit_effects = data.on_hit_effects
-	new_projectile.aoe = data.current_aoe
-	add_child(new_projectile)
-	new_projectile.position = path_muzzle.position
-	new_projectile.look_at(target.global_position)
-	new_projectile.direction = Vector2.RIGHT.rotated(new_projectile.rotation)
+func fire_projectile(target: UnitScenePrototype) -> void:
+	create_projectile.emit(
+		ProjectileData.new(
+			data.projectile_speed, 
+			data.calculate_damage(),
+			data.current_pierce, 
+			data.current_aoe, 
+			data.on_hit_effects, 
+			path_muzzle.global_position, 
+			target.global_position))
 
 func fire_instant() -> void:
 	path_animation_player.play("fire")

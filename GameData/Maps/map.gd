@@ -30,6 +30,8 @@ var astar_array : Array[AStarGrid2D] = [astar_pathing, astar_preview]
 var all_waypoints : Array[Vector2] = []
 #const WALL_TILE_COORD := Vector2i(0,0)
 #const FLOOR_TILE_COORD := Vector2i(0,0)
+##Array of cells currently containing baddies, to prevent building on top of them.
+var occupied_cells : Array[Vector2i]
 
 ## Build Mode
 
@@ -81,33 +83,47 @@ func _get_current_tile(current_position: Vector2) -> Vector2i:
 func reset_previous_tiles() -> void:
 	previous_tiles = [Vector2(0, 0)]
 
-func build_status(tower_preview: TowerBase) -> void:
+func update_build_status(tower_preview: TowerBase) -> void:
 	var mouse_pos : Vector2 = get_global_mouse_position()
-	var centre_tile : Vector2i = path_exclusion_layer.local_to_map(mouse_pos)
-	var centre_tile_pos : Vector2 = path_exclusion_layer.map_to_local(centre_tile)
-	var all_cells : Array[Vector2i] = []
+	var centre_tile : Vector2i = path_ground_layer.local_to_map(path_ground_layer.to_local(mouse_pos))
+	var centre_tile_pos : Vector2 = path_ground_layer.map_to_local(centre_tile)
+	var all_tiles : Array[Vector2i] = []
+	var baddy_occupied_tiles : Array[Vector2i] =[]
 	
 	tower_preview.build_data.build_position = centre_tile_pos
 	tower_preview.build_data.build_valid = true
 	
-	#for each cell in tower shape, do below code
+	for baddy in get_tree().get_nodes_in_group("baddies"):
+		var occupied_tile = path_ground_layer.local_to_map(path_ground_layer.to_local(baddy.global_position))
+		if not baddy_occupied_tiles.has(occupied_tile):
+			baddy_occupied_tiles.append(occupied_tile)
+	
+	#determines if tower can be built at current position
 	for child in tower_preview.tower_children:
-		var current_cell : Vector2i = path_exclusion_layer.local_to_map(child.global_position)
-		all_cells.append(current_cell)
-		path_pathfinding_layer.set_cell(current_cell, 0, Vector2i(0,0), 0)
-		astar_preview.set_point_solid(current_cell, true)
-		if path_exclusion_layer.get_cell_source_id(current_cell) != -1 or update_preview().is_empty():
+		var current_tile : Vector2i = path_ground_layer.local_to_map(path_ground_layer.to_local(child.global_position))
+		all_tiles.append(current_tile)
+		path_pathfinding_layer.set_cell(current_tile, 0, Vector2i(0,0), 0)
+		astar_preview.set_point_solid(current_tile, true)
+		if baddy_occupied_tiles.has(current_tile) or path_exclusion_layer.get_cell_source_id(current_tile) != -1 or update_preview().is_empty():
 			tower_preview.build_data.build_valid = false
 	
+	update_preview_layers(all_tiles)
+	
+	pathing_visual_update()
+
+func can_build(tower_preview: TowerBase) -> void:
+	pass
+
+##Checks if the cells in previous_tiles are still being occupied. 
+##If not, cleans up pathfinding_layer and removes the tile from astar_preview 
+func update_preview_layers(all_tiles: Array[Vector2i]) -> void:
 	for tile in previous_tiles:
-		if all_cells.has(tile):
+		if all_tiles.has(tile):
 			continue
 		if path_exclusion_layer.get_cell_source_id(tile) == -1:
 			astar_preview.set_point_solid(tile, false)
-		path_pathfinding_layer.clear()
-	previous_tiles = all_cells
-	
-	pathing_visual_update()
+		path_pathfinding_layer.set_cell(tile) #erases cells not in current position
+	previous_tiles = all_tiles
 
 func build_mode_cleanup() -> void:
 	path_pathfinding_layer.clear()

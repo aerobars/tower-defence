@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://d26dcb2y5cl72" path="res://GameData/MainScenes/Scripts/baddy_container.gd" id="3_skb8s"]
 [ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="4_crvjy"]
 [ext_resource type="Script" uid="uid://p8btputct86" path="res://GameData/SupportScenes/Scripts/camera_2d.gd" id="5_o3ukp"]
+[ext_resource type="Script" uid="uid://t02dvq4mpbb1" path="res://GameData/MainScenes/Scripts/projectile_container.gd" id="6_crvjy"]
 [ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/UIScenes/GUI/Scripts/ui.gd" id="6_d6kyk"]
 [ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://VisualResources/Inventory/inventory_bg.tres" id="7_lb214"]
 [ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="8_dxi7t"]
@@ -45,6 +46,7 @@ script = ExtResource("3_mkklv")
 script = ExtResource("3_skb8s")
 
 [node name="ProjectileContainer" type="Node2D" parent="." unique_id=155900036]
+script = ExtResource("6_crvjy")
 
 [node name="RangeDisplay" type="Sprite2D" parent="." unique_id=541214347]
 visible = false

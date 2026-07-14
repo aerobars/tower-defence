@@ -37,7 +37,8 @@ var activation_cooldown : float
 
 func setup_stats(_level : int = 0) -> void:
 	super(_level)
-	stats_updated.connect(set_activation_cooldown)
+	if not stats_updated.is_connected(set_activation_cooldown):
+		stats_updated.connect(set_activation_cooldown)
 
 func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
 	return BUFFABLE_STATS

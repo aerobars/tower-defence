@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://ci4b2d4m6qd7c"]
+[gd_scene format=3 uid="uid://ci4b2d4m6qd7c"]
 
 [ext_resource type="Script" uid="uid://7fki6cw7vhh8" path="res://GameData/Towers/Scripts/tower_base.gd" id="1_ronnk"]
 
-[node name="TowerBase" type="Node2D"]
+[node name="TowerBase" type="Node2D" unique_id=931054110]
 script = ExtResource("1_ronnk")

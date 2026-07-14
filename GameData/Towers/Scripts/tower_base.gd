@@ -1,6 +1,7 @@
 class_name TowerBase extends Node2D
 ##Handles tower setup and updates to tower mods
 
+signal cell_created(tower_cell: TowerCell)
 signal unit_selected(tower_cell : TowerCell)
 signal show_upgrade_panel(popup_type : String, tower_data, tower_id : TowerBase)
 signal update_mods(net_power : int)
@@ -37,7 +38,6 @@ var tower_children : Array = []
 func _ready() -> void:
 	var tower_mods : Dictionary = build_data.mods
 	var init_power_buffs : Dictionary = build_data.power_buffs
-	tower_data.tower_shape = build_data.shape
 	aura_tower = build_data.aura_tower
 	mod_slot_count = tower_data.tower_shape.size() 
 	cell_size = build_data.cell_size
@@ -46,17 +46,22 @@ func _ready() -> void:
 	for i in mod_slot_count:
 		var new_cell = TOWER_CELL_PROTO.instantiate()
 		var slot_id : int = tower_data.connected_button_id * 10 + i
+		
 		new_cell.position = get_coords_from_vectors(tower_data.tower_shape[i])
-		if is_built and tower_mods[slot_id] != null:
-			new_cell.data = tower_mods[slot_id].duplicate(true)
-			if tower_data.level > 0:
-				new_cell.data.setup_stats(tower_data.level)
 		new_cell.button_slot_id = slot_id
-		update_mods.connect(new_cell.update_mod)
-		new_cell.unit_selected.connect(tower_selected)
-		new_cell.update_range_display.connect(update_range_display_received)
-		new_cell.hide_range_display.connect(hide_range_display_received)
 		new_cell.non_aura_radius = non_aura_radius
+		
+		if is_built:
+			cell_created.emit(new_cell)
+			update_mods.connect(new_cell.update_mod)
+			new_cell.unit_selected.connect(tower_selected)
+			new_cell.update_range_display.connect(update_range_display_received)
+			new_cell.hide_range_display.connect(hide_range_display_received)
+			if tower_mods[slot_id] != null:
+				new_cell.data = tower_mods[slot_id].duplicate(true)
+				if tower_data.level > 0:
+					new_cell.data.setup_stats(tower_data.level)
+		
 		tower_children.append(new_cell)
 		add_child(new_cell)
 	tower_update(aura_tower, init_power_buffs)
