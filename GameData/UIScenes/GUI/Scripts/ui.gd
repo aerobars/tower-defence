@@ -1,6 +1,7 @@
 extends CanvasLayer
 
-signal create_draggable
+signal connect_new_button(new_button: BuildTowerButton)
+signal connect_inv_button(new_slot: InventorySlotUI)
 signal engage_build_mode(data: Dictionary, btn_ref)
 signal start_next_wave
 signal check_build_mode
@@ -23,15 +24,16 @@ signal clear_popup
 @export var path_game_bookend_popup : Control
 @export var path_tutorial : Control
 
-@onready var new_slot := path_inventory_ui.connect("slot_created", connect_inv_button_signal)
-
 const GAME_MESSAGE_A_VALUE = 0.78
 const TOWER_BUTTON := preload("res://GameData/UIScenes/GUI/Scenes/tower_button.tscn")
 @onready var texture : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
 @onready var tower : PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
 
-func _ready() -> void:
+func setup_ui() -> void:
 	update_wave_button()
+	
+	path_inventory_ui.slot_created.connect(connect_inv_button_signal)
+	path_inventory_ui.inventory_setup()
 	
 	## Button Setup
 	var build_buttons_count : int
@@ -41,11 +43,6 @@ func _ready() -> void:
 		build_buttons_count = SaveManager.save_data_run.button_data.size() #input some other value once it's time
 	for i in build_buttons_count:
 		create_tower_button(i)
-
-## Tower Preview
-
-func initiate_build_mode(data: TowerBuildData, btn_ref: BuildTowerButton) -> void:
-	engage_build_mode.emit(data, btn_ref)
 
 ## UI
 
@@ -81,28 +78,12 @@ func create_tower_button(num: int) -> void:
 		SaveManager.save_data_run.button_data.append(new_button.button_data)
 	else:
 		new_button.button_data = SaveManager.save_data_run.button_data[num]
-	new_button.create_draggable.connect(initiate_create_draggable)
-	new_button.pressed.connect(func(): initiate_build_mode(new_button.tower_data, new_button))
+	connect_new_button.emit(new_button)
 	path_tower_buttons.add_child(new_button)
 
-func initiate_create_draggable(
-	tower_mod: ModPrototype, 
-	initial_pos : Vector2 = Vector2(0,0), 
-	slot_occupied : TowerButtonModSlot = null, 
-	_is_dragging = true
-	) -> void:
-	create_draggable.emit(tower_mod, initial_pos, slot_occupied, _is_dragging)
-
-func connect_inv_button_signal(inventory_slot) -> void: #connects new inventory slot signal
-	inventory_slot.button_down.connect(func(): initiate_create_draggable(inventory_slot.slot_data.inventory_mod))
-	inventory_slot.hovered.connect(initiate_create_popup)
-	inventory_slot.clear_popup.connect(initiate_clear_popup)
-
-func initiate_create_popup(popup_type: String , data, popup_owner : TowerBase = null) -> void:
-	create_popup.emit(popup_type, data, popup_owner)
-
-func initiate_clear_popup() -> void:
-	clear_popup.emit()
+##Connects new inventory slot signals to game_scene functions
+func connect_inv_button_signal(inventory_slot: InventorySlotUI) -> void:
+	connect_inv_button.emit(inventory_slot)
 
 ## Display Updates
 
@@ -150,6 +131,6 @@ func game_over(_result) -> void:
 	path_game_bookend_popup.game_over = true
 	update_game_message("Game Over!", 2.0, 0.0, 75)
 	path_game_bookend_popup.get_node("TextureRect/Label").text = "Thank you for playing! 
-	Please click the button below to complete a quick feedback survey and return to the main menu (and start a new game (＾ ＾)b )"
+	Please click the button below to complete a quick feedback survey and return to the main menu (and start a new game :D )"
 	path_game_bookend_popup.get_node("TextureRect/Button").text = "Go to survey"
 	path_game_bookend_popup.visible = true

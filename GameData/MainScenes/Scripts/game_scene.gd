@@ -84,14 +84,16 @@ var tower_preview : Node2D
 
 
 func _ready() -> void:
+	
 	## Child Node Setup
 	path_ui.update_health_bar(player_health, max_player_health)
 	path_ui.update_cash_display(player_cash)
-	path_ui.create_draggable.connect(create_draggable)
 	path_ui.check_build_mode.connect(path_build_mode_container.check_build_mode)
-	path_ui.create_popup.connect(create_popup)
-	path_ui.clear_popup.connect(clear_popup)
-	path_ui.engage_build_mode.connect(path_build_mode_container.initiate_build_mode)
+	path_ui.connect_new_button.connect(connect_new_button)
+	path_ui.connect_inv_button.connect(connect_inv_slot)
+#	path_ui.create_popup.connect(create_popup)
+#	path_ui.clear_popup.connect(clear_popup)
+#	path_ui.engage_build_mode.connect(path_build_mode_container.initiate_build_mode)
 	path_ui.start_next_wave.connect(path_baddy_container.start_next_wave)
 	
 	path_baddy_container.new_baddy_spawned.connect(new_baddy_spawn)
@@ -110,26 +112,29 @@ func _ready() -> void:
 	path_tower_container.tower_sold.connect(path_map_node.on_tower_sold)
 	path_tower_container.tower_sold.connect(on_tower_sold)
 	
+	## Initial Setup
 	
-	##Saved Run Setup
+	path_ui.setup_ui()
+	
+	
 	if SaveManager.save_data_run.new_game : #rest of func only needs to run to load saved towers
+		SaveManager.complete_new_game_setup()
 		return
+	
+	## Saved Run Setup
+	
 	for tower in SaveManager.save_data_run.tower_data:
 		for button in get_tree().get_nodes_in_group("build_buttons"):
 			if button.button_data.button_id == tower.connected_button_id:
 				path_tower_container.create_tower(button.tower_data, button, tower.position, tower.rotation, tower.level, true)
 	
-	##Saved Draggable Mod Position Set
+	## Saved Draggable Mod Position Set
 	await get_tree().process_frame
 	for mod in get_tree().get_nodes_in_group("droppable"):
 		if mod is ModDraggable:
 			mod.global_position = mod.mod_slot_ref.global_position
-	
-	#for each tower in saved tower data
-	#create a new tower at the saved position
-	#add saved mods to tower
-	#set tower level to saved level
-	#connect linked button signals
+
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_released("ui_cancel") and path_build_mode_container.build_mode:
@@ -241,6 +246,15 @@ func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) ->
 
 ## GUI Functions
 
+func connect_new_button(new_button: BuildTowerButton) -> void:
+	new_button.create_draggable.connect(create_draggable)
+	new_button.pressed.connect(func(): path_build_mode_container.initiate_build_mode(new_button.tower_data, new_button))
+
+func connect_inv_slot(new_inv_slot: InventorySlotUI) -> void:
+	new_inv_slot.button_down.connect(func(): create_draggable(new_inv_slot.slot_data.inventory_mod))
+	new_inv_slot.hovered.connect(create_popup)
+	new_inv_slot.clear_popup.connect(clear_popup)
+
 func create_draggable(
 	tower_mod: ModPrototype, 
 	initial_pos : Vector2 = get_global_mouse_position(), 
@@ -302,7 +316,6 @@ func on_unit_selection(unit) -> void:
 		current_unit.set_selected(false)
 	current_unit = unit
 	current_unit.set_selected(true)
-	
 
 ##Save/Load Testing
 func _on_save_button_up() -> void:

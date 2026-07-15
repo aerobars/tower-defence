@@ -17,7 +17,6 @@ script = ExtResource("2_42fmt")
 modifying_stats = Array[ExtResource("2_s3uhx")]([SubResource("Resource_04737")])
 info_name = "Burst Move Speed"
 info_display_icon = ExtResource("1_76uyw")
-stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_duration = Array[float]([0.5, 0.5, 0.5, 0.5, 0.5])
 buff_targets = 2
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

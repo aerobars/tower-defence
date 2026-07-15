@@ -128,6 +128,11 @@ func update_preview_layers(all_tiles: Array[Vector2i]) -> void:
 
 func build_mode_cleanup() -> void:
 	path_pathfinding_layer.clear()
+	for tile in previous_tiles:
+		astar_preview.set_point_solid(tile, false)
+		
+	reset_previous_tiles()
+	
 	pathing_visual_update()
 
 func on_tower_built(new_tower: TowerBase) -> void:

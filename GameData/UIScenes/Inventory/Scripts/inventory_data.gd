@@ -1,6 +1,6 @@
 class_name InventoryData extends Resource
 
-#SlotData holds TowerMod and quantity
+##SlotData holds TowerMod and quantity
 @export var slots: Array[InventorySlotData]
 
 var inventory_ui : InventoryUI

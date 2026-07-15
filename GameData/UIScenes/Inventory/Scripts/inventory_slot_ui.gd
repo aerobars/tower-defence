@@ -1,4 +1,4 @@
-class_name InventorySlotUi extends Button
+class_name InventorySlotUI extends Button
 
 signal hovered(info_popup, data: ModPrototype)
 signal clear_popup

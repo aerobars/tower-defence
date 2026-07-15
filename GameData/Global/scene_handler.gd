@@ -16,7 +16,6 @@ var profile_data : Resource #variable to profile settings(resolution, sound volu
 func _ready() -> void:
 	load_main_menu()
 
-
 func load_main_menu() -> void:
 	continue_button.pressed.connect(on_continue_pressed)
 	new_game.pressed.connect(on_new_game_pressed)

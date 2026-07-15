@@ -12,7 +12,7 @@ func _ready() -> void:
 		queue_free()
 
 func _on_skip_tutorial_button_up() -> void:
-	SaveManager.save_data_profile.show_tutorial = false
+	SaveManager.tutorial_completed()
 	queue_free()
 
 func _on_intro_button_button_up() -> void:
@@ -36,5 +36,5 @@ func _on_powering_mods_button_button_up() -> void:
 	powering_mods.queue_free()
 
 func _on_end_button_button_up() -> void:
-	SaveManager.save_data_profile.show_tutorial = false
+	SaveManager.tutorial_completed()
 	queue_free()

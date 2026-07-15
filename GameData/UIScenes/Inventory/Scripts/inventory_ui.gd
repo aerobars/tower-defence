@@ -1,20 +1,18 @@
 class_name InventoryUI extends Control
 
-signal slot_created(new_slot) #Connected to game_scene
+signal slot_created(new_slot: InventorySlotUI) #Connected to game_scene
 
 const INVENTORY_SLOT = preload("res://GameData/UIScenes/Inventory/inventory_slot.tscn")
 
-#InventoryData holds and array of SlotData and Update Inventory function
+##Contains an array of SlotData and Update Inventory function
 @export var data : InventoryData
 
 @export var game_scene : Node2D
 
 
-func _ready() -> void:
-	await game_scene.ready
+func inventory_setup() -> void:
 	data.inventory_ui = self
 	if SaveManager.save_data_run.new_game:
-		SaveManager.save_data_run.new_game = false
 		SaveManager.save_data_run.inventory_data = data
 	else:
 		data = SaveManager.save_data_run.inventory_data

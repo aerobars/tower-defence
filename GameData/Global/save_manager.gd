@@ -12,14 +12,23 @@ func _ready() -> void:
 		save_data_profile = SaveDataProfile.new()
 	if existing_save():
 		save_data_run = ResourceLoader.load(SAVE_PATH_RUN, "SaveDataRun", ResourceLoader.CACHE_MODE_IGNORE)
+		save_data_run.new_game = false
 	else:
 		new_game()
 
 func new_game():
 	save_data_run = SaveDataRun.new()
 
+func complete_new_game_setup() -> void:
+	if not save_data_run.new_game:
+		return
+	save_data_run.new_game = false
+
 func save_run():
 	ResourceSaver.save(save_data_run, SAVE_PATH_RUN)
 
 func existing_save(save_path : String = "user://run_save.tres", save_type : String = "SaveDataRun") -> bool:
 	return ResourceLoader.exists(save_path, save_type)
+
+func tutorial_completed() -> void:
+	save_data_profile.show_tutorial = false

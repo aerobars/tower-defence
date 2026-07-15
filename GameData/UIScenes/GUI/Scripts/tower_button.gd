@@ -1,12 +1,7 @@
 class_name BuildTowerButton extends TextureButton
 
 ## Signals
-signal update_towers(
-	aura_status: bool, 
-	power_surplus_buffs : Dictionary,
-	mod_slot_ref: StaticBody2D, 
-	slot_data: ModPrototype,
-	) 
+signal update_towers(update_data : ModUpdateData) 
 signal create_draggable(
 	tower_mod: ModPrototype, 
 	initial_pos : Vector2, 
@@ -126,10 +121,10 @@ func on_mod_update(slot_id : int, data : ModPrototype = button_data.mod_data[slo
 				2: #Weapon
 					has_wep = true
 	
-	update_towers.emit(
+	update_towers.emit(ModUpdateData.new(
 		has_aura and not has_wep, 
 		power_surplus_buffs, 
 		slot_id, 
-		data,)
+		data))
 	
 	net_power_display.text = str(net_power)

@@ -65,7 +65,7 @@ func _ready() -> void:
 		
 		tower_children.append(new_cell)
 		add_child(new_cell)
-	tower_update(aura_tower, init_power_buffs)
+	tower_update(ModUpdateData.new(aura_tower, init_power_buffs))
 	await get_tree().create_timer(0.25).timeout
 	clickable = true
 
@@ -99,28 +99,23 @@ func level_up() -> void:
 		if child.data != null:
 			child.data.setup_stats(tower_data.level)
 
-func tower_update(
-	aura_status: bool, 
-	power_surplus_buffs : Dictionary,
-	button_slot_id: int = 0, 
-	button_mod_data: ModPrototype = null, 
-	) -> void:
+func tower_update(updated_mod_data : ModUpdateData) -> void:
 	
 	var mod_list : Dictionary = {0 : [], #Aura
 								 1 : [], #Power
 								 2 : []} #Weapon
 	
-	aura_tower = aura_status
+	aura_tower = updated_mod_data.aura_status
 	net_power = 0
 	
 	for child in tower_children: 
-		if button_slot_id == child.button_slot_id:
+		if updated_mod_data.slot_id == child.button_slot_id:
 			if child.data != null and child.data.mod_class == child.data.ModClass.AURA: #Aura
 				for target in child.aura_targets: #clears aura effects of old aura before updating
 					child.remove_buff(target)
 				child.aura_targets = []
-			if button_mod_data != null: #set tower mod's data
-				child.data = button_mod_data.duplicate(true)
+			if updated_mod_data.slot_data != null: #set tower mod's data
+				child.data = updated_mod_data.slot_data.duplicate(true)
 				child.data.data_owner = child
 				if child.data.swap_enabled:
 					if child.data.swap_buff == null or child.data.swap_buff_duration == 0.0:
@@ -133,7 +128,7 @@ func tower_update(
 			mod_list[child.data.mod_class].append(child)
 			child.data.setup_stats(tower_data.level)
 			net_power += child.data.current_power
-			child.data.power_surplus_buffs = power_surplus_buffs
+			child.data.power_surplus_buffs = updated_mod_data.power_surplus_buffs
 	
 	if not aura_tower and mod_list[0].size() > 0:
 		apply_auras(mod_list)
