@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://dx8v8breuxb2f"]
+
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="1_oke2q"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_pr3fh"]
+
+[resource]
+script = ExtResource("2_pr3fh")
+info_description = "If this mod is equipped, at the end of a wave, gain an additional reward choice"
+metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

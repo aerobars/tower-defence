@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AbilityOnHit" format=3 uid="uid://dhy1sybn2g1nn"]
+
+[ext_resource type="Resource" uid="uid://b8vpnj50cueqk" path="res://GameData/BuffsAndAbilities/Buffs/BaddyBuffs/knockback_push.tres" id="1_buff"]
+[ext_resource type="Texture2D" uid="uid://b7813pvk1mmp0" path="res://Assets/Environment/Props/crateWood.png" id="1_icon"]
+[ext_resource type="Script" uid="uid://stua4x4ldhoc" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd" id="1_script"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_script")
+onhit_success_chance = Array[float]([0.25, 0.3, 0.35, 0.4, 0.45])
+info_name = "On-Hit Knockback"
+info_display_icon = ExtResource("1_icon")
+info_description = "Chance on hit to push the target away"
+buff_data = ExtResource("1_buff")
+ability_targets = 2
+ability_effect_amount = Array[float]([5.0, 5.0, 5.0, 5.0, 5.0])
+ability_damage_tag = 2

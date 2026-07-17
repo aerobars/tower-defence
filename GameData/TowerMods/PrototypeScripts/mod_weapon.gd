@@ -14,6 +14,8 @@ const BUFFABLE_STATS = [
 @export var projectile_speed : float = 750
 ##BLEED = 1, BLUNT = 2, BURN = 4, HEAL = 8, PIERCE = 16, POISON = 32, SHOCK = 64
 @export var damage_tags : int = GlobalEnums.DamageTag.PIERCE
+@export var abilities : Array[AbilityOnHit]
+
 
 ##Level based variables
 @export_group("Weapon Stats", "base_")
@@ -34,6 +36,7 @@ var current_multitarget : int
 var current_pierce : int
 
 var activation_cooldown : float
+var on_hit_buffs : Array[Buff]
 
 func setup_stats(_level : int = 0) -> void:
 	super(_level)
@@ -63,14 +66,14 @@ func calculate_damage() -> Array: #returns [total attack damage, damage tags, di
 	else:
 		return [current_damage, damage_tags, false]
 
-func add_on_hit_effect(buff : Buff) -> void:
+func add_on_hit_buff(buff : Buff) -> void:
 	if buff is not BuffStat and buff.damage_tag > 0:
 		damage_tags |= buff.damage_tag
 	data_owner.path_buff_display.update_display(buff)
-	on_hit_effects.append(buff)
+	on_hit_buffs.append(buff)
 
-func remove_on_hit_effect(buff : Buff) -> void:
+func remove_on_hit_buff(buff : Buff) -> void:
 	if buff is not BuffStat and buff.damage_tag > 0:
 		damage_tags &= ~buff.damage_tag
 	data_owner.path_buff_display.remove_buff(buff)
-	on_hit_effects.erase(buff)
+	on_hit_buffs.erase(buff)

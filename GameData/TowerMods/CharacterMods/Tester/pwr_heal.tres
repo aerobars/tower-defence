@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://cv851nf6jacrj"]
+
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="1_kuoav"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_r7783"]
+
+[resource]
+script = ExtResource("2_r7783")
+info_name = "Healing Power"
+info_description = "If this mod is equipped, at the end of a wave, heal 1 for each instance of this mod on the field."
+metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

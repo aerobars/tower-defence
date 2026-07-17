@@ -6,6 +6,8 @@ const BUFFABLE_STATS = [
 
 @export var power_surplus_buffable_stats : Array[GlobalEnums.BuffableStats] = [GlobalEnums.BuffableStats.DAMAGE]
 
+@export var abilities : Array[AbilityWaveClear]
+
 func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
 
 	return BUFFABLE_STATS

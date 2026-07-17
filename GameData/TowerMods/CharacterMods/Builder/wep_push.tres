@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ModWeapon" format=3 uid="uid://bjsvrnr44batq"]
+
+[ext_resource type="Script" uid="uid://stua4x4ldhoc" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd" id="1_fkt2h"]
+[ext_resource type="Resource" path="res://GameData/BuffsAndAbilities/Abilities/onhit_knockback.tres" id="2_ct7a7"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="3_kxj16"]
+[ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="3_nlwsg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1u4x"]
+atlas = ExtResource("3_kxj16")
+region = Rect2(384, 192, 16, 16)
+
+[resource]
+script = ExtResource("3_nlwsg")
+projectile_speed = 0.0
+damage_tags = 2
+abilities = Array[ExtResource("1_fkt2h")]([ExtResource("2_ct7a7")])
+info_name = "Push "
+info_description = "Chance on hit to deal additional blunt damage and push the baddy back"
+info_texture = SubResource("AtlasTexture_s1u4x")
+metadata/_custom_type_script = "uid://djuix1w1w7p4i"

@@ -17,7 +17,7 @@ const BUFFABLE_STATS = [
 	GlobalEnums.BuffableStats.DAMAGE,
 	GlobalEnums.BuffableStats.DEFENCE,
 	GlobalEnums.BuffableStats.MAX_HEALTH,
-	GlobalEnums.BuffableStats.MOVE_SPEED
+	GlobalEnums.BuffableStats.MOVESPEED
 ]
 const BASE_LEVEL_XP : float = 100.0
 
@@ -25,7 +25,7 @@ const BASE_LEVEL_XP : float = 100.0
 @export var base_max_health : float = 75
 @export var base_damage : float = 1
 @export var base_defence : float = 5
-@export var base_move_speed : float = 150
+@export var base_movespeed : float = 150
 @export var base_defence_tag : GlobalEnums.BaddyArmorTags = GlobalEnums.BaddyArmorTags.UNARMORED
 
 var wave_ratio : float :
@@ -36,7 +36,7 @@ var current_damage : float :
 	set(value):
 		current_damage = max(value, 1)
 var current_defence : float
-var current_move_speed : float
+var current_movespeed : float
 
 var health : float = 0 : set = _on_health_set
 
@@ -50,13 +50,13 @@ var active_abilities: Array[AbilityPrototype]
 #var level : int = 0 :
 #	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
 
-##Stats Setup and Adjustment
+## Stats Setup and Adjustment
 
 func setup_stats(_level: int = 0) -> void:
 	super(_level)
 	health = current_max_health
 
-##Runtime
+## Runtime
 
 #add_buff and remove_buff functions in unit_data_proto
 func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
@@ -66,10 +66,10 @@ func set_current_stats() -> void:
 	current_max_health = base_max_health * wave_ratio
 	current_damage = base_damage #don't scale base damage
 	current_defence = base_defence * wave_ratio
-	current_move_speed = base_move_speed * wave_ratio
+	current_movespeed = base_movespeed * wave_ratio
 
-func clamp_move_speed() -> void:
-	current_move_speed = clampf(current_move_speed, 75, 500) #don't use setter for this for stun MS
+func clamp_movespeed() -> void:
+	current_movespeed = clampf(current_movespeed, 75, 500) #don't use setter for this for stun MS
 
 func _on_health_set(new_value: float) -> void:
 	health = clamp(new_value, 0, current_max_health)

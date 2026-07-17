@@ -1,5 +1,7 @@
 class_name ProjectileScene extends Node2D
 
+signal hit_detected
+
 ##Projectile Stats
 
 var data : ProjectileData
@@ -25,7 +27,9 @@ func _on_area_2d_body_entered(body: UnitScenePrototype) -> void:
 			data.aoe)
 		for baddy in baddies:
 			baddy.on_hit(data.damage.duplicate(), data.on_hit_effects)
+			hit_detected.emit(baddy.global_position)
 	else:
 		body.on_hit(data.damage.duplicate(), data.on_hit_effects)
+		hit_detected.emit(body.global_position)
 	if pierce_count == data.pierce_total:
 		queue_free()

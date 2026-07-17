@@ -130,7 +130,7 @@ func build_mode_cleanup() -> void:
 	path_pathfinding_layer.clear()
 	for tile in previous_tiles:
 		astar_preview.set_point_solid(tile, false)
-		
+	
 	reset_previous_tiles()
 	
 	pathing_visual_update()

@@ -2,7 +2,7 @@ extends Node2D
 
 signal update_wave_info(wave_baddies: Array)
 signal new_baddy_spawned(new_baddy: Baddy)
-signal wave_cleared
+signal wave_ended
 signal base_damaged(baddy_damage : float)
 signal game_over
 
@@ -59,7 +59,7 @@ func spawn_baddies(wave_data) -> void:
 func on_baddy_death(baddy: Baddy) -> void:
 	living_baddies.erase(baddy)
 	if living_baddies.size() == 0 and remaining_spawns == 0:
-		wave_cleared.emit()
+		wave_ended.emit()
 
 func baddy_escaped(baddy: Baddy) -> void:
 	if not baddy.data.spawn_summon:

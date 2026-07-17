@@ -2,6 +2,7 @@ extends Node2D
 
 signal game_finished(result)
 signal tower_cell_update_check
+signal wave_cleared
 
 ## UI
 
@@ -99,7 +100,7 @@ func _ready() -> void:
 	path_baddy_container.new_baddy_spawned.connect(new_baddy_spawn)
 	path_baddy_container.base_damaged.connect(on_base_damage)
 	path_baddy_container.game_over.connect(game_over)
-	path_baddy_container.wave_cleared.connect(wave_cleared)
+	path_baddy_container.wave_ended.connect(wave_ended)
 	
 	path_build_mode_container.cell_size = path_map_node.CELL_SIZE
 	path_build_mode_container.path_map = path_map_node
@@ -186,11 +187,12 @@ func on_base_damage(damage) -> void:
 	if player_health <= 0 and not is_game_over:
 		game_over()
 
-func wave_cleared() -> void:
+func wave_ended() -> void:
 	if is_game_over:
 		return
 	path_ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
 	player_cash += wave_reward
+	wave_cleared.emit()
 	var new_reward_ui = REWARD_UI.instantiate()
 	new_reward_ui.total_rewards = SaveManager.save_data_run.wave_reward_total
 	new_reward_ui.connect_reward_card.connect(reward_signal_connection)

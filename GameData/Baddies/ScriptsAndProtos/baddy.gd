@@ -6,7 +6,7 @@ signal baddy_death(baddy: Baddy)
 signal baddy_escaped(baddy: Baddy)
 signal open_baddy_display(data: BaddyStats)
 signal update_baddy_display(baddy: Baddy)
-signal hit_detected
+signal hit_detected(pos: Vector2)
 signal process_update(delta: float, cur_pos: Vector2)
 signal checkpoint_reached
 #signal unit_selected(baddy: Baddy)
@@ -51,25 +51,25 @@ func _ready() -> void:
 	super()
 	path_baddy_texture.texture = data.info_texture
 	
-	#healthbar setup
+	# Healthbar Setup
 	healthbar_update(data.health, data.current_max_health)
 	path_status_display.position = position + Vector2(-30, 18)
 	
-	#pathing setup
+	# Pathing Setup
 	current_tile = global_position
 	update_pathing()
 	
-	#signal connections
+	# Signal Connections
 	data.health_changed.connect(healthbar_update)
 	data.health_depleted.connect(destroy)
 	data.stats_updated.connect(stats_update)
 	data.update_buff_display.connect(path_status_display.path_buff_display_container.update_display)
 	data.remove_buff_display.connect(path_status_display.path_buff_display_container.remove_buff)
 	
-	#innate effects setup
+	# Innate Effects Setup
 	
 	for ability in data.innate_abilities:
-		var new_ability = ability.duplicate(true)
+		var new_ability = ability.duplicate(true) #ability is duplicated to avoid share instances across baddies
 		data.active_abilities.append(new_ability)
 		new_ability.ability_setup(self)
 		path_status_display.path_buff_display_container.update_display(new_ability)
@@ -91,10 +91,12 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	path_status_display.position = position + Vector2(-30, 18)
+	if _has_active_knockback():
+		return  # Movement handled by BuffInstance knockback, position set directly
 	if current_path.is_empty():
 		return
 	
-	movement_delta = data.current_move_speed * delta
+	movement_delta = data.current_movespeed * delta
 	
 	if global_position.distance_to(current_path_point) <= path_point_margin:
 		current_path_index += 1
@@ -115,6 +117,12 @@ func _physics_process(delta: float) -> void:
 	
 	global_position = global_position.move_toward(current_path_point, movement_delta)
 
+func _has_active_knockback() -> bool:
+	for buff_key in data.active_buffs:
+		if buff_key is BuffKnockback:
+			return true
+	return false
+
 func update_pathing() -> void:
 	current_path = path_map.update_baddy_pathing(current_tile, waypoint_index)
 	current_path_index = 0
@@ -124,7 +132,7 @@ func update_pathing() -> void:
 func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void: 
 	calculate_damage(dmg)
 	var pending_buffs : Array[Buff] = []
-	hit_detected.emit()
+	hit_detected.emit(global_position)
 	for buff in data.active_buffs:
 		data.active_buffs[buff].level = tower_mod_level
 		if buff is BuffOnHit:

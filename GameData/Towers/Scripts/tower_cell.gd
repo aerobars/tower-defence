@@ -8,6 +8,7 @@ signal create_projectile(projectile_data: ProjectileData)
 signal update_range_display(tower_cell: TowerCell)
 signal hide_range_display
 signal process_update(delta: float, cur_pos: Vector2)
+signal hit_detected(target_pos: Vector2)
 #signal display_popup
 #signal clear_popup
 
@@ -42,6 +43,12 @@ func _ready():
 	super()
 	for body in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(body)
+	if data is ModPower or data is ModWeapon:
+		for ability in data.abilities:
+			var new_ability = ability.duplicate(true) #ability is duplicated to avoid share instances across baddies
+			data.active_abilities.append(new_ability)
+			new_ability.ability_setup(self)
+			path_buff_display.update_display(new_ability)
 
 func get_level() -> int:
 	return get_parent().tower_data.level
@@ -167,28 +174,29 @@ func fire(target: UnitScenePrototype):
 	if data.projectile_speed > 0:
 		fire_projectile(target)
 	else:
-		fire_instant()
-		if data.current_aoe > 0:
-			var baddies = StaticFunctions.setup_aoe(
-				self, 
-				target.global_position, 
-				"baddies", 
-				data.current_aoe)
-			for baddy in baddies:
-				baddy.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
-		else:
-			target.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
+		fire_instant(target)
 
 func fire_projectile(target: UnitScenePrototype) -> void:
 	create_projectile.emit(
 		ProjectileData.new(
-			data.projectile_speed, 
-			data.calculate_damage(),
-			data.current_pierce, 
-			data.current_aoe, 
-			data.on_hit_effects, 
+			self, 
 			path_muzzle.global_position, 
 			target.global_position))
 
-func fire_instant() -> void:
+func projectile_contact(projectile_pos: Vector2) -> void:
+	hit_detected.emit(projectile_pos)
+
+func fire_instant(target: UnitScenePrototype) -> void:
 	path_animation_player.play("fire")
+	if data.current_aoe > 0:
+		var baddies = StaticFunctions.setup_aoe(
+			self, 
+			target.global_position, 
+			"baddies", 
+			data.current_aoe)
+		for baddy in baddies:
+			baddy.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
+			hit_detected.emit(baddy.global_position)
+	else:
+		target.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
+		hit_detected.emit(target.global_position)

@@ -23,8 +23,6 @@ var current_range : float
 @export var swap_buff : Buff
 @export var swap_buff_duration: float
 
-##Innate onhit effects that tower starts with
-@export var on_hit_effects : Array[Buff] = []
 var net_power : int = 0
 var power_surplus_buffs : Dictionary = {}
 var power_calc : float :

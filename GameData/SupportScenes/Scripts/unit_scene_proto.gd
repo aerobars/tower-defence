@@ -14,12 +14,11 @@ var selected : bool = false
 @abstract func get_level() -> int
 
 func _ready() -> void:
-	if data != null:
-		data.data_owner = self
-		data.setup_stats(get_level())
-	else:
+	if data == null:
 		print("unit_scene_proto: no data file detected")
-
+		return
+	data.data_owner = self
+	data.setup_stats(get_level())
 
 ##UnitProtoype function, calls the add_buff function in data resource, body defaults to self
 func add_buff(buff : Buff, body : CollisionObject2D = self, cur_level : int = 0) -> void:

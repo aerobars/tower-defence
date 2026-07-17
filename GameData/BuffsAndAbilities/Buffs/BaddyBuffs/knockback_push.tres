@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BuffKnockback" format=3 uid="uid://b8vpnj50cueqk"]
+
+[ext_resource type="Texture2D" uid="uid://lqnf6vvd76vi" path="res://Assets/Effects/explosion1.png" id="1_icon"]
+[ext_resource type="Script" uid="uid://y233t1n5gad2" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_knockback.gd" id="1_script"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_script")
+info_name = "Knockback Push"
+info_display_icon = ExtResource("1_icon")
+buff_stack_limit = Array[int]([1, 1, 1, 1, 1])
+buff_duration = Array[float]([0.3, 0.3, 0.3, 0.3, 0.3])
+buff_targets = 2

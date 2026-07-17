@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://dfs6kx7xcmncd"]
+
+[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="1_sx1b2"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_bwdvb"]
+
+[resource]
+script = ExtResource("2_bwdvb")
+power_surplus_buffable_stats = Array[int]([])
+info_description = "If this mod is equipped, at the end of a wave, gain additional money for each instance of this mod on the field."
+metadata/_custom_type_script = "uid://cypg7wm5b3ytj"
