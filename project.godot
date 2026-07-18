@@ -39,7 +39,7 @@ mouse_cursor/custom_image="uid://fu8tlh1sblwb"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_ai/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 

@@ -7,6 +7,8 @@ signal tower_sold(sell_value: int, tower: TowerBase)
 
 const TOWER_BASE_SCENE := preload("res://GameData/Towers/Scenes/tower_base.tscn")
 
+var current_towers : Array[TowerBase]
+
 func create_tower(
 	_build_data: TowerBuildData, 
 	connected_btn: BuildTowerButton, 

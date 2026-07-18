@@ -61,6 +61,9 @@ func _get_all_waypoints() -> void:
 		if child is Marker2D:
 			all_waypoints.append(get_current_tile(child.global_position))
 
+func get_current_tile(current_global_position: Vector2) -> Vector2i:
+	return path_ground_layer.local_to_map(path_ground_layer.to_local(current_global_position))
+
 ##Updates the pathfinding line
 func pathing_visual_update() -> void:
 	path_pathfinding_visual.clear_points()
@@ -79,9 +82,6 @@ func update_preview() -> PackedVector2Array:
 			segment.remove_at(0) #removes duplicate point
 		path.append_array(segment)
 	return path
-
-func get_current_tile(current_global_position: Vector2) -> Vector2i:
-	return path_ground_layer.local_to_map(path_ground_layer.to_local(current_global_position))
 
 func reset_previous_tiles() -> void:
 	previous_tiles = [Vector2(0, 0)]
@@ -128,10 +128,11 @@ func update_preview_layers(all_tiles: Array[Vector2i]) -> void:
 
 func build_mode_cleanup() -> void:
 	path_pathfinding_layer.clear()
-	for tile in previous_tiles:
-		astar_preview.set_point_solid(tile, false)
-	
-	reset_previous_tiles()
+	if not previous_tiles == [Vector2(0, 0)]:
+		for tile in previous_tiles:
+			astar_preview.set_point_solid(tile, false)
+		
+		reset_previous_tiles()
 	
 	pathing_visual_update()
 
@@ -141,7 +142,7 @@ func on_tower_built(new_tower: TowerBase) -> void:
 		path_exclusion_layer.set_cell(child_tile, 5, Vector2i(1,0), 0)
 		astar_pathing.set_point_solid(child_tile, true)
 		astar_preview.set_point_solid(child_tile, true)
-	pathing_visual_update()
+	reset_previous_tiles()
 	pathing_updated.emit()
 
 func on_tower_sold(_sell_value: int, tower: TowerBase) -> void:

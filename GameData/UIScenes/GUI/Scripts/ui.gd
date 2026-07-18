@@ -2,11 +2,8 @@ extends CanvasLayer
 
 signal connect_new_button(new_button: BuildTowerButton)
 signal connect_inv_button(new_slot: InventorySlotUI)
-signal engage_build_mode(data: Dictionary, btn_ref)
 signal start_next_wave
 signal check_build_mode
-signal create_popup
-signal clear_popup
 
 @export_group("Node Paths", "path_")
 @export var path_hp_bar : TextureProgressBar

@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://daxore4jcvu1"]
 
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="1_0vrf7"]
+[ext_resource type="Script" uid="uid://bdvisqhdbqwsu" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_wave_clear.gd" id="1_shcgv"]
 [ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_0vrf7"]
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="2_shcgv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0vrf7"]
 atlas = ExtResource("1_0vrf7")

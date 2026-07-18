@@ -69,11 +69,11 @@ var wave_reward : int :
 		return randi_range(50, 50) # (1 + float(SaveManager.save_data_run.current_wave)/10)
 var current_unit : Node2D
 var is_game_over : bool = false
-
+var wave_end_effect_tracker : Dictionary = {}
 
 ## Build Mode
 
-##"aura_tower": bool, "mods": button_data.mod_data (Dictionary[slot_id: int, PrototypeMod]), "power_buffs": power_surplus_buffs (Dictionary[stat, amt: int]), "shape": button_data.tower_shape (Array[Vector2i])
+##Contains: "aura_tower": bool, "mods": button_data.mod_data (Dictionary[slot_id: int, PrototypeMod]), "power_buffs": power_surplus_buffs (Dictionary[stat, amt: int]), "shape": button_data.tower_shape (Array[Vector2i])
 var build_data : TowerBuildData
 var build_location : Vector2 = Vector2(0, 0)
 var build_rotation : float = 0.0
@@ -92,9 +92,6 @@ func _ready() -> void:
 	path_ui.check_build_mode.connect(path_build_mode_container.check_build_mode)
 	path_ui.connect_new_button.connect(connect_new_button)
 	path_ui.connect_inv_button.connect(connect_inv_slot)
-#	path_ui.create_popup.connect(create_popup)
-#	path_ui.clear_popup.connect(clear_popup)
-#	path_ui.engage_build_mode.connect(path_build_mode_container.initiate_build_mode)
 	path_ui.start_next_wave.connect(path_baddy_container.start_next_wave)
 	
 	path_baddy_container.new_baddy_spawned.connect(new_baddy_spawn)
@@ -134,8 +131,6 @@ func _ready() -> void:
 	for mod in get_tree().get_nodes_in_group("droppable"):
 		if mod is ModDraggable:
 			mod.global_position = mod.mod_slot_ref.global_position
-
-
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_released("ui_cancel") and path_build_mode_container.build_mode:
@@ -192,6 +187,7 @@ func wave_ended() -> void:
 		return
 	path_ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
 	player_cash += wave_reward
+	wave_end_effect_tracker = {}
 	wave_cleared.emit()
 	var new_reward_ui = REWARD_UI.instantiate()
 	new_reward_ui.total_rewards = SaveManager.save_data_run.wave_reward_total
@@ -200,6 +196,26 @@ func wave_ended() -> void:
 	path_ui.add_child(new_reward_ui)
 	path_ui.update_wave_button()
 	#load next level/wave selection
+
+
+##Ideally, in the instances of a lower boon limit, would use the values from higher level towers over lower level,
+##doesn't do this currently(does FIFO) but something to change in the future
+func end_of_wave_effects(data: AbilityWaveClear, level: int) -> void:
+	if not wave_end_effect_tracker.has(data.boon_type):
+		wave_end_effect_tracker[data.boon_type] = 0
+	wave_end_effect_tracker[data.boon_type] += 1
+	if wave_end_effect_tracker[data.boon_type] >= data.boon_limit:
+		return
+	match data.boon_type:
+		AbilityWaveClear.Boon.HEAL:
+			SaveManager.save_data_run.current_player_health += data.boon_amount[level]
+		AbilityWaveClear.Boon.MONEY:
+			SaveManager.save_data_run.current_cash += data.boon_amount[level]
+		AbilityWaveClear.Boon.UPGRADE:
+			var rand_tower_base = path_tower_container.get_child(randi() % path_tower_container.get_child_count())
+			while rand_tower_base.tower_data.level == 4:
+				rand_tower_base = path_tower_container.get_child(randi() % path_tower_container.get_child_count())
+			rand_tower_base.level_up()
 
 func reward_signal_connection(reward_card) -> void:
 	reward_card.reward_selected.connect(path_ui.path_inventory_ui.data.update_inventory)
@@ -227,6 +243,7 @@ func connect_new_tower_cell(new_cell: TowerCell) -> void:
 	new_cell.create_projectile.connect(path_projectile_container.create_projectile)
 	new_cell.mod_updated.connect(tower_cell_updated) #for when new_cell gets updated
 	tower_cell_update_check.connect(new_cell.on_tower_cell_updated) #for when other mods get updated
+	new_cell.wave_clear_ability_triggered.connect(end_of_wave_effects)
 
 func on_tower_built(data, build_btn_ref, tower_rotation) -> void:
 	player_cash -= build_btn_ref.build_cost
@@ -307,8 +324,6 @@ func update_range_display(tower: TowerCell) -> void:
 
 func hide_range_display() -> void:
 	path_range_display.visible = false
-
-## Runtime Functions
 
 func on_unit_selection(unit) -> void:
 	if current_unit == unit:

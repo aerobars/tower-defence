@@ -3,12 +3,15 @@ class_name TowerCell extends UnitScenePrototype
 
 
 ## Signals
+
 signal mod_updated(cell: TowerCell)
 signal create_projectile(projectile_data: ProjectileData)
 signal update_range_display(tower_cell: TowerCell)
 signal hide_range_display
 signal process_update(delta: float, cur_pos: Vector2)
 signal hit_detected(target_pos: Vector2)
+signal wave_cleared
+signal wave_clear_ability_triggered(ability_data: AbilityWaveClear)
 #signal display_popup
 #signal clear_popup
 
@@ -31,6 +34,7 @@ var button_slot_id : int
 
 
 ## Gametime
+
 var baddies_in_range : Array[UnitScenePrototype]
 var attack_targets : Array = [UnitScenePrototype]
 var activation_timer : float = 0.0
@@ -160,6 +164,13 @@ func _on_range_body_exited(body) -> void:
 		baddies_in_range.erase(body)
 	if data.mod_class == data.ModClass.AURA and data.buff_data.buff_persistent_effect:
 		remove_buff(data.buff_data, body)
+
+func on_wave_cleared() -> void:
+	wave_cleared.emit()
+
+##Pairs with on_wave_cleared to have Wave Clear Trigger Abilities send their data to Game Scene
+func on_wave_clear_ability_trigger(ability_data: AbilityWaveClear) -> void:
+	wave_clear_ability_triggered.emit(ability_data, get_parent().tower_data.level)
 
 ## Weapon Function
 

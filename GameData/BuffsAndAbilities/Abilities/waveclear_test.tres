@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="AbilityWaveClear" format=3 uid="uid://bfj5yrmb4et8p"]
 
 [ext_resource type="Texture2D" uid="uid://b7813pvk1mmp0" path="res://Assets/Environment/Props/crateWood.png" id="1_fv41d"]
-[ext_resource type="Script" uid="uid://bdvisqhdbqwsu" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_wave_end.gd" id="1_npniv"]
+[ext_resource type="Script" uid="uid://bdvisqhdbqwsu" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_wave_clear.gd" id="1_npniv"]
 
 [resource]
 script = ExtResource("1_npniv")
