@@ -9,6 +9,7 @@ const STAT_BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScrip
 const ONHIT_BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_onhit.gd")
 const ABSOLUTE_BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_abs.gd")
 const DOT_BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_dot.gd")
+const KB_BUFF = preload("res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_knockback.gd")
 
 const ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_proto.gd")
 const TRIGGERED_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_triggered_proto.gd")
@@ -17,6 +18,7 @@ const LAST_LAUGH_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/P
 const ONHIT_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd")
 const PERIODIC_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_periodic.gd")
 const HP_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_hp_threshold.gd")
+const WAVE_CLEAR_ABILITY = preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_wave_clear.gd")
 
 ## Game Colours
 

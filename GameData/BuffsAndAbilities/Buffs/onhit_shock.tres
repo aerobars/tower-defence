@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://exytku8lt0ik" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_abs.gd" id="1_vmcgx"]
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="2_2ckeo"]
-[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_rxpv8"]
 [ext_resource type="Script" uid="uid://cxkis28w2jd6p" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_onhit.gd" id="2_vmcgx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2ckeo"]

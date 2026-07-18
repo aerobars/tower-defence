@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="AbilityOnHit" format=3 uid="uid://cdjgi2qqen6v6"]
 
 [ext_resource type="Script" uid="uid://stua4x4ldhoc" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd" id="1_tsu4x"]
-[ext_resource type="Resource" uid="uid://cmijnc8cpsfbi" path="res://GameData/BuffsAndAbilities/Buffs/BaddyBuffs/stat_burst_speed.tres" id="1_ywiir"]
+[ext_resource type="Resource" uid="uid://cmijnc8cpsfbi" path="res://GameData/BuffsAndAbilities/Buffs/stat_baddy_burst_speed.tres" id="1_ywiir"]
 [ext_resource type="Texture2D" uid="uid://b7813pvk1mmp0" path="res://Assets/Environment/Props/crateWood.png" id="2_k0qi0"]
 
 [resource]

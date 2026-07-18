@@ -91,10 +91,8 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	path_status_display.position = position + Vector2(-30, 18)
-	if _has_active_knockback():
-		return  # Movement handled by BuffInstance knockback, position set directly
-	if current_path.is_empty():
-		return
+	if _has_active_disable() or current_path.is_empty():
+		return  # In the case of Knockback buff, movement handled by BuffInstance knockback, position set directly
 	
 	movement_delta = data.current_movespeed * delta
 	
@@ -117,9 +115,9 @@ func _physics_process(delta: float) -> void:
 	
 	global_position = global_position.move_toward(current_path_point, movement_delta)
 
-func _has_active_knockback() -> bool:
+func _has_active_disable() -> bool:
 	for buff_key in data.active_buffs:
-		if buff_key is BuffKnockback:
+		if buff_key is BuffKnockback or buff_key is BuffAbsolute:
 			return true
 	return false
 

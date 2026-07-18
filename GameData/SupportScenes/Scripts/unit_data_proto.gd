@@ -97,12 +97,6 @@ func recalculate_stats() -> void:
 	elif self is ModPrototype:
 		power_buff()
 	
-	for buff in active_buffs.keys():
-		if buff is BuffAbsolute:
-			var stat_name: String = GlobalEnums.BuffableStats.keys()[buff.stat].to_lower()
-			var cur_property_name: String = str("current_" + stat_name)
-			set(cur_property_name, buff.effect_amount[active_buffs[buff].level])
-	
 	stats_updated.emit()
 
 func power_buff() -> void:

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BuffStat" format=3 uid="uid://vro7w5vpsqqw"]
+
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_8funt"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_5rpjm"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="3_45spm"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1au8h"]
+atlas = ExtResource("1_8funt")
+region = Rect2(576, 176, 16, 16)
+
+[resource]
+script = ExtResource("3_45spm")
+info_name = "Damage"
+info_display_icon = SubResource("AtlasTexture_1au8h")
+buff_targets = 1
+buff_persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

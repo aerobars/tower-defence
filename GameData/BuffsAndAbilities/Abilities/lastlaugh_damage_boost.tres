@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="AbilityLastLaugh" format=3 uid="uid://billxb52g8pds"]
 
 [ext_resource type="Script" uid="uid://fsmcacyx68e1" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_last_laugh.gd" id="1_4ngyx"]
-[ext_resource type="Resource" uid="uid://bw54hxxtoj4hc" path="res://GameData/BuffsAndAbilities/Buffs/BaddyBuffs/stat_damage_plus.tres" id="1_kb35f"]
+[ext_resource type="Resource" uid="uid://bw54hxxtoj4hc" path="res://GameData/BuffsAndAbilities/Buffs/stat_baddy_damage_plus.tres" id="1_kb35f"]
 [ext_resource type="Texture2D" uid="uid://22enqo8rhfpx" path="res://Assets/Effects/explosion2.png" id="2_hlutl"]
 
 [resource]

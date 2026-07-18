@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="AbilityAura" format=3 uid="uid://b8yjo5043rumd"]
 
 [ext_resource type="Script" uid="uid://b5fdancndgo32" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_aura_resource.gd" id="1_twakl"]
-[ext_resource type="Resource" uid="uid://e7n1t7sxx8la" path="res://GameData/BuffsAndAbilities/Buffs/BaddyBuffs/stat_move_speed_aura.tres" id="1_vb861"]
+[ext_resource type="Resource" uid="uid://e7n1t7sxx8la" path="res://GameData/BuffsAndAbilities/Buffs/stat_baddy_move_speed.tres" id="1_vb861"]
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="2_vb861"]
 
 [resource]

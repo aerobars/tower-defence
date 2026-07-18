@@ -123,7 +123,7 @@ func _process(delta: float) -> void:
 	if data == null or data is ModPower: 
 		return
 	process_update.emit(delta, global_position)
-	if get_parent().net_power < 0:
+	if get_parent().net_power < 0 or _has_active_disable():
 		return
 	activation_timer = clamp(activation_timer + delta, 0, data.activation_cooldown)
 	if baddies_in_range.size() > 0:
@@ -143,6 +143,12 @@ func _process(delta: float) -> void:
 			activation_timer = 0.0
 	else:
 		attack_targets = [null]
+
+func _has_active_disable() -> bool:
+	for buff_key in data.active_buffs:
+		if buff_key is BuffAbsolute:
+			return true
+	return false
 
 func _on_range_body_entered(body) -> void:
 	if data == null or body == self:

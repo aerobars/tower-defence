@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="BuffStat" format=3 uid="uid://cs0f5503onc8g"]
+
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_hvbnw"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_040sh"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="3_xu1ky"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gp121"]
+atlas = ExtResource("1_hvbnw")
+region = Rect2(416, 176, 16, 16)
+
+[sub_resource type="Resource" id="Resource_m48v8"]
+script = ExtResource("2_040sh")
+stat = 2
+modification_type = 1
+modification_amount = Array[float]([0.25, 0.25, 0.25, 0.25, 0.25])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
+[resource]
+script = ExtResource("3_xu1ky")
+modifying_stats = Array[ExtResource("2_040sh")]([SubResource("Resource_m48v8")])
+info_name = "Attack Speed"
+info_display_icon = SubResource("AtlasTexture_gp121")
+buff_targets = 1
+buff_persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AbilityOnHit" format=3 uid="uid://dhy1sybn2g1nn"]
 
-[ext_resource type="Resource" uid="uid://b8vpnj50cueqk" path="res://GameData/BuffsAndAbilities/Buffs/BaddyBuffs/knockback_push.tres" id="1_buff"]
+[ext_resource type="Resource" uid="uid://b8vpnj50cueqk" path="res://GameData/BuffsAndAbilities/Buffs/knockback_push.tres" id="1_buff"]
 [ext_resource type="Texture2D" uid="uid://b7813pvk1mmp0" path="res://Assets/Environment/Props/crateWood.png" id="1_icon"]
 [ext_resource type="Script" uid="uid://stua4x4ldhoc" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd" id="1_script"]
 

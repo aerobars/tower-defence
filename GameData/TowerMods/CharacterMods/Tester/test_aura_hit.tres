@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ModAura" format=3 uid="uid://bersox0rcaonk"]
 
-[ext_resource type="Resource" uid="uid://d28awyyh0t1la" path="res://GameData/BuffsAndAbilities/Buffs/TowerBuffs/onhit_shock.tres" id="1_xuelf"]
+[ext_resource type="Resource" uid="uid://d28awyyh0t1la" path="res://GameData/BuffsAndAbilities/Buffs/onhit_shock.tres" id="1_xuelf"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="2_a4ux6"]
 [ext_resource type="Texture2D" uid="uid://cqvhg7gv2q32f" path="res://Assets/Effects/explosionSmoke1.png" id="2_xuelf"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="3_2rp7h"]

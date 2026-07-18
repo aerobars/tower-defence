@@ -1,12 +1,1 @@
-class_name BuffAbsolute extends BuffStat
-
-var stat : GlobalEnums.BuffableStats : get = get_stat
-
-func get_stat() -> GlobalEnums.BuffableStats:
-	if buff_targets == GlobalEnums.Targets.BADDIES:
-		return GlobalEnums.BuffableStats.MOVESPEED
-	elif buff_targets == GlobalEnums.Targets.TOWERS:
-		return GlobalEnums.BuffableStats.ATTACK_SPEED
-	else:
-		print("no target declared for Absolute Buff:", info_name)
-		return 0
+class_name BuffAbsolute extends Buff

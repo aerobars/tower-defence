@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="AbilityPeriodic" format=3 uid="uid://o6racipfkcxg"]
 
 [ext_resource type="Script" uid="uid://pa8fwdfly17a" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_periodic.gd" id="1_njtyr"]
-[ext_resource type="Resource" uid="uid://bi6l8t12f2lkr" path="res://GameData/BuffsAndAbilities/Buffs/BaddyBuffs/stat_armor_plus.tres" id="1_t4ynq"]
+[ext_resource type="Resource" uid="uid://bi6l8t12f2lkr" path="res://GameData/BuffsAndAbilities/Buffs/stat_baddy_armor_plus.tres" id="1_t4ynq"]
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="2_36phu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ubt4"]

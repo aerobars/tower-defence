@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ModAura" format=3 uid="uid://cda1enewweprf"]
 
-[ext_resource type="Resource" uid="uid://bg70q2egkue1q" path="res://GameData/BuffsAndAbilities/Buffs/TowerBuffs/stat_poison.tres" id="1_8ct3n"]
+[ext_resource type="Resource" uid="uid://bg70q2egkue1q" path="res://GameData/BuffsAndAbilities/Buffs/stat_baddy_poison.tres" id="1_8ct3n"]
 [ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="3_8ct3n"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="3_kjxxs"]
 [ext_resource type="Texture2D" uid="uid://vey2hsb1283a" path="res://Assets/Effects/towerDefense_tile134.png" id="4_8t5ml"]
