@@ -70,6 +70,7 @@ var wave_reward : int :
 var current_unit : Node2D
 var is_game_over : bool = false
 var wave_end_effect_tracker : Dictionary = {}
+var temp_reward_bonus : int
 
 ## Build Mode
 
@@ -116,6 +117,10 @@ func _ready() -> void:
 	
 	
 	if SaveManager.save_data_run.new_game : #rest of func only needs to run to load saved towers
+		GameData.sort_mod_data()
+		if SaveManager.save_data_profile.show_tutorial:
+			await SaveManager.tutorial_completed
+		path_ui.create_new_reward(1) #total rewards is 3 for initial reward selection
 		SaveManager.complete_new_game_setup()
 		return
 	
@@ -126,7 +131,8 @@ func _ready() -> void:
 			if button.button_data.button_id == tower.connected_button_id:
 				path_tower_container.create_tower(button.tower_data, button, tower.position, tower.rotation, tower.level, true)
 	
-	## Saved Draggable Mod Position Set
+		## Saved Draggable Mod Position Set
+	
 	await get_tree().process_frame
 	for mod in get_tree().get_nodes_in_group("droppable"):
 		if mod is ModDraggable:
@@ -188,13 +194,9 @@ func wave_ended() -> void:
 	path_ui.update_game_message("Wave Cleared!", 2.0, 0.5, 65)
 	player_cash += wave_reward
 	wave_end_effect_tracker = {}
+	temp_reward_bonus = 0
 	wave_cleared.emit()
-	var new_reward_ui = REWARD_UI.instantiate()
-	new_reward_ui.total_rewards = SaveManager.save_data_run.wave_reward_total
-	new_reward_ui.connect_reward_card.connect(reward_signal_connection)
-	path_ui.clear_baddy_info()
-	path_ui.add_child(new_reward_ui)
-	path_ui.update_wave_button()
+	path_ui.create_new_reward(temp_reward_bonus)
 	#load next level/wave selection
 
 
@@ -216,9 +218,8 @@ func end_of_wave_effects(data: AbilityWaveClear, level: int) -> void:
 			while rand_tower_base.tower_data.level == 4:
 				rand_tower_base = path_tower_container.get_child(randi() % path_tower_container.get_child_count())
 			rand_tower_base.level_up()
-
-func reward_signal_connection(reward_card) -> void:
-	reward_card.reward_selected.connect(path_ui.path_inventory_ui.data.update_inventory)
+		AbilityWaveClear.Boon.REWARD_CHOICE:
+			temp_reward_bonus += 1
 
 func game_over() -> void:
 	is_game_over = true

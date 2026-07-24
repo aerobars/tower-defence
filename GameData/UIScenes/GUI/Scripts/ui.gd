@@ -5,6 +5,10 @@ signal connect_inv_button(new_slot: InventorySlotUI)
 signal start_next_wave
 signal check_build_mode
 
+const GAME_MESSAGE_A_VALUE = 0.78
+const TOWER_BUTTON := preload("res://GameData/UIScenes/GUI/Scenes/tower_button.tscn")
+const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
+
 @export_group("Node Paths", "path_")
 @export var path_hp_bar : TextureProgressBar
 @export var path_hp_text : Label
@@ -21,8 +25,7 @@ signal check_build_mode
 @export var path_game_bookend_popup : Control
 @export var path_tutorial : Control
 
-const GAME_MESSAGE_A_VALUE = 0.78
-const TOWER_BUTTON := preload("res://GameData/UIScenes/GUI/Scenes/tower_button.tscn")
+
 @onready var texture : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
 @onready var tower : PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
 
@@ -66,6 +69,10 @@ func _on_fast_forward_pressed() -> void:
 	else:
 		Engine.set_time_scale(2.0)
 
+##Connects new inventory slot signals to game_scene functions
+func connect_inv_button_signal(inventory_slot: InventorySlotUI) -> void:
+	connect_inv_button.emit(inventory_slot)
+
 func create_tower_button(num: int) -> void:
 	var new_button = TOWER_BUTTON.instantiate()
 	new_button.button_data = TowerButtonData.new()
@@ -78,9 +85,16 @@ func create_tower_button(num: int) -> void:
 	connect_new_button.emit(new_button)
 	path_tower_buttons.add_child(new_button)
 
-##Connects new inventory slot signals to game_scene functions
-func connect_inv_button_signal(inventory_slot: InventorySlotUI) -> void:
-	connect_inv_button.emit(inventory_slot)
+func create_new_reward(temp_reward_bonus: int) -> void:
+	var new_reward_ui = REWARD_UI.instantiate()
+	new_reward_ui.total_rewards = SaveManager.save_data_run.wave_reward_total + temp_reward_bonus
+	new_reward_ui.connect_reward_card.connect(reward_signal_connection)
+	clear_baddy_info()
+	update_wave_button()
+	add_child(new_reward_ui)
+
+func reward_signal_connection(reward_card) -> void:
+	reward_card.reward_selected.connect(path_inventory_ui.data.update_inventory)
 
 ## Display Updates
 

@@ -33,7 +33,7 @@ func _init(_buff: Buff, _buff_owner: Node2D, _buff_source: Node2D, _buff_level: 
 
 func update(delta: float, position: Vector2 = Vector2(0,0)) -> void:
 	if buff is BuffDot:
-		match buff.process_type:
+		match buff.buff_process_type:
 			GlobalEnums.ProcessingMethods.TIME:
 				dot_timer += delta
 			GlobalEnums.ProcessingMethods.POSITION:
@@ -41,7 +41,7 @@ func update(delta: float, position: Vector2 = Vector2(0,0)) -> void:
 				last_position = position
 		if dot_timer >= buff.dot_interval[level]:
 			_effect_trigger()
-			dot_timer = 0.0
+			dot_timer -= buff.dot_interval[level]
 	if buff is BuffKnockback:
 		_apply_knockback(delta)
 	if buff.buff_persistent_effect: #prevents aura buffs from expiring while active 

@@ -33,4 +33,4 @@ func _init(
 	pierce_total = projectile_owner.data.current_pierce
 	damage = projectile_owner.data.calculate_damage()
 	aoe = projectile_owner.data.current_aoe
-	on_hit_effects = projectile_owner.data.on_hit_effects
+	on_hit_effects = projectile_owner.data.on_hit_buffs

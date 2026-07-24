@@ -3,7 +3,7 @@ class_name AbilityWaveClear extends AbilityTriggeredPrototype
 
 signal send_ability_data(data: AbilityWaveClear)
 
-enum Boon {MAX_HEATLH, HEAL, MONEY, UPGRADE}
+enum Boon {MAX_HEATLH, HEAL, MONEY, UPGRADE, REWARD_CHOICE}
 
 @export_group("Wave Clear Abilities")
 ##The type of boon the player will receive upon wave completion

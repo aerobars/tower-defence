@@ -11,7 +11,7 @@ var inventory_ui
 
 
 func _ready() -> void:
-	var reward_options = get_rewards()
+	var reward_options = get_reward_options()
 	for i in total_rewards:
 		var new_card = reward_card.instantiate()
 		new_card.data = reward_options[i]
@@ -19,7 +19,13 @@ func _ready() -> void:
 		new_card.reward_selected.connect(_on_reward_selected)
 		connect_reward_card.emit(new_card)
 
-func get_rewards() -> Array[ModPrototype]:
+func get_reward_options() -> Array[ModPrototype]:
+	if SaveManager.save_data_run.new_game:
+		return [
+			load(filepath + GameData.aura_mods[randi() % GameData.aura_mods.size()]),
+			load(filepath + GameData.pwr_mods[randi() % GameData.pwr_mods.size()]),
+			load(filepath + GameData.wep_mods[randi() % GameData.wep_mods.size()])
+			]
 	var rewards : Array[ModPrototype] = []
 	for i in total_rewards:
 		var mod = load(filepath + GameData.character_mods[character][randi() % GameData.character_mods[character].size()])

@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="PowerMod" format=3 uid="uid://cxrlbhfn535mr"]
+[gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://cxrlbhfn535mr"]
 
 [ext_resource type="Texture2D" uid="uid://lqnf6vvd76vi" path="res://Assets/Effects/explosion1.png" id="1_86nls"]
-[ext_resource type="Script" uid="uid://c4bd0pun8mwpt" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_proto.gd" id="2_swqss"]
+[ext_resource type="Script" uid="uid://bdvisqhdbqwsu" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_wave_clear.gd" id="1_swqss"]
 [ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="3_m625h"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_do3r7"]
@@ -11,9 +11,9 @@ region = Rect2(30, 30, 32, 32)
 [resource]
 script = ExtResource("3_m625h")
 power_surplus_buffable_stats = Array[int]([4])
+base_power_levels = Array[int]([4, 4, 4, 4, 4])
+mod_class = 1
 info_name = "Crit Chance Boost Power"
 info_description = "Provides power and increases Crit Chance of weapon mods by 10% per point of surplus power."
 info_texture = SubResource("AtlasTexture_do3r7")
-base_power_levels = Array[int]([4, 4, 4, 4, 4])
-mod_class = 1
 metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

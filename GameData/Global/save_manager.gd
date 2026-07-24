@@ -1,5 +1,7 @@
 extends Node
 
+signal tutorial_completed
+
 var save_data_profile : SaveDataProfile
 var save_data_run : SaveDataRun
 const SAVE_PATH_PROFILE = "user://profile_save.tres"
@@ -20,8 +22,8 @@ func new_game():
 	save_data_run = SaveDataRun.new()
 
 func complete_new_game_setup() -> void:
-	if not save_data_run.new_game:
-		return
+#	if not save_data_run.new_game:
+#		return
 	save_data_run.new_game = false
 
 func save_run():
@@ -30,5 +32,6 @@ func save_run():
 func existing_save(save_path : String = "user://run_save.tres", save_type : String = "SaveDataRun") -> bool:
 	return ResourceLoader.exists(save_path, save_type)
 
-func tutorial_completed() -> void:
+func complete_tutorial() -> void:
 	save_data_profile.show_tutorial = false
+	tutorial_completed.emit()

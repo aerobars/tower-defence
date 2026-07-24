@@ -45,6 +45,9 @@ const TOTAL_ACTS = 1
 const BOSS_WAVES := [10]
 
 var character_mods : Dictionary = {}
+var aura_mods : Array = []
+var pwr_mods : Array = []
+var wep_mods : Array = []
 var act_baddies : Dictionary = {}
 var act_bosses : Dictionary = {}
 
@@ -85,6 +88,15 @@ func get_mod_data(filepath: String, dir_name) -> void:
 			character_mods[dir_name].append(file)
 		else:
 			print("Invalid filetype found in CharacterMods")
+
+func sort_mod_data() -> void:
+	for mod in character_mods[SaveManager.save_data_run.character]:
+		if mod.begins_with("aura"):
+			aura_mods.append(mod)
+		elif mod.begins_with("pwr"):
+			pwr_mods.append(mod)
+		elif mod.begins_with("wep"):
+			wep_mods.append(mod)
 
 func get_wave_data() -> Dictionary:
 	var wave_data : Dictionary = {
