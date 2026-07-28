@@ -69,7 +69,7 @@ func set_current_stats() -> void:
 	current_movespeed = base_movespeed * wave_ratio
 
 func clamp_movespeed() -> void:
-	current_movespeed = clampf(current_movespeed, 75, 500) #don't use setter for this for stun MS
+	current_movespeed = clampf(current_movespeed, 75, 500)
 
 func _on_health_set(new_value: float) -> void:
 	health = clamp(new_value, 0, current_max_health)

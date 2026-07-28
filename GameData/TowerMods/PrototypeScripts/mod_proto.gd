@@ -12,6 +12,7 @@ var class_string : String:
 @export_group("Universal Mod Stats", "base_")
 @export var base_power_levels : Array[int] = [-1, -1, -1, -1, -1]
 ##range is radius of range circle, default (26) is 1/2 tower base
+##approx. ranger reference: 100 = 1 tile, 200 = 2.5 tiles, 300 = 4 tiles, 400 = 5.5 tiles
 @export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] 
 var current_power : int
 var current_range : float

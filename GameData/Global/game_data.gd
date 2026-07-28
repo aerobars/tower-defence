@@ -44,12 +44,12 @@ const CHAR_FILEPATH = "res://GameData/TowerMods/CharacterMods/"
 const TOTAL_ACTS = 1
 const BOSS_WAVES := [10]
 
-var character_mods : Dictionary = {}
-var aura_mods : Array = []
-var pwr_mods : Array = []
-var wep_mods : Array = []
-var act_baddies : Dictionary = {}
-var act_bosses : Dictionary = {}
+@export var character_mods : Dictionary = {}
+@export var aura_mods : Array = []
+@export var pwr_mods : Array = []
+@export var wep_mods : Array = []
+@export var act_baddies : Dictionary = {}
+@export var act_bosses : Dictionary = {}
 
 func _ready() -> void:
 	get_act_data(BADDY_FILEPATH + "Act")

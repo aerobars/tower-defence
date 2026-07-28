@@ -93,7 +93,7 @@ func recalculate_stats() -> void:
 		set(cur_property_name, get(cur_property_name) * stat_multipliers[stat_name])
 	
 	if self is BaddyStats:
-		clamp_move_speed()
+		clamp_movespeed()
 	elif self is ModPrototype:
 		power_buff()
 	
@@ -102,7 +102,7 @@ func recalculate_stats() -> void:
 func power_buff() -> void:
 	pass
 
-func clamp_move_speed() -> void:
+func clamp_movespeed() -> void:
 	pass
 
 @abstract

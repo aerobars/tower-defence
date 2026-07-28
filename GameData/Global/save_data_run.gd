@@ -14,6 +14,8 @@ var init_inventory = load("res://GameData/UIScenes/Inventory/player_inventory.tr
 @export var current_wave : int = 0
 @export var previous_wave : Array = []
 @export var wave_reward_total : int = 2
+#act baddies from GameData
+#act bosses from GameData
 
 ## Player Related
 
@@ -23,6 +25,8 @@ var init_inventory = load("res://GameData/UIScenes/Inventory/player_inventory.tr
 @export var current_player_health : int = 100
 
 ## Mod / Tower Related
+
+#Characther mods, and sorted mods from GameData
 
 ##Mods in Inventory
 @export var inventory_data : InventoryData 

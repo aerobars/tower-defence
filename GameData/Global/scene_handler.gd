@@ -34,13 +34,17 @@ func on_new_game_pressed() -> void:
 
 func create_new_game(new_game_status: bool) -> void: 
 	get_node("MainMenu").queue_free()
-	var game_scene = GAME_SCENE.instantiate()
-	game_scene.game_finished.connect(endgame_check)
-	game_instance = game_scene
+	game_instance = game_scene_setup()
 	if new_game_status:
 		SaveManager.new_game()
-	SaveManager.save_data_run.new_game = new_game_status
 	add_child(game_instance)
+
+func game_scene_setup() -> Node2D:
+	var game_scene = GAME_SCENE.instantiate()
+	game_scene.game_finished.connect(endgame_check)
+	SaveManager.start_new_run.connect(game_scene.new_run_start)
+	SaveManager.setup_saved_run.connect(game_scene.saved_run_setup)
+	return game_scene
 
 func on_quit_pressed() -> void:
 	get_tree().quit()

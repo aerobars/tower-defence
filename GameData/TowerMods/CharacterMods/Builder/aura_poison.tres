@@ -10,8 +10,9 @@ region = Rect2(16, 16, 32, 32)
 
 [resource]
 script = ExtResource("3_kjxxs")
+base_activation_speed_levels = Array[float]([5.0, 4.0, 3.0, 2.0, 1.0])
 buff_data = ExtResource("1_8ct3n")
-base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
+base_range_levels = Array[float]([150.0, 150.0, 150.0, 150.0, 150.0])
 info_name = "Poison Aura"
 info_description = "Adds a stack of poison to baddies in AoE, or adds the poison debuff to wepons on this tower, slowing movespeed by 1% per stack"
 info_texture = SubResource("AtlasTexture_8ct3n")

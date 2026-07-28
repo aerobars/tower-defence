@@ -23,6 +23,18 @@
 [ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/Scenes/tutorial.tscn" id="18_v8hmh"]
 [ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/Scenes/game_over_message.tscn" id="19_h8guh"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_s1u4x"]
+radius = 100.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_st03m"]
+radius = 200.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q7o3e"]
+radius = 300.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5o0m5"]
+radius = 400.0
+
 [node name="GameScene" type="Node2D" unique_id=2134006224 node_paths=PackedStringArray("path_ui", "path_range_display", "path_camera", "path_build_mode_container", "path_tower_container", "path_baddy_container", "path_projectile_container", "path_map_node")]
 script = ExtResource("1_ipu8h")
 path_ui = NodePath("UI")
@@ -293,6 +305,25 @@ theme_override_font_sizes/font_size = 75
 
 [node name="GameOverMessage" parent="UI" unique_id=25078715 instance=ExtResource("19_h8guh")]
 visible = false
+
+[node name="RangeRef" type="Area2D" parent="." unique_id=2069938082]
+visible = false
+position = Vector2(992, 352)
+collision_layer = 0
+collision_mask = 0
+input_pickable = false
+
+[node name="100px" type="CollisionShape2D" parent="RangeRef" unique_id=237260338]
+shape = SubResource("CircleShape2D_s1u4x")
+
+[node name="200px" type="CollisionShape2D" parent="RangeRef" unique_id=523756484]
+shape = SubResource("CircleShape2D_st03m")
+
+[node name="300px" type="CollisionShape2D" parent="RangeRef" unique_id=1391498483]
+shape = SubResource("CircleShape2D_q7o3e")
+
+[node name="400px" type="CollisionShape2D" parent="RangeRef" unique_id=245439695]
+shape = SubResource("CircleShape2D_5o0m5")
 
 [connection signal="button_up" from="UI/HUD/InfoBar/SaveButton/Save" to="." method="_on_save_button_up"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/NextWave" to="UI" method="_on_next_wave_pressed"]

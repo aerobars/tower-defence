@@ -94,6 +94,9 @@ func _ready() -> void:
 	path_ui.connect_new_button.connect(connect_new_button)
 	path_ui.connect_inv_button.connect(connect_inv_slot)
 	path_ui.start_next_wave.connect(path_baddy_container.start_next_wave)
+	SaveManager.setup_new_run.connect(path_ui.new_game_setup)
+	SaveManager.setup_saved_run.connect(path_ui.new_game_setup)
+	
 	
 	path_baddy_container.new_baddy_spawned.connect(new_baddy_spawn)
 	path_baddy_container.base_damaged.connect(on_base_damage)
@@ -115,23 +118,18 @@ func _ready() -> void:
 	
 	path_ui.setup_ui()
 	
-	
-	if SaveManager.save_data_run.new_game : #rest of func only needs to run to load saved towers
-		GameData.sort_mod_data()
-		if SaveManager.save_data_profile.show_tutorial:
-			await SaveManager.tutorial_completed
-		path_ui.create_new_reward(1) #total rewards is 3 for initial reward selection
-		SaveManager.complete_new_game_setup()
-		return
-	
-	## Saved Run Setup
-	
+	SaveManager.check_save_status()
+
+func new_run_start() -> void:
+	path_ui.create_new_reward(1) #total rewards is 3 for initial reward selection
+
+func saved_run_setup() -> void:
 	for tower in SaveManager.save_data_run.tower_data:
 		for button in get_tree().get_nodes_in_group("build_buttons"):
 			if button.button_data.button_id == tower.connected_button_id:
 				path_tower_container.create_tower(button.tower_data, button, tower.position, tower.rotation, tower.level, true)
 	
-		## Saved Draggable Mod Position Set
+	## Saved Draggable Mod Position Set
 	
 	await get_tree().process_frame
 	for mod in get_tree().get_nodes_in_group("droppable"):

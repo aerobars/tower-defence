@@ -10,8 +10,9 @@ region = Rect2(16, 16, 32, 32)
 
 [resource]
 script = ExtResource("2_glhai")
+base_activation_speed_levels = Array[float]([5.0, 4.0, 3.0, 2.0, 1.0])
 buff_data = ExtResource("1_glhai")
-base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
+base_range_levels = Array[float]([150.0, 150.0, 150.0, 150.0, 150.0])
 info_name = "Burn Aura"
 info_description = "Deals damage to enemies in range, or adds the burn debuff to it's tower's weapon mods"
 info_texture = SubResource("AtlasTexture_r4om8")

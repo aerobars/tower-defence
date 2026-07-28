@@ -9,11 +9,10 @@ extends Control
 
 func _ready() -> void:
 	if SaveManager.save_data_profile.show_tutorial == false:
-		queue_free()
+		complete_tutorial()
 
 func _on_skip_tutorial_button_up() -> void:
-	SaveManager.complete_tutorial()
-	queue_free()
+	complete_tutorial()
 
 func _on_intro_button_button_up() -> void:
 	game_obj.visible = true
@@ -36,5 +35,8 @@ func _on_powering_mods_button_button_up() -> void:
 	powering_mods.queue_free()
 
 func _on_end_button_button_up() -> void:
+	complete_tutorial()
+
+func complete_tutorial() -> void:
 	SaveManager.complete_tutorial()
 	queue_free()

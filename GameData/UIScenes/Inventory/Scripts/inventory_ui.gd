@@ -12,10 +12,7 @@ const INVENTORY_SLOT = preload("res://GameData/UIScenes/Inventory/inventory_slot
 
 func inventory_setup() -> void:
 	data.inventory_ui = self
-	if SaveManager.save_data_run.new_game:
-		SaveManager.save_data_run.inventory_data = data
-	else:
-		data = SaveManager.save_data_run.inventory_data
+	data = SaveManager.save_data_run.inventory_data
 	for i in data.slots:
 		create_slot(i)
 

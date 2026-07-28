@@ -32,16 +32,13 @@ const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_se
 func setup_ui() -> void:
 	update_wave_button()
 	
-	path_inventory_ui.slot_created.connect(connect_inv_button_signal)
+	path_inventory_ui.slot_created.connect(connect_inv_button_signal)	
+
+func new_game_setup() -> void:
 	path_inventory_ui.inventory_setup()
 	
 	## Button Setup
-	var build_buttons_count : int
-	if SaveManager.save_data_run.new_game:
-		build_buttons_count = SaveManager.save_data_run.init_btn_count
-	else:
-		build_buttons_count = SaveManager.save_data_run.button_data.size() #input some other value once it's time
-	for i in build_buttons_count:
+	for i in SaveManager.save_data_run.button_data.size():
 		create_tower_button(i)
 
 ## UI
@@ -76,12 +73,7 @@ func connect_inv_button_signal(inventory_slot: InventorySlotUI) -> void:
 func create_tower_button(num: int) -> void:
 	var new_button = TOWER_BUTTON.instantiate()
 	new_button.button_data = TowerButtonData.new()
-	if SaveManager.save_data_run.new_game:
-		new_button.button_data.button_id = num + 1
-		new_button.button_data.tower_shape = SaveManager.save_data_run.init_tower_shapes[num] as Array[Vector2i]
-		SaveManager.save_data_run.button_data.append(new_button.button_data)
-	else:
-		new_button.button_data = SaveManager.save_data_run.button_data[num]
+	new_button.button_data = SaveManager.save_data_run.button_data[num]
 	connect_new_button.emit(new_button)
 	path_tower_buttons.add_child(new_button)
 
