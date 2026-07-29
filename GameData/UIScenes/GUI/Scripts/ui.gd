@@ -32,7 +32,7 @@ const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_se
 func setup_ui() -> void:
 	update_wave_button()
 	
-	path_inventory_ui.slot_created.connect(connect_inv_button_signal)	
+	path_inventory_ui.slot_created.connect(connect_inv_button_signal)
 
 func new_game_setup() -> void:
 	path_inventory_ui.inventory_setup()
@@ -74,6 +74,7 @@ func create_tower_button(num: int) -> void:
 	var new_button = TOWER_BUTTON.instantiate()
 	new_button.button_data = TowerButtonData.new()
 	new_button.button_data = SaveManager.save_data_run.button_data[num]
+#	new_button.pressed.connect(path_tutorial)
 	connect_new_button.emit(new_button)
 	path_tower_buttons.add_child(new_button)
 

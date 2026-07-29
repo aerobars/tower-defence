@@ -6,7 +6,7 @@ var shape_dictionary : Dictionary[int, Array] = {
 	],
 	3 : [
 		[Vector2i(0, -1), Vector2i(0, 0), Vector2i(0, 1)], #Orion
-		[Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1)] #Ursa Minor
+		[Vector2i(0, -1), Vector2i(0, 0), Vector2i(-1, 0)] #Ursa Minor
 	],
 	4 : [
 		 

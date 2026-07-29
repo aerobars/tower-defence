@@ -6,7 +6,6 @@
 size = Vector2(32, 32)
 
 [node name="ModSlot" type="StaticBody2D" unique_id=635031877 groups=["droppable"]]
-z_index = -1
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("1_xjtiu")

@@ -36,7 +36,6 @@ var tower_children : Array = []
 
 ## Setup
 func _ready() -> void:
-	var tower_mods : Dictionary = build_data.mods
 	var init_power_buffs : Dictionary = build_data.power_buffs
 	aura_tower = build_data.aura_tower
 	tower_data.tower_shape = build_data.shape
@@ -45,29 +44,34 @@ func _ready() -> void:
 	
 	#var mod_list = tower_mods.keys()
 	for i in mod_slot_count:
-		var new_cell = TOWER_CELL_PROTO.instantiate()
-		var slot_id : int = tower_data.connected_button_id * 10 + i
-		
-		new_cell.position = get_coords_from_vectors(tower_data.tower_shape[i])
-		new_cell.button_slot_id = slot_id
-		new_cell.non_aura_radius = non_aura_radius
-		
-		if is_built:
-			cell_created.emit(new_cell)
-			update_mods.connect(new_cell.update_mod)
-			new_cell.unit_selected.connect(tower_selected)
-			new_cell.update_range_display.connect(update_range_display_received)
-			new_cell.hide_range_display.connect(hide_range_display_received)
-			if tower_mods[slot_id] != null:
-				new_cell.data = tower_mods[slot_id].duplicate(true)
-				if tower_data.level > 0:
-					new_cell.data.setup_stats(tower_data.level)
-		
-		tower_children.append(new_cell)
-		add_child(new_cell)
+		tower_cell_setup(i)
+	
 	tower_update(ModUpdateData.new(aura_tower, init_power_buffs))
 	await get_tree().create_timer(0.25).timeout
 	clickable = true
+
+func tower_cell_setup(cell_num) -> void:
+	var tower_mods : Dictionary = build_data.mods
+	var new_cell = TOWER_CELL_PROTO.instantiate()
+	var slot_id : int = tower_data.connected_button_id * 10 + cell_num
+		
+	new_cell.position = get_coords_from_vectors(tower_data.tower_shape[cell_num])
+	new_cell.button_slot_id = slot_id
+	new_cell.non_aura_radius = non_aura_radius
+	
+	if is_built:
+		cell_created.emit(new_cell)
+		update_mods.connect(new_cell.update_mod)
+		new_cell.unit_selected.connect(tower_selected)
+		new_cell.update_range_display.connect(update_range_display_received)
+		new_cell.hide_range_display.connect(hide_range_display_received)
+		if tower_mods[slot_id] != null:
+			new_cell.data = tower_mods[slot_id].duplicate(true)
+			if tower_data.level > 0:
+				new_cell.data.setup_stats(tower_data.level)
+	
+	tower_children.append(new_cell)
+	add_child(new_cell)
 
 ##currently unused
 func get_coords_from_mod_data(button_id: int) -> Vector2:

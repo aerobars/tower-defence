@@ -265,6 +265,7 @@ func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) ->
 ## GUI Functions
 
 func connect_new_button(new_button: BuildTowerButton) -> void:
+	new_button.cell_size = path_map_node.CELL_SIZE
 	new_button.create_draggable.connect(create_draggable)
 	new_button.pressed.connect(func(): path_build_mode_container.initiate_build_mode(new_button.tower_data, new_button))
 

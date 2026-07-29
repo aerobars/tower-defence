@@ -26,8 +26,14 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_s1u4x"]
 radius = 100.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_smyd1"]
+radius = 150.0
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_st03m"]
 radius = 200.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ppbk6"]
+radius = 250.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q7o3e"]
 radius = 300.0
@@ -316,8 +322,14 @@ input_pickable = false
 [node name="100px" type="CollisionShape2D" parent="RangeRef" unique_id=237260338]
 shape = SubResource("CircleShape2D_s1u4x")
 
+[node name="150px" type="CollisionShape2D" parent="RangeRef" unique_id=1335411606]
+shape = SubResource("CircleShape2D_smyd1")
+
 [node name="200px" type="CollisionShape2D" parent="RangeRef" unique_id=523756484]
 shape = SubResource("CircleShape2D_st03m")
+
+[node name="250px" type="CollisionShape2D" parent="RangeRef" unique_id=1835425729]
+shape = SubResource("CircleShape2D_ppbk6")
 
 [node name="300px" type="CollisionShape2D" parent="RangeRef" unique_id=1391498483]
 shape = SubResource("CircleShape2D_q7o3e")

@@ -14,10 +14,12 @@ signal create_draggable(
 @onready var mod_draggable_scene := preload("res://GameData/UIScenes/GUI/Scenes/mod_draggable.tscn")
 @export var build_cost_label : Label
 @export var net_power_display : Label
+@export var mod_slot_container : Container
 @export var button_data : TowerButtonData #contains mod slot data, slot count, and id
 @export var slot_radius : float = 64
 var slot_data_ref : Dictionary
 var button_slots : Array =[]
+var cell_size : int
 
 ## Gametime
 var build_cost : int : 
@@ -42,24 +44,19 @@ func new_mod_slot(slot_num: int) -> void:
 	new_slot.mod_updated.connect(on_mod_update)
 	new_slot.slot_id = get_slot_id(slot_num)
 	button_slots.append(new_slot)
-	add_child(new_slot)
-	set_slot_position(new_slot, slot_num)
+	mod_slot_container.add_child(new_slot)
+	new_slot.position = get_coords_from_vectors(button_data.tower_shape[slot_num])
+#	set_slot_position(new_slot, slot_num)
 	if button_data.mod_data.has(new_slot.slot_id) and button_data.mod_data[new_slot.slot_id] != null:
 		new_slot.occupied = true
 		create_draggable.emit(button_data.mod_data[new_slot.slot_id], new_slot.global_position, new_slot, false)
 
-
 func get_slot_id(slot_num: int) -> int:
 	return button_data.button_id * 10 + slot_num
 
-func set_slot_position(slot: TowerButtonModSlot, slot_num: int) -> void:
-	var angle : float
-	if button_data.slot_count > 4:
-		angle = -PI/2 + slot_num * (TAU / (button_data.slot_count))
-	else:
-		angle = -(slot_num * (PI / (button_data.slot_count-1)))
-	slot.position.x = slot_radius * cos(angle) + size.x/2
-	slot.position.y = slot_radius * sin(angle) + size.y/2
+func get_coords_from_vectors(cell: Vector2i) -> Vector2:
+	@warning_ignore("integer_division")
+	return Vector2(cell.x * cell_size * 0.75, cell.y * cell_size * 0.75)
 
 ## In-Game
 

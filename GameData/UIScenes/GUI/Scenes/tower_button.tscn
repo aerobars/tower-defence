@@ -1,21 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://iq7vcv16hyni"]
+[gd_scene format=3 uid="uid://iq7vcv16hyni"]
 
-[ext_resource type="Texture2D" uid="uid://ceqhep7if173u" path="res://Assets/UI/Buttons/button_round_line.png" id="1_ge1wo"]
+[ext_resource type="Texture2D" uid="uid://clhk7px75x85h" path="res://Assets/UI/Buttons/button_square_line.png" id="1_iu1wd"]
 [ext_resource type="Script" uid="uid://ca6gk23vpyi7s" path="res://GameData/UIScenes/GUI/Scripts/tower_button.gd" id="2_0hnoc"]
 [ext_resource type="Texture2D" uid="uid://c5d7v1851rr54" path="res://Assets/Icons/power.png" id="4_0hnoc"]
 [ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="4_ge1wo"]
 
-[node name="BuildTowerButton" type="TextureButton" node_paths=PackedStringArray("build_cost_label", "net_power_display") groups=["build_buttons"]]
+[node name="BuildTowerButton" type="TextureButton" unique_id=835236435 node_paths=PackedStringArray("build_cost_label", "net_power_display", "mod_slot_container") groups=["build_buttons"]]
 custom_minimum_size = Vector2(80, 80)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = ExtResource("1_ge1wo")
+texture_normal = ExtResource("1_iu1wd")
 stretch_mode = 0
 script = ExtResource("2_0hnoc")
 build_cost_label = NodePath("BuildCostDisplay")
 net_power_display = NodePath("NetPower")
+mod_slot_container = NodePath("ModSlotContainer")
 
-[node name="TowerIcon" type="TextureRect" parent="."]
+[node name="TowerIcon" type="TextureRect" parent="." unique_id=1189719433]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -31,7 +32,7 @@ grow_vertical = 2
 scale = Vector2(0.85, 0.85)
 texture = ExtResource("4_ge1wo")
 
-[node name="PowerIcon" type="TextureRect" parent="."]
+[node name="PowerIcon" type="TextureRect" parent="." unique_id=475874700]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -47,7 +48,7 @@ grow_vertical = 2
 texture = ExtResource("4_0hnoc")
 stretch_mode = 2
 
-[node name="BuildCostDisplay" type="Label" parent="."]
+[node name="BuildCostDisplay" type="Label" parent="." unique_id=828263777]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -62,7 +63,7 @@ grow_vertical = 0
 theme_override_colors/font_color = Color(0.18717614, 0.18717614, 0.18717614, 1)
 text = "$"
 
-[node name="NetPower" type="Label" parent="."]
+[node name="NetPower" type="Label" parent="." unique_id=2056339680]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -78,3 +79,15 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 35
 text = "0"
 horizontal_alignment = 1
+
+[node name="ModSlotContainer" type="Container" parent="." unique_id=1236578161]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -112.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 2

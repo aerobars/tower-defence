@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://d0c26ox538jjk" path="res://Assets/UI/Buttons/button_rectangle_gradient.png" id="2_dg6u1"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://VisualResources/Fonts/infopopup_font_12.tres" id="3_snetv"]
 
-[node name="Tutorial" type="Control"]
+[node name="Tutorial" type="Control" unique_id=1931990489]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_73r4p")
 
-[node name="Intro" type="TextureRect" parent="."]
+[node name="Intro" type="TextureRect" parent="." unique_id=2050670487]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -28,7 +28,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_dg6u1")
 
-[node name="Label" type="Label" parent="Intro"]
+[node name="Label" type="Label" parent="Intro" unique_id=1775213962]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -54,7 +54,7 @@ If you'd like to learn on your own or have already gone through the tutorial, th
 "
 autowrap_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Intro"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Intro" unique_id=1854348261]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -70,15 +70,15 @@ grow_vertical = 0
 theme_override_constants/separation = 13
 alignment = 1
 
-[node name="Skip Tutorial" type="Button" parent="Intro/HBoxContainer"]
+[node name="Skip Tutorial" type="Button" parent="Intro/HBoxContainer" unique_id=1515016409]
 layout_mode = 2
 text = "Skip Tutorial"
 
-[node name="IntroButton" type="Button" parent="Intro/HBoxContainer"]
+[node name="IntroButton" type="Button" parent="Intro/HBoxContainer" unique_id=51964989]
 layout_mode = 2
 text = "Continue"
 
-[node name="GameObj" type="TextureRect" parent="."]
+[node name="GameObj" type="TextureRect" parent="." unique_id=2038327438]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -94,7 +94,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_dg6u1")
 
-[node name="ObjButton" type="Button" parent="GameObj"]
+[node name="ObjButton" type="Button" parent="GameObj" unique_id=507735154]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -109,7 +109,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Yawn..."
 
-[node name="Label" type="Label" parent="GameObj"]
+[node name="Label" type="Label" parent="GameObj" unique_id=1967939514]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -130,7 +130,7 @@ Once your health reaches zero, or you're unable to kill a single baddy in a wave
 "
 autowrap_mode = 3
 
-[node name="TowerBuilding" type="TextureRect" parent="."]
+[node name="TowerBuilding" type="TextureRect" parent="." unique_id=924149226]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -146,7 +146,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_dg6u1")
 
-[node name="TowerBuildingButton" type="Button" parent="TowerBuilding"]
+[node name="TowerBuildingButton" type="Button" parent="TowerBuilding" unique_id=1448923912]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -161,7 +161,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Tower Mods?!"
 
-[node name="Label" type="Label" parent="TowerBuilding"]
+[node name="Label" type="Label" parent="TowerBuilding" unique_id=786292121]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -186,7 +186,7 @@ Regardless of your strategy, as long as you kill at least one baddy in the wave 
 The towers won't do anything on their own though. You'll need to build them up with tower mods."
 autowrap_mode = 2
 
-[node name="ModsIntro" type="TextureRect" parent="."]
+[node name="ModsIntro" type="TextureRect" parent="." unique_id=257110175]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -202,7 +202,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_dg6u1")
 
-[node name="ModsIntroButton" type="Button" parent="ModsIntro"]
+[node name="ModsIntroButton" type="Button" parent="ModsIntro" unique_id=697820942]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -217,7 +217,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Tell me more!"
 
-[node name="Label" type="Label" parent="ModsIntro"]
+[node name="Label" type="Label" parent="ModsIntro" unique_id=1378128159]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -248,7 +248,7 @@ If a Weapon Mod is present in the tower, then instead the aura will only affect 
 "
 autowrap_mode = 2
 
-[node name="PoweringMods" type="TextureRect" parent="."]
+[node name="PoweringMods" type="TextureRect" parent="." unique_id=1876409175]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -264,7 +264,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_dg6u1")
 
-[node name="PoweringModsButton" type="Button" parent="PoweringMods"]
+[node name="PoweringModsButton" type="Button" parent="PoweringMods" unique_id=1234865022]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -279,7 +279,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Comes great responsibility..."
 
-[node name="Label" type="Label" parent="PoweringMods"]
+[node name="Label" type="Label" parent="PoweringMods" unique_id=509318565]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -302,7 +302,7 @@ The only requirement for a tower to function is that their net power (the number
 As a great man once said, with great power..."
 autowrap_mode = 2
 
-[node name="End" type="TextureRect" parent="."]
+[node name="End" type="TextureRect" parent="." unique_id=566374579]
 visible = false
 layout_mode = 1
 anchors_preset = 5
@@ -315,7 +315,7 @@ offset_bottom = 288.0
 grow_horizontal = 2
 texture = ExtResource("2_dg6u1")
 
-[node name="EndButton" type="Button" parent="End"]
+[node name="EndButton" type="Button" parent="End" unique_id=1475018442]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -330,7 +330,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Let's do this!"
 
-[node name="Label" type="Label" parent="End"]
+[node name="Label" type="Label" parent="End" unique_id=544608441]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
