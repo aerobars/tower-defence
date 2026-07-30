@@ -16,8 +16,8 @@ func _ready() -> void:
 	else:
 		save_data_profile = SaveDataProfile.new()
 	if existing_save():
+		new_game()
 		save_data_run = ResourceLoader.load(SAVE_PATH_RUN, "SaveDataRun", ResourceLoader.CACHE_MODE_IGNORE)
-		save_data_run.new_game = false
 	else:
 		new_game()
 

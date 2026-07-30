@@ -45,7 +45,6 @@ func create_new_game(is_new_game: bool) -> void:
 
 func game_scene_setup() -> Node2D:
 	var game_scene = GAME_SCENE.instantiate()
-	game_scene.game_finished.connect(endgame_check)
 	SaveManager.start_new_run.connect(game_scene.new_run_start)
 	SaveManager.setup_saved_run.connect(game_scene.saved_run_setup)
 	return game_scene
@@ -56,7 +55,7 @@ func on_quit_pressed() -> void:
 func on_feedback_pressed() -> void:
 	OS.shell_open("https://forms.gle/1gdVhHvJ8LJ4wVLX9")
 
-func endgame_check(_result) -> void:
+func endgame_check() -> void:
 	if unloading_game:
 		return
 	unloading_game = true

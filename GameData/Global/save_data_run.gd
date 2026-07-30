@@ -5,7 +5,7 @@ class_name SaveDataRun extends Resource
 var new_game : bool = true
 var init_btn_count : int = 2
 var init_tower_shapes : Array[Array] = [[Vector2i(0, -1), Vector2i(0, 0)] , [Vector2i(0, -1), Vector2i(0, 0), Vector2i(-1, 0)]]
-var init_inventory = load("res://GameData/UIScenes/Inventory/player_inventory.tres")
+var init_inventory = load("res://GameData/UI/Inventory/player_inventory.tres")
 
 
 ## Act Related

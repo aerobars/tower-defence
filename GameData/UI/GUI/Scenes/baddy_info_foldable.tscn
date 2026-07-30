@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://jug24xmepvb3"]
 
-[ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/UIScenes/GUI/Scripts/baddy_info.gd" id="1_6f8tt"]
+[ext_resource type="Script" uid="uid://bx21dqt1eoy44" path="res://GameData/UI/GUI/Scripts/baddy_info.gd" id="1_6f8tt"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://VisualResources/Fonts/infopopup_font_12.tres" id="2_04737"]
 
 [node name="BaddyInfo" type="FoldableContainer" unique_id=1522176865 node_paths=PackedStringArray("path_baddy_name", "path_baddy_health", "path_baddy_damage", "path_baddy_defence", "path_baddy_move_speed", "path_baddy_description")]

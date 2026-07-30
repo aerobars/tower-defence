@@ -2,7 +2,7 @@ class_name InventoryUI extends Control
 
 signal slot_created(new_slot: InventorySlotUI) #Connected to game_scene
 
-const INVENTORY_SLOT = preload("res://GameData/UIScenes/Inventory/inventory_slot.tscn")
+const INVENTORY_SLOT = preload("res://GameData/UI/Inventory/inventory_slot.tscn")
 
 ##Contains an array of SlotData and Update Inventory function
 @export var data : InventoryData

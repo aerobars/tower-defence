@@ -2,7 +2,7 @@ extends Control
 
 signal connect_reward_card(reward_card: Control) #Connected to GameScene
 
-@onready var reward_card := preload("res://GameData/UIScenes/GUI/RewardSelection/reward_card.tscn")
+@onready var reward_card := preload("res://GameData/UI/GUI/RewardSelection/reward_card.tscn")
 @export var reward_container : Control
 var total_rewards : int
 var character : String = SaveManager.save_data_run.character

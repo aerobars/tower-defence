@@ -12,11 +12,15 @@ signal create_draggable(
 
 ## Setup
 
-@onready var mod_slot_scene := preload("res://GameData/UIScenes/GUI/Scenes/tower_button_mod_slot.tscn")
-@onready var mod_draggable_scene := preload("res://GameData/UIScenes/GUI/Scenes/mod_draggable.tscn")
+@onready var mod_slot_scene := preload("res://GameData/UI/GUI/Scenes/tower_button_mod_slot.tscn")
+@onready var mod_draggable_scene := preload("res://GameData/UI/GUI/Scenes/mod_draggable.tscn")
+const TOWER_CELL_TEXTURE := preload("res://Assets/Towers/towerDefense_tile181.png")
+
 @export var build_cost_label : Label
 @export var net_power_display : Label
 @export var mod_slot_container : Container
+@export var tower_icon_container :Container
+@export var pwr_icon : TextureRect
 @export var button_data : TowerButtonData #contains mod slot data, slot count, and id
 @export var slot_radius : float = 64
 var slot_data_ref : Dictionary
@@ -38,13 +42,25 @@ var tower_data : TowerBuildData : get = get_tower_mods
 ## Setup
 
 func _ready() -> void:
+	set_tower_icons()
 	for i in button_data.slot_count:
 		new_mod_slot(i)
 		if SaveManager.save_data_run.new_game:
 			button_data.mod_data[get_slot_id(i)] = null
 		on_mod_update(get_slot_id(i))
 	build_cost = button_data.tower_shape.size()
-	$PowerIcon.modulate.a = 0.5
+	pwr_icon.modulate.a = 0.5
+
+func set_tower_icons() -> void:
+	for child in tower_icon_container.get_children():
+		child.queue_free()
+	for cell in button_data.tower_shape:
+		var new_cell = TextureRect.new()
+		new_cell.texture = TOWER_CELL_TEXTURE
+		new_cell.scale = Vector2(0.5, 0.5)
+#		new_cell.pivot_offset_ratio = Vector2(1, 1)
+		tower_icon_container.add_child(new_cell)
+		new_cell.position = get_coords_from_vectors(cell, 0.5)
 
 func new_mod_slot(slot_num: int) -> void:
 	var new_slot = mod_slot_scene.instantiate()
@@ -52,7 +68,7 @@ func new_mod_slot(slot_num: int) -> void:
 	new_slot.slot_id = get_slot_id(slot_num)
 	button_slots.append(new_slot)
 	mod_slot_container.add_child(new_slot)
-	new_slot.position = get_coords_from_vectors(button_data.tower_shape[slot_num])
+	new_slot.position = get_coords_from_vectors(button_data.tower_shape[slot_num], 0.75)
 #	set_slot_position(new_slot, slot_num)
 	if button_data.mod_data.has(new_slot.slot_id) and button_data.mod_data[new_slot.slot_id] != null:
 		new_slot.occupied = true
@@ -61,9 +77,9 @@ func new_mod_slot(slot_num: int) -> void:
 func get_slot_id(slot_num: int) -> int:
 	return button_data.button_id * 10 + slot_num
 
-func get_coords_from_vectors(cell: Vector2i) -> Vector2:
+func get_coords_from_vectors(cell: Vector2i, ratio : float) -> Vector2:
 	@warning_ignore("integer_division")
-	return Vector2(cell.x * cell_size * 0.75, cell.y * cell_size * 0.75)
+	return Vector2(cell.x * cell_size * ratio, cell.y * cell_size * ratio)
 
 ## In-Game
 
@@ -134,11 +150,9 @@ func on_mod_update(slot_id : int, data : ModPrototype = button_data.mod_data[slo
 	net_power_display.text = str(net_power)
 
 func _on_mouse_entered() -> void:
-	print('entered')
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector2(1.1, 1.1), 0.1)
 
 func _on_mouse_exited() -> void:
-	print('exited')
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)

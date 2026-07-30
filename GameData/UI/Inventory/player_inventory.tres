@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="InventoryData" format=3 uid="uid://c3m5eg7swenlw"]
 
-[ext_resource type="Script" uid="uid://bjmi2gnp5s1tf" path="res://GameData/UIScenes/Inventory/Scripts/inventory_data.gd" id="1_fy7e0"]
-[ext_resource type="Script" uid="uid://b4so26n1sqyy1" path="res://GameData/UIScenes/Inventory/Scripts/inventory_slot_data.gd" id="2_4o2ck"]
+[ext_resource type="Script" uid="uid://bjmi2gnp5s1tf" path="res://GameData/UI/Inventory/Scripts/inventory_data.gd" id="1_fy7e0"]
+[ext_resource type="Script" uid="uid://b4so26n1sqyy1" path="res://GameData/UI/Inventory/Scripts/inventory_slot_data.gd" id="2_4o2ck"]
 [ext_resource type="Resource" uid="uid://daxore4jcvu1" path="res://GameData/TowerMods/CharacterMods/Builder/pwr_damage.tres" id="3_wioqo"]
 [ext_resource type="Resource" uid="uid://b702xntyc62fc" path="res://GameData/TowerMods/CharacterMods/Builder/wep_basic.tres" id="4_wioqo"]
 

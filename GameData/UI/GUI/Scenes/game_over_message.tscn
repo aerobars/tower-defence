@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bs6ykvufkigbj"]
 
-[ext_resource type="Script" uid="uid://oe8tvtkxqkb7" path="res://GameData/UIScenes/GUI/Scripts/game_over_message.gd" id="1_13jiq"]
+[ext_resource type="Script" uid="uid://oe8tvtkxqkb7" path="res://GameData/UI/GUI/Scripts/game_over_message.gd" id="1_13jiq"]
 [ext_resource type="Texture2D" uid="uid://d0c26ox538jjk" path="res://Assets/UI/Buttons/button_rectangle_gradient.png" id="1_foxll"]
 [ext_resource type="Theme" uid="uid://bp5hjnce415xl" path="res://VisualResources/Fonts/infopopup_font_12.tres" id="2_13jiq"]
 

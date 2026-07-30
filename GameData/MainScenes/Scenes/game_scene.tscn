@@ -8,20 +8,22 @@
 [ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="4_crvjy"]
 [ext_resource type="Script" uid="uid://p8btputct86" path="res://GameData/SupportScenes/Scripts/camera_2d.gd" id="5_o3ukp"]
 [ext_resource type="Script" uid="uid://t02dvq4mpbb1" path="res://GameData/MainScenes/Scripts/projectile_container.gd" id="6_crvjy"]
-[ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/UIScenes/GUI/Scripts/ui.gd" id="6_d6kyk"]
+[ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/UI/GUI/Scripts/ui.gd" id="6_d6kyk"]
 [ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://VisualResources/Inventory/inventory_bg.tres" id="7_lb214"]
-[ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UIScenes/Inventory/Scripts/inventory_ui.gd" id="8_dxi7t"]
-[ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://GameData/UIScenes/Inventory/player_inventory.tres" id="9_8pkxk"]
-[ext_resource type="PackedScene" uid="uid://jug24xmepvb3" path="res://GameData/UIScenes/GUI/Scenes/baddy_info_foldable.tscn" id="10_2fa2s"]
+[ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UI/Inventory/Scripts/inventory_ui.gd" id="8_dxi7t"]
+[ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://GameData/UI/Inventory/player_inventory.tres" id="9_8pkxk"]
+[ext_resource type="PackedScene" uid="uid://jug24xmepvb3" path="res://GameData/UI/GUI/Scenes/baddy_info_foldable.tscn" id="10_2fa2s"]
 [ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://VisualResources/Fonts/kfn_50_o1.tres" id="11_k11wq"]
 [ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://VisualResources/Fonts/kfn_30_o1.tres" id="12_vv4yf"]
 [ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="13_mrls8"]
 [ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="14_0l3vd"]
+[ext_resource type="Texture2D" uid="uid://cdw2euysxu36c" path="res://Assets/UI/gear.png" id="14_d6kyk"]
 [ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="15_2pb0w"]
 [ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="16_kwcc8"]
 [ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="17_igako"]
-[ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UIScenes/GUI/Scenes/tutorial.tscn" id="18_v8hmh"]
-[ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UIScenes/GUI/Scenes/game_over_message.tscn" id="19_h8guh"]
+[ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UI/GUI/Scenes/tutorial.tscn" id="18_v8hmh"]
+[ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UI/GUI/Scenes/game_over_message.tscn" id="19_h8guh"]
+[ext_resource type="PackedScene" uid="uid://bgjp1sb8trhb3" path="res://GameData/UI/GUI/Scenes/pause_menu.tscn" id="24_d6kyk"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_s1u4x"]
 radius = 100.0
@@ -63,6 +65,8 @@ script = ExtResource("3_mkklv")
 [node name="BaddyContainer" type="Node2D" parent="." unique_id=492987642]
 script = ExtResource("3_skb8s")
 
+[node name="TutorialContainer" type="Node2D" parent="." unique_id=411034298]
+
 [node name="ProjectileContainer" type="Node2D" parent="." unique_id=155900036]
 script = ExtResource("6_crvjy")
 
@@ -76,7 +80,7 @@ texture = ExtResource("4_crvjy")
 script = ExtResource("5_o3ukp")
 zoom_disabled = true
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=910804750 node_paths=PackedStringArray("path_hp_bar", "path_hp_text", "path_cash_display", "path_game_message", "path_baddy_info_foldbable", "path_next_wave_button", "path_pause_button", "path_ff_button", "path_build_bar", "path_inventory_ui", "path_tower_buttons", "path_game_bookend_popup", "path_tutorial")]
+[node name="UI" type="CanvasLayer" parent="." unique_id=910804750 node_paths=PackedStringArray("path_hp_bar", "path_hp_text", "path_cash_display", "path_game_message", "path_baddy_info_foldbable", "path_next_wave_button", "path_pause_button", "path_ff_button", "path_build_bar", "path_inventory_ui", "path_tower_buttons", "path_game_bookend_popup", "path_tutorial", "path_pause_menu")]
 script = ExtResource("6_d6kyk")
 path_hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
 path_hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
@@ -91,6 +95,7 @@ path_inventory_ui = NodePath("HUD/BuildBar/InventoryContainer/InventoryUI")
 path_tower_buttons = NodePath("HUD/BuildBar/TowerButtonsContainer")
 path_game_bookend_popup = NodePath("GameOverMessage")
 path_tutorial = NodePath("Tutorial")
+path_pause_menu = NodePath("PauseMenu")
 
 [node name="HUD" type="Control" parent="UI" unique_id=795196558]
 layout_mode = 3
@@ -142,9 +147,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -280.0
+offset_left = -606.0
 offset_top = -144.0
-offset_right = 95.0
+offset_right = -231.0
 offset_bottom = -64.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -167,42 +172,25 @@ anchor_right = 1.0
 offset_bottom = 71.0
 grow_horizontal = 2
 
-[node name="SaveButton" type="HBoxContainer" parent="UI/HUD/InfoBar" unique_id=39488801]
-layout_mode = 0
-offset_left = 64.0
-offset_right = 180.0
+[node name="SettingsButton" type="HBoxContainer" parent="UI/HUD/InfoBar" unique_id=39488801]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -116.0
 offset_bottom = 71.0
+grow_horizontal = 0
 
-[node name="Save" type="Button" parent="UI/HUD/InfoBar/SaveButton" unique_id=236056422]
+[node name="Settings" type="TextureButton" parent="UI/HUD/InfoBar/SettingsButton" unique_id=1803615290]
 layout_mode = 2
-text = "Save and Quit"
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("14_d6kyk")
 
 [node name="InfoContainer" type="HBoxContainer" parent="UI/HUD/InfoBar" unique_id=2091727925]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 272.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Symbol" type="Label" parent="UI/HUD/InfoBar/InfoContainer" unique_id=355145448]
-custom_minimum_size = Vector2(120, 60)
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
-theme_override_fonts/font = ExtResource("11_k11wq")
-theme_override_font_sizes/font_size = 50
-text = "$"
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="Money" type="Label" parent="UI/HUD/InfoBar/InfoContainer" unique_id=1203486635]
-custom_minimum_size = Vector2(120, 60)
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
-theme_override_fonts/font = ExtResource("12_vv4yf")
-theme_override_font_sizes/font_size = 30
-vertical_alignment = 1
+offset_right = 636.0
+offset_bottom = 60.0
 
 [node name="HealthIcon" type="TextureRect" parent="UI/HUD/InfoBar/InfoContainer" unique_id=1237741575]
 custom_minimum_size = Vector2(60, 60)
@@ -237,6 +225,24 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "100/100"
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Symbol" type="Label" parent="UI/HUD/InfoBar/InfoContainer" unique_id=355145448]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
+theme_override_fonts/font = ExtResource("11_k11wq")
+theme_override_font_sizes/font_size = 50
+text = "$"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Money" type="Label" parent="UI/HUD/InfoBar/InfoContainer" unique_id=1203486635]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
+theme_override_fonts/font = ExtResource("12_vv4yf")
+theme_override_font_sizes/font_size = 30
 vertical_alignment = 1
 
 [node name="Control" type="Control" parent="UI/HUD/InfoBar/InfoContainer" unique_id=660258614]
@@ -313,6 +319,9 @@ visible = false
 [node name="GameOverMessage" parent="UI" unique_id=25078715 instance=ExtResource("19_h8guh")]
 visible = false
 
+[node name="PauseMenu" parent="UI" unique_id=1103320355 instance=ExtResource("24_d6kyk")]
+visible = false
+
 [node name="RangeRef" type="Area2D" parent="." unique_id=2069938082]
 visible = false
 position = Vector2(992, 352)
@@ -338,7 +347,7 @@ shape = SubResource("CircleShape2D_q7o3e")
 [node name="400px" type="CollisionShape2D" parent="RangeRef" unique_id=245439695]
 shape = SubResource("CircleShape2D_5o0m5")
 
-[connection signal="button_up" from="UI/HUD/InfoBar/SaveButton/Save" to="." method="_on_save_button_up"]
+[connection signal="button_up" from="UI/HUD/InfoBar/SettingsButton/Settings" to="UI" method="_on_settings_button_up"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/NextWave" to="UI" method="_on_next_wave_pressed"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="UI" method="_on_pause_play_pressed"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/FastForward" to="UI" method="_on_fast_forward_pressed"]

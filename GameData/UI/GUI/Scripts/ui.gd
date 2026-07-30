@@ -4,10 +4,11 @@ signal connect_new_button(new_button: BuildTowerButton)
 signal connect_inv_button(new_slot: InventorySlotUI)
 signal start_next_wave
 signal check_build_mode
+#signal save_and_quit
 
 const GAME_MESSAGE_A_VALUE = 0.78
-const TOWER_BUTTON := preload("res://GameData/UIScenes/GUI/Scenes/tower_button.tscn")
-const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
+const TOWER_BUTTON := preload("res://GameData/UI/GUI/Scenes/tower_button.tscn")
+const REWARD_UI = preload("res://GameData/UI/GUI/RewardSelection/reward_selection.tscn")
 
 @export_group("Node Paths", "path_")
 @export var path_hp_bar : TextureProgressBar
@@ -24,7 +25,7 @@ const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_se
 @export var path_tower_buttons : HBoxContainer
 @export var path_game_bookend_popup : Control
 @export var path_tutorial : Control
-
+@export var path_pause_menu : PauseMenu
 
 @onready var texture : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
 @onready var tower : PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
@@ -138,3 +139,22 @@ func game_over(_result) -> void:
 	Please click the button below to complete a quick feedback survey and return to the main menu (and start a new game :D )"
 	path_game_bookend_popup.get_node("TextureRect/Button").text = "Go to survey"
 	path_game_bookend_popup.visible = true
+
+func _on_settings_button_up() -> void:
+	path_pause_menu.visible = true
+	get_tree().paused = true
+	pass # Replace with function body.
+
+func _on_pause_menu_close_pause_menu() -> void:
+	path_pause_menu.visible = false
+	get_tree().paused = false
+	pass # Replace with function body.
+
+func _on_pause_menu_open_settings() -> void:
+	pass # Replace with function body.
+
+
+func _on_pause_menu_save_and_quit() -> void:
+	SaveManager.save_run()
+	get_tree().quit()
+#	save_and_quit.emit()

@@ -1,19 +1,18 @@
 extends Node2D
 
-signal game_finished(result)
 signal tower_cell_update_check
 signal wave_cleared
 
 ## UI
 
 const BADDY_SCENE := preload("res://GameData/Baddies/ScriptsAndProtos/baddy.tscn")
-const DRAGGABLE_MOD := preload("res://GameData/UIScenes/GUI/Scenes/mod_draggable.tscn")
-const TOWER_BUTTON := preload("res://GameData/UIScenes/GUI/Scenes/tower_button.tscn")
+const DRAGGABLE_MOD := preload("res://GameData/UI/GUI/Scenes/mod_draggable.tscn")
+const TOWER_BUTTON := preload("res://GameData/UI/GUI/Scenes/tower_button.tscn")
 const PREVIEW_RANGE_DISPLAY : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
-const REWARD_UI = preload("res://GameData/UIScenes/GUI/RewardSelection/reward_selection.tscn")
+const REWARD_UI = preload("res://GameData/UI/GUI/RewardSelection/reward_selection.tscn")
 const POPUPS : Dictionary = {
-	"mod" : preload("res://GameData/UIScenes/GUI/Scenes/mod_popup.tscn"),
-	"tower" : preload("res://GameData/UIScenes/GUI/Scenes/tower_popup.tscn")
+	"mod" : preload("res://GameData/UI/GUI/Scenes/mod_popup.tscn"),
+	"tower" : preload("res://GameData/UI/GUI/Scenes/tower_popup.tscn")
 }
 @export_group("Scene Paths")
 @export_subgroup("UI", "path_")
@@ -334,9 +333,12 @@ func on_unit_selection(unit) -> void:
 	current_unit = unit
 	current_unit.set_selected(true)
 
-##Save/Load Testing
-func _on_save_button_up() -> void:
-	game_finished.emit(false)
-
 func tower_cell_updated(cell: TowerCell) -> void:
 	tower_cell_update_check.emit(cell)
+
+##Save/Load Testing
+
+
+
+#func _on_save_button_up() -> void:
+#	open_pause_menu.emit(false)
