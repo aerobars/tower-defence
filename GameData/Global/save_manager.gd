@@ -55,5 +55,5 @@ func existing_save(save_path : String = "user://run_save.tres", save_type : Stri
 	return ResourceLoader.exists(save_path, save_type)
 
 func complete_tutorial() -> void:
-	save_data_profile.show_tutorial = false
+	save_data_profile.tutorial_completed = true
 	tutorial_completed.emit()

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://clhk7px75x85h" path="res://Assets/UI/Buttons/button_square_line.png" id="1_iu1wd"]
 [ext_resource type="Script" uid="uid://ca6gk23vpyi7s" path="res://GameData/UIScenes/GUI/Scripts/tower_button.gd" id="2_0hnoc"]
+[ext_resource type="Texture2D" uid="uid://cwqfpomujf41f" path="res://Assets/UI/Art/button_square_line.png" id="2_yiwhv"]
 [ext_resource type="Texture2D" uid="uid://c5d7v1851rr54" path="res://Assets/Icons/power.png" id="4_0hnoc"]
 [ext_resource type="Texture2D" uid="uid://clcprfblme3xx" path="res://Assets/Towers/towerDefense_tile181.png" id="4_ge1wo"]
 
@@ -10,6 +11,7 @@ custom_minimum_size = Vector2(80, 80)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture_normal = ExtResource("1_iu1wd")
+texture_pressed = ExtResource("2_yiwhv")
 stretch_mode = 0
 script = ExtResource("2_0hnoc")
 build_cost_label = NodePath("BuildCostDisplay")
@@ -91,3 +93,6 @@ offset_top = -112.0
 offset_bottom = -112.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

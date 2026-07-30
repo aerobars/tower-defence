@@ -1,6 +1,7 @@
 class_name BuildTowerButton extends TextureButton
 
 ## Signals
+
 signal update_towers(update_data : ModUpdateData) 
 signal create_draggable(
 	tower_mod: ModPrototype, 
@@ -10,6 +11,7 @@ signal create_draggable(
 	)
 
 ## Setup
+
 @onready var mod_slot_scene := preload("res://GameData/UIScenes/GUI/Scenes/tower_button_mod_slot.tscn")
 @onready var mod_draggable_scene := preload("res://GameData/UIScenes/GUI/Scenes/mod_draggable.tscn")
 @export var build_cost_label : Label
@@ -21,15 +23,20 @@ var slot_data_ref : Dictionary
 var button_slots : Array =[]
 var cell_size : int
 
-## Gametime
+## Gametime Functions
+
 var build_cost : int : 
 	set(value): 
 		build_cost = 1 + value * 3 #value should always be slot count
 		build_cost_label.text = "$" + str(build_cost)
 var tower_data : TowerBuildData : get = get_tower_mods
 
+#################
+### Functions ###
+#################
 
 ## Setup
+
 func _ready() -> void:
 	for i in button_data.slot_count:
 		new_mod_slot(i)
@@ -125,3 +132,13 @@ func on_mod_update(slot_id : int, data : ModPrototype = button_data.mod_data[slo
 		data))
 	
 	net_power_display.text = str(net_power)
+
+func _on_mouse_entered() -> void:
+	print('entered')
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "scale", Vector2(1.1, 1.1), 0.1)
+
+func _on_mouse_exited() -> void:
+	print('exited')
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)

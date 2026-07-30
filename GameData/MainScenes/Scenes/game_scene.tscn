@@ -308,6 +308,7 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 75
 
 [node name="Tutorial" parent="UI" unique_id=1588393518 instance=ExtResource("18_v8hmh")]
+visible = false
 
 [node name="GameOverMessage" parent="UI" unique_id=25078715 instance=ExtResource("19_h8guh")]
 visible = false

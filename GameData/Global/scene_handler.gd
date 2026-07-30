@@ -14,7 +14,11 @@ var unload_count : int = 0
 var profile_data : Resource #variable to profile settings(resolution, sound volumes, etc.)
 
 func _ready() -> void:
-	load_main_menu()
+	#if player hasn't completed the tutorial, load into the game instead of the main menu
+	if SaveManager.save_data_profile.tutorial_completed:
+		load_main_menu()
+	else:
+		create_new_game(true)
 
 func load_main_menu() -> void:
 	continue_button.pressed.connect(on_continue_pressed)
@@ -32,10 +36,10 @@ func on_continue_pressed() -> void:
 func on_new_game_pressed() -> void:
 	create_new_game(true)
 
-func create_new_game(new_game_status: bool) -> void: 
+func create_new_game(is_new_game: bool) -> void: 
 	get_node("MainMenu").queue_free()
 	game_instance = game_scene_setup()
-	if new_game_status:
+	if is_new_game:
 		SaveManager.new_game()
 	add_child(game_instance)
 

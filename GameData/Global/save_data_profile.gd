@@ -1,3 +1,3 @@
 class_name SaveDataProfile extends Resource
 
-@export var show_tutorial : bool = true
+@export var tutorial_completed : bool = false

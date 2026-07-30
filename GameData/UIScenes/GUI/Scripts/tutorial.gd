@@ -8,7 +8,7 @@ extends Control
 @onready var end : TextureRect = $End
 
 func _ready() -> void:
-	if SaveManager.save_data_profile.show_tutorial == false:
+	if SaveManager.save_data_profile.tutorial_completed == true:
 		complete_tutorial()
 
 func _on_skip_tutorial_button_up() -> void:

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://k23igyttqbm8" path="res://GameData/Global/scene_handler.gd" id="1_sy2fw"]
 [ext_resource type="PackedScene" uid="uid://de1fv8ifwa5fh" path="res://GameData/MainScenes/Scenes/main_menu.tscn" id="2_qjdn2"]
 
-[node name="SceneHandler" type="Node"]
+[node name="SceneHandler" type="Node" unique_id=714803083]
 script = ExtResource("1_sy2fw")
 
-[node name="MainMenu" parent="." instance=ExtResource("2_qjdn2")]
+[node name="MainMenu" parent="." unique_id=92701721 instance=ExtResource("2_qjdn2")]
