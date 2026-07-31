@@ -45,15 +45,6 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Return" type="Button" parent="VBoxContainer" unique_id=2082308386]
-layout_mode = 2
-text = "Return
-"
-
-[node name="Control2" type="Control" parent="VBoxContainer" unique_id=1673032251]
-custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
-
 [node name="Settings" type="Button" parent="VBoxContainer" unique_id=1273261372]
 layout_mode = 2
 text = "Settings"
@@ -66,6 +57,15 @@ layout_mode = 2
 layout_mode = 2
 text = "Save and Quit"
 
-[connection signal="button_up" from="VBoxContainer/Return" to="." method="_on_return_button_up"]
+[node name="Control2" type="Control" parent="VBoxContainer" unique_id=1673032251]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Return" type="Button" parent="VBoxContainer" unique_id=2082308386]
+layout_mode = 2
+text = "Return
+"
+
 [connection signal="button_up" from="VBoxContainer/Settings" to="." method="_on_settings_button_up"]
 [connection signal="button_up" from="VBoxContainer/SaveQuit" to="." method="_on_save_quit_button_up"]
+[connection signal="button_up" from="VBoxContainer/Return" to="." method="_on_return_button_up"]

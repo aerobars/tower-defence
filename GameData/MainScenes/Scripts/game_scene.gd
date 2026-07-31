@@ -2,6 +2,7 @@ extends Node2D
 
 signal tower_cell_update_check
 signal wave_cleared
+signal open_settings
 
 ## UI
 
@@ -196,7 +197,6 @@ func wave_ended() -> void:
 	path_ui.create_new_reward(temp_reward_bonus)
 	#load next level/wave selection
 
-
 ##Ideally, in the instances of a lower boon limit, would use the values from higher level towers over lower level,
 ##doesn't do this currently(does FIFO) but something to change in the future
 func end_of_wave_effects(data: AbilityWaveClear, level: int) -> void:
@@ -335,6 +335,10 @@ func on_unit_selection(unit) -> void:
 
 func tower_cell_updated(cell: TowerCell) -> void:
 	tower_cell_update_check.emit(cell)
+
+func _on_ui_open_settings() -> void:
+	print("open settings game scene")
+	open_settings.emit()
 
 ##Save/Load Testing
 

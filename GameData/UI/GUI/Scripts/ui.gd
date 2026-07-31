@@ -4,6 +4,7 @@ signal connect_new_button(new_button: BuildTowerButton)
 signal connect_inv_button(new_slot: InventorySlotUI)
 signal start_next_wave
 signal check_build_mode
+signal open_settings
 #signal save_and_quit
 
 const GAME_MESSAGE_A_VALUE = 0.78
@@ -151,7 +152,8 @@ func _on_pause_menu_close_pause_menu() -> void:
 	pass # Replace with function body.
 
 func _on_pause_menu_open_settings() -> void:
-	pass # Replace with function body.
+	print('open settings ui')
+	open_settings.emit()
 
 
 func _on_pause_menu_save_and_quit() -> void:

@@ -347,7 +347,11 @@ shape = SubResource("CircleShape2D_q7o3e")
 [node name="400px" type="CollisionShape2D" parent="RangeRef" unique_id=245439695]
 shape = SubResource("CircleShape2D_5o0m5")
 
+[connection signal="open_settings" from="UI" to="." method="_on_ui_open_settings"]
 [connection signal="button_up" from="UI/HUD/InfoBar/SettingsButton/Settings" to="UI" method="_on_settings_button_up"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/NextWave" to="UI" method="_on_next_wave_pressed"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="UI" method="_on_pause_play_pressed"]
 [connection signal="pressed" from="UI/HUD/InfoBar/MarginContainer/GameControls/FastForward" to="UI" method="_on_fast_forward_pressed"]
+[connection signal="close_pause_menu" from="UI/PauseMenu" to="UI" method="_on_pause_menu_close_pause_menu"]
+[connection signal="open_settings" from="UI/PauseMenu" to="UI" method="_on_pause_menu_open_settings"]
+[connection signal="save_and_quit" from="UI/PauseMenu" to="UI" method="_on_pause_menu_save_and_quit"]

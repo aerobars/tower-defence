@@ -4,10 +4,13 @@ extends Node
 @onready var new_game := $MainMenu/Margin/VBox/NewGame
 @onready var quit_button := $MainMenu/Margin/VBox/Quit
 @onready var feedback_button := $MainMenu/Margin/VBox/Feedback
+@onready var settings_button := $MainMenu/Margin/VBox/Settings
 
 const GAME_SCENE = preload("res://GameData/MainScenes/Scenes/game_scene.tscn")
+const SETTINGS_SCENE = preload("res://GameData/MainScenes/Scenes/settings.tscn")
 var main_menu = preload("res://GameData/MainScenes/Scenes/main_menu.tscn")
 var game_instance
+var settings_instance
 var unloading_game : bool = false
 var unload_count : int = 0
 
@@ -25,6 +28,7 @@ func load_main_menu() -> void:
 	new_game.pressed.connect(on_new_game_pressed)
 	quit_button.pressed.connect(on_quit_pressed)
 	feedback_button.pressed.connect(on_feedback_pressed)
+	settings_button.pressed.connect(open_settings)
 	if SaveManager.existing_save():
 		continue_button.visible = true
 	else:
@@ -45,9 +49,21 @@ func create_new_game(is_new_game: bool) -> void:
 
 func game_scene_setup() -> Node2D:
 	var game_scene = GAME_SCENE.instantiate()
+	game_scene.open_settings.connect(open_settings)
 	SaveManager.start_new_run.connect(game_scene.new_run_start)
 	SaveManager.setup_saved_run.connect(game_scene.saved_run_setup)
 	return game_scene
+
+func open_settings() -> void:
+	settings_instance = SETTINGS_SCENE.instantiate()
+	settings_instance.close_settings.connect(close_settings)
+	add_child(settings_instance)
+	get_tree().paused = true
+
+func close_settings() -> void:
+	get_tree().paused = false
+	settings_instance.queue_free()
+	
 
 func on_quit_pressed() -> void:
 	get_tree().quit()
