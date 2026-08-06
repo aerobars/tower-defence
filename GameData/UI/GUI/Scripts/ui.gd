@@ -143,18 +143,17 @@ func game_over(_result) -> void:
 
 func _on_settings_button_up() -> void:
 	path_pause_menu.visible = true
+	path_build_bar.visible = false
 	get_tree().paused = true
-	pass # Replace with function body.
 
 func _on_pause_menu_close_pause_menu() -> void:
 	path_pause_menu.visible = false
+	path_build_bar.visible = true
 	get_tree().paused = false
-	pass # Replace with function body.
 
 func _on_pause_menu_open_settings() -> void:
-	print('open settings ui')
+	path_pause_menu.visible = false
 	open_settings.emit()
-
 
 func _on_pause_menu_save_and_quit() -> void:
 	SaveManager.save_run()

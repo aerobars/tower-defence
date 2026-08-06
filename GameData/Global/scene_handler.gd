@@ -57,6 +57,8 @@ func game_scene_setup() -> Node2D:
 func open_settings() -> void:
 	settings_instance = SETTINGS_SCENE.instantiate()
 	settings_instance.close_settings.connect(close_settings)
+	if game_instance:
+		game_instance.connect_settings(settings_instance)
 	add_child(settings_instance)
 	get_tree().paused = true
 

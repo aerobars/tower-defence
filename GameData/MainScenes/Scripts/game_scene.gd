@@ -337,8 +337,10 @@ func tower_cell_updated(cell: TowerCell) -> void:
 	tower_cell_update_check.emit(cell)
 
 func _on_ui_open_settings() -> void:
-	print("open settings game scene")
 	open_settings.emit()
+
+func connect_settings(settings_instance : Control) -> void:
+	settings_instance.close_settings.connenct(path_ui)
 
 ##Save/Load Testing
 
