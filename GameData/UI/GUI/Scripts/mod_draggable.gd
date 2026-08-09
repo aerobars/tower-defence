@@ -9,6 +9,7 @@ var data : ModPrototype
 var draggable := false
 var inside_droppable := false
 var mod_slot_ref : TowerButtonModSlot
+##mod_slot that this draggable previously occupied
 var prev_slot_ref : TowerButtonModSlot
 
 var offset : Vector2
@@ -43,14 +44,7 @@ func _process(_delta: float) -> void:
 func droppable_check() -> void:
 	var tween = get_tree().create_tween()
 	if inside_droppable:
-		if prev_slot_ref != null: #if it's not null that means it occupied a previous slot
-			prev_slot_ref.update(null, false, null)
-		if mod_slot_ref.occupied and mod_slot_ref.occupying_mod != self: #check if mod slot is occupied with different mod
-			mod_slot_ref.occupying_mod.mod_dropped.emit(mod_slot_ref.occupying_mod.data, 1) #returns old mod back to inventory
-			_run_tween_async(tween, mod_slot_ref.occupying_mod, "global_position", mod_slot_ref.occupying_mod.inventory_pos, 0.2) 
-			mod_dropped.emit(data, -1) #connected to inventory_ui
-		elif not mod_slot_ref.occupied:#unwritten else: stops inventory from subtracting if occupying mod is returned to same slot
-			mod_dropped.emit(data, -1)
+		check_mod_slot_state(tween)
 		tween.tween_property(self, "global_position", mod_slot_ref.global_position, 0.2).set_ease(Tween.EASE_OUT)
 		in_inventory = false
 		mod_slot_ref.update(data, true, self)
@@ -66,6 +60,16 @@ func droppable_check() -> void:
 		await tween.finished
 		queue_free()
 	draggable = false
+
+func check_mod_slot_state(tween: Tween) -> void:
+	if prev_slot_ref != null: #if it's not null that means it occupied a previous slot
+		prev_slot_ref.update(null, false, null)
+	if mod_slot_ref.occupied and mod_slot_ref.occupying_mod != self: #check if mod slot is occupied with different mod
+		mod_slot_ref.occupying_mod.mod_dropped.emit(mod_slot_ref.occupying_mod.data, 1) #returns old mod back to inventory
+		_run_tween_async(tween, mod_slot_ref.occupying_mod, "global_position", mod_slot_ref.occupying_mod.inventory_pos, 0.2) 
+		mod_dropped.emit(data, -1) #connected to inventory_ui
+	elif not mod_slot_ref.occupied:#unwritten else: stops inventory from subtracting if occupying mod is returned to same slot
+		mod_dropped.emit(data, -1)
 
 func _run_tween_async(tween: Tween, object: ModDraggable, property: NodePath, end_pos: Variant, duration: float) -> void:
 	tween.tween_property(object, property, end_pos, duration).set_ease(Tween.EASE_OUT)
@@ -90,11 +94,11 @@ func _on_timer_timeout() -> void:
 		#hovered.emit(data)
 	pass
 
-func _on_area_2d_body_entered(body: TowerButtonModSlot) -> void: #react to player dragging over mod slot
+func _on_area_2d_body_entered(slot: TowerButtonModSlot) -> void: #react to player dragging over mod slot
 	inside_droppable = true
-	body.modulate = Color(Color.BISQUE, 1)
-	mod_slot_ref = body
+	slot.get_focus()
+	mod_slot_ref = slot
 
-func _on_area_2d_body_exited(body: TowerButtonModSlot) -> void:
+func _on_area_2d_body_exited(slot: TowerButtonModSlot) -> void:
 	inside_droppable = false
-	body.modulate = Color(Color.AZURE, 0.7)
+	slot.lose_focus()

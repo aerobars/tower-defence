@@ -3,6 +3,7 @@ class_name TowerButtonModSlot extends StaticBody2D
 signal mod_updated(slot_id : int, data : ModPrototype) #connected to build buttons
 
 var slot_id : int
+var focused := false
 var occupied := false
 var occupying_mod : ModDraggable
 #var data : PrototypeMod
@@ -16,6 +17,14 @@ func _process(_delta: float) -> void:
 		visible = true
 	else:
 		visible = false
+
+func get_focus() -> void:
+	focused = true
+	modulate = Color(Color.BISQUE, 1)
+
+func lose_focus() -> void:
+	focused = false
+	modulate = Color(Color.AZURE, 0.7)
 
 func update(_data : ModPrototype, _occupied : bool = occupied, _occupying_mod : ModDraggable = occupying_mod) -> void:
 	occupied = _occupied
