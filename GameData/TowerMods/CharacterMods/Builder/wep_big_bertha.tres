@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ModWeapon" format=3 uid="uid://dwimlcgbw3ru7"]
+
+[ext_resource type="Script" uid="uid://stua4x4ldhoc" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd" id="1_1dyhp"]
+[ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_575jx"]
+
+[resource]
+script = ExtResource("2_575jx")
+projectile_speed = 600.0
+damage_tags = 2
+base_aoe_levels = Array[float]([150.0, 150.0, 150.0, 150.0, 150.0])
+base_attack_speed_levels = Array[float]([2.0, 2.0, 2.0, 2.0, 2.0])
+base_damage_levels = Array[float]([30.0, 40.0, 50.0, 60.0, 70.0])
+base_pierce_levels = Array[int]([2, 2, 2, 2, 2])
+base_power_levels = Array[int]([-6, -6, -6, -6, -6])
+mod_class = 2
+info_name = "Big Bertha"
+metadata/_custom_type_script = "uid://djuix1w1w7p4i"

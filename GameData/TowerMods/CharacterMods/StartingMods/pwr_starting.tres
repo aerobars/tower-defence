@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://bfhoo45foedde"]
+
+[ext_resource type="Script" uid="uid://bdvisqhdbqwsu" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_wave_clear.gd" id="1_klda1"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_hwcqn"]
+
+[resource]
+script = ExtResource("2_hwcqn")
+base_power_levels = Array[int]([2, 3, 4, 5, 6])
+mod_class = 1
+metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

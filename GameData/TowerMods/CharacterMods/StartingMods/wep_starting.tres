@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ModWeapon" format=3 uid="uid://6g4cu7vat4jh"]
+
+[ext_resource type="Script" uid="uid://stua4x4ldhoc" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd" id="1_w2ax7"]
+[ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_xh5wr"]
+
+[resource]
+script = ExtResource("2_xh5wr")
+base_damage_levels = Array[float]([10.0, 12.5, 15.0, 17.5, 20.0])
+mod_class = 2
+metadata/_custom_type_script = "uid://djuix1w1w7p4i"

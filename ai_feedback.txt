@@ -1,0 +1,504 @@
+# Tower Defence Codebase Review
+
+Date: July 10, 2026  
+Project reviewed: `aerobars/tower-defence` downloaded as `tower-defence-main`  
+Review type: Static codebase inventory and code review
+
+## Executive Summary
+
+This is clearly an early game project, but it already has more architecture than a typical first attempt. The strongest idea is the modular tower system: tower buttons define loadouts, tower cells execute weapon/aura/power mods, and enemies carry data-driven buffs and abilities. That is a promising foundation for a tower defense game with interesting build variety.
+
+The biggest risks are not the game concept. They are maintainability and runtime fragility:
+
+- A lot of unrelated responsibilities live in `game_scene.gd`.
+- Several systems are connected by loosely typed dictionaries and signals.
+- A few signal signatures and emitted arguments appear inconsistent.
+- Some gameplay code likely has coordinate-space and buff-targeting bugs.
+- Exported game binaries are committed into the source tree.
+
+The best next phase would be a stabilization pass: clean repository hygiene, split the largest controller, tighten contracts between systems, and fix the most likely gameplay bugs before adding lots of new content.
+
+## Codebase Inventory
+
+### Project Shape
+
+- Engine: Godot 4 project
+- Project name: `Tower Defence`
+- Approximate script count: 64 `.gd` files
+- Approximate GDScript size: 3,500 lines
+- Scene/resource count:
+  - 28 `.tscn` scenes
+  - 56 `.tres` resources
+  - 51 `.png` assets
+  - 54 `.import` files
+- Main source folders:
+  - `GameData/Baddies`
+  - `GameData/Towers`
+  - `GameData/TowerMods`
+  - `GameData/BuffsAndAbilities`
+  - `GameData/UIScenes`
+  - `GameData/Maps`
+  - `GameData/Global`
+  - `Assets`
+  - `VisualResources`
+
+### Core Systems Present
+
+- Enemy system:
+  - `Baddy`
+  - `BaddyStats`
+  - boss prototype
+  - enemy resource files by act
+- Tower system:
+  - `TowerBase`
+  - `TowerCell`
+  - `TowerProjectile`
+  - shape/grid placement
+- Tower mod system:
+  - weapon mods
+  - aura mods
+  - power mods
+  - character-specific mod pools
+- Buff and ability system:
+  - stat buffs
+  - damage over time buffs
+  - on-hit buffs
+  - aura abilities
+  - triggered/periodic/hp-threshold abilities
+- UI system:
+  - tower buttons
+  - drag-and-drop mods
+  - inventory UI
+  - reward cards
+  - popups
+  - wave info/baddy info panels
+- Save system:
+  - run save data
+  - profile save data
+  - Godot `ResourceSaver` / `ResourceLoader`
+- Map/pathfinding:
+  - `AStarGrid2D`
+  - build preview path validation
+  - dynamic tower blockage
+
+### Large/Important Files
+
+- `GameData/MainScenes/Scripts/game_scene.gd` - 481 lines
+- `GameData/Towers/Scripts/tower_cell.gd` - 199 lines
+- `GameData/Baddies/ScriptsAndProtos/baddy.gd` - 180 lines
+- `GameData/Towers/Scripts/tower_base.gd` - 151 lines
+- `GameData/UIScenes/GUI/Scripts/ui.gd` - 150 lines
+- `GameData/UIScenes/GUI/Scripts/tower_button.gd` - 133 lines
+- `GameData/Baddies/ScriptsAndProtos/baddy_stats.gd` - 128 lines
+- `GameData/Global/game_data.gd` - 118 lines
+
+## Top 10 Recommended Fixes / Improvements
+
+## 1. Remove Exported Builds From The Repository
+
+### What I found
+
+The `Executable/` folder contains built game artifacts:
+
+- `happiness_comes_in_waves.exe`
+- `happiness_comes_in_waves.x86_64`
+- `.pck` files
+- shell launcher
+
+This folder alone is roughly 160 MB+.
+
+The current `.gitignore` only ignores:
+
+```gitignore
+.godot/
+```
+
+### Why it matters
+
+Committing exported builds into Git makes the repository heavy and slow. Every binary update bloats Git history permanently. It also makes collaboration harder because pull/push operations become slower for everyone.
+
+### Suggested fix
+
+Add build outputs to `.gitignore`:
+
+```gitignore
+.godot/
+Executable/
+*.exe
+*.x86_64
+*.pck
+*.dmg
+```
+
+Then distribute builds using GitHub Releases, itch.io, or a separate shared build folder.
+
+## 2. Split Up `game_scene.gd`
+
+### What I found
+
+`GameData/MainScenes/Scripts/game_scene.gd` is doing many jobs:
+
+- wave start logic
+- enemy spawning
+- player health/cash
+- game-over flow
+- tower build mode
+- tower preview
+- pathfinding preview
+- actual tower creation
+- tower selling/upgrading
+- UI popup creation
+- selection handling
+- save/load tower restoration
+
+### Why it matters
+
+This script is the project control center, but it has become too broad. As more features are added, small changes in one area can accidentally break unrelated systems.
+
+### Suggested fix
+
+Split responsibilities into focused scripts/nodes:
+
+- `WaveController` or `WaveSpawner`
+- `BuildController`
+- `EconomyController`
+- `SelectionController`
+- `PopupController`
+- `PathPreviewController`
+
+`game_scene.gd` should mostly wire those controllers together.
+
+## 3. Fix Projectile And Turret Coordinate-Space Issues
+
+### What I found
+
+In `GameData/Towers/Scripts/tower_cell.gd`, targeting uses local positions in places where global positions are probably intended:
+
+```gdscript
+path_turret.look_at(attack_targets[0].position)
+new_projectile.look_at(target.position)
+```
+
+Enemies and projectiles are not guaranteed to share the same parent coordinate space.
+
+### Why it matters
+
+This can create aiming bugs that only appear on certain maps, scene layouts, or parent-node arrangements. Turrets may visually aim wrong, and projectiles may fly in the wrong direction.
+
+### Suggested fix
+
+Use global positions when aiming at units in the world:
+
+```gdscript
+path_turret.look_at(attack_targets[0].global_position)
+new_projectile.look_at(target.global_position)
+```
+
+Also consider spawning projectiles into a neutral world/projectile container instead of as children of the tower cell, so their movement is easier to reason about.
+
+## 4. Make Signal Signatures Consistent
+
+### What I found
+
+Several signals appear to declare one thing but emit another.
+
+Examples:
+
+`baddy.gd` declares:
+
+```gdscript
+signal base_damage(damage)
+```
+
+But emits:
+
+```gdscript
+base_damage.emit(data.current_damage, data.spawn_summon)
+```
+
+`baddy.gd` declares:
+
+```gdscript
+signal update_baddy_display(data: BaddyStats)
+```
+
+But emits:
+
+```gdscript
+update_baddy_display.emit(self)
+```
+
+`tower_button_mod_slot.gd` declares:
+
+```gdscript
+signal mod_updated(StaticBody2D, PrototypeMod)
+```
+
+But emits:
+
+```gdscript
+mod_updated.emit(slot_id, _data)
+```
+
+### Why it matters
+
+Signals are the glue holding the project together. If the declarations are inaccurate, it becomes hard to know what any connection expects, and runtime errors become more likely.
+
+### Suggested fix
+
+Update signal declarations to match actual emitted data:
+
+```gdscript
+signal base_damage(damage: float, is_summon: bool)
+signal update_baddy_display(baddy: Baddy)
+signal mod_updated(slot_id: int, data: PrototypeMod)
+```
+
+Then check all connected functions and make their parameter lists match.
+
+## 5. Fix Buff / AoE Targeting Bugs
+
+### What I found
+
+In `GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_instance.gd`, the AoE target loop appears to damage the buff owner instead of each target:
+
+```gdscript
+for target in onhit_targets:
+	buff_owner.calculate_damage(...)
+```
+
+That likely should be:
+
+```gdscript
+for target in onhit_targets:
+	target.calculate_damage(...)
+```
+
+Also, in `GameData/SupportScenes/Scripts/unit_data_proto.gd`, this is called:
+
+```gdscript
+clamp_movespeed()
+```
+
+But `BaddyStats` defines:
+
+```gdscript
+func clamp_move_speed() -> void:
+```
+
+The names do not match, so the intended baddy movement-speed clamp probably never runs.
+
+### Why it matters
+
+Buff bugs are hard to diagnose because the data files can look correct while runtime effects hit the wrong target or fail silently. This can make balance feel random.
+
+### Suggested fix
+
+- Correct the AoE loop to apply damage/effects to `target`.
+- Rename either `clamp_movespeed()` or `clamp_move_speed()` so the override works.
+- Add simple debug tests for:
+  - aura applies to the right target type
+  - dot damages the right unit
+  - move speed clamps correctly
+
+## 6. Clean Up Save / New-Game State
+
+### What I found
+
+`SaveDataRun.new_game` is used as a setup flag in multiple places.
+
+For example:
+
+- `scene_handler.gd` sets it when starting a new game.
+- `ui.gd` uses it to decide how many tower buttons to create.
+- `inventory_ui.gd` flips it to `false` during setup.
+- `game_scene.gd` uses it to decide whether to restore saved towers.
+
+### Why it matters
+
+This makes scene initialization order very important. If a script runs earlier or later than expected, the game may treat a new run like a loaded run, or vice versa.
+
+### Suggested fix
+
+Separate the concepts:
+
+- `is_new_run`: saved run metadata
+- `needs_initial_setup`: temporary scene setup flag
+- explicit functions:
+  - `SaveManager.start_new_run()`
+  - `SaveManager.load_run()`
+  - `SaveManager.initialize_new_run_defaults()`
+
+Avoid having UI scripts flip global save-state flags during `_ready()`.
+
+## 7. Harden Tower Placement And Path Preview Logic
+
+### What I found
+
+Tower placement preview mutates `astar_preview` and pathfinding layers during mouse movement. The logic for valid placement is mixed into `update_tower_preview()`.
+
+### Why it matters
+
+Tower defense placement rules are one of the most important parts of the game. A tower should not be placeable if it blocks the path, overlaps existing towers, or lands on blocked cells. The current logic may work, but it is hard to test and easy to break.
+
+### Suggested fix
+
+Extract placement checks into focused functions:
+
+```gdscript
+func can_place_tower(cells: Array[Vector2i]) -> bool
+func would_block_path(cells: Array[Vector2i]) -> bool
+func get_tower_cells(center: Vector2i, shape: Array[Vector2i], rotation: float) -> Array[Vector2i]
+```
+
+Then `update_tower_preview()` can become mostly visual:
+
+- calculate cells
+- call `can_place_tower`
+- set preview color
+- draw preview path
+
+## 8. Avoid Creating Tweens Every Physics Frame
+
+### What I found
+
+In `GameData/Baddies/ScriptsAndProtos/baddy.gd`, this happens inside `_physics_process()`:
+
+```gdscript
+var tween = get_tree().create_tween()
+tween.tween_property(self, "rotation", global_position.angle_to_point(current_path_point), 0.15)
+```
+
+### Why it matters
+
+Creating a new tween every physics frame for every enemy can become expensive as enemy count grows. It can also create overlapping tweens fighting each other.
+
+### Suggested fix
+
+Use direct smoothing instead:
+
+```gdscript
+var target_rotation := global_position.angle_to_point(current_path_point)
+rotation = lerp_angle(rotation, target_rotation, 10.0 * delta)
+```
+
+Or create a tween only when the target waypoint changes.
+
+## 9. Add Resource/Data Validation
+
+### What I found
+
+The project relies heavily on `.tres` resources, which is good for Godot. But many systems assume data is complete:
+
+- level arrays have enough entries
+- character mod pools are not empty
+- reward pools have enough unique rewards
+- baddy directories exist
+- boss waves have boss resources
+- textures/icons are assigned
+- buffs have valid targets and durations
+
+### Why it matters
+
+As content grows, a single incomplete resource can break runtime. A validation pass catches problems before playtesting.
+
+### Suggested fix
+
+Create a debug-only validation script that checks all resources on startup or through an editor tool:
+
+- every `PrototypeMod` has 5 values for level-based arrays
+- every `BaddyStats` resource has valid spawn data
+- every buff has valid duration/stack arrays
+- every reward pool has enough valid entries
+- no null textures for visible UI cards
+
+This is a high-leverage quality-of-life tool for a data-driven game.
+
+## 10. Improve UI Responsiveness And Player-Facing Polish
+
+### What I found
+
+The project has a lot of UI already, but some parts are fixed or incomplete:
+
+- project viewport is set to 1600x900
+- hotkeys only cover tower buttons 1 and 2
+- popup positioning uses mouse position plus fixed offsets
+- reward card stats check `data.current_aoe` before stats are necessarily initialized
+- some labels/text likely need polish before external playtests
+
+### Why it matters
+
+Even when the underlying game works, unclear UI makes a tower defense game feel harder to understand than it is. Since the game has modular tower building, the UI needs to make cause/effect obvious.
+
+### Suggested fix
+
+- Make all tower buttons hotkeyable.
+- Use anchors/containers more aggressively for responsive layout.
+- Clamp popups to the viewport so they do not appear off-screen.
+- Show clear tower/mod stat changes before and after upgrades.
+- Add hover explanations for power, aura mode, weapon range, and net power.
+
+## Smaller Notes
+
+### Naming / Typos
+
+There are a few typos in comments and strings, such as:
+
+- `DIRETORY`
+- `indictator`
+- `instatiation`
+- `unti`
+- `mulitplicatives`
+- `MAX_HEATLH`
+
+These are minor, but cleaning them up makes the project easier to navigate.
+
+### Dead / Placeholder Code
+
+Several places have placeholder or currently-unused functions, such as:
+
+- `get_slot_id()` in `tower_base.gd`
+- `end_game()` in `ui.gd`
+- timer hover popup stubs
+- `defunct_recalculate_stats()`
+
+Keeping old experiments around is normal early on, but it eventually makes the project harder to read. Either delete them or move them into a scratch/prototype folder.
+
+### Comments
+
+There are useful comments explaining intent, especially around tower build data and buff behavior. The next step is to convert some of those intent comments into real types/classes instead of dictionaries.
+
+For example, instead of passing this around:
+
+```gdscript
+{
+	"aura_tower": bool,
+	"mods": Dictionary,
+	"power_buffs": Dictionary,
+	"shape": Array[Vector2i]
+}
+```
+
+Consider a `TowerBuildData` resource/class with named typed fields.
+
+## Suggested Priority Order
+
+If I were doing the next work sprint, I would tackle it in this order:
+
+1. Remove exported builds from Git and update `.gitignore`.
+2. Fix obvious runtime bugs:
+   - signal signature mismatches
+   - projectile global/local position bugs
+   - AoE buff target bug
+   - move speed clamp naming bug
+3. Split `game_scene.gd` enough that wave/build/economy logic are separate.
+4. Extract tower placement validation into testable functions.
+5. Clean up save/new-run initialization.
+6. Add a resource validation tool.
+7. Improve UI clarity for tower mods, power, range, and rewards.
+
+## Overall Assessment
+
+This is a promising early project. The tower/mod/buff architecture is ambitious, and the codebase already has a lot of the right building blocks for a replayable tower defense game.
+
+The main recommendation is to pause feature expansion briefly and stabilize the foundation. If the project keeps growing before the contracts are tightened, the game may become harder to debug than necessary. If the current systems are cleaned up now, the friend will have a much easier time adding enemies, towers, mods, waves, and balance changes later.

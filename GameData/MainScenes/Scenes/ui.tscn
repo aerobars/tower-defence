@@ -1,0 +1,268 @@
+[gd_scene format=3 uid="uid://c5jbor1m8vegr"]
+
+[ext_resource type="Script" uid="uid://4eacfeat0kea" path="res://GameData/UI/GUI/Scripts/ui.gd" id="1_y5r40"]
+[ext_resource type="StyleBox" uid="uid://5vfbp6tawj1m" path="res://VisualResources/Inventory/inventory_bg.tres" id="2_jnydt"]
+[ext_resource type="Script" uid="uid://cpe4nt5gmn0y2" path="res://GameData/UI/Inventory/Scripts/inventory_ui.gd" id="3_vatr5"]
+[ext_resource type="Resource" uid="uid://c3m5eg7swenlw" path="res://GameData/UI/Inventory/player_inventory.tres" id="4_irr8j"]
+[ext_resource type="PackedScene" uid="uid://jug24xmepvb3" path="res://GameData/UI/GUI/Scenes/baddy_info_foldable.tscn" id="5_f16l4"]
+[ext_resource type="Texture2D" uid="uid://cdw2euysxu36c" path="res://Assets/UI/gear.png" id="6_mt85l"]
+[ext_resource type="Texture2D" uid="uid://br7enwm10hpjq" path="res://Assets/Icons/home.png" id="7_mw6ki"]
+[ext_resource type="Texture2D" uid="uid://b4p4546v03cif" path="res://Assets/UI/HPbar.jpg" id="8_o0qg6"]
+[ext_resource type="FontVariation" uid="uid://b1rvyi5eh08vx" path="res://VisualResources/Fonts/kfn_50_o1.tres" id="9_nlg1v"]
+[ext_resource type="FontVariation" uid="uid://yac1636nknky" path="res://VisualResources/Fonts/kfn_30_o1.tres" id="10_nlwgu"]
+[ext_resource type="Texture2D" uid="uid://b6ltkudoulh6l" path="res://Assets/Icons/play.png" id="11_yno8d"]
+[ext_resource type="Texture2D" uid="uid://cjwamwf662cid" path="res://Assets/Icons/pause.png" id="12_mobaj"]
+[ext_resource type="Texture2D" uid="uid://djt7tufi2ucng" path="res://Assets/Icons/fastForward.png" id="13_uet6o"]
+[ext_resource type="PackedScene" uid="uid://bfclp7iyn1iv8" path="res://GameData/UI/GUI/Scenes/tutorial.tscn" id="14_shygb"]
+[ext_resource type="PackedScene" uid="uid://bs6ykvufkigbj" path="res://GameData/UI/GUI/Scenes/game_over_message.tscn" id="15_kqjq2"]
+[ext_resource type="PackedScene" uid="uid://bgjp1sb8trhb3" path="res://GameData/UI/GUI/Scenes/pause_menu.tscn" id="16_k8xuc"]
+
+[node name="UI" type="CanvasLayer" unique_id=1927509624 node_paths=PackedStringArray("path_hp_bar", "path_hp_text", "path_cash_display", "path_game_message", "path_baddy_info_foldbable", "path_next_wave_button", "path_pause_button", "path_ff_button", "path_build_bar", "path_inventory_ui", "path_tower_buttons", "path_game_bookend_popup", "path_tutorial", "path_pause_menu")]
+script = ExtResource("1_y5r40")
+path_hp_bar = NodePath("HUD/InfoBar/InfoContainer/HealthBar")
+path_hp_text = NodePath("HUD/InfoBar/InfoContainer/HealthBar/HealthAmount")
+path_cash_display = NodePath("HUD/InfoBar/InfoContainer/Money")
+path_game_message = NodePath("HUD/GameMessage")
+path_baddy_info_foldbable = NodePath("HUD/BuildBar/BaddyInfo")
+path_next_wave_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/NextWave")
+path_pause_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/PausePlay")
+path_ff_button = NodePath("HUD/InfoBar/MarginContainer/GameControls/FastForward")
+path_build_bar = NodePath("HUD/BuildBar")
+path_inventory_ui = NodePath("HUD/BuildBar/InventoryContainer/InventoryUI")
+path_tower_buttons = NodePath("HUD/BuildBar/TowerButtonsContainer")
+path_game_bookend_popup = NodePath("GameOverMessage")
+path_tutorial = NodePath("Tutorial")
+path_pause_menu = NodePath("PauseMenu")
+
+[node name="HUD" type="Control" parent="." unique_id=341855570]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+mouse_filter = 2
+
+[node name="BuildBar" type="ColorRect" parent="HUD" unique_id=1464569426]
+custom_minimum_size = Vector2(1280, 100)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
+
+[node name="InventoryContainer" type="PanelContainer" parent="HUD/BuildBar" unique_id=983615032]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -160.0
+offset_right = 128.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("2_jnydt")
+
+[node name="InventoryUI" type="GridContainer" parent="HUD/BuildBar/InventoryContainer" unique_id=1113265142 node_paths=PackedStringArray("game_scene")]
+layout_mode = 2
+mouse_filter = 2
+columns = 3
+script = ExtResource("3_vatr5")
+data = ExtResource("4_irr8j")
+game_scene = NodePath("")
+
+[node name="TowerButtonsContainer" type="HBoxContainer" parent="HUD/BuildBar" unique_id=791660972]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -606.0
+offset_top = -144.0
+offset_right = -231.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/separation = 150
+alignment = 1
+
+[node name="BaddyInfo" parent="HUD/BuildBar" unique_id=1522176865 instance=ExtResource("5_f16l4")]
+layout_mode = 1
+offset_top = -31.0
+offset_bottom = 0.0
+
+[node name="InfoBar" type="ColorRect" parent="HUD" unique_id=992569995]
+self_modulate = Color(0, 0, 0, 0.470588)
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 71.0
+grow_horizontal = 2
+
+[node name="SettingsButton" type="HBoxContainer" parent="HUD/InfoBar" unique_id=2144645615]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -116.0
+offset_bottom = 71.0
+grow_horizontal = 0
+
+[node name="Settings" type="TextureButton" parent="HUD/InfoBar/SettingsButton" unique_id=94108885]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("6_mt85l")
+
+[node name="InfoContainer" type="HBoxContainer" parent="HUD/InfoBar" unique_id=819702424]
+layout_mode = 1
+offset_right = 636.0
+offset_bottom = 60.0
+
+[node name="HealthIcon" type="TextureRect" parent="HUD/InfoBar/InfoContainer" unique_id=111915540]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 10
+texture = ExtResource("7_mw6ki")
+
+[node name="HealthBar" type="TextureProgressBar" parent="HUD/InfoBar/InfoContainer" unique_id=901892204]
+custom_minimum_size = Vector2(250, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+value = 100.0
+nine_patch_stretch = true
+texture_under = ExtResource("8_o0qg6")
+texture_progress = ExtResource("8_o0qg6")
+tint_under = Color(0.215686, 0.215686, 0.215686, 1)
+tint_progress = Color(0, 0.658824, 0, 1)
+
+[node name="HealthAmount" type="Label" parent="HUD/InfoBar/InfoContainer/HealthBar" unique_id=1766242558]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "100/100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Symbol" type="Label" parent="HUD/InfoBar/InfoContainer" unique_id=825326048]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
+theme_override_fonts/font = ExtResource("9_nlg1v")
+theme_override_font_sizes/font_size = 50
+text = "$"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Money" type="Label" parent="HUD/InfoBar/InfoContainer" unique_id=937779731]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.705882)
+theme_override_fonts/font = ExtResource("10_nlwgu")
+theme_override_font_sizes/font_size = 30
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="HUD/InfoBar/InfoContainer" unique_id=92702832]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/InfoBar" unique_id=1722577391]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -82.0
+offset_right = 82.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="GameControls" type="HBoxContainer" parent="HUD/InfoBar/MarginContainer" unique_id=2072497832]
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="NextWave" type="Button" parent="HUD/InfoBar/MarginContainer/GameControls" unique_id=969558714]
+process_mode = 3
+layout_mode = 2
+text = "Next Wave"
+
+[node name="PausePlay" type="TextureButton" parent="HUD/InfoBar/MarginContainer/GameControls" unique_id=1253388627]
+process_mode = 3
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+toggle_mode = true
+button_pressed = true
+texture_normal = ExtResource("11_yno8d")
+texture_pressed = ExtResource("12_mobaj")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="FastForward" type="TextureButton" parent="HUD/InfoBar/MarginContainer/GameControls" unique_id=81770937]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("13_uet6o")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="GameMessage" type="Label" parent="HUD" unique_id=2054085143]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.0
+offset_top = -51.5
+offset_right = 86.0
+offset_bottom = 51.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 0.78431374)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 75
+
+[node name="Tutorial" parent="." unique_id=1931990489 instance=ExtResource("14_shygb")]
+visible = false
+
+[node name="GameOverMessage" parent="." unique_id=797061591 instance=ExtResource("15_kqjq2")]
+visible = false
+
+[node name="PauseMenu" parent="." unique_id=1103320355 instance=ExtResource("16_k8xuc")]
+visible = false
+
+[connection signal="button_up" from="HUD/InfoBar/SettingsButton/Settings" to="." method="_on_settings_button_up"]
+[connection signal="pressed" from="HUD/InfoBar/MarginContainer/GameControls/NextWave" to="." method="_on_next_wave_pressed"]
+[connection signal="pressed" from="HUD/InfoBar/MarginContainer/GameControls/PausePlay" to="." method="_on_pause_play_pressed"]
+[connection signal="pressed" from="HUD/InfoBar/MarginContainer/GameControls/FastForward" to="." method="_on_fast_forward_pressed"]
+[connection signal="close_pause_menu" from="PauseMenu" to="." method="_on_pause_menu_close_pause_menu"]
+[connection signal="open_settings" from="PauseMenu" to="." method="_on_pause_menu_open_settings"]
+[connection signal="save_and_quit" from="PauseMenu" to="." method="_on_pause_menu_save_and_quit"]

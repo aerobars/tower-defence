@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ModWeapon" format=3 uid="uid://c7l6qplp7tkmo"]
+
+[ext_resource type="Script" uid="uid://stua4x4ldhoc" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd" id="1_d2yy7"]
+[ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_ynro4"]
+
+[resource]
+script = ExtResource("2_ynro4")
+base_damage_levels = Array[float]([15.0, 20.0, 25.0, 30.0, 35.0])
+base_power_levels = Array[int]([0, 0, 0, 0, 0])
+base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
+mod_class = 2
+info_name = "Powerless Weapon"
+info_description = "Does not require power"
+metadata/_custom_type_script = "uid://djuix1w1w7p4i"

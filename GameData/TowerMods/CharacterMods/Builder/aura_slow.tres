@@ -11,7 +11,7 @@ region = Rect2(32, 32, 32, 32)
 [resource]
 script = ExtResource("2_0uy1i")
 buff_data = ExtResource("1_lqh3p")
-base_range_levels = Array[float]([250.0, 250.0, 250.0, 250.0, 250.0])
+base_range_levels = Array[float]([200.0, 200.0, 200.0, 200.0, 200.0])
 info_name = "Slow Aura"
 info_description = "Slows enemies in the area. Doesn't stack"
 info_texture = SubResource("AtlasTexture_lwfwe")

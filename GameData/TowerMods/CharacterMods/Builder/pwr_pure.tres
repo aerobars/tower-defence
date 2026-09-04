@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://bqis681bjjcil"]
+
+[ext_resource type="Script" uid="uid://bdvisqhdbqwsu" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_wave_clear.gd" id="1_03gpj"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_bruob"]
+
+[resource]
+script = ExtResource("2_bruob")
+power_surplus_buffable_stats = Array[int]([])
+base_power_levels = Array[int]([6, 7, 8, 9, 10])
+mod_class = 1
+info_name = "Pure Power"
+info_description = "No abilities, no surplus buffs, just pure power"
+metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

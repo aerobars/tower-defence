@@ -11,7 +11,7 @@ region = Rect2(10, 0, 32, 32)
 [resource]
 script = ExtResource("2_55rpv")
 power_surplus_buffable_stats = Array[int]([2])
-base_power_levels = Array[int]([4, 4, 4, 4, 4])
+base_power_levels = Array[int]([3, 4, 5, 6, 6])
 mod_class = 1
 info_name = "Attack Speed Boost Power"
 info_description = "Provides Power and increases the attack speed of aura or weapon mods by 10% per point of surplus power"

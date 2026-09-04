@@ -15,7 +15,6 @@ damage_tags = 2
 base_attack_speed_levels = Array[float]([2.0, 2.0, 2.0, 2.0, 2.0])
 base_damage_levels = Array[float]([20.0, 40.0, 60.0, 80.0, 100.0])
 base_multitarget_levels = Array[int]([99, 99, 99, 99, 99])
-base_power_levels = Array[int]([-2, -2, -2, -2, -2])
 base_range_levels = Array[float]([75.0, 75.0, 75.0, 75.0, 75.0])
 mod_class = 2
 info_name = "Big Stompa"

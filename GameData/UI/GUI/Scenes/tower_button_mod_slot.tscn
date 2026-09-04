@@ -14,8 +14,8 @@ script = ExtResource("1_xjtiu")
 shape = SubResource("RectangleShape2D_exgtw")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=905551119]
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+offset_left = -14.0
+offset_top = -14.0
+offset_right = 14.0
+offset_bottom = 14.0
 mouse_filter = 2

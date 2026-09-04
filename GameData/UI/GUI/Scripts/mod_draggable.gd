@@ -40,6 +40,7 @@ func _process(_delta: float) -> void:
 		elif Input.is_action_just_released("ui_accept"):
 			GameData.is_dragging = false
 			droppable_check()
+			draggable = false
 
 func droppable_check() -> void:
 	var tween = get_tree().create_tween()
@@ -48,7 +49,6 @@ func droppable_check() -> void:
 		tween.tween_property(self, "global_position", mod_slot_ref.global_position, 0.2).set_ease(Tween.EASE_OUT)
 		in_inventory = false
 		mod_slot_ref.update(data, true, self)
-		#mod_slot_ref.get_parent().data
 	elif in_inventory: #if mod slot started in inventory and wasn't added to mod slot
 		tween.tween_property(self, "global_position", inventory_pos, 0.2).set_ease(Tween.EASE_OUT)
 		await tween.finished
@@ -59,7 +59,6 @@ func droppable_check() -> void:
 		prev_slot_ref.update(null, false)
 		await tween.finished
 		queue_free()
-	draggable = false
 
 func check_mod_slot_state(tween: Tween) -> void:
 	if prev_slot_ref != null: #if it's not null that means it occupied a previous slot
@@ -98,6 +97,7 @@ func _on_area_2d_body_entered(slot: TowerButtonModSlot) -> void: #react to playe
 	inside_droppable = true
 	slot.get_focus()
 	mod_slot_ref = slot
+	print(mod_slot_ref)
 
 func _on_area_2d_body_exited(slot: TowerButtonModSlot) -> void:
 	inside_droppable = false
