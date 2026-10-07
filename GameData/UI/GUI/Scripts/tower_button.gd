@@ -21,8 +21,8 @@ const TOWER_CELL_TEXTURE := preload("res://Assets/Towers/towerDefense_tile181.pn
 @export var mod_slot_container : Container
 @export var tower_icon_container :Container
 @export var pwr_icon : TextureRect
-@export var button_data : TowerButtonData #contains mod slot data, slot count, and id
 @export var slot_radius : float = 64
+var button_data : TowerButtonData #contains mod slot data, slot count, and id
 var slot_data_ref : Dictionary
 var button_slots : Array =[]
 var cell_size : int

@@ -66,11 +66,15 @@ func get_act_data(filepath: String) -> void:
 		act_baddies[i] = []
 		for file in dir:
 			if file.ends_with(".tres"):
+				if OS.has_feature("editor"):
+					ValidatorResource.validate(filepath + file)
 				act_baddies[i].append(file)
 		
 		act_bosses[i] = []
 		for file in boss_dir:
 			if file.ends_with(".tres"):
+				if OS.has_feature("editor"):
+					ValidatorResource.validate(filepath + file)
 				act_bosses[i].append(file)
 
 func get_mod_data(filepath: String, dir_name) -> void:
@@ -83,8 +87,10 @@ func get_mod_data(filepath: String, dir_name) -> void:
 		if file.ends_with("/"):
 			var subdir = file.left(-1)
 			character_mods[subdir] = []
-			get_mod_data(filepath + "/" + subdir, subdir)
+			get_mod_data(filepath + subdir + "/", subdir)
 		elif file.ends_with(".tres"):
+			if OS.has_feature("editor"):
+				ValidatorResource.validate(filepath + file)
 			character_mods[dir_name].append(file)
 		else:
 			print("Invalid filetype found in CharacterMods")

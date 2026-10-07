@@ -14,7 +14,7 @@ expand_margin_top = 5.0
 expand_margin_right = 5.0
 expand_margin_bottom = 5.0
 
-[node name="RewardSelection" type="Control" node_paths=PackedStringArray("reward_container")]
+[node name="RewardSelection" type="Control" unique_id=1474081123 node_paths=PackedStringArray("reward_container")]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -27,7 +27,7 @@ size_flags_vertical = 0
 script = ExtResource("1_gipd4")
 reward_container = NodePath("PanelContainer/HBoxContainer")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1650513369]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -42,6 +42,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_whhxv")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=328504065]
 layout_mode = 2
 theme_override_constants/separation = 25

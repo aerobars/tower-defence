@@ -9,6 +9,19 @@ const TOWER_BASE_SCENE := preload("res://GameData/Towers/Scenes/tower_base.tscn"
 
 var current_towers : Array[TowerBase]
 
+#returns dictionary of mods currently in play and their levels
+var mods_in_play : Dictionary[String, ModsInPlay] :
+	get:
+		var mods : Dictionary[String, ModsInPlay]
+		for tower in current_towers:
+			for child in tower.tower_children:
+				var mod_name = child.data.info_name
+				if not mods.has(mod_name):
+					mods[mod_name] = ModsInPlay.new(child.data)
+				mods[mod_name].append_level(tower.tower_data.level)
+				mods[mod_name].sort_levels()
+		return mods
+
 func create_tower(
 	_build_data: TowerBuildData, 
 	connected_btn: BuildTowerButton, 

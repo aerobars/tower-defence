@@ -133,9 +133,12 @@ func update_baddy_info(baddy: Baddy) -> void:
 func clear_baddy_info() -> void:
 	path_baddy_info_foldbable.clear_display()
 
-func game_over(_result) -> void:
+func game_over(result) -> void:
 	path_game_bookend_popup.game_over = true
-	update_game_message("Game Over!", 2.0, 0.0, 75)
+	if result:
+		update_game_message("You win!", 2.0, 0.0, 75)
+	else:
+		update_game_message("Game Over!", 2.0, 0.0, 75)
 	path_game_bookend_popup.get_node("TextureRect/Label").text = "Thank you for playing! 
 	Please click the button below to complete a quick feedback survey and return to the main menu (and start a new game :D )"
 	path_game_bookend_popup.get_node("TextureRect/Button").text = "Go to survey"

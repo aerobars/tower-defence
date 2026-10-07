@@ -6,11 +6,11 @@ signal clear_popup
 #SlotData holds TowerMod and quantity
 var slot_data : InventorySlotData : set = set_slot_data
 
-@onready var image : TextureRect = $TextureRect
+@export var mod_icon : TextureRect 
 @onready var amount : Label = $ColorRect/Label
 @onready var hover_timer : Timer = $Timer
 
-const HOVER_DELAY : float = 0.5
+const HOVER_DELAY : float = 0.75
 const POPUP_TYPE : String = "mod"
 
 
@@ -21,10 +21,10 @@ func _ready() -> void:
 
 func set_slot_data(value: InventorySlotData):
 	slot_data = value
-	#if statement only needed if I want empty inventory slots; I don't
+	#if statement only needed if I want empty inventory slots; I don't currently
 	#if slot_data == null:
 	#	return
-	image.texture = value.inventory_mod.info_texture
+	mod_icon.texture = value.inventory_mod.info_texture
 	#image.modulate = value.inventory_mod.info_modulate
 	amount.text = str(value.quantity)
 

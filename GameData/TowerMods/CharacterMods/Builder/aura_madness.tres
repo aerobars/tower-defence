@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="ModAura" format=3 uid="uid://cl8yayxad0v3u"]
+
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="1_pal3k"]
+[ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="1_u3kki"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="2_d8121"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="3_hnfqa"]
+
+[sub_resource type="Resource" id="Resource_q7o3e"]
+script = ExtResource("1_pal3k")
+stat = 2
+modification_type = 1
+modification_amount = Array[float]([0.25, 0.5, 0.75, 1.0, 1.5])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
+[sub_resource type="Resource" id="Resource_5o0m5"]
+script = ExtResource("1_pal3k")
+stat = 8
+modification_type = 1
+modification_amount = Array[float]([-0.75, -0.75, -0.75, -0.75, -0.75])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
+[sub_resource type="Resource" id="Resource_s1u4x"]
+script = ExtResource("2_d8121")
+modifying_stats = Array[ExtResource("1_pal3k")]([SubResource("Resource_q7o3e"), SubResource("Resource_5o0m5")])
+info_name = "Madness"
+buff_stack_limit = Array[int]([1, 1, 1, 1, 1])
+buff_targets = 1
+buff_persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1u4x"]
+atlas = ExtResource("3_hnfqa")
+region = Rect2(608, 176, 16, 16)
+
+[resource]
+script = ExtResource("1_u3kki")
+buff_data = SubResource("Resource_s1u4x")
+base_power_levels = Array[int]([-3, -3, -3, -3, -3])
+base_range_levels = Array[float]([350.0, 350.0, 350.0, 350.0, 350.0])
+info_name = "Madness Aura"
+info_description = "Greatly increased attack speed at the cost of reduce damage."
+info_texture = SubResource("AtlasTexture_s1u4x")
+metadata/_custom_type_script = "uid://bshp47gjxu8sm"

@@ -1,16 +1,21 @@
 [gd_scene format=3 uid="uid://2eyhy1p2h3n1"]
 
 [ext_resource type="Script" uid="uid://30g7ngs8qgpj" path="res://GameData/UI/GUI/Scripts/mod_draggable.gd" id="1_nyg7q"]
+[ext_resource type="Texture2D" uid="uid://b1o78gvsbisma" path="res://Assets/UI/mod_border.png" id="2_700vd"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eql1v"]
 size = Vector2(32, 32)
 
-[node name="InventoryDraggable" type="Node2D" unique_id=11616051 groups=["droppable"]]
+[node name="InventoryDraggable" type="Node2D" unique_id=11616051 node_paths=PackedStringArray("mod_icon") groups=["droppable"]]
 script = ExtResource("1_nyg7q")
+mod_icon = NodePath("ModIcon")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1432767714]
+[node name="ModIcon" type="Sprite2D" parent="." unique_id=1432767714]
 position = Vector2(-16, -16)
 offset = Vector2(16, 16)
+
+[node name="ModBorder" type="Sprite2D" parent="." unique_id=1623765992]
+texture = ExtResource("2_700vd")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=305652838]
 position = Vector2(-16, -16)

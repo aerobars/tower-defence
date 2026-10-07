@@ -43,10 +43,9 @@ func setup_stats() -> void:
 	
 
 func base_stats_array(value : String) -> String:
-	var base_array
 	var bold_text : String = "["
 	var base_name : String = "base_" + value + "_levels"
-	base_array = data.get(base_name)
+	var base_array = data.get(base_name)
 	for i in base_array.size():
 		if i == level:
 			bold_text += "[b]%s[/b]" % str(base_array[i]) + ", "

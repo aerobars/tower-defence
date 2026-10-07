@@ -68,13 +68,14 @@ grow_vertical = 0
 mouse_filter = 2
 theme_override_styles/panel = ExtResource("2_jnydt")
 
-[node name="InventoryUI" type="GridContainer" parent="HUD/BuildBar/InventoryContainer" unique_id=1113265142 node_paths=PackedStringArray("game_scene")]
+[node name="InventoryUI" type="GridContainer" parent="HUD/BuildBar/InventoryContainer" unique_id=1113265142]
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
 columns = 3
 script = ExtResource("3_vatr5")
 data = ExtResource("4_irr8j")
-game_scene = NodePath("")
 
 [node name="TowerButtonsContainer" type="HBoxContainer" parent="HUD/BuildBar" unique_id=791660972]
 process_mode = 3

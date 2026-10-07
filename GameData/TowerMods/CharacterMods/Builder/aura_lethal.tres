@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="ModAura" format=3 uid="uid://c6ni50xl2ppri"]
+
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_vkxef"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_x5x04"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="3_7k4dr"]
+[ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="4_bs71l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1u4x"]
+atlas = ExtResource("1_vkxef")
+region = Rect2(368, 336, 16, 16)
+
+[sub_resource type="Resource" id="Resource_st03m"]
+script = ExtResource("2_x5x04")
+stat = 2
+modification_type = 1
+modification_amount = Array[float]([0.1, 0.15, 0.2, 0.25, 0.3])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
+[sub_resource type="Resource" id="Resource_s1u4x"]
+script = ExtResource("2_x5x04")
+stat = 8
+modification_amount = Array[float]([1.0, 2.0, 3.0, 4.0, 5.0])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
+[sub_resource type="Resource" id="Resource_2288k"]
+script = ExtResource("3_7k4dr")
+modifying_stats = Array[ExtResource("2_x5x04")]([SubResource("Resource_st03m"), SubResource("Resource_s1u4x")])
+info_name = "Attack Speed Aura"
+info_display_icon = SubResource("AtlasTexture_s1u4x")
+buff_stack_limit = Array[int]([1, 1, 1, 1, 1])
+buff_targets = 1
+buff_persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xsxll"]
+atlas = ExtResource("1_vkxef")
+region = Rect2(416, 176, 16, 16)
+
+[resource]
+script = ExtResource("4_bs71l")
+buff_data = SubResource("Resource_2288k")
+base_range_levels = Array[float]([150.0, 200.0, 250.0, 300.0, 350.0])
+info_name = "Lethality Aura"
+info_description = "Boosts tower's attack speed and damage. Does not stack."
+info_texture = SubResource("AtlasTexture_xsxll")
+metadata/_custom_type_script = "uid://bshp47gjxu8sm"

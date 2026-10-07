@@ -184,7 +184,7 @@ func new_baddy_spawn(new_baddy) -> void:
 func on_base_damage(damage) -> void:
 	player_health -= damage
 	if player_health <= 0 and not is_game_over:
-		game_over()
+		game_over(false)
 
 func wave_ended() -> void:
 	if is_game_over:
@@ -194,12 +194,34 @@ func wave_ended() -> void:
 	wave_end_effect_tracker = {}
 	temp_reward_bonus = 0
 	wave_cleared.emit()
+	#end_of_wave_effects()
 	path_ui.create_new_reward(temp_reward_bonus)
 	#load next level/wave selection
 
 ##Ideally, in the instances of a lower boon limit, would use the values from higher level towers over lower level,
 ##doesn't do this currently(does FIFO) but something to change in the future
 func end_of_wave_effects(data: AbilityWaveClear, level: int) -> void:
+	var cur_mods = path_tower_container.mods_in_play
+	for mod in cur_mods:
+		var mod_data = cur_mods[mod].data
+		if mod_data is ModPower and mod_data.abilities.size() > 0:
+			for ability in mod_data.abilities:
+				for i in range(ability.boon_limit):
+					var boon_value = mod_data.boon_amount[cur_mods[mod].levels[i]]
+					match ability.boon_type:
+						AbilityWaveClear.Boon.HEAL:
+							SaveManager.save_data_run.current_player_health += boon_value
+						AbilityWaveClear.Boon.MONEY:
+							SaveManager.save_data_run.current_cash += mod_data.boon_amount[cur_mods[mod].levels[i]]
+						AbilityWaveClear.Boon.UPGRADE:
+							var rand_tower_base = path_tower_container.get_child(randi() % path_tower_container.get_child_count())
+							while rand_tower_base.tower_data.level == 4:
+								rand_tower_base = path_tower_container.get_child(randi() % path_tower_container.get_child_count())
+							rand_tower_base.level_up()
+						AbilityWaveClear.Boon.REWARD_CHOICE:
+							temp_reward_bonus += 1
+	
+	return
 	if not wave_end_effect_tracker.has(data.boon_type):
 		wave_end_effect_tracker[data.boon_type] = 0
 	wave_end_effect_tracker[data.boon_type] += 1
@@ -218,9 +240,9 @@ func end_of_wave_effects(data: AbilityWaveClear, level: int) -> void:
 		AbilityWaveClear.Boon.REWARD_CHOICE:
 			temp_reward_bonus += 1
 
-func game_over() -> void:
+func game_over(result) -> void:
 	is_game_over = true
-	path_ui.game_over(is_game_over)
+	path_ui.game_over(result)
 
 ## Building Functions
 
