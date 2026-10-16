@@ -5,7 +5,9 @@ class_name SaveDataRun extends Resource
 var new_game : bool = true
 var init_btn_count : int = 2
 var init_tower_shapes : Array[Array] = [[Vector2i(0, -1), Vector2i(0, 0)] , [Vector2i(0, -1), Vector2i(0, 0), Vector2i(-1, 0)]]
-var init_inventory = load("res://GameData/UI/Inventory/player_inventory.tres")
+var init_inventory = load("res://GameData/UI/Inventory/test_inventory.tres")
+#"res://GameData/UI/Inventory/test_inventory.tres" swap for testing
+#"res://GameData/UI/Inventory/player_inventory.tres"
 
 
 ## Act Related
@@ -23,6 +25,7 @@ var init_inventory = load("res://GameData/UI/Inventory/player_inventory.tres")
 ##Initial value is starting cash for new games
 @export var current_cash : int = 50
 @export var current_player_health : int = 100
+@export_range(1, 1000) var current_max_health : int = 100
 
 ## Mod / Tower Related
 

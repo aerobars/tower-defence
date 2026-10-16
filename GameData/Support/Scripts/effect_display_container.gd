@@ -1,6 +1,6 @@
 class_name EffectDisplayContainer extends HBoxContainer
 
-const EFFECT_DISPLAY_SCENE = preload("res://GameData/SupportScenes/Scenes/effect_display.tscn")
+const EFFECT_DISPLAY_SCENE = preload("res://GameData/Support/Scenes/effect_display.tscn")
 
 func update_display(effect, effect_stacks: int = 1) -> void:
 	for child in get_children(): #check if mod exists in inventory and increment

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ModPower" format=3 uid="uid://c0b02to1odbhe"]
+
+[ext_resource type="Script" uid="uid://bdvisqhdbqwsu" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_wave_clear.gd" id="1_uv2nw"]
+[ext_resource type="Resource" uid="uid://bfj5yrmb4et8p" path="res://GameData/BuffsAndAbilities/Abilities/waveclear_test.tres" id="2_lplqa"]
+[ext_resource type="Texture2D" uid="uid://c5d7v1851rr54" path="res://Assets/Icons/power.png" id="2_yctj0"]
+[ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="3_lplqa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ik7bv"]
+atlas = ExtResource("2_yctj0")
+region = Rect2(8, 8, 32, 32)
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("3_lplqa")
+power_surplus_buffable_stats = Array[int]([])
+abilities = Array[ExtResource("1_uv2nw")]([ExtResource("2_lplqa")])
+base_power_levels = Array[int]([4, 4, 4, 4, 4])
+mod_class = 1
+info_name = "Test Power"
+info_description = "Test Power for testing"
+info_texture = SubResource("AtlasTexture_ik7bv")
+metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

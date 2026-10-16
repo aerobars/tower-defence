@@ -2,6 +2,11 @@
 
 [ext_resource type="Script" uid="uid://stua4x4ldhoc" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_onhit.gd" id="1_1dyhp"]
 [ext_resource type="Script" uid="uid://djuix1w1w7p4i" path="res://GameData/TowerMods/PrototypeScripts/mod_weapon.gd" id="2_575jx"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="2_g7mit"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1u4x"]
+atlas = ExtResource("2_g7mit")
+region = Rect2(592, 224, 16, 16)
 
 [resource]
 script = ExtResource("2_575jx")
@@ -14,4 +19,6 @@ base_pierce_levels = Array[int]([2, 2, 2, 2, 2])
 base_power_levels = Array[int]([-6, -6, -6, -6, -6])
 mod_class = 2
 info_name = "Big Bertha"
+info_description = "big bertha"
+info_texture = SubResource("AtlasTexture_s1u4x")
 metadata/_custom_type_script = "uid://djuix1w1w7p4i"

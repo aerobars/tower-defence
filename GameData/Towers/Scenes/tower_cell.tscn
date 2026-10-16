@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://4eacglye7opc" path="res://Assets/UI/range_overlay.png" id="2_a0cob"]
 [ext_resource type="Texture2D" uid="uid://c44rk0b010555" path="res://Assets/Effects/towerDefense_tile297.png" id="3_a0cob"]
 [ext_resource type="Texture2D" uid="uid://b4ksur272eykf" path="res://Assets/Towers/standard_tower_base_solid.jpg" id="3_a3qir"]
-[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/SupportScenes/Scenes/effect_display_container.tscn" id="4_qw5iw"]
+[ext_resource type="PackedScene" uid="uid://cljxtnwc7h3iu" path="res://GameData/Support/Scenes/effect_display_container.tscn" id="4_qw5iw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n0uum"]
 size = Vector2(52, 52)

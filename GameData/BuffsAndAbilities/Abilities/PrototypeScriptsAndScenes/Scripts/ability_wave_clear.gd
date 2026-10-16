@@ -1,4 +1,5 @@
-##Ability that triggers when a wave has been cleared, Ability targets 
+##Ability that triggers when a wave has been cleared, 
+##Currently processed through GameScene > end_of_wave_effects instead of ability_triggered_proto
 class_name AbilityWaveClear extends AbilityTriggeredPrototype
 
 signal send_ability_data(data: AbilityWaveClear)

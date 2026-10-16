@@ -39,7 +39,9 @@ var baddies_in_range : Array[UnitScenePrototype]
 var attack_targets : Array = [UnitScenePrototype]
 var activation_timer : float = 0.0
 var attack_tracker : int
-
+var level : int : 
+	get:
+		return get_parent().tower_data.level
 
 ## Initial Setup
 
@@ -49,8 +51,8 @@ func _ready():
 		_on_range_body_entered(body)
 	if data is ModPower or data is ModWeapon:
 		for ability in data.abilities:
-			var new_ability = ability.duplicate(true) #ability is duplicated to avoid share instances across baddies
-			data.active_abilities.append(new_ability)
+			var new_ability = ability.duplicate(true) #ability is duplicated to avoid shared instances across baddies
+#			data.active_abilities.append(new_ability) #may be obsolete with ability changes
 			new_ability.ability_setup(self)
 			path_buff_display.update_display(new_ability)
 
@@ -66,7 +68,7 @@ func update_mod(net_power : int = 0) -> void:
 		remove_from_group("towers")
 		return
 	data.net_power = net_power
-	data.setup_stats(get_parent().tower_data.level)
+	data.setup_stats(level)
 	match data.mod_class:
 		0: #Aura
 			if get_parent().aura_tower:
@@ -134,7 +136,7 @@ func _process(delta: float) -> void:
 		if activation_timer >= data.activation_cooldown:
 			if data is ModAura and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.buff_persistent_effect and get_parent().aura_tower:
 				for baddy in baddies_in_range:
-					add_buff(data.buff_data, baddy, get_parent().tower_data.level)
+					add_buff(data.buff_data, baddy, level)
 			elif data is ModWeapon:
 				#attack_tracker += 1
 				for i in data.current_multitarget:
@@ -156,12 +158,12 @@ func _on_range_body_entered(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body)
 		if data.mod_class == data.ModClass.AURA and data.buff_data.buff_persistent_effect:
-			add_buff(data.buff_data, body, get_parent().tower_data.level)
+			add_buff(data.buff_data, body, level)
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		if data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
 			return #nothing gets added for offensive auras in aura mode
 		else:
-			add_buff(data.buff_data, body, get_parent().tower_data.level)
+			add_buff(data.buff_data, body, level)
 
 func _on_range_body_exited(body) -> void:
 	if data == null:
@@ -176,7 +178,7 @@ func on_wave_cleared() -> void:
 
 ##Pairs with on_wave_cleared to have Wave Clear Trigger Abilities send their data to Game Scene
 func on_wave_clear_ability_trigger(ability_data: AbilityWaveClear) -> void:
-	wave_clear_ability_triggered.emit(ability_data, get_parent().tower_data.level)
+	wave_clear_ability_triggered.emit(ability_data, level)
 
 ## Weapon Function
 
@@ -188,6 +190,7 @@ func turn():
 		path_turret.look_at(attack_targets[0].global_position)
 
 func fire(target: UnitScenePrototype):
+	path_animation_player.play("fire")
 	if data.projectile_speed > 0:
 		fire_projectile(target)
 	else:
@@ -204,7 +207,6 @@ func projectile_contact(projectile_pos: Vector2) -> void:
 	hit_detected.emit(projectile_pos)
 
 func fire_instant(target: UnitScenePrototype) -> void:
-	path_animation_player.play("fire")
 	if data.current_aoe > 0:
 		var baddies = StaticFunctions.setup_aoe(
 			self, 
@@ -212,8 +214,8 @@ func fire_instant(target: UnitScenePrototype) -> void:
 			"baddies", 
 			data.current_aoe)
 		for baddy in baddies:
-			baddy.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
+			baddy.on_hit(AttackInfo.new(data.calculate_damage(), data.on_hit_effects, level))
 			hit_detected.emit(baddy.global_position)
 	else:
-		target.on_hit(data.calculate_damage(), data.on_hit_effects, get_parent().tower_data.level)
+		target.on_hit(AttackInfo.new(data.calculate_damage(), data.on_hit_effects, level))
 		hit_detected.emit(target.global_position)

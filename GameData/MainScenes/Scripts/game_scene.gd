@@ -48,12 +48,11 @@ var remaining_spawns := 0
 var wave_total := 0
 var living_baddies := 0
 var escaped_baddies := 0
-@export_range(0, 100, 1, "suffix: hp") var max_player_health : int = 100
 var player_health : int :
 	set(value):
 		SaveManager.save_data_run.current_player_health = value
 		if path_ui:
-			path_ui.update_health_bar(SaveManager.save_data_run.current_player_health, max_player_health)
+			path_ui.update_health_bar(SaveManager.save_data_run.current_player_health, SaveManager.save_data_run.current_max_health)
 	get:
 		return SaveManager.save_data_run.current_player_health
 #var character : String = "Tester"
@@ -88,7 +87,7 @@ var tower_preview : Node2D
 func _ready() -> void:
 	
 	## Child Node Setup
-	path_ui.update_health_bar(player_health, max_player_health)
+	path_ui.update_health_bar(player_health, SaveManager.save_data_run.current_max_health)
 	path_ui.update_cash_display(player_cash)
 	path_ui.check_build_mode.connect(path_build_mode_container.check_build_mode)
 	path_ui.connect_new_button.connect(connect_new_button)
@@ -200,7 +199,7 @@ func wave_ended() -> void:
 
 ##Ideally, in the instances of a lower boon limit, would use the values from higher level towers over lower level,
 ##doesn't do this currently(does FIFO) but something to change in the future
-func end_of_wave_effects(data: AbilityWaveClear, level: int) -> void:
+func end_of_wave_effects() -> void:
 	var cur_mods = path_tower_container.mods_in_play
 	for mod in cur_mods:
 		var mod_data = cur_mods[mod].data
@@ -210,9 +209,9 @@ func end_of_wave_effects(data: AbilityWaveClear, level: int) -> void:
 					var boon_value = mod_data.boon_amount[cur_mods[mod].levels[i]]
 					match ability.boon_type:
 						AbilityWaveClear.Boon.HEAL:
-							SaveManager.save_data_run.current_player_health += boon_value
+							player_health += boon_value
 						AbilityWaveClear.Boon.MONEY:
-							SaveManager.save_data_run.current_cash += mod_data.boon_amount[cur_mods[mod].levels[i]]
+							SaveManager.save_data_run.current_cash += boon_value
 						AbilityWaveClear.Boon.UPGRADE:
 							var rand_tower_base = path_tower_container.get_child(randi() % path_tower_container.get_child_count())
 							while rand_tower_base.tower_data.level == 4:
@@ -220,25 +219,9 @@ func end_of_wave_effects(data: AbilityWaveClear, level: int) -> void:
 							rand_tower_base.level_up()
 						AbilityWaveClear.Boon.REWARD_CHOICE:
 							temp_reward_bonus += 1
-	
-	return
-	if not wave_end_effect_tracker.has(data.boon_type):
-		wave_end_effect_tracker[data.boon_type] = 0
-	wave_end_effect_tracker[data.boon_type] += 1
-	if wave_end_effect_tracker[data.boon_type] >= data.boon_limit:
-		return
-	match data.boon_type:
-		AbilityWaveClear.Boon.HEAL:
-			SaveManager.save_data_run.current_player_health += data.boon_amount[level]
-		AbilityWaveClear.Boon.MONEY:
-			SaveManager.save_data_run.current_cash += data.boon_amount[level]
-		AbilityWaveClear.Boon.UPGRADE:
-			var rand_tower_base = path_tower_container.get_child(randi() % path_tower_container.get_child_count())
-			while rand_tower_base.tower_data.level == 4:
-				rand_tower_base = path_tower_container.get_child(randi() % path_tower_container.get_child_count())
-			rand_tower_base.level_up()
-		AbilityWaveClear.Boon.REWARD_CHOICE:
-			temp_reward_bonus += 1
+						AbilityWaveClear.Boon.MAX_HEATLH:
+							SaveManager.save_data_run.current_max_health += boon_value
+							path_ui.update_health_bar(player_health, SaveManager.save_data_run.current_max_healtha)
 
 func game_over(result) -> void:
 	is_game_over = true

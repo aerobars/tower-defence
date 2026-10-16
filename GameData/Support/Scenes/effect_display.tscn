@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dxbuochr46q3e"]
 
-[ext_resource type="Script" uid="uid://btf1131inp48o" path="res://GameData/SupportScenes/Scripts/effect_display.gd" id="1_nwjix"]
+[ext_resource type="Script" uid="uid://btf1131inp48o" path="res://GameData/Support/Scripts/effect_display.gd" id="1_nwjix"]
 [ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="2_esp53"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7nr08"]

@@ -2,18 +2,18 @@
 
 [ext_resource type="Script" uid="uid://bjmi2gnp5s1tf" path="res://GameData/UI/Inventory/Scripts/inventory_data.gd" id="1_fy7e0"]
 [ext_resource type="Script" uid="uid://b4so26n1sqyy1" path="res://GameData/UI/Inventory/Scripts/inventory_slot_data.gd" id="2_4o2ck"]
-[ext_resource type="Resource" uid="uid://daxore4jcvu1" path="res://GameData/TowerMods/CharacterMods/Builder/pwr_damage.tres" id="3_wioqo"]
-[ext_resource type="Resource" uid="uid://b702xntyc62fc" path="res://GameData/TowerMods/CharacterMods/Builder/wep_basic.tres" id="4_wioqo"]
+[ext_resource type="Resource" uid="uid://bfhoo45foedde" path="res://GameData/TowerMods/CharacterMods/StartingMods/pwr_starting.tres" id="3_gpe42"]
+[ext_resource type="Resource" uid="uid://6g4cu7vat4jh" path="res://GameData/TowerMods/CharacterMods/StartingMods/wep_starting.tres" id="4_wsokm"]
 
 [sub_resource type="Resource" id="Resource_j0xu1"]
 script = ExtResource("2_4o2ck")
-inventory_mod = ExtResource("3_wioqo")
+inventory_mod = ExtResource("3_gpe42")
 quantity = 1
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 
 [sub_resource type="Resource" id="Resource_573rb"]
 script = ExtResource("2_4o2ck")
-inventory_mod = ExtResource("4_wioqo")
+inventory_mod = ExtResource("4_wsokm")
 quantity = 1
 metadata/_custom_type_script = "uid://b4so26n1sqyy1"
 

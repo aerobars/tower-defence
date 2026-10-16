@@ -9,6 +9,8 @@ var save_data_profile : SaveDataProfile
 var save_data_run : SaveDataRun
 const SAVEPATH_PROFILE = "user://profile_save.tres"
 const SAVEPATH_RUN = "user://run_save.tres"
+#mac save path: Users/Muffins/Library/Application Support/Godot/app_userdata/Tower Defence
+#linux save path: 
 
 func _ready() -> void:
 	print(OS.get_user_data_dir())

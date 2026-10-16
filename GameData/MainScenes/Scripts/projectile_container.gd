@@ -1,6 +1,6 @@
 extends Node2D
 
-const PROJECTILE_SCENE := preload("res://GameData/SupportScenes/Scenes/projectile.tscn")
+const PROJECTILE_SCENE := preload("res://GameData/Support/Scenes/projectile.tscn")
 
 ##Creates projectile, sets projectile data, initial position, and projectile direction
 func create_projectile(data: ProjectileData) -> void:

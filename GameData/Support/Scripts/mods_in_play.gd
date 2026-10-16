@@ -1,4 +1,4 @@
-##Resource class for sto
+##Resource class for storing mod data and their associated tower level of mods currently in play
 class_name ModsInPlay extends Resource
 
 var data : ModPrototype

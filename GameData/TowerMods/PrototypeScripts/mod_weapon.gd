@@ -36,7 +36,7 @@ var current_multitarget : int
 var current_pierce : int
 
 var activation_cooldown : float
-var on_hit_buffs : Array[Buff]
+var on_hit_effects : Array[Buff]
 
 func setup_stats(_level : int = 0) -> void:
 	super(_level)
@@ -70,10 +70,10 @@ func add_on_hit_effect(buff : Buff) -> void:
 	if buff is not BuffStat and buff.damage_tag > 0:
 		damage_tags |= buff.damage_tag
 	data_owner.path_buff_display.update_display(buff)
-	on_hit_buffs.append(buff)
+	on_hit_effects.append(buff)
 
 func remove_on_hit_effect(buff : Buff) -> void:
 	if buff is not BuffStat and buff.damage_tag > 0:
 		damage_tags &= ~buff.damage_tag
 	data_owner.path_buff_display.remove_buff(buff)
-	on_hit_buffs.erase(buff)
+	on_hit_effects.erase(buff)

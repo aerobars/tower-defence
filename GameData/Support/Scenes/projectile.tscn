@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cspv52j38kqra"]
 
-[ext_resource type="Script" uid="uid://bk3ntmtbue8ok" path="res://GameData/SupportScenes/Scripts/projectile.gd" id="1_pfsx8"]
+[ext_resource type="Script" uid="uid://bk3ntmtbue8ok" path="res://GameData/Support/Scripts/projectile.gd" id="1_pfsx8"]
 [ext_resource type="Texture2D" uid="uid://bp5aad61ufbfa" path="res://Assets/Effects/towerDefense_tile297_rotated.png" id="2_mth3a"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_238f6"]

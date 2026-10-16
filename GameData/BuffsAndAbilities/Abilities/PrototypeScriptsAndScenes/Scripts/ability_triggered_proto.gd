@@ -1,14 +1,14 @@
 ##Abstract Ability class for abilities that trigger under certain conditions, such as on hit or a periodic timer.
 @abstract class_name AbilityTriggeredPrototype extends AbilityPrototype
 
-func triggered_effect(triggering_pos = ability_owner.global_position) -> void:
-	if triggering_pos is Baddy:
-		triggering_pos = triggering_pos.global_position
+func triggered_effect(triggering_source = ability_owner.global_position) -> void:
+	if triggering_source is Baddy:
+		triggering_source = triggering_source.global_position
 	if ability_targets == GlobalEnums.Targets.NONE:
 		no_target_trigger()
 		return
 	
-	var onhit_targets = _determine_targets(triggering_pos)
+	var onhit_targets = _determine_targets(triggering_source)
 	
 	if ability_damage_tag > 0:
 		for target in onhit_targets:

@@ -39,7 +39,7 @@ var waypoint_index : int = 1
 ## Runtime Variables
 
 const AURA_SCENE := preload("res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scenes/ability_aura.tscn")
-const PROJECTILE_IMPACT := preload("res://GameData/SupportScenes/Scenes/projectile_impact.tscn")
+const PROJECTILE_IMPACT := preload("res://GameData/Support/Scenes/projectile_impact.tscn")
 
 var destroyed := false
 var level : int = 0
@@ -127,33 +127,38 @@ func update_pathing() -> void:
 	current_path_point = current_path[current_path_index]
 
 ##dmg Array contains dmg amt, dmg tags, and crit status
-func on_hit(dmg: Array, debuff: Array = [], tower_mod_level : int = 0) -> void: 
-	calculate_damage(dmg)
+func on_hit(attack: AttackInfo) -> void: 
+	calculate_damage(attack)
 	var pending_buffs : Array[Buff] = []
 	hit_detected.emit(global_position)
 	for buff in data.active_buffs:
-		data.active_buffs[buff].level = tower_mod_level
+		data.active_buffs[buff].level = attack.mod_level
 		if buff is BuffOnHit:
-			data.active_buffs[buff].on_hit_check(dmg[1], pending_buffs)
+			data.active_buffs[buff].on_hit_check(attack.damage_tags, pending_buffs)
 	#debuff.append_array(pending_buffs)
-	if debuff != []:
-		for i in debuff:
+	if attack.onhit_effects != []:
+		for i in attack.onhit_effects:
 			add_buff(i, self ,level)
 
 ##dmg Array contains dmg amt, dmg tags, and crit status
-func calculate_damage(dmg: Array) -> void:
+func calculate_damage(attack: AttackInfo) -> void:
 	for tag in GlobalEnums.DamageTag.keys():
 		var cur_tag = GlobalEnums.DamageTag[tag]
-		if dmg[1] & cur_tag:
+		if attack.damage_tags & cur_tag:
 			if cur_tag == GlobalEnums.DamageTag.BLUNT or cur_tag == GlobalEnums.DamageTag.PIERCE:
-				dmg[0] = max(0, dmg[0] - data.current_defence)
+				attack.damage_amount = max(0, attack.damage_amount - data.current_defence)
 				impact(cur_tag)
 			elif cur_tag == GlobalEnums.DamageTag.HEAL:
-				dmg[0] = dmg[0] * -1
+				attack.damage_amount = attack.damage_amount * -1
 			else:
-				dmg[0] *=  GlobalEnums.DEFENCE_TABLE[data.base_defence_tag][cur_tag]
-	data.health -= dmg[0]
-	DamageNumbers.display_number(dmg[0], path_damage_number_origin.global_position, dmg[1], dmg[2])
+				attack.damage_amount *=  GlobalEnums.DEFENCE_TABLE[data.base_defence_tag][cur_tag]
+	data.health -= attack.damage_amount
+	DamageNumbers.display_number(
+		attack.damage_amount, 
+		path_damage_number_origin.global_position, 
+		attack.damage_tags, 
+		attack.crit_status
+		)
 
 func healthbar_update(health, max_health) -> void:
 	path_status_display.path_health_bar.max_value = max_health

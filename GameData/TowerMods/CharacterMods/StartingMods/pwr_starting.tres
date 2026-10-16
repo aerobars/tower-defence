@@ -2,9 +2,17 @@
 
 [ext_resource type="Script" uid="uid://bdvisqhdbqwsu" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_wave_clear.gd" id="1_klda1"]
 [ext_resource type="Script" uid="uid://cypg7wm5b3ytj" path="res://GameData/TowerMods/PrototypeScripts/mod_power.gd" id="2_hwcqn"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="2_u4y73"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1u4x"]
+atlas = ExtResource("2_u4y73")
+region = Rect2(512, 32, 16, 16)
 
 [resource]
 script = ExtResource("2_hwcqn")
 base_power_levels = Array[int]([2, 3, 4, 5, 6])
 mod_class = 1
+info_name = "Starting Power"
+info_description = "The starting power"
+info_texture = SubResource("AtlasTexture_s1u4x")
 metadata/_custom_type_script = "uid://cypg7wm5b3ytj"

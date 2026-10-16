@@ -11,8 +11,8 @@ const INVENTORY_SLOT = preload("res://GameData/UI/Inventory/inventory_slot.tscn"
 
 
 func inventory_setup() -> void:
-	data.inventory_ui = self
 	data = SaveManager.save_data_run.inventory_data
+	data.inventory_ui = self
 	for i in data.slots:
 		create_slot(i)
 

@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource("1_npniv")
+boon_limit = 10
 info_name = "Wave Clear Test"
 info_display_icon = ExtResource("1_fv41d")
 info_description = "test"
