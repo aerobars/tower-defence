@@ -16,6 +16,7 @@ var class_string : String:
 @export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] 
 var current_power : int
 var current_range : float
+
 @export var mod_class : ModClass
 
 @export_group("Swapper Data", "swap_")
@@ -34,18 +35,18 @@ func add_buff(buff : Buff, _buff_source : CollisionObject2D, buff_level : int, a
 	if buff.buff_targets == GlobalEnums.Targets.TOWERS or buff.buff_targets == GlobalEnums.Targets.SELF:
 		super(buff, _buff_source, buff_level, amt)
 	elif buff.buff_targets == GlobalEnums.Targets.BADDIES:
-		add_on_hit_effect(buff)
+		add_onhit_effect(buff)
 
 func remove_buff(buff : Buff, buff_source : CollisionObject2D, amt : = 1) -> void:
 	if buff is BuffStat and buff.buff_targets == GlobalEnums.Targets.TOWERS:
 		super(buff, buff_source ,amt)
 	else:
-		remove_on_hit_effect(buff)
+		remove_onhit_effect(buff)
 
-func add_on_hit_effect(_buff : Buff) -> void: #setup for Weapon Mods
+func add_onhit_effect(_buff : Buff) -> void: #setup for Weapon Mods
 	pass
 
-func remove_on_hit_effect(_buff : Buff) -> void:#setup for Weapon Mods
+func remove_onhit_effect(_buff : Buff) -> void:#setup for Weapon Mods
 	pass
 
 func power_buff() -> void:

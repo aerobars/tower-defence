@@ -42,8 +42,7 @@ var health : float = 0 : set = _on_health_set
 
 ##Buffs and Auras
 @export_group("In Game Effects")
-@export var innate_abilities : Array[AbilityPrototype]
-var active_abilities: Array[AbilityPrototype]
+@export var abilities : Array[AbilityPrototype]
 
 ##currently unused
 @export var experience : int = 0: set = _on_experience_set

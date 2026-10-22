@@ -20,6 +20,14 @@ func _ready() -> void:
 	data.data_owner = self
 	data.setup_stats(get_level())
 
+func ability_setup(ability: AbilityPrototype) -> void:
+	var new_ability = ability.duplicate(true) #ability is duplicated to avoid shared instances (esp. important for periodic abilities)
+	data.active_abilities.append(new_ability)
+	new_ability.ability_setup(self)
+	display_update(new_ability)
+
+@abstract func display_update(effect) -> void
+
 ##UnitProtoype function, calls the add_buff function in data resource, body defaults to self
 func add_buff(buff : Buff, body : CollisionObject2D = self, cur_level : int = 0) -> void:
 	body.data.add_buff(buff, self, cur_level) #self = buff_source

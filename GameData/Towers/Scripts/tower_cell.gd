@@ -42,6 +42,7 @@ var attack_tracker : int
 var level : int : 
 	get:
 		return get_parent().tower_data.level
+var aura_targets : Array = []
 
 ## Initial Setup
 
@@ -49,18 +50,18 @@ func _ready():
 	super()
 	for body in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(body)
-	if data is ModPower or data is ModWeapon:
 		for ability in data.abilities:
-			var new_ability = ability.duplicate(true) #ability is duplicated to avoid shared instances across baddies
-#			data.active_abilities.append(new_ability) #may be obsolete with ability changes
-			new_ability.ability_setup(self)
-			path_buff_display.update_display(new_ability)
+			ability_setup(ability) #function is in unit_scene_proto
 
 func get_level() -> int:
 	return get_parent().tower_data.level
 
 ## Mod Updates
 
+func display_update(effect) -> void:
+	path_buff_display.update_display(effect)
+
+##Function for updating this mod 
 func update_mod(net_power : int = 0) -> void:
 	if data == null:
 		path_range_aoe.get_shape().radius = 0.0
@@ -85,11 +86,16 @@ func update_mod(net_power : int = 0) -> void:
 	path_turret.texture = data.info_texture
 	mod_updated.emit(self)
 
-func on_tower_cell_updated(updated_cell: TowerCell) -> void: #Connected to GameData, triggers whenever any mod is updated
+func aura_setup() -> void:
+	pass
+
+##Connected to GameData, triggers whenever any mod is updated
+func on_tower_cell_updated(updated_cell: TowerCell) -> void: 
 	if updated_cell == self:
 		return
 	if updated_cell in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(updated_cell)
+
 
 ##Input Event Handling
 
@@ -134,7 +140,7 @@ func _process(delta: float) -> void:
 			if not path_animation_player.is_playing():
 				turn()
 		if activation_timer >= data.activation_cooldown:
-			if data is ModAura and data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.buff_persistent_effect and get_parent().aura_tower:
+			if data is ModAura and _aura_check():
 				for baddy in baddies_in_range:
 					add_buff(data.buff_data, baddy, level)
 			elif data is ModWeapon:
@@ -152,18 +158,25 @@ func _has_active_disable() -> bool:
 			return true
 	return false
 
+func _aura_check() -> bool:
+	return data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not data.buff_data.buff_persistent_effect and get_parent().aura_tower
+
 func _on_range_body_entered(body) -> void:
 	if data == null or body == self:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.append(body)
+	if data.mod_class == data.ModClass.Aura:
+		pass
 		if data.mod_class == data.ModClass.AURA and data.buff_data.buff_persistent_effect:
 			add_buff(data.buff_data, body, level)
+			aura_targets.append(body)
 	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
 		if data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
 			return #nothing gets added for offensive auras in aura mode
 		else:
 			add_buff(data.buff_data, body, level)
+			aura_targets.append(body)
 
 func _on_range_body_exited(body) -> void:
 	if data == null:
@@ -172,6 +185,7 @@ func _on_range_body_exited(body) -> void:
 		baddies_in_range.erase(body)
 	if data.mod_class == data.ModClass.AURA and data.buff_data.buff_persistent_effect:
 		remove_buff(data.buff_data, body)
+		aura_targets.erase(body)
 
 func on_wave_cleared() -> void:
 	wave_cleared.emit()
@@ -214,8 +228,20 @@ func fire_instant(target: UnitScenePrototype) -> void:
 			"baddies", 
 			data.current_aoe)
 		for baddy in baddies:
-			baddy.on_hit(AttackInfo.new(data.calculate_damage(), data.on_hit_effects, level))
+			baddy.on_hit(AttackData.new(
+				data.current_damage, 
+				data.damage_tags, 
+				level, 
+				data.current_crit_chance, 
+				data.current_crit_multiplier, 
+				data.onhit_effects))
 			hit_detected.emit(baddy.global_position)
 	else:
-		target.on_hit(AttackInfo.new(data.calculate_damage(), data.on_hit_effects, level))
+		target.on_hit(AttackData.new(
+			data.current_damage, 
+			data.damage_tags, 
+			level, 
+			data.current_crit_chance, 
+			data.current_crit_multiplier, 
+			data.onhit_effects))
 		hit_detected.emit(target.global_position)

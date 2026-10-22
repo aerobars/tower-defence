@@ -1,10 +1,10 @@
-class_name TowerBase extends Node2D
 ##Handles tower setup and updates to tower mods
+class_name TowerBase extends Node2D
 
 signal cell_created(tower_cell: TowerCell)
 signal unit_selected(tower_cell : TowerCell)
 signal show_upgrade_panel(popup_type : String, tower_data, tower_id : TowerBase)
-signal update_mods(net_power : int)
+signal update_mods(net_power : int) #connected to cells within the towewr
 signal clear_popup
 signal update_range_display(tower_cell: TowerCell)
 signal hide_range_display
@@ -87,6 +87,7 @@ func get_slot_id(_value: int) -> void:
 	pass
 
 ## Gameplay
+
 func tower_selected(tower_cell) -> void:
 	if clickable:
 		var mod_data : Array
@@ -103,6 +104,7 @@ func level_up() -> void:
 		if child.data != null:
 			child.data.setup_stats(tower_data.level)
 
+##Called during tower setup and mod updates
 func tower_update(updated_mod_data : ModUpdateData) -> void:
 	
 	var mod_list : Dictionary = {0 : [], #Aura
@@ -118,7 +120,7 @@ func tower_update(updated_mod_data : ModUpdateData) -> void:
 				for target in child.aura_targets: #clears aura effects of old aura before updating
 					child.remove_buff(target)
 				child.aura_targets = []
-			if updated_mod_data.slot_data != null: #set tower mod's data
+			if updated_mod_data.slot_data != null: #set updating cell's mod data
 				child.data = updated_mod_data.slot_data.duplicate(true)
 				child.data.data_owner = child
 				if child.data.swap_enabled:
@@ -128,7 +130,7 @@ func tower_update(updated_mod_data : ModUpdateData) -> void:
 						child.data.add_buff(child.data.swap_buff, child, tower_data.level)
 			else:
 				child.data = null
-		if child.data != null:
+		if child.data != null: #update tower data
 			mod_list[child.data.mod_class].append(child)
 			child.data.setup_stats(tower_data.level)
 			net_power += child.data.current_power

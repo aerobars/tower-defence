@@ -26,10 +26,22 @@ func _on_area_2d_body_entered(body: UnitScenePrototype) -> void:
 			"baddies", 
 			data.aoe)
 		for baddy in baddies:
-			baddy.on_hit(AttackInfo.new(data.damage.duplicate(), data.on_hit_effects))
+			baddy.on_hit(AttackData.new(
+				data.damage, 
+				data.damage_tags, 
+				data.level, 
+				data.crit_chance, 
+				data.crit_multi, 
+				data.on_hit_effects))
 			hit_detected.emit(baddy.global_position)
 	else:
-		body.on_hit(AttackInfo.new(data.damage.duplicate(), data.on_hit_effects))
+		body.on_hit(AttackData.new(
+			data.damage, 
+			data.damage_tags, 
+			data.level, 
+			data.crit_chance, 
+			data.crit_multi, 
+			data.on_hit_effects))
 		hit_detected.emit(body.global_position)
 	if pierce_count == data.pierce_total:
 		queue_free()

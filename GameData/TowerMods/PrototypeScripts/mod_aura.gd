@@ -8,6 +8,7 @@ const BUFFABLE_STATS = [
 
 @export_group("Aura Stats")
 ##How many times per second this tower activates
+@export var abilities : Array[AbilityAura]
 @export var base_activation_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] #cd between attacks in seconds
 @export var buff_data : Buff 
 var current_activation_speed : float

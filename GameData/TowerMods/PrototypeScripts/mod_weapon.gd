@@ -36,7 +36,7 @@ var current_multitarget : int
 var current_pierce : int
 
 var activation_cooldown : float
-var on_hit_effects : Array[Buff]
+var onhit_effects : Array
 
 func setup_stats(_level : int = 0) -> void:
 	super(_level)
@@ -60,20 +60,27 @@ func set_current_stats() -> void:
 func set_activation_cooldown() -> void:
 	activation_cooldown = 1 / current_attack_speed
 
+##obsolete
 func calculate_damage() -> Array: #returns [total attack damage, damage tags, did the attack crit]
 	if current_crit_chance > randf():
-		return [current_damage * current_crit_multiplier, damage_tags, true]
+		return [current_damage * current_crit_multiplier, true]
 	else:
-		return [current_damage, damage_tags, false]
+		return [current_damage, false]
 
-func add_on_hit_effect(buff : Buff) -> void:
-	if buff is not BuffStat and buff.damage_tag > 0:
-		damage_tags |= buff.damage_tag
-	data_owner.path_buff_display.update_display(buff)
-	on_hit_effects.append(buff)
+func add_onhit_effect(effect) -> void:
+	if effect is AbilityPrototype:
+		pass
+	elif effect is Buff:
+		if effect is not BuffStat and effect.damage_tag > 0:
+			damage_tags |= effect.damage_tag
+	data_owner.path_buff_display.update_display(effect)
+	onhit_effects.append(effect)
 
-func remove_on_hit_effect(buff : Buff) -> void:
-	if buff is not BuffStat and buff.damage_tag > 0:
-		damage_tags &= ~buff.damage_tag
-	data_owner.path_buff_display.remove_buff(buff)
-	on_hit_effects.erase(buff)
+func remove_onhit_effect(effect) -> void:
+	if effect is AbilityPrototype:
+		pass
+	elif effect is Buff:
+		if effect is not BuffStat and effect.damage_tag > 0:
+			damage_tags &= ~effect.damage_tag
+	data_owner.path_buff_display.remove_buff(effect)
+	onhit_effects.erase(effect)

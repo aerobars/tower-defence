@@ -15,6 +15,7 @@ var level : int = 0
 ##buff_owner is the unit affected by the buff
 var data_owner : UnitScenePrototype
 var active_buffs : Dictionary[Buff, BuffInstance] = {}
+var active_abilities : Array[AbilityPrototype] = []
 
 func setup_stats(_level : int = 0) -> void:
 	level = _level

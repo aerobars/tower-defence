@@ -65,7 +65,7 @@ func baddy_escaped(baddy: Baddy) -> void:
 	if not baddy.data.spawn_summon:
 		escaped_baddies += 1
 	if escaped_baddies == wave_total:
-		game_over.emit()
+		game_over.emit(false)
 	else:
 		base_damaged.emit(baddy.data.current_damage)
 		on_baddy_death(baddy)

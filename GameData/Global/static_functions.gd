@@ -22,3 +22,6 @@ static func setup_aoe(
 			targets.append(body.collider)
 	
 	return targets
+
+static func calculate_damage(damage: float, crit_chance: float, crit_multi: float) -> void:
+	pass

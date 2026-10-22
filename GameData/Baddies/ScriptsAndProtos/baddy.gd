@@ -69,15 +69,15 @@ func _ready() -> void:
 	# Innate Effects Setup
 	
 	for ability in data.innate_abilities:
-		var new_ability = ability.duplicate(true) #ability is duplicated to avoid share instances across baddies
-		data.active_abilities.append(new_ability)
-		new_ability.ability_setup(self)
-		path_status_display.path_buff_display_container.update_display(new_ability)
+		ability_setup(ability) #function in unit_scene_proto
 	
 	stats_update()
 
 func get_level() -> int:
 	return level
+
+func display_update(effect) -> void:
+	path_status_display.path_buff_display_container.update_display(effect)
 
 func aura_setup(aura_data) -> void:
 	var new_aura = AURA_SCENE.instantiate()
@@ -127,21 +127,20 @@ func update_pathing() -> void:
 	current_path_point = current_path[current_path_index]
 
 ##dmg Array contains dmg amt, dmg tags, and crit status
-func on_hit(attack: AttackInfo) -> void: 
+func on_hit(attack: AttackData) -> void: 
 	calculate_damage(attack)
-	var pending_buffs : Array[Buff] = []
 	hit_detected.emit(global_position)
-	for buff in data.active_buffs:
-		data.active_buffs[buff].level = attack.mod_level
-		if buff is BuffOnHit:
-			data.active_buffs[buff].on_hit_check(attack.damage_tags, pending_buffs)
+#	for buff in data.active_buffs:
+#		data.active_buffs[buff].level = attack.mod_level
+#		if buff is BuffOnHit:
+#			data.active_buffs[buff].on_hit_check(attack.damage_tags, pending_buffs)
 	#debuff.append_array(pending_buffs)
 	if attack.onhit_effects != []:
 		for i in attack.onhit_effects:
 			add_buff(i, self ,level)
 
 ##dmg Array contains dmg amt, dmg tags, and crit status
-func calculate_damage(attack: AttackInfo) -> void:
+func calculate_damage(attack: AttackData) -> void:
 	for tag in GlobalEnums.DamageTag.keys():
 		var cur_tag = GlobalEnums.DamageTag[tag]
 		if attack.damage_tags & cur_tag:
