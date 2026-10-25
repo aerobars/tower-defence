@@ -8,10 +8,10 @@
 resource_local_to_scene = true
 script = ExtResource("1_script")
 onhit_success_chance = Array[float]([1.0, 0.3, 0.35, 0.4, 0.45])
-info_name = "On-Hit Knockback"
-info_display_icon = ExtResource("2_5xfmi")
 info_description = "Chance on hit to push the target away"
 buff_data = ExtResource("1_buff")
 ability_targets = 2
 ability_effect_amount = Array[float]([5.0, 5.0, 5.0, 5.0, 5.0])
 ability_damage_tag = 2
+info_name = "On-Hit Knockback"
+info_display_icon = ExtResource("2_5xfmi")

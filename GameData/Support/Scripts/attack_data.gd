@@ -4,7 +4,6 @@ var damage_amount : float
 var damage_tags : int
 var crit_multi : float
 var crit_status : bool
-var onhit_effects : Array[Buff]
 var mod_level : int
 
 func _init(
@@ -13,13 +12,11 @@ func _init(
 	_level: int = 0, 
 	_crit_chance: float = 0.0, 
 	_crit_multi: float = 0.0, 
-	_onhits: Array[Buff] = []
 	) -> void:
 	
 	damage_tags = _dmg_tags
 	mod_level = _level
 	crit_multi = _crit_multi
-	onhit_effects = _onhits
 	
 	if _crit_chance > randf():
 		damage_amount = _dmg * _crit_multi

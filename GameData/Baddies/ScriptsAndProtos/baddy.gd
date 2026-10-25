@@ -69,7 +69,7 @@ func _ready() -> void:
 	# Innate Effects Setup
 	
 	for ability in data.innate_abilities:
-		ability_setup(ability) #function in unit_scene_proto
+		add_ability(ability) #function in unit_scene_proto
 	
 	stats_update()
 
@@ -79,7 +79,7 @@ func get_level() -> int:
 func display_update(effect) -> void:
 	path_status_display.path_buff_display_container.update_display(effect)
 
-func aura_setup(aura_data) -> void:
+func aura_setup(aura_data: AbilityAura) -> void:
 	var new_aura = AURA_SCENE.instantiate()
 	new_aura.ability_aura_data = aura_data
 	path_ability_container.add_child(new_aura)
@@ -126,20 +126,19 @@ func update_pathing() -> void:
 	current_path_index = 0
 	current_path_point = current_path[current_path_index]
 
-##dmg Array contains dmg amt, dmg tags, and crit status
+##for when baddy is hit by attack
 func on_hit(attack: AttackData) -> void: 
 	calculate_damage(attack)
-	hit_detected.emit(global_position)
-#	for buff in data.active_buffs:
+	hit_detected.emit(self)
+	for buff in data.active_buffs:
 #		data.active_buffs[buff].level = attack.mod_level
-#		if buff is BuffOnHit:
-#			data.active_buffs[buff].on_hit_check(attack.damage_tags, pending_buffs)
+		if buff is BuffOnHit:
+			data.active_buffs[buff].on_hit_check(attack.damage_tags)
 	#debuff.append_array(pending_buffs)
-	if attack.onhit_effects != []:
-		for i in attack.onhit_effects:
-			add_buff(i, self ,level)
+#	if attack.onhit_effects != []:
+#		for i in attack.onhit_effects:
+#			add_effect(i,level)
 
-##dmg Array contains dmg amt, dmg tags, and crit status
 func calculate_damage(attack: AttackData) -> void:
 	for tag in GlobalEnums.DamageTag.keys():
 		var cur_tag = GlobalEnums.DamageTag[tag]
@@ -152,6 +151,7 @@ func calculate_damage(attack: AttackData) -> void:
 			else:
 				attack.damage_amount *=  GlobalEnums.DEFENCE_TABLE[data.base_defence_tag][cur_tag]
 	data.health -= attack.damage_amount
+	@warning_ignore("narrowing_conversion")
 	DamageNumbers.display_number(
 		attack.damage_amount, 
 		path_damage_number_origin.global_position, 

@@ -20,7 +20,6 @@ var damage_tags : int
 var crit_chance : float
 var crit_multi : float
 var aoe : float
-var on_hit_effects : Array[Buff]
 var level : int
 
 func _init(

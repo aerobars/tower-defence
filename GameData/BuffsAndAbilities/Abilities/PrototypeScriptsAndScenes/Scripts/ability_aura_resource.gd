@@ -1,4 +1,4 @@
-class_name AbilityAura extends AbilityPrototype
+class_name AbilityAura extends Ability
 
 #signal ability_aura_setup(ability_info : AbilityAura)
 

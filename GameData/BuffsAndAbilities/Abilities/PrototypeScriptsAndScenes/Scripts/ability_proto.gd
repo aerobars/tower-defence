@@ -1,19 +1,19 @@
 ##Prototype for Ability scene, contains functions for execution of ability during runtime
 ##Contains data specific around constructing and executing ability functions
-@abstract class_name AbilityPrototype extends Resource
+@abstract class_name Ability extends Effect
 
 
 var ability_owner : CollisionObject2D
 
 @export_group("Ability Info", "info_")
-@export var info_name : String
-@export var info_display_icon : Texture2D
+#@export var info_name : String
+#@export var info_display_icon : Texture2D
 @export_multiline() var info_description : String
 
 ##data for buff that is applied
 @export var buff_data: Buff
 
-var owner_level
+var owner_level : int
 
 @export_group("Universal Ability Data", "ability_")
 @export var ability_targets : GlobalEnums.Targets
@@ -28,7 +28,7 @@ var cooldown_timer : float
 @export var ability_aoe : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 
 ##ability_owner set in ability_proto, use super to expand for specific ability needs
-func ability_setup(_ability_owner: CollisionObject2D) -> void:
+func ability_setup(_ability_owner: UnitScenePrototype) -> void:
 	ability_owner = _ability_owner
 	owner_level = ability_owner.level
 	if ability_cooldown[owner_level] > 0.0:

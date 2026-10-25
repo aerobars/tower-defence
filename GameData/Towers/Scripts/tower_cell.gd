@@ -50,8 +50,8 @@ func _ready():
 	super()
 	for body in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(body)
-		for ability in data.abilities:
-			ability_setup(ability) #function is in unit_scene_proto
+		for ability in data.innate_abilities:
+			add_ability(ability) #function is in unit_scene_proto
 
 func get_level() -> int:
 	return get_parent().tower_data.level
@@ -69,6 +69,8 @@ func update_mod(net_power : int = 0) -> void:
 		remove_from_group("towers")
 		return
 	data.net_power = net_power
+	for ability in data.innate_abilities:
+		add_ability(ability)
 	data.setup_stats(level)
 	match data.mod_class:
 		0: #Aura
@@ -142,7 +144,7 @@ func _process(delta: float) -> void:
 		if activation_timer >= data.activation_cooldown:
 			if data is ModAura and _aura_check():
 				for baddy in baddies_in_range:
-					add_buff(data.buff_data, baddy, level)
+					baddy.add_effect(data.buff_data, level)
 			elif data is ModWeapon:
 				#attack_tracker += 1
 				for i in data.current_multitarget:
@@ -164,27 +166,30 @@ func _aura_check() -> bool:
 func _on_range_body_entered(body) -> void:
 	if data == null or body == self:
 		return
-	if body.is_in_group("baddies"):
+	if body.is_in_group("baddies"): #happens regardless of mod class
 		baddies_in_range.append(body)
-	if data.mod_class == data.ModClass.Aura:
-		pass
-		if data.mod_class == data.ModClass.AURA and data.buff_data.buff_persistent_effect:
-			add_buff(data.buff_data, body, level)
+	
+	if data.mod_class == data.ModClass.AURA:
+		if body.is_in_group("baddies") and data.buff_data.buff_persistent_effect:
+			body.add_effect(data.buff_data, level)
 			aura_targets.append(body)
-	elif data.mod_class == data.ModClass.AURA and body.is_in_group("towers"):
-		if data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and get_parent().aura_tower:
-			return #nothing gets added for offensive auras in aura mode
-		else:
-			add_buff(data.buff_data, body, level)
-			aura_targets.append(body)
+		elif body.is_in_group("towers"):
+			if data.buff_data.buff_targets == GlobalEnums.Targets.TOWERS:
+				pass
+				#add ability
+			elif data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not get_parent().aura_tower:
+				body.add_effect(data.buff_data, level)
+				aura_targets.append(body)
+				#nothing gets added for offensive auras in aura mode
+				
 
 func _on_range_body_exited(body) -> void:
-	if data == null:
+	if data == null or body == self:
 		return
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body)
 	if data.mod_class == data.ModClass.AURA and data.buff_data.buff_persistent_effect:
-		remove_buff(data.buff_data, body)
+		body.remove_effect(data.buff_data)
 		aura_targets.erase(body)
 
 func on_wave_cleared() -> void:
@@ -215,10 +220,11 @@ func fire_projectile(target: UnitScenePrototype) -> void:
 		ProjectileData.new(
 			self, 
 			path_muzzle.global_position, 
-			target.global_position))
+			target.global_position
+			))
 
-func projectile_contact(projectile_pos: Vector2) -> void:
-	hit_detected.emit(projectile_pos)
+func projectile_contact(projectile_target: UnitScenePrototype) -> void:
+	hit_detected.emit(projectile_target)
 
 func fire_instant(target: UnitScenePrototype) -> void:
 	if data.current_aoe > 0:
@@ -226,22 +232,23 @@ func fire_instant(target: UnitScenePrototype) -> void:
 			self, 
 			target.global_position, 
 			"baddies", 
-			data.current_aoe)
+			data.current_aoe
+			)
 		for baddy in baddies:
 			baddy.on_hit(AttackData.new(
-				data.current_damage, 
+				data.current_damage,
 				data.damage_tags, 
-				level, 
-				data.current_crit_chance, 
-				data.current_crit_multiplier, 
-				data.onhit_effects))
-			hit_detected.emit(baddy.global_position)
+				level,
+				data.current_crit_chance,
+				data.current_crit_multiplier
+				))
+			hit_detected.emit(baddy)
 	else:
 		target.on_hit(AttackData.new(
-			data.current_damage, 
+			data.current_damage,
 			data.damage_tags, 
-			level, 
-			data.current_crit_chance, 
-			data.current_crit_multiplier, 
-			data.onhit_effects))
-		hit_detected.emit(target.global_position)
+			level,
+			data.current_crit_chance,
+			data.current_crit_multiplier
+			))
+		hit_detected.emit(target)

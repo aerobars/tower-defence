@@ -12,7 +12,7 @@ region = Rect2(32, 16, 32, 32)
 [resource]
 resource_local_to_scene = true
 script = ExtResource("3_5qge7")
-abilities = Array[ExtResource("1_dj4lx")]([ExtResource("2_5qge7")])
+innate_abilities = Array[ExtResource("1_dj4lx")]([ExtResource("2_5qge7")])
 base_damage_levels = Array[float]([15.0, 20.0, 25.0, 30.0, 35.0])
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 mod_class = 2

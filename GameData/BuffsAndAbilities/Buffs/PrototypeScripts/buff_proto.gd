@@ -1,9 +1,9 @@
 @abstract
-class_name Buff extends Resource
+class_name Buff extends Effect
 
-@export_group("Buff Info", "info_")
-@export var info_name : String
-@export var info_display_icon : Texture2D
+#@export_group("Buff Info", "info_")
+#@export var info_name : String
+#@export var info_display_icon : Texture2D
 
 @export_group("Universal Buff Data", "buff_")
 @export_range(1, 99) var buff_stack_limit: Array[int] = [99, 99, 99, 99, 99]

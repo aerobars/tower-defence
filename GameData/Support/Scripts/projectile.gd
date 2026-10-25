@@ -32,8 +32,8 @@ func _on_area_2d_body_entered(body: UnitScenePrototype) -> void:
 				data.level, 
 				data.crit_chance, 
 				data.crit_multi, 
-				data.on_hit_effects))
-			hit_detected.emit(baddy.global_position)
+				))
+			hit_detected.emit(baddy)
 	else:
 		body.on_hit(AttackData.new(
 			data.damage, 
@@ -41,7 +41,7 @@ func _on_area_2d_body_entered(body: UnitScenePrototype) -> void:
 			data.level, 
 			data.crit_chance, 
 			data.crit_multi, 
-			data.on_hit_effects))
-		hit_detected.emit(body.global_position)
+			))
+		hit_detected.emit(body)
 	if pierce_count == data.pierce_total:
 		queue_free()

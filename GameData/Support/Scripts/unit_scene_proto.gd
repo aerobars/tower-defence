@@ -6,6 +6,7 @@ signal unit_selected(unit: UnitScenePrototype)
 @export_group("Unit Node Paths", "path_")
 @export var path_mouse_detection : CollisionObject2D
 @export var path_selection_circle : Sprite2D
+#@export var path_unit_texture : Sprite2D
 
 var data : UnitDataPrototype
 
@@ -20,23 +21,33 @@ func _ready() -> void:
 	data.data_owner = self
 	data.setup_stats(get_level())
 
-func ability_setup(ability: AbilityPrototype) -> void:
+func add_ability(ability: Ability) -> void:
 	var new_ability = ability.duplicate(true) #ability is duplicated to avoid shared instances (esp. important for periodic abilities)
 	data.active_abilities.append(new_ability)
 	new_ability.ability_setup(self)
 	display_update(new_ability)
 
+func remove_ability(ability: Ability) -> void:
+	data.active_abilities.erase(ability)
+	#display_update(ability)
+
 @abstract func display_update(effect) -> void
 
-##UnitProtoype function, calls the add_buff function in data resource, body defaults to self
-func add_buff(buff : Buff, body : CollisionObject2D = self, cur_level : int = 0) -> void:
-	body.data.add_buff(buff, self, cur_level) #self = buff_source
+##UnitProtoype function, directs effect to the appropriate add_ function
+func add_effect(effect : Effect, cur_level : int = 0) -> void:
+	if effect is Buff:
+		data.add_buff(effect, self, cur_level) #self = buff_source
+	elif effect is Ability:
+		add_ability(effect)
 
 ##UnitProtoype function, calls the remove_buff function in data resource, body defaults to self
-func remove_buff(buff: Buff, body : CollisionObject2D = self, _cur_level : int = 0) -> void:
-	body.data.remove_buff(buff, self)
+func remove_effect(effect: Effect, _cur_level : int = 0) -> void:
+	if effect is Buff:
+		data.remove_buff(effect, self)
+	elif effect is Ability:
+		remove_ability(effect)
 
-func add_buff_aoe(buff : Buff, _body : CollisionObject2D = self) -> void:
+func add_buff_aoe(buff : Buff, _body : UnitScenePrototype = self) -> void:
 	var new_aoe = EffectAoE.new()
 	new_aoe.shape = CircleShape2D
 	new_aoe.get_shape().radius = buff.buff_effect_aoe

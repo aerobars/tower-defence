@@ -19,7 +19,7 @@ func ability_setup(_ability_owner: CollisionObject2D) -> void:
 	super(_ability_owner)
 	if ability_targets != GlobalEnums.Targets.NONE:
 		print("Incorrect wave clear ability targets, targets must be NONE")
-	ability_owner.wave_cleared.connect(triggered_effect)
+#	ability_owner.wave_cleared.connect(triggered_effect)
 
 func no_target_trigger() -> void:
 	send_ability_data.emit(self)

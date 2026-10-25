@@ -15,7 +15,7 @@ var level : int = 0
 ##buff_owner is the unit affected by the buff
 var data_owner : UnitScenePrototype
 var active_buffs : Dictionary[Buff, BuffInstance] = {}
-var active_abilities : Array[AbilityPrototype] = []
+var active_abilities : Array[Ability] = []
 
 func setup_stats(_level : int = 0) -> void:
 	level = _level
@@ -37,6 +37,8 @@ func add_buff(buff : Buff, buff_source : CollisionObject2D, buff_level : int, am
 	recalculate_stats()
 
 func remove_buff(buff : Buff, buff_source : CollisionObject2D, amt : int = 1) -> void:
+	if not active_buffs.has(buff):
+		return
 	var inst = active_buffs[buff]
 	
 	if buff.buff_persistent_effect: #check whether buff is an aura/persistent effect
@@ -48,6 +50,12 @@ func remove_buff(buff : Buff, buff_source : CollisionObject2D, amt : int = 1) ->
 		active_buffs.erase(buff)
 		remove_buff_display.emit(buff)
 		recalculate_stats()
+
+func add_ability(ability: Ability) -> void:
+	pass
+
+func remove_ability(ability: Ability) -> void:
+	pass
 
 func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
 	return []

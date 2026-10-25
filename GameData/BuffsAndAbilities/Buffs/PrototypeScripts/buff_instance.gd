@@ -53,7 +53,7 @@ func update(delta: float, position: Vector2 = Vector2(0,0)) -> void:
 
 ## On Hit
 
-func on_hit_check(_damage_tags : int, _pending_buffs) -> void:
+func on_hit_check(_damage_tags : int) -> void:
 	if randf() <= float(buff.success_chance_per_stack[level] * stacks):
 		_effect_trigger()
 		if buff.buff_persistent_effect == false:

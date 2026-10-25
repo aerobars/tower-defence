@@ -14,8 +14,7 @@ const BUFFABLE_STATS = [
 @export var projectile_speed : float = 750
 ##BLEED = 1, BLUNT = 2, BURN = 4, HEAL = 8, PIERCE = 16, POISON = 32, SHOCK = 64
 @export var damage_tags : int = GlobalEnums.DamageTag.PIERCE
-@export var abilities : Array[AbilityOnHit]
-
+@export var innate_abilities : Array[AbilityOnHit]
 
 ##Level based variables
 @export_group("Weapon Stats", "base_")
@@ -36,7 +35,7 @@ var current_multitarget : int
 var current_pierce : int
 
 var activation_cooldown : float
-var onhit_effects : Array
+#var onhit_effects : Array
 
 func setup_stats(_level : int = 0) -> void:
 	super(_level)
@@ -67,20 +66,20 @@ func calculate_damage() -> Array: #returns [total attack damage, damage tags, di
 	else:
 		return [current_damage, false]
 
-func add_onhit_effect(effect) -> void:
-	if effect is AbilityPrototype:
+func add_onhit_effect(effect: Effect) -> void:
+	if effect is Ability:
 		pass
 	elif effect is Buff:
 		if effect is not BuffStat and effect.damage_tag > 0:
 			damage_tags |= effect.damage_tag
 	data_owner.path_buff_display.update_display(effect)
-	onhit_effects.append(effect)
+#	onhit_effects.append(effect)
 
-func remove_onhit_effect(effect) -> void:
-	if effect is AbilityPrototype:
+func remove_onhit_effect(effect: Effect) -> void:
+	if effect is Ability:
 		pass
 	elif effect is Buff:
 		if effect is not BuffStat and effect.damage_tag > 0:
 			damage_tags &= ~effect.damage_tag
 	data_owner.path_buff_display.remove_buff(effect)
-	onhit_effects.erase(effect)
+#	onhit_effects.erase(effect)
