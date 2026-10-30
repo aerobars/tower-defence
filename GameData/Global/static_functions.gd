@@ -23,5 +23,5 @@ static func setup_aoe(
 	
 	return targets
 
-static func calculate_damage(damage: float, crit_chance: float, crit_multi: float) -> void:
-	pass
+#static func calculate_damage(damage: float, crit_chance: float, crit_multi: float) -> void:
+#	pass

@@ -17,8 +17,9 @@ metadata/_custom_type_script = "uid://bpcwdsr32rwby"
 [resource]
 script = ExtResource("3_45spm")
 modifying_stats = Array[ExtResource("2_5rpjm")]([SubResource("Resource_s1u4x")])
-info_name = "Damage"
-info_display_icon = SubResource("AtlasTexture_1au8h")
+buff_stack_limit = Array[int]([1, 1, 1, 1, 1])
 buff_targets = 1
 buff_persistent_effect = true
+info_name = "Damage"
+info_display_icon = SubResource("AtlasTexture_1au8h")
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

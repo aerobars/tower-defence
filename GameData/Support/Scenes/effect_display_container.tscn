@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://deyhlssg4xq4i" path="res://GameData/Support/Scripts/effect_display_container.gd" id="1_wstdr"]
 
-[node name="BuffDisplayContainer" type="HBoxContainer"]
+[node name="BuffDisplayContainer" type="HBoxContainer" unique_id=1133760997]
 custom_minimum_size = Vector2(0, 16)
 offset_bottom = 16.0
 mouse_filter = 2

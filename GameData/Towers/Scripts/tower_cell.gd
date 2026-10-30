@@ -19,7 +19,7 @@ signal wave_clear_ability_triggered(ability_data: AbilityWaveClear)
 ## Tower Setup
 
 const TURRET_TEXTURE_SIZE : float = 32
-var non_aura_radius : float #equal to TowerBase's Marker2D radius
+var non_aura_radius : float = 0.0
 var button_slot_id : int
 
 @export_group("Tower Node Paths", "path_")
@@ -39,9 +39,6 @@ var baddies_in_range : Array[UnitScenePrototype]
 var attack_targets : Array = [UnitScenePrototype]
 var activation_timer : float = 0.0
 var attack_tracker : int
-var level : int : 
-	get:
-		return get_parent().tower_data.level
 var aura_targets : Array = []
 
 ## Initial Setup
@@ -58,20 +55,20 @@ func get_level() -> int:
 
 ## Mod Updates
 
-func display_update(effect) -> void:
-	path_buff_display.update_display(effect)
+func display_update(effect, stacks : int = 1) -> void:
+	path_buff_display.update_display(effect, stacks)
 
 ##Function for updating this mod 
-func update_mod(net_power : int = 0) -> void:
+func setup_mod(net_power : int = 0) -> void:
 	if data == null:
 		path_range_aoe.get_shape().radius = 0.0
 		path_turret.texture = null
 		remove_from_group("towers")
 		return
 	data.net_power = net_power
-	for ability in data.innate_abilities:
-		add_ability(ability)
-	data.setup_stats(level)
+	data.update_buff_display.connect(display_update)
+	data.remove_buff_display.connect(path_buff_display.remove_buff)
+	data.setup_stats(get_level())
 	match data.mod_class:
 		0: #Aura
 			if get_parent().aura_tower:
@@ -144,7 +141,7 @@ func _process(delta: float) -> void:
 		if activation_timer >= data.activation_cooldown:
 			if data is ModAura and _aura_check():
 				for baddy in baddies_in_range:
-					baddy.add_effect(data.buff_data, level)
+					baddy.add_effect(data.buff_data, self, get_level())
 			elif data is ModWeapon:
 				#attack_tracker += 1
 				for i in data.current_multitarget:
@@ -171,15 +168,15 @@ func _on_range_body_entered(body) -> void:
 	
 	if data.mod_class == data.ModClass.AURA:
 		if body.is_in_group("baddies") and data.buff_data.buff_persistent_effect:
-			body.add_effect(data.buff_data, level)
+			body.add_effect(data.buff_data, self, get_level())
 			aura_targets.append(body)
 		elif body.is_in_group("towers"):
 			if data.buff_data.buff_targets == GlobalEnums.Targets.TOWERS:
-				pass
-				#add ability
-			elif data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not get_parent().aura_tower:
-				body.add_effect(data.buff_data, level)
+				body.add_effect(data.buff_data, self, get_level())
 				aura_targets.append(body)
+			elif data.buff_data.buff_targets == GlobalEnums.Targets.BADDIES and not get_parent().aura_tower:
+				body.add_effect(data.buff_data, self, get_level())
+				aura_targets.append(body)#currently same process as tower targets but will be diff when ability is implemented
 				#nothing gets added for offensive auras in aura mode
 				
 
@@ -189,7 +186,7 @@ func _on_range_body_exited(body) -> void:
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body)
 	if data.mod_class == data.ModClass.AURA and data.buff_data.buff_persistent_effect:
-		body.remove_effect(data.buff_data)
+		body.remove_effect(data.buff_data, self)
 		aura_targets.erase(body)
 
 func on_wave_cleared() -> void:
@@ -197,7 +194,7 @@ func on_wave_cleared() -> void:
 
 ##Pairs with on_wave_cleared to have Wave Clear Trigger Abilities send their data to Game Scene
 func on_wave_clear_ability_trigger(ability_data: AbilityWaveClear) -> void:
-	wave_clear_ability_triggered.emit(ability_data, level)
+	wave_clear_ability_triggered.emit(ability_data, get_level())
 
 ## Weapon Function
 
@@ -238,7 +235,7 @@ func fire_instant(target: UnitScenePrototype) -> void:
 			baddy.on_hit(AttackData.new(
 				data.current_damage,
 				data.damage_tags, 
-				level,
+				get_level(),
 				data.current_crit_chance,
 				data.current_crit_multiplier
 				))
@@ -247,7 +244,7 @@ func fire_instant(target: UnitScenePrototype) -> void:
 		target.on_hit(AttackData.new(
 			data.current_damage,
 			data.damage_tags, 
-			level,
+			get_level(),
 			data.current_crit_chance,
 			data.current_crit_multiplier
 			))

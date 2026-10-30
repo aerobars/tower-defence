@@ -16,7 +16,6 @@ var selected : bool = false
 
 func _ready() -> void:
 	if data == null:
-		print("unit_scene_proto: no data file detected")
 		return
 	data.data_owner = self
 	data.setup_stats(get_level())
@@ -34,16 +33,20 @@ func remove_ability(ability: Ability) -> void:
 @abstract func display_update(effect) -> void
 
 ##UnitProtoype function, directs effect to the appropriate add_ function
-func add_effect(effect : Effect, cur_level : int = 0) -> void:
+func add_effect(effect : Effect, effect_source : UnitScenePrototype = self ,cur_level : int = 0) -> void:
+	if data == null:
+		return
 	if effect is Buff:
-		data.add_buff(effect, self, cur_level) #self = buff_source
+		data.add_buff(effect, effect_source, cur_level)
 	elif effect is Ability:
 		add_ability(effect)
 
 ##UnitProtoype function, calls the remove_buff function in data resource, body defaults to self
-func remove_effect(effect: Effect, _cur_level : int = 0) -> void:
+func remove_effect(effect : Effect, effect_source : UnitScenePrototype = self, amt : int = 1) -> void:
+	if data == null:
+		return
 	if effect is Buff:
-		data.remove_buff(effect, self)
+		data.remove_buff(effect, effect_source, amt)
 	elif effect is Ability:
 		remove_ability(effect)
 

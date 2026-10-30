@@ -49,7 +49,7 @@ func mod_validation(mod: ModPrototype) -> void:
 		validation_results.errors_update("Invalid mod class for " + data_name)
 
 ##errors: movespeed <= 0, damage <= 0, 
-func baddy_validation(baddy: BaddyStats) -> void:
+func baddy_validation(_baddy: BaddyStats) -> void:
 	pass
 #errors, check if name is filled out, name prefix and class mismatch, aura mod with no buff
 

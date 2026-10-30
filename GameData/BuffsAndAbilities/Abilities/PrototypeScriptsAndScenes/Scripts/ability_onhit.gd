@@ -8,6 +8,6 @@ func ability_setup(_ability_owner) -> void:
 	super(_ability_owner)
 	ability_owner.hit_detected.connect(on_hit_check)
 
-func on_hit_check(triggering_unit: UnitScenePrototype) -> void:
+func on_hit_check(triggering_unit: Node2D) -> void:
 	if randf() <= onhit_success_chance[owner_level]:
 		triggered_effect(triggering_unit)

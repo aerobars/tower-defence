@@ -6,6 +6,7 @@ enum BuffModificationType {
 	ABS ##2
 	}
 
+@warning_ignore("enum_variable_without_default")
 @export var stat : GlobalEnums.BuffableStats
 @export var modification_type : BuffModificationType
 ##Behaves as either flat amount for ADD, or percentage increase for MULTIPLY

@@ -61,7 +61,7 @@ func tower_cell_setup(cell_num) -> void:
 	
 	if is_built:
 		cell_created.emit(new_cell)
-		update_mods.connect(new_cell.update_mod)
+		update_mods.connect(new_cell.setup_mod)
 		new_cell.unit_selected.connect(tower_selected)
 		new_cell.update_range_display.connect(update_range_display_received)
 		new_cell.hide_range_display.connect(hide_range_display_received)
@@ -107,47 +107,84 @@ func level_up() -> void:
 ##Called during tower setup and mod updates
 func tower_update(updated_mod_data : ModUpdateData) -> void:
 	
+	var updating_cell : TowerCell
 	var mod_list : Dictionary = {0 : [], #Aura
 								 1 : [], #Power
 								 2 : []} #Weapon
 	
-	aura_tower = updated_mod_data.aura_status
 	net_power = 0
 	
 	for child in tower_children: 
 		if updated_mod_data.slot_id == child.button_slot_id:
+			updating_cell = child #for apply_local_auras
+			
+			#clears aura effects of old aura before updating
 			if child.data != null and child.data.mod_class == child.data.ModClass.AURA: #Aura
-				for target in child.aura_targets: #clears aura effects of old aura before updating
-					child.remove_buff(target)
+				for target in child.aura_targets: 
+					target.remove_effect(child.data.buff_data, child)
 				child.aura_targets = []
-			if updated_mod_data.slot_data != null: #set updating cell's mod data
+			
+			#clears mod data if updated mod slot is empty
+			if updated_mod_data.slot_data == null: 
+				child.data = null
+			
+			#set updating cell's mod data
+			else: 
 				child.data = updated_mod_data.slot_data.duplicate(true)
 				child.data.data_owner = child
 				if child.data.swap_enabled:
 					if child.data.swap_buff == null or child.data.swap_buff_duration == 0.0:
 						print("Swapper enabled with incomplete swap data for ", child.data.name)
 					else:
-						child.data.add_buff(child.data.swap_buff, child, tower_data.level)
-			else:
-				child.data = null
-		if child.data != null: #update tower data
+						child.add_effect(child.data.swap_buff, child, tower_data.level)
+				for ability in child.data.innate_abilities:
+					child.add_ability(ability)
+		
+		#update tower base data
+		if child.data != null: 
 			mod_list[child.data.mod_class].append(child)
 			child.data.setup_stats(tower_data.level)
 			net_power += child.data.current_power
 			child.data.power_surplus_buffs = updated_mod_data.power_surplus_buffs
 	
-	if not aura_tower and mod_list[0].size() > 0:
-		apply_auras(mod_list)
+	#add aura effects to any weapon mods in the same tower
+	if is_built and updated_mod_data.slot_data != null and not updated_mod_data.aura_status: #check this over aura_tower because it's more up to date during update
+		apply_local_auras(updated_mod_data.aura_status, mod_list, updating_cell)
+	aura_tower = updated_mod_data.aura_status
 	
+	#connected to base's tower cells to complete their update
 	update_mods.emit(net_power)
 	
 	#if low power, set low power display
 
-func apply_auras(mod_list: Dictionary) -> void:
-	#add aura effects to any weapon mods in the same tower
-	for aura in mod_list[0]:
+func apply_local_auras(updated_aura_status: bool, mod_list: Dictionary, updated_cell: TowerCell) -> void:
+	#for all outcomes, tower must not be an aura tower
+	
+	#apply auras when: 
+	#tower is no longer aura tower > apply aura effect to other auras and all weapon mods
+	if aura_tower != updated_aura_status: #tower is no longer an aura tower
+			for aura in mod_list[0]:
+				for other_aura in mod_list[0]:
+					if aura == other_aura: #skips adding aura effect to itself
+						continue
+					else: 
+						aura.add_effect(aura.data.buff_data, aura, tower_data.level)
+				for wep in mod_list[2]:
+					wep.add_effect(aura.data.buff_data, aura, tower_data.level)
+	
+	#new aura is added > apply new aura to other auras and weapon mods, apply existing auras to new aura
+	elif updated_cell.data is ModAura:
+		for aura in mod_list[0]:
+			if aura.button_slot_id != updated_cell.button_slot_id:
+				aura.add_effect(updated_cell.data.buff_data, updated_cell, tower_data.level)
+				updated_cell.add_effect(aura.data.buff_data, aura, tower_data.level)
 		for wep in mod_list[2]:
-			wep.data.add_buff(aura.data.buff_data, aura, tower_data.level)
+			wep.add_effect(updated_cell.data.buff_data, updated_cell, tower_data.level)
+	
+	#new weapon is added > apply all auras to new weapon mod
+	elif updated_cell.data is ModWeapon:
+		for aura in mod_list[0]:
+			updated_cell.add_effect(aura.data.buff_data, aura, tower_data.level)
 
 func clear_popup_received() -> void:
 	clear_popup.emit()

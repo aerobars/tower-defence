@@ -48,14 +48,8 @@ func remove_buff(buff : Buff, buff_source : CollisionObject2D, amt : int = 1) ->
 	
 	if inst.buff_source.size() == 0 or inst.stacks == 0:
 		active_buffs.erase(buff)
-		remove_buff_display.emit(buff)
+		remove_buff_display.emit(buff)    
 		recalculate_stats()
-
-func add_ability(ability: Ability) -> void:
-	pass
-
-func remove_ability(ability: Ability) -> void:
-	pass
 
 func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
 	return []

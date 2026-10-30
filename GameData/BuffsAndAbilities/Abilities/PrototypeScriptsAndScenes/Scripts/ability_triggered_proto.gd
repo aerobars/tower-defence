@@ -1,7 +1,7 @@
 ##Abstract Ability class for abilities that trigger under certain conditions, such as on hit or a periodic timer.
 @abstract class_name AbilityTriggeredPrototype extends Ability
 
-func triggered_effect(trigger_source: UnitScenePrototype = ability_owner) -> void:
+func triggered_effect(trigger_source: Node2D = ability_owner) -> void:
 	if ability_targets == GlobalEnums.Targets.NONE:
 		no_target_trigger()
 		return
