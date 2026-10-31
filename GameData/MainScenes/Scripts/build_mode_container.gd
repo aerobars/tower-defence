@@ -2,19 +2,19 @@ extends Node2D
 
 signal build_tower(tower_data: TowerBuildData, build_button_ref: BuildTowerButton, tower_rotation: float)
 
-const PREVIEW_RANGE_DISPLAY : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
-const TOWER_BASE_SCENE : PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
+const PREVIEW_RANGE_DISPLAY: CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
+const TOWER_BASE_SCENE: PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
 
-var cell_size : int #set to Map Node CELL_SIZE in Game Scene
-var path_map : Node2D
+var cell_size: int #set to Map Node CELL_SIZE in Game Scene
+var path_map: Node2D
 
-var build_btn_ref : BuildTowerButton
+var build_btn_ref: BuildTowerButton
 ##aura_tower: bool, mods: button_data.mod_data (Dictionary[slot_id: int, PrototypeMod]), power_buffs: power_surplus_buffs (Dictionary[stat, amt: int]), shape: button_data.tower_shape (Array[Vector2i])
-var build_data : TowerBuildData
+var build_data: TowerBuildData
 ##Used for valid build locations
-var build_location : Vector2 = Vector2(0, 0)
-var build_mode : bool = false
-var tower_preview : TowerBase
+var build_location: Vector2 = Vector2(0, 0)
+var build_mode: bool = false
+var tower_preview: TowerBase
 
 func _process(_delta: float) -> void:
 	if build_mode:
@@ -37,7 +37,7 @@ func set_tower_preview() -> void:
 	tower_preview = create_tower_preview()
 	tower_preview.modulate = Color("GREEN")
 	
-	var range_texture : Sprite2D
+	var range_texture: Sprite2D
 	
 	
 	for button_id in build_data.mods: #adds range indicator to auras and weapons
@@ -47,7 +47,7 @@ func set_tower_preview() -> void:
 		var slot_id = button_id % 10
 		if mod.mod_class == mod.ModClass.AURA or mod.mod_class == mod.ModClass.WEAPON:
 			range_texture = Sprite2D.new()
-			var scaling : float = mod.base_range_levels[0] / 300.0
+			var scaling: float = mod.base_range_levels[0] / 300.0
 			range_texture.texture = PREVIEW_RANGE_DISPLAY
 			if mod.mod_class == mod.ModClass.WEAPON:
 				range_texture.modulate = Color("CRIMSON")
@@ -74,7 +74,7 @@ func create_tower_preview() -> TowerBase:
 	return new_tower
 
 func update_tower_preview() -> void:
-	var colour : String
+	var colour: String
 	
 	path_map.update_build_status(tower_preview)
 	

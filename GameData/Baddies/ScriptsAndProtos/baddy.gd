@@ -14,27 +14,27 @@ signal checkpoint_reached
 ## Node Paths
 
 @export_group("Node Paths", "path")
-@export var path_status_display : Node2D
-@export var path_impact_area : Marker2D
-@export var path_damage_number_origin : Marker2D
-@export var path_hit_flash : AnimationPlayer
-@export var path_ability_container : Node2D
-@export var path_baddy_texture : Sprite2D
-#@export var path_selection_circle : Sprite2D
+@export var path_status_display: Node2D
+@export var path_impact_area: Marker2D
+@export var path_damage_number_origin: Marker2D
+@export var path_hit_flash: AnimationPlayer
+@export var path_ability_container: Node2D
+@export var path_baddy_texture: Sprite2D
+#@export var path_selection_circle: Sprite2D
 
 ## Pathfinding
 
-var path_map : Node2D
-var movement_delta : float
-var path_point_margin : float = 0.5
+var path_map: Node2D
+var movement_delta: float
+var path_point_margin: float = 0.5
 var current_tile: Vector2i : 
-	set(cur_pos) :
+	set(cur_pos):
 		current_tile = path_map.get_current_tile(cur_pos)
 ##set in BaddyContainer when baddy is instantiated
-var current_path : PackedVector2Array 
-var current_path_index : int = 0
-var current_path_point : Vector2
-var waypoint_index : int = 1
+var current_path: PackedVector2Array 
+var current_path_index: int = 0
+var current_path_point: Vector2
+var waypoint_index: int = 1
 
 ## Runtime Variables
 
@@ -42,7 +42,7 @@ const AURA_SCENE := preload("res://GameData/BuffsAndAbilities/Abilities/Prototyp
 const PROJECTILE_IMPACT := preload("res://GameData/Support/Scenes/projectile_impact.tscn")
 
 var destroyed := false
-var level : int = 0
+var level: int = 0
 #var selected := false
 
 ## Setup
@@ -69,7 +69,7 @@ func _ready() -> void:
 	# Innate Effects Setup
 	
 	for ability in data.innate_abilities:
-		add_ability(ability) #function in unit_scene_proto
+		add_ability(ability, self) #function in unit_scene_proto
 	
 	stats_update()
 

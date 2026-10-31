@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="1_e625d"]
 [ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_nuh51"]
 [ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="3_hj02m"]
+[ext_resource type="Script" uid="uid://b5fdancndgo32" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_aura_resource.gd" id="4_nuh51"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aoyt4"]
 atlas = ExtResource("1_aoyt4")
@@ -19,21 +20,46 @@ metadata/_custom_type_script = "uid://bpcwdsr32rwby"
 [sub_resource type="Resource" id="Resource_li3sx"]
 script = ExtResource("3_hj02m")
 modifying_stats = Array[ExtResource("2_nuh51")]([SubResource("Resource_t27ny")])
-info_name = "Stacking Attack Speed"
-info_display_icon = SubResource("AtlasTexture_aoyt4")
 buff_targets = 1
 buff_persistent_effect = true
+info_name = "Stacking Attack Speed"
+info_display_icon = SubResource("AtlasTexture_aoyt4")
 metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s1u4x"]
 atlas = ExtResource("1_aoyt4")
 region = Rect2(368, 336, 16, 16)
 
+[sub_resource type="Resource" id="Resource_qw5iw"]
+script = ExtResource("2_nuh51")
+stat = 2
+modification_type = 1
+modification_amount = Array[float]([0.1, 0.15, 0.2, 0.25, 0.3])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
+[sub_resource type="Resource" id="Resource_a0cob"]
+script = ExtResource("3_hj02m")
+modifying_stats = Array[ExtResource("2_nuh51")]([SubResource("Resource_qw5iw")])
+buff_targets = 1
+buff_persistent_effect = true
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
+
+[sub_resource type="Resource" id="Resource_a3qir"]
+script = ExtResource("4_nuh51")
+buff_data = SubResource("Resource_a0cob")
+ability_targets = 1
+metadata/_custom_type_script = "uid://b5fdancndgo32"
+
 [resource]
 script = ExtResource("1_e625d")
+innate_abilities = Array[ExtResource("4_nuh51")]([SubResource("Resource_a3qir")])
+base_activation_speed_levels = null
 buff_data = SubResource("Resource_li3sx")
 base_power_levels = Array[int]([-1, -1, -1, -1, -1])
 base_range_levels = Array[float]([250.0, 250.0, 250.0, 250.0, 250.0])
+mod_class = null
+swap_enabled = null
+swap_buff_duration = null
 info_name = "Stacking Attack Speed Aura"
 info_description = "Provides a stacking attack speed bonus."
 info_texture = SubResource("AtlasTexture_s1u4x")

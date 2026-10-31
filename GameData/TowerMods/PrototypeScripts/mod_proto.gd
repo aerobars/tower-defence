@@ -4,49 +4,49 @@ class_name ModPrototype extends UnitDataPrototype
 enum ModClass { AURA, POWER, WEAPON }
 
 
-var class_string : String: 
+var class_string: String: 
 	get: 
 		return ModClass.keys()[ModClass.values().find(mod_class)]
 
 ##Stats for all mod types
 @export_group("Universal Mod Stats", "base_")
-@export var base_power_levels : Array[int] = [-2, -2, -2, -2, -2]
+@export var base_power_levels: Array[int] = [-2, -2, -2, -2, -2]
 ##range is radius of range circle, default (26) is 1/2 tower base
 ##approx. ranger reference: 100 = 1 tile, 200 = 2.5 tiles, 300 = 4 tiles, 400 = 5.5 tiles
-@export var base_range_levels : Array[float] = [26, 26, 26, 26, 26] 
-var current_power : int
-var current_range : float
+@export var base_range_levels: Array[float] = [26, 26, 26, 26, 26] 
+var current_power: int
+var current_range: float
 
-@export var mod_class : ModClass
+@export var mod_class: ModClass
 
 @export_group("Swapper Data", "swap_")
-@export var swap_enabled : bool
+@export var swap_enabled: bool
 ##Create buff in inspector, don't used saved resource
-@export var swap_buff : Buff
+@export var swap_buff: Buff
 @export var swap_buff_duration: float
 
-var net_power : int = 0
-var power_surplus_buffs : Dictionary = {}
-var power_calc : float :
+var net_power: int = 0
+var power_surplus_buffs: Dictionary = {}
+var power_calc: float :
 	get:
 		return (1 + float(net_power)/10) # * float(power_surplus_buffs[stat_name])/10)
 
-func add_buff(buff : Buff, _buff_source : CollisionObject2D, buff_level : int, amt : int = 1) -> void:
+func add_buff(buff: Buff, _buff_source: CollisionObject2D, buff_level: int, amt: int = 1) -> void:
 	if buff.buff_targets == GlobalEnums.Targets.TOWERS or buff.buff_targets == GlobalEnums.Targets.SELF:
 		super(buff, _buff_source, buff_level, amt)
 	elif buff.buff_targets == GlobalEnums.Targets.BADDIES:
 		add_onhit_effect(buff)
 
-func remove_buff(buff : Buff, buff_source : CollisionObject2D, amt : = 1) -> void:
+func remove_buff(buff: Buff, buff_source: CollisionObject2D, amt: = 1) -> void:
 	if buff is BuffStat and buff.buff_targets == GlobalEnums.Targets.TOWERS:
 		super(buff, buff_source ,amt)
 	else:
 		remove_onhit_effect(buff)
 
-func add_onhit_effect(_buff : Buff) -> void: #setup for Weapon Mods
+func add_onhit_effect(_buff: Buff) -> void: #setup for Weapon Mods
 	pass
 
-func remove_onhit_effect(_buff : Buff) -> void:#setup for Weapon Mods
+func remove_onhit_effect(_buff: Buff) -> void:#setup for Weapon Mods
 	pass
 
 func power_buff() -> void:

@@ -1,7 +1,7 @@
 class_name ValidatorResource extends RefCounted
 
-var data_name : String
-var validation_results : ValidatorResult
+var data_name: String
+var validation_results: ValidatorResult
 
 func validate(filepath: String) -> void:
 	var data = load(filepath)

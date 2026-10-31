@@ -1,10 +1,10 @@
 class_name AttackData extends RefCounted
 
-var damage_amount : float
-var damage_tags : int
-var crit_multi : float
-var crit_status : bool
-var mod_level : int
+var damage_amount: float
+var damage_tags: int
+var crit_multi: float
+var crit_status: bool
+var mod_level: int
 
 func _init(
 	_dmg: float, 

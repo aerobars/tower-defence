@@ -9,79 +9,79 @@ signal open_settings
 const BADDY_SCENE := preload("res://GameData/Baddies/ScriptsAndProtos/baddy.tscn")
 const DRAGGABLE_MOD := preload("res://GameData/UI/GUI/Scenes/mod_draggable.tscn")
 const TOWER_BUTTON := preload("res://GameData/UI/GUI/Scenes/tower_button.tscn")
-const PREVIEW_RANGE_DISPLAY : CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
+const PREVIEW_RANGE_DISPLAY: CompressedTexture2D = preload("res://Assets/UI/range_overlay.png")
 const REWARD_UI = preload("res://GameData/UI/GUI/RewardSelection/reward_selection.tscn")
-const POPUPS : Dictionary = {
-	"mod" : preload("res://GameData/UI/GUI/Scenes/mod_popup.tscn"),
-	"tower" : preload("res://GameData/UI/GUI/Scenes/tower_popup.tscn")
+const POPUPS: Dictionary = {
+	"mod": preload("res://GameData/UI/GUI/Scenes/mod_popup.tscn"),
+	"tower": preload("res://GameData/UI/GUI/Scenes/tower_popup.tscn")
 }
 @export_group("Scene Paths")
 @export_subgroup("UI", "path_")
-@export var path_ui : CanvasLayer
-@export var path_range_display : Sprite2D
-@export var path_camera : Camera2D
-var cur_popup : Node2D
+@export var path_ui: CanvasLayer
+@export var path_range_display: Sprite2D
+@export var path_camera: Camera2D
+var cur_popup: Node2D
 
 @export_subgroup("Containers", "path_")
-@export var path_build_mode_container : Node2D
-@export var path_tower_container : Node2D
-@export var path_baddy_container : Node2D
-@export var path_projectile_container : Node2D
+@export var path_build_mode_container: Node2D
+@export var path_tower_container: Node2D
+@export var path_baddy_container: Node2D
+@export var path_projectile_container: Node2D
 
 ## Pathfinding
 
 @export_subgroup("Map and Pathfinding", "path_")
-@export var path_map_node : Node2D #set in _ready instead if using multiple maps
-@export var path_pathfinding_line :Line2D
-var preview_path : PackedVector2Array = []
+@export var path_map_node: Node2D #set in _ready instead if using multiple maps
+@export var path_pathfinding_line:Line2D
+var preview_path: PackedVector2Array = []
 
-var tower_grid_size : int :
+var tower_grid_size: int :
 	get():
 		return path_map_node.CELL_SIZE * 3 #CELL_SIZE * number of columns in tower grid(3)
-var previous_tiles : Array[Vector2i]
+var previous_tiles: Array[Vector2i]
 
 ## Gameplay 
 
-var new_game : bool
+var new_game: bool
 @export_group("Gameplay")
 var remaining_spawns := 0 
 var wave_total := 0
 var living_baddies := 0
 var escaped_baddies := 0
-var player_health : int :
+var player_health: int :
 	set(value):
 		SaveManager.save_data_run.current_player_health = value
 		if path_ui:
 			path_ui.update_health_bar(SaveManager.save_data_run.current_player_health, SaveManager.save_data_run.current_max_health)
 	get:
 		return SaveManager.save_data_run.current_player_health
-#var character : String = "Tester"
-var player_cash : int :
+#var character: String = "Tester"
+var player_cash: int :
 	set(value):
 		SaveManager.save_data_run.current_cash = value
 		if path_ui:
 			path_ui.update_cash_display(SaveManager.save_data_run.current_cash)
 	get:
 		return SaveManager.save_data_run.current_cash
-var wave_reward : int :
+var wave_reward: int :
 	get:
 		return randi_range(50, 50) # (1 + float(SaveManager.save_data_run.current_wave)/10)
-var current_unit : Node2D
-var is_game_over : bool = false
-var wave_end_effect_tracker : Dictionary = {}
-var temp_reward_bonus : int
+var current_unit: Node2D
+var is_game_over: bool = false
+var wave_end_effect_tracker: Dictionary = {}
+var temp_reward_bonus: int
 
 ## Build Mode
 
 ##Contains: "aura_tower": bool, "mods": button_data.mod_data (Dictionary[slot_id: int, PrototypeMod]), "power_buffs": power_surplus_buffs (Dictionary[stat, amt: int]), "shape": button_data.tower_shape (Array[Vector2i])
-var build_data : TowerBuildData
-var build_location : Vector2 = Vector2(0, 0)
-var build_rotation : float = 0.0
-var build_mode : bool = false
-var build_tiles : Array[Vector2i]
-var build_valid : bool = false
-@onready var tower_base_scene : PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
-var tower_preview : Node2D
+var build_data: TowerBuildData
+var build_location: Vector2 = Vector2(0, 0)
+var build_rotation: float = 0.0
+var build_mode: bool = false
+var build_tiles: Array[Vector2i]
+var build_valid: bool = false
+@onready var tower_base_scene: PackedScene = preload("res://GameData/Towers/Scenes/tower_base.tscn")
+var tower_preview: Node2D
 
 
 func _ready() -> void:
@@ -257,7 +257,7 @@ func on_tower_sold(sell_value: int, _tower) -> void:
 	player_cash += sell_value
 	path_ui.update_cash_display(player_cash)
 
-func upgrade_check(upgrade_cost : int, tower : TowerBase, popup : TowerPopup) -> void:
+func upgrade_check(upgrade_cost: int, tower: TowerBase, popup: TowerPopup) -> void:
 	if player_cash < upgrade_cost:
 		path_ui.update_game_message("Unable to upgrade: insufficient funds", 1.0, 0.5)
 	else:
@@ -280,8 +280,8 @@ func connect_inv_slot(new_inv_slot: InventorySlotUI) -> void:
 
 func create_draggable(
 	tower_mod: ModPrototype, 
-	initial_pos : Vector2 = get_global_mouse_position(), 
-	slot_occupied : TowerButtonModSlot = null, 
+	initial_pos: Vector2 = get_global_mouse_position(), 
+	slot_occupied: TowerButtonModSlot = null, 
 	_is_dragging = true
 	) -> void: #button down for inventory slot
 	
@@ -299,7 +299,7 @@ func create_draggable(
 		#new_draggable.global_position = initial_pos
 		new_draggable.in_inventory = false
 
-func create_popup(popup_type: String , data, popup_owner : TowerBase = null) -> void:
+func create_popup(popup_type: String , data, popup_owner: TowerBase = null) -> void:
 	clear_popup()
 	var popup = POPUPS[popup_type].instantiate()
 	var popup_size = popup.get_child(0).size
@@ -318,7 +318,7 @@ func clear_popup() -> void:
 
 func update_range_display(tower: TowerCell) -> void:
 	path_range_display.global_position = tower.global_position
-	var scaling : float = tower.data.current_range / 300.0
+	var scaling: float = tower.data.current_range / 300.0
 	if tower.data.mod_class == ModPrototype.ModClass.WEAPON:
 		path_range_display.modulate = Color("CRIMSON")
 	elif tower.data.mod_class == ModPrototype.ModClass.AURA:
@@ -344,7 +344,7 @@ func tower_cell_updated(cell: TowerCell) -> void:
 func _on_ui_open_settings() -> void:
 	open_settings.emit()
 
-func connect_settings(settings_instance : Control) -> void:
+func connect_settings(settings_instance: Control) -> void:
 	settings_instance.close_settings.connenct(path_ui)
 
 ##Save/Load Testing

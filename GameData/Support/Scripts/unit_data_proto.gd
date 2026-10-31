@@ -6,23 +6,23 @@ signal remove_buff_display(buff: Buff)
 signal stats_updated
 
 @export_group("Unit Info", "info_")
-@export var info_name : String
-@export_multiline var info_description : String
-@export var info_texture : Texture2D
+@export var info_name: String
+@export_multiline var info_description: String
+@export var info_texture: Texture2D
 
 ##first level will be 0 after setup_stats to line up with arrays
-var level : int = 0 
+var level: int = 0 
 ##buff_owner is the unit affected by the buff
-var data_owner : UnitScenePrototype
-var active_buffs : Dictionary[Buff, BuffInstance] = {}
-var active_abilities : Array[Ability] = []
+var data_owner: UnitScenePrototype
+var active_buffs: Dictionary[Buff, BuffInstance] = {}
+var active_abilities: Array[Ability] = []
 
-func setup_stats(_level : int = 0) -> void:
+func setup_stats(_level: int = 0) -> void:
 	level = _level
 	recalculate_stats()
 
 ##buff/data_owner is the unit affected by the buff, buff_source is the unit providing the buff being added
-func add_buff(buff : Buff, buff_source : CollisionObject2D, buff_level : int, amt : int = 1) -> void:
+func add_buff(buff: Buff, buff_source: CollisionObject2D, buff_level: int, amt: int = 1) -> void:
 	if not active_buffs.has(buff):
 		var new_inst = BuffInstance.new(buff, data_owner, buff_source, buff_level)
 		active_buffs[buff] = new_inst
@@ -36,7 +36,7 @@ func add_buff(buff : Buff, buff_source : CollisionObject2D, buff_level : int, am
 	update_buff_display.emit(buff, inst.stacks)
 	recalculate_stats()
 
-func remove_buff(buff : Buff, buff_source : CollisionObject2D, amt : int = 1) -> void:
+func remove_buff(buff: Buff, buff_source: CollisionObject2D, amt: int = 1) -> void:
 	if not active_buffs.has(buff):
 		return
 	var inst = active_buffs[buff]
@@ -69,7 +69,7 @@ func recalculate_stats() -> void:
 		if buff is BuffStat:
 			for buff_stat in buff.modifying_stats:
 				if buff_check(buff_stat.stat):
-					var stat_name : String = ""
+					var stat_name: String = ""
 					var inst = active_buffs[buff]
 					for stat in GlobalEnums.BuffableStats.keys():
 						if buff_stat.stat & GlobalEnums.BuffableStats[stat]:

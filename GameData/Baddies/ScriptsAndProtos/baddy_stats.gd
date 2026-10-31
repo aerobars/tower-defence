@@ -5,10 +5,10 @@ signal health_changed(current_health: float, max_health: float)
 
 
 @export_group("Spawn Data", "spawn_")
-@export var spawn_per_wave : int = 1
-@export var spawn_interval : float = 0.5
+@export var spawn_per_wave: int = 1
+@export var spawn_interval: float = 0.5
 ##If true, baddy is considered a summon and doesn't count towards escaped baddies game over condition
-@export var spawn_summon : bool = false
+@export var spawn_summon: bool = false
 
 ##Baddy Stats
 
@@ -19,34 +19,34 @@ const BUFFABLE_STATS = [
 	GlobalEnums.BuffableStats.MAX_HEALTH,
 	GlobalEnums.BuffableStats.MOVESPEED
 ]
-const BASE_LEVEL_XP : float = 100.0
+const BASE_LEVEL_XP: float = 100.0
 
 @export_group("Base Stats", "base_")
-@export var base_max_health : float = 75
-@export var base_damage : float = 1
-@export var base_defence : float = 5
-@export var base_movespeed : float = 150
-@export var base_defence_tag : GlobalEnums.BaddyArmorTags = GlobalEnums.BaddyArmorTags.UNARMORED
+@export var base_max_health: float = 75
+@export var base_damage: float = 1
+@export var base_defence: float = 5
+@export var base_movespeed: float = 150
+@export var base_defence_tag: GlobalEnums.BaddyArmorTags = GlobalEnums.BaddyArmorTags.UNARMORED
 
-var wave_ratio : float :
+var wave_ratio: float :
 	get:
 		return 1 + (SaveManager.save_data_run.current_wave - 1)/10.0
-var current_max_health : float
-var current_damage : float :
+var current_max_health: float
+var current_damage: float :
 	set(value):
 		current_damage = max(value, 1)
-var current_defence : float
-var current_movespeed : float
+var current_defence: float
+var current_movespeed: float
 
-var health : float = 0 : set = _on_health_set
+var health: float = 0 : set = _on_health_set
 
 ##Buffs and Auras
 @export_group("In Game Effects")
-@export var innate_abilities : Array[Ability]
+@export var innate_abilities: Array[Ability]
 
 ##currently unused
-@export var experience : int = 0: set = _on_experience_set
-#var level : int = 0 :
+@export var experience: int = 0: set = _on_experience_set
+#var level: int = 0 :
 #	get(): return floor(max(1.0, sqrt(experience/BASE_LEVEL_XP) + 0.5))
 
 ## Stats Setup and Adjustment
@@ -77,7 +77,7 @@ func _on_health_set(new_value: float) -> void:
 		health_depleted.emit()
 
 func _on_experience_set(new_value: int) -> void:
-	var old_level : int = level
+	var old_level: int = level
 	experience = new_value
 	if not old_level == level:
 		recalculate_stats()

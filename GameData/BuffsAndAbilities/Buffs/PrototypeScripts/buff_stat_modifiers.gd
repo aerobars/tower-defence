@@ -7,7 +7,7 @@ enum BuffModificationType {
 	}
 
 @warning_ignore("enum_variable_without_default")
-@export var stat : GlobalEnums.BuffableStats
-@export var modification_type : BuffModificationType
+@export var stat: GlobalEnums.BuffableStats
+@export var modification_type: BuffModificationType
 ##Behaves as either flat amount for ADD, or percentage increase for MULTIPLY
-@export var modification_amount : Array[float] = [0, 0, 0, 0, 0]
+@export var modification_amount: Array[float] = [0, 0, 0, 0, 0]

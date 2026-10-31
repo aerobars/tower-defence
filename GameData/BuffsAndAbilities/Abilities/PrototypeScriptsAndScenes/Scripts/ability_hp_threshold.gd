@@ -4,12 +4,12 @@ signal threshold_reached
 
 ##float is hp/max hp ratio to trigger effect, 
 ##bool tracks if effect has already been triggered to prevent repeating
-@export var threshold_levels : Dictionary[float, bool]
+@export var threshold_levels: Dictionary[float, bool]
 ##If true, effect will repeat if baddy health crosses the given threshold again
-@export var repeateable_effect : bool = false 
+@export var repeateable_effect: bool = false 
 
-func ability_setup(_ability_owner: CollisionObject2D) -> void:
-	super(_ability_owner)
+func ability_setup(_ability_owner: CollisionObject2D, _ability_source: UnitScenePrototype) -> void:
+	super(_ability_owner, _ability_source)
 	ability_owner.data.health_changed.connect(threshold_check)
 
 func threshold_check(current_health: float, max_health: float) -> void:

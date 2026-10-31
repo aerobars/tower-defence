@@ -8,14 +8,16 @@ const BUFFABLE_STATS = [
 
 @export_group("Aura Stats")
 ##How many times per second this tower activates
-@export var innate_abilities : Array[AbilityAura]
-@export var base_activation_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] #cd between attacks in seconds
-@export var buff_data : Buff 
-var current_activation_speed : float
+@export var innate_abilities: Array[AbilityAura]
+@export var base_activation_speed_levels: Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] #cd between attacks in seconds
+@export var buff_data: Buff 
+var current_activation_speed: float
 
-var activation_cooldown : float
+var activation_cooldown: float
+##Array containing just the tower's aura abilities
+var active_auras: Array[AbilityAura]
 
-func setup_stats(_level : int = 0) -> void:
+func setup_stats(_level: int = 0) -> void:
 	super(_level)
 	if not stats_updated.is_connected(set_activation_cooldown):
 		stats_updated.connect(set_activation_cooldown)

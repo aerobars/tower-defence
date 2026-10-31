@@ -4,11 +4,11 @@ signal hit_detected
 
 ##Projectile Stats
 
-var data : ProjectileData
-var direction : Vector2
+var data: ProjectileData
+var direction: Vector2
 
-var lifetime_cur : float = 0.0
-var pierce_count : int = 0
+var lifetime_cur: float = 0.0
+var pierce_count: int = 0
 
 func _process(delta: float) -> void:
 	position += direction * data.speed * delta

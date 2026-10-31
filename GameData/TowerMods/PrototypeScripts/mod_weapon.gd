@@ -11,33 +11,33 @@ const BUFFABLE_STATS = [
 ]
 
 ##A projectile speed of 0 is an instant attack
-@export var projectile_speed : float = 750
+@export var projectile_speed: float = 750
 ##BLEED = 1, BLUNT = 2, BURN = 4, HEAL = 8, PIERCE = 16, POISON = 32, SHOCK = 64
-@export var damage_tags : int = GlobalEnums.DamageTag.PIERCE
-@export var innate_abilities : Array[AbilityOnHit]
+@export var damage_tags: int = GlobalEnums.DamageTag.PIERCE
+@export var innate_abilities: Array[AbilityOnHit]
 
 ##Level based variables
 @export_group("Weapon Stats", "base_")
-@export var base_aoe_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
+@export var base_aoe_levels: Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 ##Number of attacks per second
-@export var base_attack_speed_levels : Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] 
-@export_range(0.0, 1.0, 0.01,) var base_crit_chance_levels : Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
+@export var base_activation_speed_levels: Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] 
+@export_range(0.0, 1.0, 0.01,) var base_crit_chance_levels: Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 @export var base_crit_multiplier_levels: Array[float] = [1.5, 1.5, 1.5, 1.5, 1.5]
-@export var base_damage_levels : Array[float] = [10.0, 10.0, 10.0, 10.0, 10.0]
-@export var base_multitarget_levels : Array [int] = [1, 1, 1, 1, 1]
-@export var base_pierce_levels : Array[int] = [1, 1, 1, 1, 1]
-var current_aoe : float
-var current_attack_speed : float
-var current_crit_chance : float
+@export var base_damage_levels: Array[float] = [10.0, 10.0, 10.0, 10.0, 10.0]
+@export var base_multitarget_levels: Array [int] = [1, 1, 1, 1, 1]
+@export var base_pierce_levels: Array[int] = [1, 1, 1, 1, 1]
+var current_aoe: float
+var current_activation_speed: float
+var current_crit_chance: float
 var current_crit_multiplier: float
-var current_damage : float
-var current_multitarget : int
-var current_pierce : int
+var current_damage: float
+var current_multitarget: int
+var current_pierce: int
 
-var activation_cooldown : float
-#var onhit_effects : Array
+var activation_cooldown: float
+#var onhit_effects: Array
 
-func setup_stats(_level : int = 0) -> void:
+func setup_stats(_level: int = 0) -> void:
 	super(_level)
 	if not stats_updated.is_connected(set_activation_cooldown):
 		stats_updated.connect(set_activation_cooldown)
@@ -47,7 +47,7 @@ func get_buffable_stats() -> Array[GlobalEnums.BuffableStats]:
 
 func set_current_stats() -> void:
 	current_aoe = base_aoe_levels[level]
-	current_attack_speed = base_attack_speed_levels[level]
+	current_activation_speed = base_activation_speed_levels[level]
 	current_crit_chance = base_crit_chance_levels[level]
 	current_crit_multiplier = base_crit_multiplier_levels[level]
 	current_damage = base_damage_levels[level]
@@ -57,7 +57,7 @@ func set_current_stats() -> void:
 	current_range = base_range_levels[level]
 
 func set_activation_cooldown() -> void:
-	activation_cooldown = 1 / current_attack_speed
+	activation_cooldown = 1 / current_activation_speed
 
 ##obsolete
 func calculate_damage() -> Array: #returns [total attack damage, damage tags, did the attack crit]

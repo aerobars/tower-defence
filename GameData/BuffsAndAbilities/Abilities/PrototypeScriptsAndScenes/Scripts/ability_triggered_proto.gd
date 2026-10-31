@@ -25,7 +25,7 @@ func no_target_trigger() -> void:
 
 ##Determine ability targets
 func _determine_targets(trigger_source: UnitScenePrototype) -> Array[Node2D]:
-	var targets : Array[Node2D] = []
+	var targets: Array[Node2D] = []
 	if ability_targets == GlobalEnums.Targets.SELF:
 		targets = [ability_owner]
 	elif ability_targets == GlobalEnums.Targets.BADDIES or ability_targets == GlobalEnums.Targets.TOWERS:

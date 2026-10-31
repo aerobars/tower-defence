@@ -1,20 +1,20 @@
 class_name BuffInstance extends Resource
 
-var buff : Buff
-var buff_owner : Node2D 
-var buff_source : Array[Node2D]
-var stacks : int = 0
-var dot_timer : float
-var time_remaining : float
-var last_position : Vector2
-var level : int = 0
+var buff: Buff
+var buff_owner: Node2D 
+var buff_source: Array[Node2D]
+var stacks: int = 0
+var dot_timer: float
+var time_remaining: float
+var last_position: Vector2
+var level: int = 0
 
 ## Knockback runtime data (only used when buff is BuffKnockback)
-var kb_target : Vector2
-var kb_start : Vector2
-var kb_initialized : bool = false
-var cell_size : int 
-var step : float 
+var kb_target: Vector2
+var kb_start: Vector2
+var kb_initialized: bool = false
+var cell_size: int 
+var step: float 
 
 ## Setup and Updates
 
@@ -53,7 +53,7 @@ func update(delta: float, position: Vector2 = Vector2(0,0)) -> void:
 
 ## On Hit
 
-func on_hit_check(_damage_tags : int) -> void:
+func on_hit_check(_damage_tags: int) -> void:
 	if randf() <= float(buff.success_chance_per_stack[level] * stacks):
 		_effect_trigger()
 		if buff.buff_persistent_effect == false:
@@ -63,18 +63,18 @@ func on_hit_check(_damage_tags : int) -> void:
 
 func _effect_trigger() -> void:
 	
-	var onhit_targets = _determine_targets()
+	var targets = _determine_targets()
 	
 	if buff.damage_tag > 0:
-		for target in onhit_targets:
+		for target in targets:
 			target.calculate_damage([buff.buff_effect_amount[level] * stacks, buff.damage_tag, false])
 	
 	if buff is BuffOnHit and buff.buff_to_apply != null:
-		for target in onhit_targets:
+		for target in targets:
 			target.data.add_buff(buff.buff_to_apply, buff_owner, level)
 
 func _determine_targets() -> Array[Node2D]:
-	var targets : Array[Node2D] = []
+	var targets: Array[Node2D] = []
 	if buff.buff_targets == GlobalEnums.Targets.BADDIES or buff.buff_targets == GlobalEnums.Targets.TOWERS:
 		targets = StaticFunctions.setup_aoe(
 			buff_owner, 
@@ -92,8 +92,8 @@ func _determine_targets() -> Array[Node2D]:
 func _apply_knockback(_delta: float) -> void:
 	if not kb_initialized:
 		kb_initialized = true
-		var kb : BuffKnockback = buff
-#		var kb := buff as BuffKnockback
+		var kb: BuffKnockback = buff
+#		var kb:= buff as BuffKnockback
 		kb_start = buff_owner.global_position
 		
 		var dir: Vector2
@@ -126,7 +126,7 @@ func _calculate_clamped_target(origin: Vector2, direction: Vector2, max_dist: fl
 	
 	var steps: int = int(max_dist / step)
 	for i in range(1, steps + 1):
-		var next_pos : Vector2 = origin + direction * (step * i)
+		var next_pos: Vector2 = origin + direction * (step * i)
 		var tile: Vector2i = buff_owner.path_map.get_current_tile(next_pos)
 		if astar.is_point_solid(tile):
 			return current_pos  # Stop at last valid position

@@ -1,13 +1,13 @@
 class_name StaticFunctions extends Node
 
 static func setup_aoe(
-		aoe_owner : Node2D, 
-		target_position : Vector2, 
-		target_group : String, 
-		radius : float
+		aoe_owner: Node2D, 
+		target_position: Vector2, 
+		target_group: String, 
+		radius: float
 		) -> Array[Node2D]:
 	
-	var targets : Array[Node2D] = []
+	var targets: Array[Node2D] = []
 	
 	var aoe_radius = CircleShape2D.new()
 	aoe_radius.radius = radius

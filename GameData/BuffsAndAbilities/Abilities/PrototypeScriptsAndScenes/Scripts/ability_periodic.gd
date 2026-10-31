@@ -1,8 +1,8 @@
 ##Contains functions for abilities that trigger on a timer at regular intervals
 class_name AbilityPeriodic extends AbilityTriggeredPrototype
 
-@export var ability_process_type : GlobalEnums.ProcessingMethods
-var last_position : Vector2
+@export var ability_process_type: GlobalEnums.ProcessingMethods
+var last_position: Vector2
 
 func process(delta: float, position: Vector2) -> void:
 	match ability_process_type:
