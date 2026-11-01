@@ -69,7 +69,7 @@ func _ready() -> void:
 	# Innate Effects Setup
 	
 	for ability in data.innate_abilities:
-		add_ability(ability, self) #function in unit_scene_proto
+		_add_ability(ability, self) #function in unit_scene_proto
 	
 	stats_update()
 

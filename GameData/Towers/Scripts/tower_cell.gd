@@ -45,10 +45,11 @@ var aura_targets: Array = []
 
 func _ready():
 	super()
+	if data != null:
+		for ability in data.innate_abilities:
+			_add_ability(ability, self) #function is in unit_scene_proto
 	for body in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(body)
-		for ability in data.innate_abilities:
-			add_ability(ability, self) #function is in unit_scene_proto
 
 func get_level() -> int:
 	return get_parent().tower_data.level
@@ -85,8 +86,8 @@ func setup_mod(net_power: int = 0) -> void:
 	path_turret.texture = data.info_texture
 	mod_updated.emit(self)
 
-func aura_setup(aura_data: AbilityAura) -> void:
-	data.active_auras.append(aura_data)
+func aura_setup(_aura_data: AbilityAura) -> void:
+	pass
 
 ##Connected to GameData, triggers whenever any mod is updated
 func on_tower_cell_updated(updated_cell: TowerCell) -> void: 
@@ -94,7 +95,6 @@ func on_tower_cell_updated(updated_cell: TowerCell) -> void:
 		return
 	if updated_cell in path_range_scene.get_overlapping_bodies():
 		_on_range_body_entered(updated_cell)
-
 
 ##Input Event Handling
 
@@ -170,7 +170,7 @@ func _on_range_body_entered(body) -> void:
 		var aura_target: bool = false
 		if body.is_in_group("baddies"):
 			for ability in data.active_auras:
-				if ability.buff_data.buff_persistent_effect:
+				if ability.ability_targets == GlobalEnums.Targets.BADDIES and ability.buff_data.buff_persistent_effect:
 					aura_target = true
 					body.add_effect(ability.buff_data, self, get_level())
 		elif body.is_in_group("towers"):
@@ -178,9 +178,13 @@ func _on_range_body_entered(body) -> void:
 				if ability.ability_targets == GlobalEnums.Targets.TOWERS:
 					aura_target = true
 					body.add_effect(ability.buff_data, self, get_level())
+					print('adding local tower aura to cell')
 				elif ability.ability_targets == GlobalEnums.Targets.BADDIES and not get_parent().aura_tower:
 					aura_target = true
-					body.add_effect(AbilityOnHit.new(ability), self, get_level())
+					var onhit = AbilityOnHit.new()
+					onhit.ability_initiate(ability)
+					body.add_effect(onhit, self, get_level())
+					print('adding local baddy aura to cell')
 				#nothing gets added for offensive auras in aura mode
 		if aura_target:
 			aura_targets.append(body)
@@ -206,7 +210,9 @@ func _on_range_body_exited(body) -> void:
 					body.remove_effect(ability.buff_data, self)
 				elif ability.ability_targets == GlobalEnums.Targets.BADDIES and not get_parent().aura_tower:
 					aura_target = true
-					body.remove_effect(AbilityOnHit.new(ability), self)
+					var onhit = AbilityOnHit.new()
+					onhit.ability_initiate(ability)
+					body.remove_effect(onhit, self)
 		if aura_target:
 			aura_targets.erase(body)
 

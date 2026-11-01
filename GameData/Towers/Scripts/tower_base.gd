@@ -127,6 +127,7 @@ func tower_update(updated_mod_data: ModUpdateData) -> void:
 			#clears mod data if updated mod slot is empty
 			if updated_mod_data.slot_data == null: 
 				child.data = null
+				child.path_buff_display.clear_display()
 			
 			#set updating cell's mod data
 			else: 
@@ -138,7 +139,7 @@ func tower_update(updated_mod_data: ModUpdateData) -> void:
 					else:
 						child.add_effect(child.data.swap_buff, child, tower_data.level)
 				for ability in child.data.innate_abilities:
-					child.add_ability(ability)
+					child.add_effect(ability)
 		
 		#update tower base data
 		if child.data != null: 

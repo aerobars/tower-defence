@@ -15,3 +15,7 @@ func remove_buff(effect) -> void:
 	for child in get_children(): #check if mod exists in inventory and increment
 		if child.info_name == effect.info_name:
 			child.queue_free()
+
+func clear_display() -> void:
+	for child in get_children():
+		child.queue_free()

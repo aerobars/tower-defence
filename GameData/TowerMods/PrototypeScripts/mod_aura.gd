@@ -3,7 +3,7 @@ class_name ModAura extends ModPrototype
 const BUFFABLE_STATS = [
 	GlobalEnums.BuffableStats.RANGE,
 #	GlobalEnums.BuffableStats.POWER,
-	GlobalEnums.BuffableStats.ATTACK_SPEED,
+	GlobalEnums.BuffableStats.ACTIVATION_SPEED,
 ]
 
 @export_group("Aura Stats")
@@ -15,7 +15,13 @@ var current_activation_speed: float
 
 var activation_cooldown: float
 ##Array containing just the tower's aura abilities
-var active_auras: Array[AbilityAura]
+var active_auras: Array[AbilityAura] : 
+	get:
+		var auras : Array[AbilityAura] = []
+		for ability in active_abilities:
+			if ability is AbilityAura:
+				auras.append(ability)
+		return auras
 
 func setup_stats(_level: int = 0) -> void:
 	super(_level)

@@ -3,6 +3,7 @@
 [ext_resource type="Resource" uid="uid://d28awyyh0t1la" path="res://GameData/BuffsAndAbilities/Buffs/onhit_shock.tres" id="1_xuelf"]
 [ext_resource type="Texture2D" uid="uid://cqvhg7gv2q32f" path="res://Assets/Effects/explosionSmoke1.png" id="2_xuelf"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="3_2rp7h"]
+[ext_resource type="Script" uid="uid://b5fdancndgo32" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_aura_resource.gd" id="3_c20mv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a4ux6"]
 atlas = ExtResource("2_xuelf")

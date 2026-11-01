@@ -2,7 +2,7 @@ class_name ModWeapon extends ModPrototype
 
 const BUFFABLE_STATS = [
 	GlobalEnums.BuffableStats.AOE,
-	GlobalEnums.BuffableStats.ATTACK_SPEED,
+	GlobalEnums.BuffableStats.ACTIVATION_SPEED,
 	GlobalEnums.BuffableStats.CRIT_CHANCE,
 	GlobalEnums.BuffableStats.CRIT_DAMAGE,
 	GlobalEnums.BuffableStats.DAMAGE,

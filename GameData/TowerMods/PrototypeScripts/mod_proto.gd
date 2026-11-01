@@ -31,17 +31,17 @@ var power_calc: float :
 	get:
 		return (1 + float(net_power)/10) # * float(power_surplus_buffs[stat_name])/10)
 
-func add_buff(buff: Buff, _buff_source: CollisionObject2D, buff_level: int, amt: int = 1) -> void:
-	if buff.buff_targets == GlobalEnums.Targets.TOWERS or buff.buff_targets == GlobalEnums.Targets.SELF:
-		super(buff, _buff_source, buff_level, amt)
-	elif buff.buff_targets == GlobalEnums.Targets.BADDIES:
-		add_onhit_effect(buff)
+#func add_buff(buff: Buff, _buff_source: CollisionObject2D, buff_level: int, amt: int = 1) -> void:
+#	if buff.buff_targets == GlobalEnums.Targets.TOWERS or buff.buff_targets == GlobalEnums.Targets.SELF:
+#		super(buff, _buff_source, buff_level, amt)
+#	elif buff.buff_targets == GlobalEnums.Targets.BADDIES:
+#		add_onhit_effect(buff)
 
-func remove_buff(buff: Buff, buff_source: CollisionObject2D, amt: = 1) -> void:
-	if buff is BuffStat and buff.buff_targets == GlobalEnums.Targets.TOWERS:
-		super(buff, buff_source ,amt)
-	else:
-		remove_onhit_effect(buff)
+#func remove_buff(buff: Buff, buff_source: CollisionObject2D, amt: = 1) -> void:
+#	if buff is BuffStat and buff.buff_targets == GlobalEnums.Targets.TOWERS:
+#		super(buff, buff_source, amt)
+#	else:
+#		remove_onhit_effect(buff)
 
 func add_onhit_effect(_buff: Buff) -> void: #setup for Weapon Mods
 	pass

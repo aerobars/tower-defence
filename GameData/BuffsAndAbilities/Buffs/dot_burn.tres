@@ -10,7 +10,7 @@ region = Rect2(16, 16, 32, 32)
 [resource]
 script = ExtResource("1_imnq3")
 damage_tag = 4
+buff_targets = 2
 info_name = "Burn"
 info_display_icon = SubResource("AtlasTexture_kn10b")
-buff_targets = 2
 metadata/_custom_type_script = "uid://2ja3gh17qp02"

@@ -20,13 +20,13 @@ func _ready() -> void:
 	data.data_owner = self
 	data.setup_stats(get_level())
 
-func add_ability(ability: Ability, ability_source) -> void:
+func _add_ability(ability: Ability, ability_source) -> void:
 	var new_ability = ability.duplicate(true) #ability is duplicated to avoid shared instances (esp. important for periodic abilities)
 	data.active_abilities.append(new_ability)
 	new_ability.ability_setup(self, ability_source)
 	display_update(new_ability)
 
-func remove_ability(ability: Ability, ability_source) -> void:
+func _remove_ability(ability: Ability) -> void:
 	#match ability source before removing ability
 	data.active_abilities.erase(ability)
 	#display_update(ability)
@@ -34,16 +34,19 @@ func remove_ability(ability: Ability, ability_source) -> void:
 @abstract func display_update(effect) -> void
 
 ##UnitProtoype function, directs effect to the appropriate add_ function
-func add_effect(effect: Effect, effect_source: UnitScenePrototype = self ,cur_level: int = 0) -> void:
+func add_effect(effect: Effect, effect_source: UnitScenePrototype = self, cur_level: int = 0) -> void:
 	if data == null:
 		return
 	if effect is Buff:
 		data.add_buff(effect, effect_source, cur_level)
 	elif effect is Ability:
-		for ability in data.active_abilities:
-			if effect.info_name == ability.info_name and ability.ability_source == effect_source: 
-				return #prevent adding duplicate abilities from same source
-			add_ability(effect, effect_source)
+		if data.active_abilities.is_empty():
+			_add_ability(effect, effect_source)
+		else:
+			for ability in data.active_abilities:
+				if effect.info_name == ability.info_name and ability.ability_source == effect_source: 
+					return #prevent adding duplicate abilities from same source
+				_add_ability(effect, effect_source)
 
 ##UnitProtoype function, calls the remove_buff function in data resource, body defaults to self
 func remove_effect(effect: Effect, effect_source: UnitScenePrototype = self, amt: int = 1) -> void:
@@ -52,7 +55,9 @@ func remove_effect(effect: Effect, effect_source: UnitScenePrototype = self, amt
 	if effect is Buff:
 		data.remove_buff(effect, effect_source, amt)
 	elif effect is Ability:
-		remove_ability(effect, effect_source)
+		for ability in data.active_abilities:
+			if effect.info_name == ability.info_name and ability.ability_source == effect_source:
+				_remove_ability(effect)
 
 func add_buff_aoe(buff: Buff, _body: UnitScenePrototype = self) -> void:
 	var new_aoe = EffectAoE.new()

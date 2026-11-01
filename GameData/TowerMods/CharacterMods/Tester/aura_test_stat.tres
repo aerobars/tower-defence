@@ -4,14 +4,50 @@
 [ext_resource type="Resource" uid="uid://vro7w5vpsqqw" path="res://GameData/BuffsAndAbilities/Buffs/stat_twr_damage.tres" id="1_ud7ij"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="2_jme3j"]
 [ext_resource type="Texture2D" uid="uid://vey2hsb1283a" path="res://Assets/Effects/towerDefense_tile134.png" id="2_ud7ij"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="4_2jrl0"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="5_rolsu"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="6_r4rn3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ud7ij"]
 atlas = ExtResource("2_ud7ij")
 region = Rect2(32, 32, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1u4x"]
+atlas = ExtResource("4_2jrl0")
+region = Rect2(576, 176, 16, 16)
+
+[sub_resource type="Resource" id="Resource_q7o3e"]
+script = ExtResource("5_rolsu")
+stat = 8
+modification_amount = Array[float]([5.0, 5.0, 5.0, 5.0, 5.0])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
+[sub_resource type="Resource" id="Resource_st03m"]
+script = ExtResource("6_r4rn3")
+modifying_stats = Array[ExtResource("5_rolsu")]([SubResource("Resource_q7o3e")])
+buff_stack_limit = Array[int]([1, 1, 1, 1, 1])
+buff_persistent_effect = true
+info_name = "Damage"
+info_display_icon = SubResource("AtlasTexture_s1u4x")
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_st03m"]
+atlas = ExtResource("2_ud7ij")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="Resource" id="Resource_abvrd"]
+script = ExtResource("1_4bfl4")
+buff_data = SubResource("Resource_st03m")
+ability_targets = 1
+ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+info_name = "Test Stat Buff Aura Ability"
+info_display_icon = SubResource("AtlasTexture_st03m")
+metadata/_custom_type_script = "uid://b5fdancndgo32"
+
 [resource]
 resource_local_to_scene = true
 script = ExtResource("2_jme3j")
+innate_abilities = Array[ExtResource("1_4bfl4")]([SubResource("Resource_abvrd")])
 buff_data = ExtResource("1_ud7ij")
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 info_name = "Test Stat Buff Aura"
