@@ -3,13 +3,28 @@
 [ext_resource type="Resource" uid="uid://b755ypu34xreh" path="res://GameData/BuffsAndAbilities/Buffs/stat_baddy_move_speed_slow.tres" id="1_lqh3p"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="2_0uy1i"]
 [ext_resource type="Texture2D" uid="uid://vey2hsb1283a" path="res://Assets/Effects/towerDefense_tile134.png" id="2_lqh3p"]
+[ext_resource type="Script" uid="uid://b5fdancndgo32" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_aura_resource.gd" id="3_lqh3p"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lwfwe"]
 atlas = ExtResource("2_lqh3p")
 region = Rect2(32, 32, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_eh7fl"]
+atlas = ExtResource("2_lqh3p")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="Resource" id="Resource_q7o3e"]
+script = ExtResource("3_lqh3p")
+buff_data = ExtResource("1_lqh3p")
+ability_targets = 2
+ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+info_name = "Move Speed Slow"
+info_display_icon = SubResource("AtlasTexture_eh7fl")
+metadata/_custom_type_script = "uid://b5fdancndgo32"
+
 [resource]
 script = ExtResource("2_0uy1i")
+innate_abilities = Array[ExtResource("3_lqh3p")]([SubResource("Resource_q7o3e")])
 buff_data = ExtResource("1_lqh3p")
 base_range_levels = Array[float]([200.0, 200.0, 200.0, 200.0, 200.0])
 info_name = "Slow Aura"

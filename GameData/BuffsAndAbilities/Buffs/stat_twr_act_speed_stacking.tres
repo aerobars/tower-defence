@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="BuffStat" format=3 uid="uid://dxwleljl4wdae"]
+
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="1_jg1tb"]
+[ext_resource type="Script" uid="uid://bpcwdsr32rwby" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat_modifiers.gd" id="2_t2t3w"]
+[ext_resource type="Script" uid="uid://bo8vgy21q5q6g" path="res://GameData/BuffsAndAbilities/Buffs/PrototypeScripts/buff_stat.gd" id="3_obbqa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aoyt4"]
+atlas = ExtResource("1_jg1tb")
+region = Rect2(368, 336, 16, 16)
+
+[sub_resource type="Resource" id="Resource_t27ny"]
+script = ExtResource("2_t2t3w")
+stat = 2
+modification_type = 1
+modification_amount = Array[float]([0.1, 0.15, 0.2, 0.25, 0.3])
+metadata/_custom_type_script = "uid://bpcwdsr32rwby"
+
+[resource]
+script = ExtResource("3_obbqa")
+modifying_stats = Array[ExtResource("2_t2t3w")]([SubResource("Resource_t27ny")])
+buff_persistent_effect = true
+info_name = "Stacking Attack Speed"
+info_display_icon = SubResource("AtlasTexture_aoyt4")
+metadata/_custom_type_script = "uid://bo8vgy21q5q6g"

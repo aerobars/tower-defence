@@ -1,25 +1,29 @@
 class_name ModDraggable extends Node2D
 
-signal mod_dropped #connected to inventory_ui
+##Connected to inventory_ui
+signal mod_dropped
 #signal hovered(data: PrototypeMod)
 #signal clear_popup
 
 var data : ModPrototype
 
 var draggable := false
-var inside_droppable := false
-var mod_slot_ref : TowerButtonModSlot
-##mod_slot that this draggable previously occupied
-var prev_slot_ref : TowerButtonModSlot
+var overlapping_slots: Array[TowerButtonModSlot] =[]
+var inside_droppable: bool :
+	get:
+		return not overlapping_slots.is_empty()
+var mod_slot_ref: TowerButtonModSlot
+##mod_slot previously occupied by the draggable, so that mod slot will be updated with any changes as well 
+var prev_slot_ref: TowerButtonModSlot
 
-var offset : Vector2
-var initial_pos :  Vector2
-var inventory_pos : Vector2
-var in_inventory : bool = true
+var offset:  Vector2
+var initial_pos:  Vector2
+var inventory_pos: Vector2
+var in_inventory: bool = true
 
 @onready var hover_timer := $Timer
-@export var mod_icon : Sprite2D
-const HOVER_DELAY : float = 0.5
+@export var mod_icon: Sprite2D
+const HOVER_DELAY: float = 0.5
 
 
 func _ready() -> void:
@@ -33,7 +37,6 @@ func _process(_delta: float) -> void:
 			initial_pos = global_position
 			offset = get_global_mouse_position() - initial_pos
 			GameData.is_dragging = true
-			prev_slot_ref = mod_slot_ref #for moving mods from one button slot to another
 		if Input.is_action_pressed("ui_accept"):
 			scale = Vector2(0.6, 0.6)
 			global_position = get_global_mouse_position() - offset
@@ -41,19 +44,27 @@ func _process(_delta: float) -> void:
 			GameData.is_dragging = false
 			droppable_check()
 			draggable = false
+			overlapping_slots.clear()
 
 func droppable_check() -> void:
 	var tween = get_tree().create_tween()
 	if inside_droppable:
+		mod_slot_ref = overlapping_slots.back()
 		check_mod_slot_state(tween)
 		tween.tween_property(self, "global_position", mod_slot_ref.global_position, 0.2).set_ease(Tween.EASE_OUT)
 		in_inventory = false
+		mod_slot_ref.lose_focus()
+		prev_slot_ref = mod_slot_ref #for moving mods from one button slot to another
 		mod_slot_ref.update(data, true, self)
-	elif in_inventory: #if mod slot started in inventory and wasn't added to mod slot
+	
+	#if mod slot started in inventory and wasn't added to mod slot
+	elif in_inventory: 
 		tween.tween_property(self, "global_position", inventory_pos, 0.2).set_ease(Tween.EASE_OUT)
 		await tween.finished
 		queue_free()
-	else: #if mod started in mod slot and removed back to inventory
+	
+	#if mod started in mod slot and removed back to inventory
+	else: 
 		tween.tween_property(self, "global_position", inventory_pos, 0.2).set_ease(Tween.EASE_OUT)
 		mod_dropped.emit(data, 1)
 		prev_slot_ref.update(null, false)
@@ -61,14 +72,18 @@ func droppable_check() -> void:
 		queue_free()
 
 func check_mod_slot_state(tween: Tween) -> void:
-	if prev_slot_ref != null: #if it's not null that means it occupied a previous slot
+	#check if mod occupied a previous slot
+	if prev_slot_ref != null: 
 		prev_slot_ref.update(null, false, null)
-	if mod_slot_ref.occupied and mod_slot_ref.occupying_mod != self: #check if mod slot is occupied with different mod
+	
+	#check if mod slot is occupied with different mod
+	if mod_slot_ref.occupied and mod_slot_ref.occupying_mod != self: 
 		mod_slot_ref.occupying_mod.mod_dropped.emit(mod_slot_ref.occupying_mod.data, 1) #returns old mod back to inventory
 		_run_tween_async(tween, mod_slot_ref.occupying_mod, "global_position", mod_slot_ref.occupying_mod.inventory_pos, 0.2) 
-		mod_dropped.emit(data, -1) #connected to inventory_ui
-	elif not mod_slot_ref.occupied:#unwritten else: stops inventory from subtracting if occupying mod is returned to same slot
+		mod_dropped.emit(data, -1) 
+	elif not mod_slot_ref.occupied:
 		mod_dropped.emit(data, -1)
+	#unwritten else: stops inventory from subtracting if occupying mod is returned to same slot
 
 func _run_tween_async(tween: Tween, object: ModDraggable, property: NodePath, end_pos: Variant, duration: float) -> void:
 	tween.tween_property(object, property, end_pos, duration).set_ease(Tween.EASE_OUT)
@@ -94,11 +109,10 @@ func _on_timer_timeout() -> void:
 	pass
 
 func _on_area_2d_body_entered(slot: TowerButtonModSlot) -> void: #react to player dragging over mod slot
-	inside_droppable = true
+	if not overlapping_slots.has(slot):
+		overlapping_slots.append(slot)
 	slot.get_focus()
-	mod_slot_ref = slot
-	print(mod_slot_ref)
 
 func _on_area_2d_body_exited(slot: TowerButtonModSlot) -> void:
-	inside_droppable = false
+	overlapping_slots.erase(slot)
 	slot.lose_focus()

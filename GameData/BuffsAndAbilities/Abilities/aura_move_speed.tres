@@ -7,11 +7,11 @@
 [resource]
 resource_local_to_scene = true
 script = ExtResource("1_twakl")
-info_name = "Move Speed Aura"
-info_display_icon = ExtResource("2_vb861")
 info_description = "Increase movespeed of nearby Baddies"
 buff_data = ExtResource("1_vb861")
 ability_targets = 2
 ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
 ability_aoe = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
+info_name = "Move Speed Aura"
+info_display_icon = ExtResource("2_vb861")
 metadata/_custom_type_script = "uid://b5fdancndgo32"

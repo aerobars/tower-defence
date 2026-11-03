@@ -34,11 +34,11 @@ func _remove_ability(ability: Ability) -> void:
 @abstract func display_update(effect) -> void
 
 ##UnitProtoype function, directs effect to the appropriate add_ function
-func add_effect(effect: Effect, effect_source: UnitScenePrototype = self, cur_level: int = 0) -> void:
+func add_effect(effect: Effect, effect_source: UnitScenePrototype = self, cur_level: int = 0, amt: int = 1) -> void:
 	if data == null:
 		return
 	if effect is Buff:
-		data.add_buff(effect, effect_source, cur_level)
+		data.add_buff(effect, effect_source, cur_level, amt)
 	elif effect is Ability:
 		if data.active_abilities.is_empty():
 			_add_ability(effect, effect_source)

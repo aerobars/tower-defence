@@ -2,6 +2,7 @@ class_name BuildTowerButton extends TextureButton
 
 ## Signals
 
+##Connected to TowerBase
 signal update_towers(update_data : ModUpdateData) 
 signal create_draggable(
 	tower_mod: ModPrototype, 
@@ -150,9 +151,13 @@ func on_mod_update(slot_id : int, data : ModPrototype = button_data.mod_data[slo
 	net_power_display.text = str(net_power)
 
 func _on_mouse_entered() -> void:
+	if GameData.is_dragging == true:
+		return
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector2(1.1, 1.1), 0.1)
 
 func _on_mouse_exited() -> void:
+	if GameData.is_dragging == true:
+		return
 	var tween = get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector2(1, 1), 0.1)

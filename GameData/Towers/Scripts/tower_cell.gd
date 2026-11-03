@@ -66,9 +66,11 @@ func setup_mod(net_power: int = 0) -> void:
 		path_turret.texture = null
 		remove_from_group("towers")
 		return
+	if not data.update_buff_display.has_connections():
+		data.update_buff_display.connect(display_update)
+	if not data.remove_buff_display.has_connections():
+		data.remove_buff_display.connect(path_buff_display.remove_buff)
 	data.net_power = net_power
-	data.update_buff_display.connect(display_update)
-	data.remove_buff_display.connect(path_buff_display.remove_buff)
 	data.setup_stats(get_level())
 	match data.mod_class:
 		0: #Aura
@@ -178,13 +180,11 @@ func _on_range_body_entered(body) -> void:
 				if ability.ability_targets == GlobalEnums.Targets.TOWERS:
 					aura_target = true
 					body.add_effect(ability.buff_data, self, get_level())
-					print('adding local tower aura to cell')
 				elif ability.ability_targets == GlobalEnums.Targets.BADDIES and not get_parent().aura_tower:
 					aura_target = true
 					var onhit = AbilityOnHit.new()
 					onhit.ability_initiate(ability)
 					body.add_effect(onhit, self, get_level())
-					print('adding local baddy aura to cell')
 				#nothing gets added for offensive auras in aura mode
 		if aura_target:
 			aura_targets.append(body)
@@ -199,12 +199,12 @@ func _on_range_body_exited(body) -> void:
 	if data.mod_class == data.ModClass.AURA:
 		var aura_target: bool = false
 		if body.is_in_group("baddies"):
-			for ability in data.innate_abilities:
+			for ability in data.active_auras:
 				if ability.buff_data.buff_persistent_effect:
 					aura_target = true
 					body.remove_effect(ability.buff_data, self)
 		elif body.is_in_group("towers"):
-			for ability in data.innate_abilities:
+			for ability in data.active_auras:
 				if ability.ability_targets == GlobalEnums.Targets.TOWERS:
 					aura_target = true
 					body.remove_effect(ability.buff_data, self)

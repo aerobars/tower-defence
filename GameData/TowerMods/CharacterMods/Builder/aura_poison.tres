@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="ModAura" format=3 uid="uid://cda1enewweprf"]
 
 [ext_resource type="Resource" uid="uid://bg70q2egkue1q" path="res://GameData/BuffsAndAbilities/Buffs/stat_baddy_poison.tres" id="1_8ct3n"]
+[ext_resource type="Script" uid="uid://b5fdancndgo32" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_aura_resource.gd" id="3_8ct3n"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="3_kjxxs"]
 [ext_resource type="Texture2D" uid="uid://vey2hsb1283a" path="res://Assets/Effects/towerDefense_tile134.png" id="4_8t5ml"]
 
@@ -8,8 +9,23 @@
 atlas = ExtResource("4_8t5ml")
 region = Rect2(16, 16, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_crr2y"]
+atlas = ExtResource("4_8t5ml")
+region = Rect2(16, 16, 32, 32)
+
+[sub_resource type="Resource" id="Resource_wjpnq"]
+script = ExtResource("3_8ct3n")
+buff_data = ExtResource("1_8ct3n")
+ability_targets = 2
+ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+ability_damage_tag = 32
+info_name = "Poison"
+info_display_icon = SubResource("AtlasTexture_crr2y")
+metadata/_custom_type_script = "uid://b5fdancndgo32"
+
 [resource]
 script = ExtResource("3_kjxxs")
+innate_abilities = Array[ExtResource("3_8ct3n")]([SubResource("Resource_wjpnq")])
 buff_data = ExtResource("1_8ct3n")
 base_range_levels = Array[float]([150.0, 150.0, 150.0, 150.0, 150.0])
 info_name = "Poison Aura"

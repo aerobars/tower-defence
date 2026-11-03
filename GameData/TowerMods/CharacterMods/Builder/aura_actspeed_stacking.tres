@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="ModAura" format=3 uid="uid://bjyie2gna8nkt"]
+
+[ext_resource type="Resource" uid="uid://dxwleljl4wdae" path="res://GameData/BuffsAndAbilities/Buffs/stat_twr_act_speed_stacking.tres" id="1_l5umt"]
+[ext_resource type="Texture2D" uid="uid://cokosm2bclnic" path="res://Assets/Environment/Tilesets/colored_packed.png" id="2_xkg3r"]
+[ext_resource type="Script" uid="uid://b5fdancndgo32" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_aura_resource.gd" id="3_5cjqp"]
+[ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="4_htvs5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s1u4x"]
+atlas = ExtResource("2_xkg3r")
+region = Rect2(368, 336, 16, 16)
+
+[sub_resource type="Resource" id="Resource_a3qir"]
+script = ExtResource("3_5cjqp")
+buff_data = ExtResource("1_l5umt")
+ability_targets = 1
+ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+metadata/_custom_type_script = "uid://b5fdancndgo32"
+
+[resource]
+script = ExtResource("4_htvs5")
+innate_abilities = Array[ExtResource("3_5cjqp")]([SubResource("Resource_a3qir")])
+buff_data = ExtResource("1_l5umt")
+base_power_levels = Array[int]([-1, -1, -1, -1, -1])
+base_range_levels = Array[float]([250.0, 250.0, 250.0, 250.0, 250.0])
+info_name = "Stacking Attack Speed Aura"
+info_description = "Provides a stacking attack speed bonus."
+info_texture = SubResource("AtlasTexture_s1u4x")
+metadata/_custom_type_script = "uid://bshp47gjxu8sm"

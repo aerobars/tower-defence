@@ -3,13 +3,29 @@
 [ext_resource type="Resource" uid="uid://bi5uxnya2aq4d" path="res://GameData/BuffsAndAbilities/Buffs/dot_burn.tres" id="1_glhai"]
 [ext_resource type="Script" uid="uid://bshp47gjxu8sm" path="res://GameData/TowerMods/PrototypeScripts/mod_aura.gd" id="2_glhai"]
 [ext_resource type="Texture2D" uid="uid://ddyaqh83bxrgn" path="res://Assets/Effects/towerDefense_tile298.png" id="2_r4om8"]
+[ext_resource type="Script" uid="uid://b5fdancndgo32" path="res://GameData/BuffsAndAbilities/Abilities/PrototypeScriptsAndScenes/Scripts/ability_aura_resource.gd" id="3_r4om8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r4om8"]
 atlas = ExtResource("2_r4om8")
 region = Rect2(16, 16, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_7nfkc"]
+atlas = ExtResource("2_r4om8")
+region = Rect2(16, 16, 32, 32)
+
+[sub_resource type="Resource" id="Resource_st03m"]
+script = ExtResource("3_r4om8")
+buff_data = ExtResource("1_glhai")
+ability_targets = 2
+ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+ability_damage_tag = 4
+info_name = "Burn"
+info_display_icon = SubResource("AtlasTexture_7nfkc")
+metadata/_custom_type_script = "uid://b5fdancndgo32"
+
 [resource]
 script = ExtResource("2_glhai")
+innate_abilities = Array[ExtResource("3_r4om8")]([SubResource("Resource_st03m")])
 buff_data = ExtResource("1_glhai")
 base_range_levels = Array[float]([100.0, 100.0, 100.0, 100.0, 100.0])
 info_name = "Burn Aura"
