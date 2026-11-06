@@ -80,7 +80,6 @@ visible = false
 shape = SubResource("CircleShape2D_s1u4x")
 
 [node name="150px" type="CollisionShape2D" parent="RangeRef" unique_id=1335411606]
-visible = false
 shape = SubResource("CircleShape2D_smyd1")
 
 [node name="200px" type="CollisionShape2D" parent="RangeRef" unique_id=523756484]

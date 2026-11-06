@@ -28,7 +28,7 @@ func setup_stats() -> void:
 		2: #Weapon
 			var mod_range = rich_text_setup()
 			var dps = rich_text_setup()
-			dps.text = "DPS: " + base_stats_array("damage") + " dmg per " + base_stats_array("attack_speed") + " s"
+			dps.text = "DPS: " + base_stats_array("damage") + " dmg per " + base_stats_array("activation_speed") + " s"
 			mod_range.text = "Range: " + base_stats_array("range") + " units"
 			container.add_child(dps)
 			container.move_child(dps, 2)

@@ -19,7 +19,7 @@ signal wave_clear_ability_triggered(ability_data: AbilityWaveClear)
 ## Tower Setup
 
 const TURRET_TEXTURE_SIZE: float = 32
-var non_aura_radius: float = 0.0
+var non_aura_radius: float = 150.0
 var button_slot_id: int
 
 @export_group("Tower Node Paths", "path_")
@@ -66,10 +66,6 @@ func setup_mod(net_power: int = 0) -> void:
 		path_turret.texture = null
 		remove_from_group("towers")
 		return
-	if not data.update_buff_display.has_connections():
-		data.update_buff_display.connect(display_update)
-	if not data.remove_buff_display.has_connections():
-		data.remove_buff_display.connect(path_buff_display.remove_buff)
 	data.net_power = net_power
 	data.setup_stats(get_level())
 	match data.mod_class:
@@ -87,6 +83,12 @@ func setup_mod(net_power: int = 0) -> void:
 			add_to_group("towers")
 	path_turret.texture = data.info_texture
 	mod_updated.emit(self)
+
+func connect_signals() -> void:
+	if not data.update_buff_display.has_connections():
+		data.update_buff_display.connect(display_update)
+	if not data.remove_buff_display.has_connections():
+		data.remove_buff_display.connect(path_buff_display.remove_buff)
 
 func aura_setup(_aura_data: AbilityAura) -> void:
 	pass
@@ -156,65 +158,92 @@ func _process(delta: float) -> void:
 		attack_targets = [null]
 
 func _has_active_disable() -> bool:
-	for buff_key in data.active_buffs:
-		if buff_key is BuffAbsolute:
+	for buff_name in data.active_buffs:
+		if data.active_buffs[buff_name].buff is BuffAbsolute:
 			return true
 	return false
 
-func _on_range_body_entered(body) -> void:
+func _on_range_body_entered(body: UnitScenePrototype) -> void:
 	if data == null or body == self:
 		return
 	
 	if body.is_in_group("baddies"): #happens regardless of mod class
 		baddies_in_range.append(body)
 	
-	if data.mod_class == data.ModClass.AURA:
-		var aura_target: bool = false
-		if body.is_in_group("baddies"):
-			for ability in data.active_auras:
-				if ability.ability_targets == GlobalEnums.Targets.BADDIES and ability.buff_data.buff_persistent_effect:
-					aura_target = true
-					body.add_effect(ability.buff_data, self, get_level())
-		elif body.is_in_group("towers"):
+	if data.mod_class == data.ModClass.AURA and add_auras(body):
+		aura_targets.append(body)
+
+func add_auras(body: UnitScenePrototype) -> bool:
+	
+	var aura_target: bool = false
+	
+	if body.is_in_group("baddies") and get_parent().aura_tower:
+		for ability in data.active_auras:
+			if ability.ability_targets == GlobalEnums.Targets.BADDIES and ability.buff_data.buff_persistent_effect:
+				aura_target = true
+				body.add_effect(ability.buff_data, self, get_level())
+	
+	elif body.is_in_group("towers"):
+		
+		if get_parent().aura_tower:
 			for ability in data.active_auras:
 				if ability.ability_targets == GlobalEnums.Targets.TOWERS:
 					aura_target = true
 					body.add_effect(ability.buff_data, self, get_level())
-				elif ability.ability_targets == GlobalEnums.Targets.BADDIES and not get_parent().aura_tower:
+	
+		#set up local auras when tower is not in aura mode
+		elif body.get_parent() == self.get_parent():
+			for ability in data.active_auras:
+				if ability.ability_targets == GlobalEnums.Targets.TOWERS:
+					aura_target = true
+					body.add_effect(ability.buff_data, self, get_level())
+				elif ability.ability_targets == GlobalEnums.Targets.BADDIES:
 					aura_target = true
 					var onhit = AbilityOnHit.new()
 					onhit.ability_initiate(ability)
 					body.add_effect(onhit, self, get_level())
-				#nothing gets added for offensive auras in aura mode
-		if aura_target:
-			aura_targets.append(body)
+	
+	return aura_target
 
-func _on_range_body_exited(body) -> void:
+func _on_range_body_exited(body: UnitScenePrototype) -> void:
 	if data == null or body == self:
 		return
 	
 	if body.is_in_group("baddies"):
 		baddies_in_range.erase(body)
 	
-	if data.mod_class == data.ModClass.AURA:
-		var aura_target: bool = false
-		if body.is_in_group("baddies"):
-			for ability in data.active_auras:
-				if ability.buff_data.buff_persistent_effect:
-					aura_target = true
-					body.remove_effect(ability.buff_data, self)
-		elif body.is_in_group("towers"):
+	if data.mod_class == data.ModClass.AURA and remove_auras(body):
+		aura_targets.erase(body)
+
+func remove_auras(body: UnitScenePrototype) -> bool:
+	
+	var aura_target: bool = false
+	
+	if body.is_in_group("baddies"):
+		for ability in data.active_auras:
+			if ability.ability_targets == GlobalEnums.Targets.BADDIES and ability.buff_data.buff_persistent_effect:
+				aura_target = true
+				body.remove_effect(ability.buff_data, self)
+	
+	elif body.is_in_group("towers"):
+	
+		if get_parent().aura_tower:
 			for ability in data.active_auras:
 				if ability.ability_targets == GlobalEnums.Targets.TOWERS:
 					aura_target = true
-					body.remove_effect(ability.buff_data, self)
-				elif ability.ability_targets == GlobalEnums.Targets.BADDIES and not get_parent().aura_tower:
+					body.add_effect(ability.buff_data, self, get_level())
+	
+		elif body.get_parent() == self.get_parent():
+			for ability in data.active_auras:
+				if ability.ability_targets == GlobalEnums.Targets.TOWERS:
+					aura_target = true
+					body.add_effect(ability.buff_data, self, get_level())
+				elif ability.ability_targets == GlobalEnums.Targets.BADDIES:
 					aura_target = true
 					var onhit = AbilityOnHit.new()
 					onhit.ability_initiate(ability)
-					body.remove_effect(onhit, self)
-		if aura_target:
-			aura_targets.erase(body)
+					body.add_effect(onhit, self, get_level())
+	return aura_target
 
 func on_wave_cleared() -> void:
 	wave_cleared.emit()

@@ -116,8 +116,8 @@ func _physics_process(delta: float) -> void:
 	global_position = global_position.move_toward(current_path_point, movement_delta)
 
 func _has_active_disable() -> bool:
-	for buff_key in data.active_buffs:
-		if buff_key is BuffKnockback or buff_key is BuffAbsolute:
+	for buff_name in data.active_buffs:
+		if data.active_buffs[buff_name].buff is BuffKnockback or data.active_buffs[buff_name].buff is BuffAbsolute:
 			return true
 	return false
 
@@ -130,10 +130,10 @@ func update_pathing() -> void:
 func on_hit(attack: AttackData) -> void: 
 	calculate_damage(attack)
 	hit_detected.emit(self)
-	for buff in data.active_buffs:
+	for buff_name in data.active_buffs:
 #		data.active_buffs[buff].level = attack.mod_level
-		if buff is BuffOnHit:
-			data.active_buffs[buff].on_hit_check(attack.damage_tags)
+		if data.active_buffs[buff_name].buff is BuffOnHit:
+			data.active_buffs[buff_name].on_hit_check(attack.damage_tags)
 	#debuff.append_array(pending_buffs)
 #	if attack.onhit_effects != []:
 #		for i in attack.onhit_effects:

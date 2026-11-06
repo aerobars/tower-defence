@@ -14,7 +14,7 @@ signal stats_updated
 var level: int = 0 
 ##buff_owner is the unit affected by the buff
 var data_owner: UnitScenePrototype
-var active_buffs: Dictionary[Buff, BuffInstance] = {}
+var active_buffs: Dictionary[String, BuffInstance] = {}
 var active_abilities: Array[Ability] = []
 
 func setup_stats(_level: int = 0) -> void:
@@ -23,11 +23,11 @@ func setup_stats(_level: int = 0) -> void:
 
 ##buff/data_owner is the unit affected by the buff, buff_source is the unit providing the buff being added
 func add_buff(buff: Buff, buff_source: CollisionObject2D, buff_level: int, amt: int = 1) -> void:
-	if not active_buffs.has(buff):
+	if not active_buffs.has(buff.info_name):
 		var new_inst = BuffInstance.new(buff, data_owner, buff_source, buff_level)
-		active_buffs[buff] = new_inst
+		active_buffs[buff.info_name] = new_inst
 	
-	var inst = active_buffs[buff]
+	var inst = active_buffs[buff.info_name]
 	
 	if not inst.buff_source.has(buff_source):
 		inst.buff_source.append(buff_source)
@@ -37,9 +37,9 @@ func add_buff(buff: Buff, buff_source: CollisionObject2D, buff_level: int, amt: 
 	recalculate_stats()
 
 func remove_buff(buff: Buff, buff_source: CollisionObject2D, amt: int = 1) -> void:
-	if not active_buffs.has(buff):
+	if not active_buffs.has(buff.info_name):
 		return
-	var inst = active_buffs[buff]
+	var inst = active_buffs[buff.info_name]
 	
 	if buff.buff_persistent_effect: #check whether buff is an aura/persistent effect
 		inst.buff_source.erase(buff_source)
@@ -47,7 +47,7 @@ func remove_buff(buff: Buff, buff_source: CollisionObject2D, amt: int = 1) -> vo
 		inst.stacks = max(inst.stacks - amt, 0)
 	
 	if inst.buff_source.size() == 0 or inst.stacks == 0:
-		active_buffs.erase(buff)
+		active_buffs.erase(buff.info_name)
 		remove_buff_display.emit(buff)    
 		recalculate_stats()
 
@@ -65,12 +65,13 @@ func buff_check(buff_stat) -> bool:
 func recalculate_stats() -> void:
 	var stat_multipliers: Dictionary = {} #Amt to multiply stats by
 	var stat_addends: Dictionary = {} #Amt to add to stats
-	for buff in active_buffs.keys():
-		if buff is BuffStat:
-			for buff_stat in buff.modifying_stats:
+	for buff_name in active_buffs.keys():
+		var buff_data: Buff = active_buffs[buff_name].buff
+		if buff_data is BuffStat:
+			for buff_stat in buff_data.modifying_stats:
 				if buff_check(buff_stat.stat):
-					var stat_name: String = ""
-					var inst = active_buffs[buff]
+					var stat_name := ""
+					var inst: BuffInstance = active_buffs[buff_name]
 					for stat in GlobalEnums.BuffableStats.keys():
 						if buff_stat.stat & GlobalEnums.BuffableStats[stat]:
 							stat_name = stat.to_lower()
