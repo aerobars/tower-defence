@@ -11,7 +11,7 @@ signal update_range_display(tower_cell: TowerCell)
 signal hide_range_display
 
 ## Setup
-@export var non_aura_radius: float = 10
+@export var non_aura_radius: float = 1
 const COLUMNS: int = 3
 const ROWS: int = 3
 var cell_size: int #set to Map Node CELL_SIZE in Game Scene via Build Mode Container
@@ -109,7 +109,6 @@ func level_up() -> void:
 ##Called during tower setup and mod updates
 func tower_update(updated_mod_data: ModUpdateData) -> void:
 	
-	var updating_cell: TowerCell
 	var mod_list: Dictionary = {0: [], #Aura
 								1: [], #Power
 								2: []} #Weapon
@@ -139,7 +138,7 @@ func tower_update(updated_mod_data: ModUpdateData) -> void:
 					if child.data.swap_buff == null or child.data.swap_buff_duration == 0.0:
 						print("Swapper enabled with incomplete swap data for ", child.data.name)
 					else:
-						child.add_effect(child.data.swap_buff, child, tower_data.level)
+						child.add_effect(child.data.swap_buff, child, 1, tower_data.level)
 				for ability in child.data.innate_abilities:
 					child.add_effect(ability)
 		

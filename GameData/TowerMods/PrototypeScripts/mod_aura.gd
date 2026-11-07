@@ -10,7 +10,6 @@ const BUFFABLE_STATS = [
 ##How many times per second this tower activates
 @export var innate_abilities: Array[AbilityAura]
 @export var base_activation_speed_levels: Array[float] = [1.0, 1.0, 1.0, 1.0, 1.0] #cd between attacks in seconds
-@export var buff_data: Buff 
 var current_activation_speed: float
 
 var activation_cooldown: float

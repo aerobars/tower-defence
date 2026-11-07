@@ -141,6 +141,7 @@ func on_mod_update(slot_id : int, data : ModPrototype = button_data.mod_data[slo
 								power_surplus_buffs[stat_name] += 1
 				2: #Weapon
 					has_wep = true
+	net_power_display.text = str(net_power)
 	
 	update_towers.emit(ModUpdateData.new(
 		has_aura and not has_wep, 
@@ -148,7 +149,6 @@ func on_mod_update(slot_id : int, data : ModPrototype = button_data.mod_data[slo
 		slot_id, 
 		data))
 	
-	net_power_display.text = str(net_power)
 
 func _on_mouse_entered() -> void:
 	if GameData.is_dragging == true:

@@ -9,10 +9,18 @@
 atlas = ExtResource("2_4108k")
 region = Rect2(16, 16, 32, 32)
 
+[sub_resource type="Resource" id="Resource_st03m"]
+script = ExtResource("3_4108k")
+buff_data = ExtResource("1_wb6df")
+ability_targets = 2
+ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+info_display_icon = SubResource("AtlasTexture_tgssl")
+metadata/_custom_type_script = "uid://b5fdancndgo32"
+
 [resource]
 resource_local_to_scene = true
 script = ExtResource("3_8eyoe")
-buff_data = ExtResource("1_wb6df")
+innate_abilities = Array[ExtResource("3_4108k")]([SubResource("Resource_st03m")])
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 info_name = "Test DoT Aura"
 info_description = "Test DoT Aura"

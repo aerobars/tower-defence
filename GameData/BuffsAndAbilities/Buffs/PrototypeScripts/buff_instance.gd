@@ -67,11 +67,11 @@ func _effect_trigger() -> void:
 	
 	if buff.damage_tag > 0:
 		for target in targets:
-			target.calculate_damage([buff.buff_effect_amount[level] * stacks, buff.damage_tag, false])
+			target.calculate_damage(AttackData.new(buff.buff_effect_amount[level] * stacks, buff.damage_tag, level))
 	
 	if buff is BuffOnHit and buff.buff_to_apply != null:
 		for target in targets:
-			target.data.add_buff(buff.buff_to_apply, buff_owner, level)
+			target.add_effect(buff.buff_to_apply, buff_owner, buff.buff_effect_amount, level)
 
 func _determine_targets() -> Array[Node2D]:
 	var targets: Array[Node2D] = []

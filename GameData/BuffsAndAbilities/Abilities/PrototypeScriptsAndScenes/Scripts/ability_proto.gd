@@ -20,7 +20,7 @@ var owner_level: int :
 
 @export_group("Universal Ability Data", "ability_")
 @export var ability_targets: GlobalEnums.Targets
-##Damage or heal amount
+##Damage or heal amount, or number of stacks of buff applied
 @export var ability_effect_amount: Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0]
 ##Damage Tag = 0 is no effect
 @warning_ignore("enum_variable_without_default")

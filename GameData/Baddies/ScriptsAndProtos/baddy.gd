@@ -64,7 +64,7 @@ func _ready() -> void:
 	data.health_depleted.connect(destroy)
 	data.stats_updated.connect(stats_update)
 	data.update_buff_display.connect(path_status_display.path_buff_display_container.update_display)
-	data.remove_buff_display.connect(path_status_display.path_buff_display_container.remove_buff)
+	data.remove_buff_display.connect(path_status_display.path_buff_display_container.remove_effect_display)
 	
 	# Innate Effects Setup
 	
@@ -78,6 +78,9 @@ func get_level() -> int:
 
 func display_update(effect) -> void:
 	path_status_display.path_buff_display_container.update_display(effect)
+
+func remove_effect_display(effect) -> void:
+	path_status_display.paht_buff_display_container.remove_effect_display(effect)
 
 func aura_setup(aura_data: AbilityAura) -> void:
 	var new_aura = AURA_SCENE.instantiate()

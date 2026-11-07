@@ -9,9 +9,17 @@
 atlas = ExtResource("2_xuelf")
 region = Rect2(16, 16, 32, 32)
 
+[sub_resource type="Resource" id="Resource_q7o3e"]
+script = ExtResource("3_c20mv")
+buff_data = ExtResource("1_xuelf")
+ability_targets = 2
+ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+info_display_icon = SubResource("AtlasTexture_a4ux6")
+metadata/_custom_type_script = "uid://b5fdancndgo32"
+
 [resource]
 script = ExtResource("3_2rp7h")
-buff_data = ExtResource("1_xuelf")
+innate_abilities = Array[ExtResource("3_c20mv")]([SubResource("Resource_q7o3e")])
 base_range_levels = Array[float]([300.0, 300.0, 300.0, 300.0, 300.0])
 info_name = "Test On Hit Aura"
 info_description = "Test On Hit Aura for testing"

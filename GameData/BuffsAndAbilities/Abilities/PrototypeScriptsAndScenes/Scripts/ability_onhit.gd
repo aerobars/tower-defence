@@ -10,6 +10,8 @@ func onhit_initiate(_ability: Ability, _onhit_chance: float = 1.0, ) -> void:
 	ability_damage_tag = _ability.ability_damage_tag
 	ability_effect_amount = _ability.ability_effect_amount
 	ability_targets = _ability.ability_targets
+	info_display_icon = _ability.info_display_icon
+	info_name = _ability.info_name
 	buff_data = _ability.buff_data
 	onhit_success_chance = [_onhit_chance, _onhit_chance, _onhit_chance, _onhit_chance, _onhit_chance]
 

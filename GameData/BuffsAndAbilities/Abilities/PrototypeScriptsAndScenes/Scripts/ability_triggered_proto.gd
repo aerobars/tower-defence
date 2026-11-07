@@ -18,7 +18,7 @@ func triggered_effect(trigger_source: Node2D = ability_owner) -> void:
 	
 	if buff_data != null:
 		for target in onhit_targets:
-			target.data.add_buff(buff_data, ability_owner, owner_level)
+			target.add_effect(buff_data, ability_owner, ability_effect_amount[owner_level], owner_level)
 
 func no_target_trigger() -> void:
 	pass

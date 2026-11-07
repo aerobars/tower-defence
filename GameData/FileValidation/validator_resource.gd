@@ -31,8 +31,8 @@ func mod_validation(mod: ModPrototype) -> void:
 	match mod.mod_class:
 		mod.ModClass.AURA:
 			valid_class =  data_name.left(4) == "aura"
-			if valid_class and mod.buff_data == null:
-				validation_results.errors_update("Missing Buff Data for " + data_name)
+			if valid_class and mod.innate_abilities.size() == 0:
+				validation_results.errors_update("Missing Aura Data for " + data_name)
 		mod.ModClass.POWER:
 			valid_class = data_name.left(3) == "pwr"
 			if valid_class:

@@ -11,7 +11,7 @@ func update_display(effect, effect_stacks: int = 1) -> void:
 	new_effect.setup(effect.info_name, effect.info_display_icon, effect_stacks)
 	add_child(new_effect)
 
-func remove_buff(effect) -> void:
+func remove_effect_display(effect) -> void:
 	for child in get_children(): #check if mod exists in inventory and increment
 		if child.info_name == effect.info_name:
 			child.queue_free()

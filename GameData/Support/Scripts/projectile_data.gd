@@ -38,6 +38,6 @@ func _init(
 	damage_tags = projectile_owner.data.damage_tags
 	
 	damage = projectile_owner.data.current_damage
-	level = projectile_owner.level
+	level = projectile_owner.get_level()
 	crit_chance = projectile_owner.data.current_crit_chance
 	crit_multi = projectile_owner.data.current_crit_multiplier
