@@ -59,6 +59,7 @@ func get_level() -> int:
 ## Mod Updates
 
 func display_update(effect, stacks: int = 1) -> void:
+	print("updating display")
 	path_buff_display.update_display(effect, stacks)
 
 func remove_effect_display(effect) -> void:

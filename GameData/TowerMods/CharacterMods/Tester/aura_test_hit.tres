@@ -14,6 +14,7 @@ script = ExtResource("3_c20mv")
 buff_data = ExtResource("1_xuelf")
 ability_targets = 2
 ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+info_name = "OnHit Aura"
 info_display_icon = SubResource("AtlasTexture_a4ux6")
 metadata/_custom_type_script = "uid://b5fdancndgo32"
 

@@ -5,6 +5,7 @@ const EFFECT_DISPLAY_SCENE = preload("res://GameData/Support/Scenes/effect_displ
 func update_display(effect, effect_stacks: int = 1) -> void:
 	for child in get_children(): #check if mod exists in inventory and increment
 		if child.info_name == effect.info_name:
+			print("same name")
 			child.update_stacks(effect_stacks)
 			return
 	var new_effect = EFFECT_DISPLAY_SCENE.instantiate()

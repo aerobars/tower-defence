@@ -14,6 +14,7 @@ script = ExtResource("3_4108k")
 buff_data = ExtResource("1_wb6df")
 ability_targets = 2
 ability_effect_amount = Array[float]([1.0, 1.0, 1.0, 1.0, 1.0])
+info_name = "DoT Aura"
 info_display_icon = SubResource("AtlasTexture_tgssl")
 metadata/_custom_type_script = "uid://b5fdancndgo32"
 
